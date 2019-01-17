@@ -36,6 +36,7 @@ const useTypeScript = fs.existsSync(paths.appTsConfig);
 
 // style files regexes
 const cssRegex = /\.css$/;
+const lessRegex = /\.less$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
@@ -112,6 +113,61 @@ module.exports = function(webpackEnv) {
     }
     return loaders;
   };
+
+  const getAntdLoaders = (cssOptions, preProcessor) => {
+    const loaders = [
+      isEnvDevelopment && require.resolve('style-loader'),
+      isEnvProduction && {
+        loader: MiniCssExtractPlugin.loader,
+        options: Object.assign(
+          {},
+          shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined
+        ),
+      },
+      {
+        loader: require.resolve('css-loader'),
+        options: cssOptions,
+      },
+      {
+        // Options for PostCSS as we reference these options twice
+        // Adds vendor prefixing based on your specified browser support in
+        // package.json
+        loader: require.resolve('postcss-loader'),
+        options: {
+          // Necessary for external CSS imports to work
+          // https://github.com/facebook/create-react-app/issues/2677
+          ident: 'postcss',
+          plugins: () => [
+            require('postcss-flexbugs-fixes'),
+            require('postcss-preset-env')({
+              autoprefixer: {
+                flexbox: 'no-2009',
+              },
+              stage: 3,
+            }),
+          ],
+          sourceMap: isEnvProduction && shouldUseSourceMap,
+        },
+      },
+    ].filter(Boolean);
+    if (preProcessor) {
+      loaders.push({
+        loader: require.resolve(preProcessor),
+        options: {
+          sourceMap: isEnvProduction && shouldUseSourceMap,
+          modules:false,
+          modifyVars: {
+            "@primary-color": "#00BFFF",
+            "@btn-primary-color" : "#fff",
+            "@menu-bg": "#00BFFF"
+          },
+          javascriptEnabled: true,
+        },
+      });
+    }
+    return loaders;
+  };
+  
 
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
@@ -347,6 +403,7 @@ module.exports = function(webpackEnv) {
                       },
                     },
                   ],
+                  ['import',{libraryName:'antd',style:true}],
                 ],
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
@@ -431,6 +488,16 @@ module.exports = function(webpackEnv) {
               // Remove this when webpack adds a warning or an error for this.
               // See https://github.com/webpack/webpack/issues/6571
               sideEffects: true,
+            },
+            {
+              test:lessRegex,
+              use:getAntdLoaders(
+                {
+                  importLoaders: 2,
+                  sourceMap: isEnvProduction && shouldUseSourceMap,
+                },
+                'less-loader'
+              ),
             },
             // Adds support for CSS Modules, but using SASS
             // using the extension .module.scss or .module.sass
