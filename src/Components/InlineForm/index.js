@@ -30,15 +30,14 @@ class InlineForm extends React.Component {
             )
           }
         </FormItem>
-        <FormItem  style={{ marginTop:23 }}>
+        <FormItem  style={{ marginTop:20 }}>
           {
             getFieldDecorator('search',{
                 initialValue:'',
             })(
               <Search
-                placeholder="input search text"
+                placeholder="请输入关键字进行搜索"
                 onSearch={value => console.log(value)}
-                enterButton
                 style={{ width:300 }}
             />
             )

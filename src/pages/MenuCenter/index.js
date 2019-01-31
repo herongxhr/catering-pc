@@ -125,19 +125,16 @@ class B extends React.Component {
 			tab3: <Table columns={tab1Columns} dataSource={this.state.DataSource} />
 		};
     return (
-      <div>
+      <div className='card-wrapper'>
         <Card
-          style={{ width: '100%' }}
           title={<SubHeader title='菜单中心' subTitle='统一菜单' />}
           tabList={tabList}
           activeTabKey={this.state.key}
           onTabChange={(key) => { this.onTabChange(key, 'key'); }}
         >
-          <div style={{ background: '#ECECEC' }}>
-            <div style={{ background: 'white'}}>
+            <div className='content-wrapper'>
 							{contentList[this.state.key]}
             </div>        
-          </div>
         </Card>
       </div>
     );

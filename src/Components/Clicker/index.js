@@ -29,7 +29,7 @@ class Clicker extends React.Component {
     return(
       <div className='clicker'>
         <ButtonGroup>
-          <Button onClick={this.decline} style={{width:32}}>
+          <Button onClick={this.decline} >
             <Icon type="minus" />
           </Button>
           <div className='count'>

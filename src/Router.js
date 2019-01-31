@@ -2,11 +2,11 @@ import React from 'react'
 import { BrowserRouter as Router,Route,Switch,Redirect } from 'react-router-dom'
 import App from './App'
 import Total from './Total'
-import A from './pages/A/index'
-import B from './pages/B/index'
-import C from './pages/C/index'
-import D from './pages/D/index'
-import E from './pages/E/index'
+import A from './pages/index/index'
+import B from './pages/MenuCenter/index'
+import C from './pages/AccSupermarket/index'
+import D from './pages/PurOrder/index'
+import E from './pages/DeliveryAcce/index'
 
 
 class IRouter extends React.Component {
