@@ -48,7 +48,7 @@ class OrderForm extends React.Component {
           }
         </FormItem>
 
-        <FormItem  style={{ marginTop:23 }}>
+        <FormItem  style={{ marginTop:20 }}>
           {
             getFieldDecorator('search',{
                 initialValue:'',
@@ -56,8 +56,7 @@ class OrderForm extends React.Component {
               <Search
                 placeholder="订单号/订单来源/状态"
                 onSearch={value => console.log(value)}
-                enterButton
-                style={{ width:300 }}
+                style={{ width:300,height:32 }}
             />
             )
           }

@@ -10,10 +10,10 @@ class D extends React.Component {
 		return(
 			<div className='PurchaseOrder'>
 				<Card
-          style={{ width: '100%' }}
-          title={<SubHeader title='采购订单' subTitle='' />}
-          onTabChange={(key) => { this.onTabChange(key, 'key'); }}
-        >
+				style={{ width: '100%' }}
+				title={<SubHeader title='采购订单' subTitle='' />}
+				onTabChange={(key) => { this.onTabChange(key, 'key'); }}
+				>
 					<OrderTable />
 				</Card>
 			</div>
