@@ -96,7 +96,6 @@ const requests = [{
 class B extends React.Component {
   state = {
     key: 'tab1',
-		noTitleKey: 'app',
 		tab1Source:[],
 		tab2Source:[]
   }

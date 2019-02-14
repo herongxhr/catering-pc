@@ -6,8 +6,14 @@ import AnnouncementCard from '../../Components/AnnouncementCard/AnnouncementCard
 import PurchaseStatistics from '../../Components/PurchaseStatistics/PurchaseStatistics'
 import DataStatistics from '../../Components/DataStatistics/DataStatistics'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 class A extends Component {
+  componentDidMount() {
+    axios.get('http://yapi.demo.qunar.com/mock/44634/jianguo/data').then((res) =>{
+      console.log(res)
+    })
+  }
   render() {
     return ( 
       <div className="App">

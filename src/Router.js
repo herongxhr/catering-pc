@@ -11,7 +11,6 @@ import E from './pages/E/index'
 
 class IRouter extends React.Component {
   render() {
-    console.log(1)
     return (
       <Router>
             <Route path='/'  render={()=> 
