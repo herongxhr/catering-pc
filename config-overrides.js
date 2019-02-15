@@ -14,8 +14,6 @@ module.exports = override(
             /* 按钮 */
             //主按钮
             '@btn-primary-bg': '@primary-color',
-            //默认按钮
-            '@btn-default-color': '@text-color',
             /* LINK */
             //LINK 悬浮
             '@link-hover-color': '@primary-color',

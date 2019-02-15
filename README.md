@@ -1,4 +1,20 @@
-##安品餐饮单位pc端
+## 安品餐饮单位pc端
+安品供餐饮单位如学校食堂等使用的pc端软件。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
