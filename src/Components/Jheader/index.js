@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router , Link,NavLink } from 'react-router-dom'
+import { BrowserRouter as Router , Link, NavLink } from 'react-router-dom'
 import { Layout, Menu, Icon } from 'antd';
 
 import './index.less'
@@ -31,6 +31,16 @@ class Jheader extends Component {
 							</Menu.Item>
 							<Menu.Item key="5">
 								<NavLink to='/delivery'>配送验收</NavLink>
+							</Menu.Item>
+							<Menu.Item key="6">
+								<NavLink to='/message'>
+									<span className="iconfont">&#xe62b;</span>
+								</NavLink>
+							</Menu.Item>
+							<Menu.Item key="7">
+								<NavLink to='/setting'>
+									<span className="iconfont">&#xe620;</span>
+								</NavLink>
 							</Menu.Item>
 						</Menu>
 						<div>

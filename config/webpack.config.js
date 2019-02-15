@@ -1,5 +1,6 @@
 'use strict';
 
+
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
@@ -8,6 +9,7 @@ const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
+const slash = require('slash');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -90,6 +92,7 @@ module.exports = function(webpackEnv) {
           // Necessary for external CSS imports to work
           // https://github.com/facebook/create-react-app/issues/2677
           ident: 'postcss',
+          modules:true,
           plugins: () => [
             require('postcss-flexbugs-fixes'),
             require('postcss-preset-env')({
@@ -155,7 +158,7 @@ module.exports = function(webpackEnv) {
         loader: require.resolve(preProcessor),
         options: {
           sourceMap: isEnvProduction && shouldUseSourceMap,
-          modules:false,
+          modules:true,
           modifyVars: {
             "@primary-color": "#00BFFF",
             "@btn-primary-color" : "#fff",
@@ -452,6 +455,26 @@ module.exports = function(webpackEnv) {
               use: getStyleLoaders({
                 importLoaders: 1,
                 sourceMap: isEnvProduction && shouldUseSourceMap,
+                modules:true,
+                getLocalIdent: (context, localIdentName, localName) => {
+                  if (
+                    context.resourcePath.includes('node_modules') ||
+                    context.resourcePath.includes('ant.design.pro.less') ||
+                    context.resourcePath.includes('global.less')
+                  ) {
+                    return localName;
+                  }
+                  const match = context.resourcePath.match(/src(.*)/);
+                  if (match && match[1]) {
+                    const antdProPath = match[1].replace('.less', '');
+                    const arr = slash(antdProPath)
+                      .split('/')
+                      .map(a => a.replace(/([A-Z])/g, '-$1'))
+                      .map(a => a.toLowerCase());
+                    return `antd-pro${arr.join('-')}-${localName}`.replace(/--/g, '-');
+                  }
+                  return localName;
+                },
               }),
               // Don't consider CSS imports dead code even if the
               // containing package claims to have no side effects.
