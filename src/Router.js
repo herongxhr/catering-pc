@@ -8,10 +8,11 @@ import C from './pages/AccSupermarket'
 import D from './pages/PurOrder'
 import E from './pages/DeliveryAcce'
 import Setting from './pages/Setting'
-import Imformation from './pages/Imformation'
+import BaseView from './pages/acount/BaseView'
 import BasicConfig from './pages/acount/basicConfig'
 import SecurityView from './pages/acount/SecurityView'
 import Dosing from './pages/acount/Dosing'
+import Supply from './pages/acount/Supply' 
 
 
 
@@ -30,10 +31,10 @@ class IRouter extends React.Component {
                       <Route path="/Setting" render={()=>
                         <Setting>
                           <Switch>
-                            <Route path="/Setting/imformation" component={Imformation}></Route>
+                            <Route path="/Setting/imformation" component={BaseView}></Route>
                             <Route path="/Setting/set" component={BasicConfig}></Route>
                             <Route path="/Setting/security" component={SecurityView}></Route>
-                            <Route path="/Setting/supply" component={Imformation}></Route>
+                            <Route path="/Setting/supply" component={Supply}></Route>
                             <Route path="/Setting/cuisine" component={Dosing}></Route>
                           </Switch>
                         </Setting>

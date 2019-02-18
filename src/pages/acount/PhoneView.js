@@ -1,10 +1,11 @@
 import React, { Fragment, PureComponent } from 'react';
 import { Input } from 'antd';
-import styles from './PhoneView.less';
+import './PhoneView.less';
 
 class PhoneView extends PureComponent {
   render() {
-    const { value, onChange } = this.props;
+    const {  onChange } = this.props;
+    const value = '0752-268888888'
     let values = ['', ''];
     if (value) {
       values = value.split('-');

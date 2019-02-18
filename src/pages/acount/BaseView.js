@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Form, Input, Upload, Select, Button } from 'antd';
 import PhoneView from './PhoneView';
+
 import './BaseView.less';
 
 const FormItem = Form.Item;
@@ -19,7 +20,7 @@ const validatorPhone = (rule, value, callback) => {
 };
 
 
-class BaseView extends Component {
+class Imformation extends Component {
   // componentDidMount() {
   //   this.setBaseInfo();
   // }
@@ -121,7 +122,7 @@ class BaseView extends Component {
                 rules: [
                   {
                     required: true,
-                    message: 'a',
+                    message: '请输入您的联系电话',
                   },
                   { validator: validatorPhone },
                 ],
@@ -137,6 +138,6 @@ class BaseView extends Component {
   }
 }
 
-const Imformation = Form.create()(BaseView)
+const BaseView = Form.create()(Imformation)
 
-export default Imformation
+export default BaseView
