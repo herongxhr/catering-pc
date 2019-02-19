@@ -1,12 +1,8 @@
 import React from 'react'
 import { Card,Table,Tag,Row,Col  } from 'antd'
 import Axios from '../../axios'
-<<<<<<< HEAD
-import SubHeader from '../../components/SubHeader'
-=======
 import SubHeader from '../../Components/SubHeader'
 import { delivery } from '../../DataConfig'
->>>>>>> 3081f34ed101447656a1483601b4bd05fedf3e76
 
 import './index.less'
 
@@ -19,7 +15,7 @@ const tabList = [{
 },{
 	key:'tab3',
 	tab:'已验收'
-}];
+}]
 
 const tab1Columns = [{
   title: '配送单号',
