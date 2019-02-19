@@ -1,7 +1,7 @@
 import React from 'react'
 import OrderTable from '../../components/OrderTable'
 import SubHeader from '../../components/SubHeader'
-import { Card } from 'antd'
+import { Card, Row, Col } from 'antd'
 
 import './index.less'
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { Layout } from 'antd';
 import { Menu, Icon } from 'antd';
 
-import SettingMenu from '../../Components/SettingMenu'
+import SettingMenu from '../../components/SettingMenu'
 
 import './index.less'
 
