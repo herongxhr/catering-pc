@@ -1,6 +1,6 @@
 import React from 'react'
 
-import MarketCommodity from '../../Components/SuperMarket'
+import MarketCommodity from '../../components/SuperMarket'
 
 import './index.less'
 

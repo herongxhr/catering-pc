@@ -1,6 +1,6 @@
 import React from 'react'
-import OrderTable from '../../Components/OrderTable'
-import SubHeader from '../../Components/SubHeader'
+import OrderTable from '../../components/OrderTable'
+import SubHeader from '../../components/SubHeader'
 import { Card } from 'antd'
 
 import './index.less'

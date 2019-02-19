@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './index.less';
-import TodayMenuCard from '../../Components/TodayMenuCard/TodayMenuCard'
-import TodoListCard from '../../Components/TodoListCard/TodoListCard'
-import DataStatistics from '../../Components/DataStatistics/DataStatistics'
+import TodayMenuCard from '../../components/TodayMenuCard/TodayMenuCard'
+import TodoListCard from '../../components/TodoListCard/TodoListCard'
+import DataStatistics from '../../components/DataStatistics/DataStatistics'
 import { Link, } from 'react-router-dom'
 import axios from 'axios'
 import { Card, Button, Tabs } from 'antd';

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Jheader from './Components/Jheader'
+import Jheader from './components/Jheader'
 import { Layout, Menu, Breadcrumb } from 'antd';
 const { Content, Footer } = Layout;
 
