@@ -7,8 +7,8 @@ class SubHeader extends React.Component {
     return(
       <div className='SubHeader'>
        <Breadcrumb>
-          <Breadcrumb.Item><a href="#">{this.props.title}</a></Breadcrumb.Item>
-          <Breadcrumb.Item><a href="#">{this.props.subTitle}</a></Breadcrumb.Item>
+          <Breadcrumb.Item><a href="">{this.props.title}</a></Breadcrumb.Item>
+          <Breadcrumb.Item><a href="">{this.props.subTitle}</a></Breadcrumb.Item>
         </Breadcrumb>
       </div>
     )

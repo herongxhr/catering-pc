@@ -35,7 +35,7 @@ const tabColumns = [{
   dataIndex: 'status',
 	key: 'status',
 	render(status){
-		return status === 1?'未下单':'已下单'
+		return status == 1?'未下单':'已下单'
 	}
 }];
 

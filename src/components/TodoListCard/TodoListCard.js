@@ -1,43 +1,40 @@
 import React, { Component } from 'react';
 import './TodoListCard.less';
 import {  Table } from 'antd';
+import { Badge } from 'antd';
 
 const columns = [{
     title: '待办事项',
     dataIndex: 'todolist',
     key: 'todolist',
   }, {
-    title: '全部',
-    dataIndex: 'all',
-    key: 'all',
+    dataIndex: 'count',
+    key: 'count',
     align: 'right',
-    className: 'all'
+    className: 'all',
+    render: count => (
+      <span>
+        <Badge count={count} style={{ backgroundColor: '#FF9500', boxShadow: '0 0 0 1px #d9d9d9 inset' }} />
+      </span>
+    ), 
   }];
 
   const data = [{
     key: '1',
-    todolist: '下周订单',
-    all: '待处理',
+    todolist: '待执行订单',
+    count: '2',
   }, {
     key: '2',
-    todolist: '未接订单',
-    all: '0个',
+    todolist: '换货审核',
+    count: '1',
   }, {
     key: '3',
-    todolist: '未验收订单',
-    all: '0件',
+    todolist: '待下单',
+    count: '3',
   },{
     key: '4',
-    todolist: '换菜审批',
-    all: '0个',
-  },{
-    key: '5',
-    todolist: '新加食材审批',
-    all: '处理中',
-  },{
-    key: '6',
-    todolist: '新加食材审批',
-    all: '处理中',
+    todolist: '待验收',
+    count: '6',
   }];
 class TodoListCard extends Component {
   render() {

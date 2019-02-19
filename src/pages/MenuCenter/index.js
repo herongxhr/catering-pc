@@ -2,10 +2,10 @@ import React from 'react'
 import { Card,Table,Tag,Tabs } from 'antd'
 import axios from 'axios'
 import Axios from '../../axios'
-import SubHeader from '../../components/SubHeader'
-import WrappedInlineForm from '../../components/InlineForm'
-import TableOne from '../../components/TableOne'
-import TableTwo from '../../components/TableTwo'
+import SubHeader from '../../Components/SubHeader'
+import WrappedInlineForm from '../../Components/InlineForm'
+import TableOne from '../../Components/TableOne'
+import TableTwo from '../../Components/TableTwo'
 
 import './index.less'
 
@@ -48,7 +48,7 @@ const tab1Columns = [{
   dataIndex: 'status',
 	key: 'status',
 	render(status){
-		return status === 1?'已执行':'未执行'
+		return status == 1?'已执行':'未执行'
 	}
 }];
 
@@ -80,7 +80,7 @@ const tab2Columns = [{
 	dataIndex:'operation',
 	key:'operation',
 	render(operation){
-		return operation === 1?<span style={{color:'blue'}}>删除</span>:''
+		return operation == 1?<span style={{color:'blue'}}>删除</span>:''
 	}
 }]
 
@@ -96,7 +96,6 @@ const requests = [{
 class B extends React.Component {
   state = {
     key: 'tab1',
-		noTitleKey: 'app',
 		tab1Source:[],
 		tab2Source:[]
   }
