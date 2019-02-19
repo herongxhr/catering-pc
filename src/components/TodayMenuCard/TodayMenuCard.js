@@ -1,57 +1,86 @@
 import React, { Component } from 'react';
 import './TodayMenuCard.less';
-import {  Table } from 'antd';
+import { Empty} from 'antd';
 
-const columns = [{
-    title: '早餐',
-    dataIndex: 'breakfast',
-    key: 'breakfast',
-  }, {
-    title: '午餐',
-    dataIndex: 'lunch',
-    key: 'lunch',
-  }, {
-    title: '晚餐',
-    dataIndex: 'dinner',
-    key: 'dinner',
-  }];
-
-  const data = [{
-    key: '1',
-    breakfast: '鹌鹑蛋',
-    lunch: '大白菜油豆腐',
-    dinner: '冬瓜排骨汤',
-  }, {
-    key: '2',
-    breakfast: '鹌鹑蛋',
-    lunch: '大白菜油豆腐',
-    dinner: '冬瓜排骨汤',
-  }, {
-    key: '3',
-    breakfast: '鹌鹑蛋',
-    lunch: '大白菜油豆腐',
-    dinner: '冬瓜排骨汤',
-  },{
-    key: '4',
-    breakfast: '鹌鹑蛋',
-    lunch: '大白菜油豆腐',
-    dinner: '冬瓜排骨汤',
-  },{
-    key: '5',
-    breakfast: '银耳粥',
-    lunch: '',
-    dinner: '冬瓜排骨汤',
-  },{
-    key: '6',
-    breakfast: '',
-    lunch: '桔子',
-    dinner: '',
-  }];
 class TodayMenuCard extends Component {
+  state={
+    datab:['纯牛奶','核桃仁'] || [],
+    dataz:['芹菜炒香干','辣椒炒牛肉','排骨萝卜汤'] || [],
+    datad:'',
+    dataw:''
+  }
   render() {
     return (
       <div className="MenuCard">
-        <Table columns={columns} dataSource={data} pagination={false}/>
+        <div className='title'>今日菜单</div>
+        <div className='todaymenu'>
+            <div className='breakfast'>
+              <div>早餐</div>
+              <ul>
+                {
+                  (this.state.datab) ?
+                  this.state.datab.map(data => <li>{data}</li>) : <Empty
+                  image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+                  description={
+                    <span>
+                      暂未排餐哦~
+                    </span>
+                  }
+                />
+                }
+              </ul>
+            </div>
+            <div className='lunch'>
+              <div>中餐</div>
+              <ul>
+                  {
+                    (this.state.dataz) ?
+                    this.state.dataz.map(data => <li>{data}</li>) : <Empty
+                    
+                    image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+                    description={
+                      <span>
+                        暂未排餐哦~
+                      </span>
+                    }
+                  />
+                  }
+                </ul>
+            </div>
+            <div className='dessert'>
+              <div>点心</div>
+              <ul>
+                {
+                  (this.state.datad) ?
+                  (this.state.datad.map(data => <li>{data}</li>)) : (<Empty
+                  image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+                  description={
+                    <span>
+                      暂未排餐哦~
+                    </span>
+                  }
+                />)
+                }
+              </ul>
+            </div>
+            <div className='dinner'>
+              <div>晚餐</div>
+              <ul>
+                {
+                  (this.state.dataw) ?
+                  this.state.dataw.map(data => <li>{data}</li>) : <Empty
+                  image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+                  description={
+                    <span>
+                      暂未排餐哦~
+                    </span>
+                  }
+                />
+                }
+              </ul>
+            </div>
+        </div>
+        
       </div>
     );
   }
