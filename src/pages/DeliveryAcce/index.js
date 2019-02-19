@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card,Table,Tag,Row,Col  } from 'antd'
 import Axios from '../../axios'
-import SubHeader from '../../Components/SubHeader'
+import SubHeader from '../../components/SubHeader'
 import { delivery } from '../../DataConfig'
 
 import './index.less'

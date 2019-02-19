@@ -1,7 +1,7 @@
 import React from 'react'
-import SubHeader from '../../Components/SubHeader'
+import SubHeader from '../../components/SubHeader'
 import { Card,Row,Col } from 'antd'
-import ParameterTable from '../../Components/ParameterTable'
+import ParameterTable from '../../components/ParameterTable'
 
 
 import './index.less'
