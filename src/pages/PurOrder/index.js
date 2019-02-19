@@ -14,7 +14,11 @@ class D extends React.Component {
 				title={<SubHeader title='采购订单' subTitle='' />}
 				onTabChange={(key) => { this.onTabChange(key, 'key'); }}
 				>
-					<OrderTable />
+					<Row>
+						<Col xl={{span: 15, offset: 4}}>
+							<OrderTable />
+						</Col>
+					</Row>
 				</Card>
 			</div>
 		)
