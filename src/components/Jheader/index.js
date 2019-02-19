@@ -21,19 +21,19 @@ class Jheader extends Component {
 							style={{ lineHeight: '70px' }}
 						>
 							<Menu.Item key="1">
-								<NavLink to='/home'><span><Icon type="home" style={{fontSize:'16px'}}/></span>主页</NavLink>
+								<NavLink to='/home'><span><Icon type="home" /></span>主页</NavLink>
 							</Menu.Item>
 							<Menu.Item key="2">
-								<div>
+								<NavLink to='/menubar'>
 									<img src={center}></img>
-									<NavLink to='/menubar'>菜单中心</NavLink>
-								</div>
+									<span>菜单中心</span>
+								</NavLink>
 							</Menu.Item>
 							<Menu.Item key="3">
-								<div>
-									<img src={dan}></img>
-									<NavLink to='/supermarket'>辅料超市</NavLink>
-								</div>								
+									<NavLink to='/supermarket'>
+										<img src={dan}></img>
+										<span>辅料超市</span>
+									</NavLink>								
 							</Menu.Item>
 							<Menu.Item key="4">
 								<NavLink to='/order'>采购订单</NavLink>
@@ -42,11 +42,14 @@ class Jheader extends Component {
 								<NavLink to='/delivery'>配送验收</NavLink>
 							</Menu.Item>
 							<Menu.Item key="6">
+								<NavLink to='/parameter'>台账</NavLink>
+							</Menu.Item>
+							<Menu.Item key="7">
 								<NavLink to='/message'>
 									<span className="iconfont">&#xe62b;</span>
 								</NavLink>
 							</Menu.Item>
-							<Menu.Item key="7">
+							<Menu.Item key="8">
 								<NavLink to='/setting'>
 									<span className="iconfont">&#xe620;</span>
 								</NavLink>

@@ -6,6 +6,7 @@ import B from './pages/MenuCenter'
 import C from './pages/AccSupermarket'
 import D from './pages/PurOrder'
 import E from './pages/DeliveryAcce'
+import Parameter from './pages/Parameter'
 import Setting from './pages/Setting'
 import BaseView from './pages/acount/BaseView'
 import BasicConfig from './pages/acount/basicConfig'
@@ -27,6 +28,7 @@ class IRouter extends React.Component {
                       <Route path="/supermarket" component={C}></Route>
                       <Route path="/order" component={D}></Route>
                       <Route path="/delivery" component={E}></Route>
+                      <Route path="/parameter" component={Parameter}></Route>
                       <Route path="/Setting" render={()=>
                         <Setting>
                           <Switch>

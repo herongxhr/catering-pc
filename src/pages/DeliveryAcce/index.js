@@ -1,7 +1,12 @@
 import React from 'react'
-import { Card,Table,Tag  } from 'antd'
+import { Card,Table,Tag,Row,Col  } from 'antd'
 import Axios from '../../axios'
+<<<<<<< HEAD
 import SubHeader from '../../components/SubHeader'
+=======
+import SubHeader from '../../Components/SubHeader'
+import { delivery } from '../../DataConfig'
+>>>>>>> 3081f34ed101447656a1483601b4bd05fedf3e76
 
 import './index.less'
 
@@ -58,22 +63,23 @@ class E extends React.Component {
 		this.setState({ [type]: key });
 	}
 	
-	componentDidMount() {
-    Axios.ajax({
-      url:'/delivery'
-    }).then((value) => {
-      this.setState({
-        DataSource:value
-      })
-    })
-	}
+	// componentDidMount() {
+  //   Axios.ajax({
+  //     url:'/delivery'
+  //   }).then((value) => {
+  //     this.setState({
+  //       DataSource:value
+  //     })
+  //   })
+	// }
 
   render() {
+    const dataSource = delivery.result
 		const contentList = {
-			tab1: <Table columns={tab1Columns} dataSource={this.state.DataSource} />,
-			tab2: <Table columns={tab1Columns} dataSource={this.state.DataSource} />,
-			tab3: <Table columns={tab1Columns} dataSource={this.state.DataSource} />
-		};
+			tab1: <Table columns={tab1Columns} dataSource={dataSource} />,
+			tab2: <Table columns={tab1Columns} dataSource={dataSource} />,
+			tab3: <Table columns={tab1Columns} dataSource={dataSource} />
+    };
     return (
       <div>
         <Card
@@ -83,11 +89,15 @@ class E extends React.Component {
           activeTabKey={this.state.key}
           onTabChange={(key) => { this.onTabChange(key, 'key'); }}
         >
-          <div style={{ background: '#ECECEC' }}>
-            <div style={{ background: 'white'}}>
-              {contentList[this.state.key]}
-            </div>
-          </div>
+        	<Row>
+						<Col xl={{span: 15, offset: 4}}>
+              <div style={{ background: '#ECECEC' }}>
+                <div style={{ background: 'white'}}>
+                  {contentList[this.state.key]}
+                </div>
+              </div>
+						</Col>
+					</Row>
         </Card>
       </div>
     );

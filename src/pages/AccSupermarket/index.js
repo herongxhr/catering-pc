@@ -7,6 +7,7 @@ const { Search } = Input;
 
 class C extends React.Component {
 	render() {
+<<<<<<< HEAD
 		return (
 			<div className={styles.standardList}>
 				<div>
@@ -77,6 +78,11 @@ class C extends React.Component {
 					</List>
 				</div>
 				{/* <MarketCommodity /> */}
+=======
+		return(
+			<div>
+				this is MarketCommodity .
+>>>>>>> 3081f34ed101447656a1483601b4bd05fedf3e76
 			</div>
 		)
 	}
