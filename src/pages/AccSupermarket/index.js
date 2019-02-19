@@ -8,7 +8,7 @@ class C extends React.Component {
 	render() {
 		return(
 			<div>
-				<MarketCommodity />
+				this is MarketCommodity .
 			</div>
 		)
 	}
