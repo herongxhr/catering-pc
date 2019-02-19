@@ -53,6 +53,7 @@ class OrderTable extends React.Component {
     })
   }
   render() {
+    console.log(this.state.DataSource)
     return(
       <div className='orderTable'>
           <WrappedOrderForm />

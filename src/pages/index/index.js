@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import './index.less';
 import TodayMenuCard from '../../Components/TodayMenuCard/TodayMenuCard'
 import TodoListCard from '../../Components/TodoListCard/TodoListCard'
-import PurchaseStatistics from '../../Components/PurchaseStatistics/PurchaseStatistics'
 import DataStatistics from '../../Components/DataStatistics/DataStatistics'
 import { Link, } from 'react-router-dom'
 import axios from 'axios'
-import { Card, Button } from 'antd';
+import { Card, Button, Tabs } from 'antd';
 
+const TabPane = Tabs.TabPane;
+const operations = <span className='extra'>查看全部</span>;
 class A extends Component {
   componentDidMount() {
     axios.get('http://yapi.demo.qunar.com/mock/44634/jianguo/data').then((res) =>{
@@ -40,7 +41,10 @@ class A extends Component {
             <TodayMenuCard />
           </div>
           <div className="App-content-accepting"> 
-            
+            <Tabs tabBarExtraContent={operations}>
+              <TabPane tab="今日验收" key="1">Content of tab 1</TabPane>
+              <TabPane tab="明日验收" key="2">Content of tab 2</TabPane>
+            </Tabs>
           </div>
         </div>
       </div>
