@@ -1,9 +1,7 @@
 import React from 'react'
 import { Card,Table,Tag,Tabs } from 'antd'
 import axios from 'axios'
-import Axios from '../../axios'
 import SubHeader from '../../Components/SubHeader'
-import WrappedInlineForm from '../../Components/InlineForm'
 import TableOne from '../../Components/TableOne'
 import TableTwo from '../../Components/TableTwo'
 

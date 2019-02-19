@@ -1,7 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router,Route,Switch,Redirect } from 'react-router-dom'
 import App from './App'
-import Total from './Total'
 import A from './pages/index'
 import B from './pages/MenuCenter'
 import C from './pages/AccSupermarket'
@@ -36,9 +35,11 @@ class IRouter extends React.Component {
                             <Route path="/Setting/security" component={SecurityView}></Route>
                             <Route path="/Setting/supply" component={Supply}></Route>
                             <Route path="/Setting/cuisine" component={Dosing}></Route>
+                            <Redirect to="/Setting/imformation" />
                           </Switch>
                         </Setting>
                       }></Route>
+                      <Redirect to="/home" />
                   </Switch>
                 </App>
             } />

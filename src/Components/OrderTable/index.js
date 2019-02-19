@@ -3,6 +3,7 @@ import { Table,Tag,Tabs,Button,Radio } from 'antd'
 import Axios from '../../axios'
 import WrappedOrderForm from '../OrderForm'
 
+import { order } from '../../DataConfig' 
 import './index.less'
 
 const TabPane = Tabs.TabPane;
@@ -40,19 +41,22 @@ const tabColumns = [{
 }];
 
 class OrderTable extends React.Component {
-  state = {
-		DataSource:[]
-  }
-  componentDidMount() {
-    Axios.ajax({
-      url:'/order'
-    }).then((value) => {
-      this.setState({
-        DataSource:value
-      })
-    })
-  }
+  // state = {
+	// 	DataSource:[]
+  // }
+
+  // componentDidMount() {
+  //   Axios.ajax({
+  //     url:'/order'
+  //   }).then((value) => {
+  //     this.setState({
+  //       DataSource:value
+  //     })
+  //   })
+  // }
+
   render() {
+    const DataSource = order.result
     return(
       <div className='orderTable'>
           <WrappedOrderForm />
@@ -67,7 +71,7 @@ class OrderTable extends React.Component {
             </div>
           </div>  
           <div style={{marginTop:30}}>
-            <Table columns={tabColumns} dataSource={this.state.DataSource}/>
+            <Table columns={tabColumns} dataSource={DataSource} />
           </div>
       </div>
     )

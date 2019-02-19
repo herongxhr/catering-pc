@@ -1,7 +1,7 @@
 import React from 'react'
 import OrderTable from '../../Components/OrderTable'
 import SubHeader from '../../Components/SubHeader'
-import { Card } from 'antd'
+import { Card,Row,Col } from 'antd'
 
 import './index.less'
 
@@ -14,7 +14,11 @@ class D extends React.Component {
 				title={<SubHeader title='采购订单' subTitle='' />}
 				onTabChange={(key) => { this.onTabChange(key, 'key'); }}
 				>
-					<OrderTable />
+					<Row>
+						<Col xl={{span: 15, offset: 4}}>
+							<OrderTable />
+						</Col>
+					</Row>
 				</Card>
 			</div>
 		)
