@@ -7,6 +7,7 @@ import WrappedInlineForm from '../../components/InlineForm'
 import TableOne from '../../components/TableOne'
 import TableTwo from '../../components/TableTwo'
 
+
 import './index.less'
 
 const baseURL =	'https://www.easy-mock.com/mock/5c4c02ec50f5ab309c7dec17/DataSource'
@@ -121,6 +122,7 @@ class B extends React.Component {
 		const contentList = {
 			tab1: <TableOne columns={tab1Columns} dataSource={this.state.tab1Source}  />,
 			tab2: <TableTwo columns={tab2Columns} dataSource={this.state.tab2Source} />,
+		//tab3: <Table columns={tab1Columns} dataSource={this.state.DataSource} />
 			tab3: <Table columns={tab1Columns} dataSource={this.state.DataSource} />
 		};
     return (

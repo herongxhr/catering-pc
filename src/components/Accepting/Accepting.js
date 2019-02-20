@@ -298,15 +298,16 @@ class Accepting extends Component {
         todayData:[],
         tomorrowData:[],
     }
-    // componentDidMount() {
-    //     Axios.ajax({
-    //       url:'/delivery'
-    //     }).then((value) => {
-    //       this.setState({
-    //         todayData:value
-    //       })
-    //     })
-    //   }
+    componentDidMount() {
+        Axios.ajax({
+          url:'/catering/goo/brand/page'
+        }).then((value) => {
+          console.log(value,'qqqq')
+          this.setState({
+            todayData:value
+          })
+        })
+      }
     render() {
         console.log(this.state.todayData)
         return ( 

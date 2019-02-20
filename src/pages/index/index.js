@@ -3,13 +3,38 @@ import './index.less';
 import TodayMenuCard from '../../components/TodayMenuCard/TodayMenuCard'
 import TodoListCard from '../../components/TodoListCard/TodoListCard'
 import Accepting from '../../components/Accepting/Accepting'
-import { Link, } from 'react-router-dom'
-import { Card, Button, Tabs } from 'antd';
+import { Card, Button, Tabs,Radio,Table } from 'antd';
+import moment from 'moment'
 
 const TabPane = Tabs.TabPane;
 const operations = <span className='extra'>查看全部</span>;
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
+const columns = [{
+  dataIndex: 'device',
+  key: 'device',
+}, {
+  dataIndex: 'time',
+  key: 'time',
+  //render:(time)=><span>{moment(time).format('YYYY-MM-DD HH:mm:ss')}</span>
+}];
+const data = [{
+  key: '1',
+  device: '晨检仪',
+  time: '2019-01-28  07：29：35',
+}, {
+  key: '2',
+  device: '验货机',
+  time: '2019-01-28  07：29：35',
+}, {
+  key: '3',
+  device: '易检设备',
+  time:'2019-01-28  07：29：35',
+}];
 class A extends Component {
   render() {
+    const title= <div>设备最后开机时间</div>
+    const footer = <div style={{textAlign:'center',fontSize:14,color:'##54C4CE'}}>查看全部</div>
     return ( 
       <div className="App">
         <div>{this.props.children}</div>
@@ -18,7 +43,7 @@ class A extends Component {
             <div className='App-pic'></div>
             <div className='App-time'>
               <h3>第32周</h3>
-              <h6>2018年12月2日</h6>
+              <h6>2018-12-02 周一</h6>
             </div>
           </div>
           <div className="App-content-data">
@@ -39,6 +64,24 @@ class A extends Component {
               <TabPane tab="今日验收" key="1"><Accepting /></TabPane>
               <TabPane tab="明日验收" key="2"><Accepting /></TabPane>
             </Tabs>
+          </div>
+          <div className='App-content-paying-wrapper'>
+            <div className='App-content-paying'>
+              <div style={{display:'flex',justifyContent:'space-between'}}>
+                  <p style={{width:226,height:65,fontSize:16,lineHeight:4,rgba:(0,0,0,0.85)}}>应付款统计分析</p>
+                  <div> 
+                    <RadioGroup defaultValue="month">
+                      <RadioButton value="month">本月</RadioButton>
+                      <RadioButton value="quarter">本季度</RadioButton>
+                      <RadioButton value="year">本年</RadioButton>
+                    </RadioGroup>
+                  </div>
+              </div>
+
+            </div>
+            <div className='App-content-opening'>
+            <Table title={()=>title} columns={columns} dataSource={data} footer={() => footer} />
+            </div>
           </div>
         </div>
       </div>

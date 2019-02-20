@@ -7,7 +7,7 @@ export default class Axios {
         loading = document.getElementById('ajaxLoading');
         loading.style.display = 'block';
         
-        let baseApi = 'https://www.easy-mock.com/mock/5c4c02ec50f5ab309c7dec17/DataSource';
+        let baseApi = 'http://yapi.uanla.test:7777/mock/17';
         return new Promise((resolve,reject)=>{
             axios({
                 url:options.url,

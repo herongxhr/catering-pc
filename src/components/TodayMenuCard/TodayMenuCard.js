@@ -55,7 +55,7 @@ class TodayMenuCard extends Component {
                   (this.state.datad.map(data => <li>{data}</li>)) : (<Empty
                   image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
                   description={
-                    <span>
+                    <span >
                       暂未排餐哦~
                     </span>
                   }
@@ -71,7 +71,7 @@ class TodayMenuCard extends Component {
                   this.state.dataw.map(data => <li>{data}</li>) : <Empty
                   image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
                   description={
-                    <span>
+                    <span >
                       暂未排餐哦~
                     </span>
                   }
