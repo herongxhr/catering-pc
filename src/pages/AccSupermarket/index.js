@@ -1,11 +1,14 @@
 import React from 'react';
-import MarketCommodity from '../../components/SuperMarket';
+import { queryCatalogF } from '../../services/api';
 import { Layout, Breadcrumb, Input, Card, Row, Col, Button, List } from 'antd';
 import './index.less';
 
 const { Search } = Input;
 
-class C extends React.Component {
+class AccSupermarket extends React.Component {
+	componentDidMount() {
+		queryCatalogF();
+	}
 	render() {
 		return (
 			<div className="supermarket-root">
@@ -20,8 +23,8 @@ class C extends React.Component {
 						<div className="filter-row"><span className="filter-title">分类</span><a type="primary">全部</a></div>
 						<div className="filter-row"><span className="filter-title">品牌</span><a type="primary">全部</a></div>
 						<div className="filter-row"><span className="filter-title">收录</span><a type="primary">全部</a>
-						<a>采购目录中商品</a>
-						<a>采购目录外商品</a>
+							<a>采购目录中商品</a>
+							<a>采购目录外商品</a>
 						</div>
 					</div>
 				</div>
@@ -81,4 +84,4 @@ class C extends React.Component {
 	}
 }
 
-export default C
+export default AccSupermarket;
