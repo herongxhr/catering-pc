@@ -1,14 +1,23 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import axios from 'axios';
 import { Spin, message } from 'antd';
 
+/**
+ * 
+ * @param {object} options 
+ * 其中method属性为请求方法
+ * url属性为请求的相对地址
+ * data为参数对象，data中showLoading为是否显示加载器
+ * data中的params属性为axios方法参数对象中的params属性
+ * 
+ */
 export default async function request(options) {
-    // let loading;
-    // let isShowLoading = options.data && options.data.showLoading;
-    // if (isShowLoading) {
-    //     loading = document.getElementById('ajaxLoading');
-    //     loading.innerHTML = (<Spin />);
-    // }
+    let loading;
+    let isShowLoading = options.data && options.data.showLoading;
+    if (isShowLoading) {
+        ReactDOM.render(<Spin />, document.getElementById('ajaxLoading'));
+    }
     let baseApi = ' https://easy-mock.com/mock/5c6cf43f2ecce005c352d626';
     try {
         const response = await axios({
@@ -17,11 +26,12 @@ export default async function request(options) {
             baseURL: baseApi,
             params: (options.data && options.data.params) || '',
         });
-        // if (isShowLoading) {
-        //     loading = document.getElementById('ajaxLoading');
-        //     loadiing.style.display = 'none';
-        // }
-        //此时的response为axios包装返回的response而不是后台返回的json对象
+        //关闭加载中
+        if (isShowLoading) {
+            loading = document.getElementById('ajaxLoading');
+            loading.style.display = 'none';
+        }
+        //此时的response为axios返回的response而不是后台返回的json对象
         if (response.status >= 200 && response.status < 300) {
             //res为后台返回的json对象
             let res = response.data;
