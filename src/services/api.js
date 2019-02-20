@@ -13,7 +13,6 @@ export function queryCatalogF() {
                 subcatalog: 'F'
             }
         }
-
     });
 }
 

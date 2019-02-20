@@ -36,14 +36,14 @@ export default async function request(options) {
             //res为后台返回的json对象
             let res = response.data;
             if (res.code === 200) {
-                console.log(res);
+                return res;
             } else {
                 message.info(res.msg);
             }
-        } else {
+        } else { //axios返回状态码为其它时
             console.log(response.data);
         }
-    } catch (error) {
+    } catch (error) { //发送axios请求出错时
         console.log(error)
     }
 }

@@ -6,6 +6,7 @@
     "ant-design-pro": "^2.2.1",
     "antd": "^3.13.2",
     "axios": "^0.18.0",
+    "dva": "^2.4.1",
     "qs": "^6.6.0",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
@@ -27,6 +28,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.3.0",
     "babel-plugin-import": "^1.11.0",
     "customize-cra": "^0.2.11",
     "less": "^3.9.0",
