@@ -8,7 +8,7 @@ export default {
     effects: {
         //其中payload为视图层dispatch方法所传
         //作为call方法首参数异步方法的参数再传入
-        *fetch({}, { call, put }) {
+        *fetch(_, { call, put }) {
             //call方法首参数为要调用的异步方法
             const response = yield call(queryCatalogF);
             console.log(response);
@@ -21,8 +21,12 @@ export default {
         }
     },
     reducers: {
-        getCatalogF(state, action) {
-            return { ...state, catalogF: action.payload }
+        getCatalogF(state, { payload }) {
+            console.log(payload);
+            return {
+                ...state,
+                catalogF: state.catalogF.concat(payload),
+            };
         },
-    }
+    },
 };

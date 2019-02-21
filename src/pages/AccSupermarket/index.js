@@ -1,22 +1,21 @@
 import React from 'react';
-import { queryCatalogF } from '../../services/api';
 import { connect } from 'dva';
-import { Layout, Breadcrumb, Input, Card, Row, Col, Button, List, Form } from 'antd';
+import {  Breadcrumb, Input, Card, List } from 'antd';
 import './index.less';
 
 const { Search } = Input;
 
 class AccSupermarket extends React.Component {
-	componentDidMount() {
+	handleClick = () => {
 		const { dispatch } = this.props;
 		//请求辅料分类
 		dispatch({
 			type: 'accSupermarket/fetch',
 		})
-		console.log(this.props);
+		console.log("props is:",this.props);
 	}
 	render() {
-		console.log(this.props);
+		console.log("props is:",this.props);
 		return (
 			<div className="supermarket-root">
 				<div className="header-container">
@@ -35,7 +34,7 @@ class AccSupermarket extends React.Component {
 						</div>
 						<div className="filter-row"><span className="filter-title">品牌</span><a type="primary">全部</a></div>
 						<div className="filter-row"><span className="filter-title">收录</span><a type="primary">全部</a>
-							<a>采购目录中商品</a>
+							<a onClick={this.handleClick}>采购目录中商品</a>
 							<a>采购目录外商品</a>
 						</div>
 					</div>
@@ -97,6 +96,6 @@ class AccSupermarket extends React.Component {
 }
 
 // AccSupermarket;
-export default connect(( state ) => ({
-	state,
+export default connect(( {accSupermarket} ) => ({
+	accSupermarket,
 }))(AccSupermarket);
