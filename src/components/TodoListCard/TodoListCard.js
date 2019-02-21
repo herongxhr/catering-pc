@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './TodoListCard.less';
 import {  Table } from 'antd';
 import { Badge } from 'antd';
+import { queryTodoList } from '../../services/api'
 
 const columns = [{
     title: '待办事项',
@@ -37,6 +38,10 @@ const columns = [{
     count: '6',
   }];
 class TodoListCard extends Component {
+  componentDidMount() {
+    console.log(queryTodoList());
+
+  }
   render() {
     return (
       <div className="TodoListCard">

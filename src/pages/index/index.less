@@ -91,6 +91,35 @@ h6{
     .ant-radio-group {
       margin-top: 17px;
   }
+  .antd-pro-charts-pie-chart{
+    width:206px;
+    height:206px;
+    margin-left:47px;
+  }
+  .antd-pro-charts-pie-legend{
+    width:468px;
+    margin-left:41px;
+    font-size:14px;
+    font-weight: 500;
+    color:rgba(0,0,0,0.85);
+    font-family: 'PingFangSC-PingFangSC-regular';
+    li>{
+      margin-bottom:30px;
+      .antd-pro-charts-pie-percent{
+        margin-right:15px; 
+        color:rgba(0, 0, 0, 0.5)
+      }
+      .ant-divider, .ant-divider-vertical {
+        width: 2px;
+        background:rgba(0, 0, 0, 0.3)
+    }
+    }
+  }
+  .antd-pro-charts-pie-pie {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
   }
   .App-content-opening{
     width:350px;
@@ -99,6 +128,15 @@ h6{
   }
   .App-content-paying,.App-content-opening{
     background:#fff;
+  }
+  .device{
+    font-size:16px;
+    margin-left:20px;
+    .ant-table-title {
+      position: relative;
+      top: 1px;
+      border-radius: 4px 4px 0 0;
+  }
   }
   @keyframes App-logo-spin {
     from {

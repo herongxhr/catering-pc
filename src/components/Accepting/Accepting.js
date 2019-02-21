@@ -29,7 +29,7 @@ const Columns = [{
       dataIndex: 'status',
       key: 'status',
       render(status){
-		return status == 1?'已接收': <span style={{color:'#FF9500'}}>未接收</span>
+		return status == 1?'已接收': <a style={{color:'#FF9500'}}>未接收</a>
 	}
   }];
   const data= [
@@ -299,17 +299,9 @@ class Accepting extends Component {
         tomorrowData:[],
     }
     componentDidMount() {
-        Axios.ajax({
-          url:'/catering/goo/brand/page'
-        }).then((value) => {
-          console.log(value,'qqqq')
-          this.setState({
-            todayData:value
-          })
-        })
+       
       }
     render() {
-        console.log(this.state.todayData)
         return ( 
         <div className="accepting">
            <Table columns={Columns} dataSource={data}/> 

@@ -5,6 +5,8 @@ import TodoListCard from '../../components/TodoListCard/TodoListCard'
 import Accepting from '../../components/Accepting/Accepting'
 import { Card, Button, Tabs,Radio,Table } from 'antd';
 import moment from 'moment'
+import Charts from 'ant-design-pro/lib/Charts';
+import { Pie, yuan } from 'ant-design-pro/lib/Charts';
 
 const TabPane = Tabs.TabPane;
 const operations = <span className='extra'>查看全部</span>;
@@ -31,10 +33,25 @@ const data = [{
   device: '易检设备',
   time:'2019-01-28  07：29：35',
 }];
+const salesPieData = [
+  {
+    x: '家用电器',
+    y: 4544,
+  },
+  {
+    x: '食用酒水',
+    y: 3321,
+  },
+  {
+    x: '个护健康',
+    y: 3113,
+  },
+];
+
 class A extends Component {
   render() {
-    const title= <div>设备最后开机时间</div>
-    const footer = <div style={{textAlign:'center',fontSize:14,color:'##54C4CE'}}>查看全部</div>
+    const title= <div className='device'>设备最后开机时间</div>
+    const footer = <div style={{textAlign:'center',fontSize:14,color:'#54C4CE'}}>查看全部</div>
     return ( 
       <div className="App">
         <div>{this.props.children}</div>
@@ -77,10 +94,17 @@ class A extends Component {
                     </RadioGroup>
                   </div>
               </div>
-
+              <div>
+                  <Pie
+                      hasLegend
+                      data={salesPieData}
+                      valueFormat={val => <span dangerouslySetInnerHTML={{ __html: yuan(val) }} />}
+                      height={206}
+                    />
+              </div>
             </div>
             <div className='App-content-opening'>
-            <Table title={()=>title} columns={columns} dataSource={data} footer={() => footer} />
+            <Table showHeader={false} title={()=>title} columns={columns} dataSource={data} footer={() => footer} pagination={false} />
             </div>
           </div>
         </div>
