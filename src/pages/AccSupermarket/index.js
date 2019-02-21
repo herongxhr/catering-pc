@@ -7,14 +7,6 @@ import './index.less';
 const { Search } = Input;
 
 class AccSupermarket extends PureComponent {
-	filterByCatalog = () => {
-
-	}
-
-	filterByBrand = () => {
-
-	}
-
 	componentDidMount() {
 		const { dispatch } = this.props;
 		//请求辅料分类
@@ -31,10 +23,19 @@ class AccSupermarket extends PureComponent {
 	render() {
 		console.log(this.props);
 		const {
-			accSupermarket: { catalogF }
+			accSupermarket: {
+				catalogList,
+				currCatalog,
+				brandList,
+				currBrand,
+				collectStatusList,
+				currCollectStatus,
+			}
 		} = this.props;
-		console.log(catalogF);
-
+		console.log(catalogList, brandList);
+		const allCatalogStyle = !currCatalog ? 'filterLink active' : "filterLink";
+		const allBrandStyle = !currBrand ? 'filterLink active' : "filterLink";
+		const allCollectStyle = !currCollectStatus ? 'filterLink active' : "filterLink";
 		return (
 			<div className="supermarket-root">
 				<div className="header-container">
@@ -44,25 +45,33 @@ class AccSupermarket extends PureComponent {
 					<Search className="goodsSearch" placeholder="请输入关键字进行搜索" onSearch={() => ({})} />
 				</div>
 				<div className="section-wrapper">
-					<div className="goods-filter">
-						<TabLinks 
-							linksData = {catalogF}
+					<p>
+						<span className="filter-title">分类</span>
+						<a className={allCatalogStyle}>全部</a>
+						<TabLinks
+							linksData={catalogList}
+							currSelect={currCatalog}
+							{...this.props}
 						/>
-						<div className="filter-row"><span className="filter-title">分类</span>
-							<a type="primary">全部</a>
-							{
-								catalogF.list.filter(item => item.type === 'F')
-									.sort((a, b) => +a.sort - +b.sort)
-									.map(item => <a key={item.id}>{item.catalog_name}</a>)
-							}
-
-						</div>
-						<div className="filter-row"><span className="filter-title">品牌</span><a type="primary">全部</a></div>
-						<div className="filter-row"><span className="filter-title">收录</span><a type="primary">全部</a>
-							<a onClick={this.handleClick}>采购目录中商品</a>
-							<a>采购目录外商品</a>
-						</div>
-					</div>
+					</p>
+					<p>
+						<span className="filter-title">品牌</span>
+						<a className={allBrandStyle}>全部</a>
+						<TabLinks
+							linksData={brandList}
+							currSelect={currBrand}
+							{...this.props}
+						/>
+					</p>
+					<p>
+						<span className="filter-title">收录</span>
+						<a className={allCollectStyle}>全部</a>
+						<TabLinks
+							linksData={collectStatusList}
+							currSelect={currCollectStatus}
+							{...this.props}
+						/>
+					</p>
 				</div>
 				<div>
 					<List

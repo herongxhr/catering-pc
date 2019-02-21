@@ -3,18 +3,21 @@ import { queryCatalog, queryHotGoods } from '../services/api';
 export default {
     namespace: 'accSupermarket',
     state: {
-        catalogF: {
-            curr: 0,
-            list: ['']
-        },
-        brand: {
-            curr: 0,
-            list: []
-        },
-        isCollect: {
-            curr: 0,
-            list: ['采购目录商品', '采购目录外商品']
-        },
+        catalogList: [],
+        currCatalog: 0,
+        brandList: [],
+        currBrand: 0,
+        collectStatusList: [
+            {
+                id: 1,
+                status_name: "采购目录中商品"
+            },
+            {
+                id: 2,
+                status_name: "采购目录外商品"
+            }
+        ],
+        currCollectStatus: 0,
         saveHotGoods: [],
         filteredGoods: []
     },
@@ -26,29 +29,17 @@ export default {
             //put方法类似于dispatch方法
             yield put({
                 //本模块内方法的type不需要加namespace前缀
-                type: 'saveCatalogF',
+                type: 'saveCatalog',
                 payload: data || [],
             });
         },
-
-        // 获取热销产品，每个分类1-2个
-        // *fetchHotGoods({ payload }, { call, put }) {
-        //     const { data } = yield call(queryHotGoods, payload);
-        //     yield put ({
-        //         type: 'saveHotGoods',
-        //         payload: data.saveHotGoods || [],
-        //     })
-
-        // }
     },
+
     reducers: {
-        saveCatalogF(state, { payload }) {
+        saveCatalog(state, { payload }) {
             return {
                 ...state,
-                catalogF: {
-                    ...state.catalogF,
-                    list: payload
-                },
+                catalogList: payload,
             };
         },
         saveHotGoods(state, { payload }) {
@@ -58,5 +49,24 @@ export default {
                 catalogF: state.catalogF.concat(payload),
             };
         },
+        doFilter(state, { payload }) {
+            if (payload.catalog_name) {
+                return {
+                    ...state,
+                    currCatalog: payload.id,
+                }
+            } else if (payload.brand_name) {
+                return {
+                    ...state,
+                    currBrand: payload.id
+                }
+            } else {
+                return {
+                    ...state,
+                    currCollectStatus: payload.id,
+                }
+            }
+
+        }
     },
 };

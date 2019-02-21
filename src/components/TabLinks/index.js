@@ -1,38 +1,47 @@
 import React from 'react';
-import classNames from 'classnames';
+// import classNames from 'classnames';
 import styles from './index.less';
 
 // 类似于按钮组的东西，显示效果更接近链接
-const TabLinks = ({ className, linksData, handleClick }) => {
-    const clsString = classNames(className);
+export default class TabLInks extends React.Component {
+    //点击筛选数据
     clickToFilter = clickedItem => {
-        const { id } = clickedItem;
-        const { distpatch } = this.props;
+        const { dispatch } = this.props;
         dispatch({
-            type: 'accSupermarket/fetchFilteredGoods',
-            payload: id
+            type: 'accSupermarket/doFilter',
+            payload: clickedItem,
         })
     }
-    //当前选中项和列表
-    const { curr, list } = filterProp;
-    // 只选辅料分类
-    const tabLinks = list.filter(item => item.type === "F")
-        // 按item.sort排序
-        .sort((a, b) => +a.sort - +b.sort)
-        .map(item => {
-            // 是否有active样式
-            const itemStyle = item.id == curr ? 'filterLink active' : 'filterLink';
-            <li style={itemStyle} {...other} key={item.id} onClick={handleClick}>{item.catalog_name}</li>
-        })
 
-    return (
-        <div className={clsString}>
-            <ul>
-                {tabLinks}
-            </ul>
-        </div>
-    )
+    render() {
+        //当前选中项和列表
+        const {
+            linksData,
+            currSelect
+        } = this.props;
 
-}
+        // 只选辅料分类
+        const tabLinks = linksData
+            .map(item => {
+                // 是否有active样式
+                const itemStyle = item.id == currSelect ? 'filterLink active' : 'filterLink';
+                return (
+                    <li
+                        className={itemStyle}
+                        key={item.id}
+                        onClick={() => this.clickToFilter(item)}
+                    >
+                        {item.catalog_name || item.brand_name || item.status_name }
+                    </li>
+                )
+            })
 
-export default TabLinks;
+        return (
+            <div style={{display: "inline-block"}} >
+                <ul>
+                    {tabLinks}
+                </ul>
+            </div>
+        )
+    }
+} 
