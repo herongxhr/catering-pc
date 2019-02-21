@@ -6,6 +6,7 @@ import SubHeader from '../../components/SubHeader'
 import WrappedInlineForm from '../../components/InlineForm'
 import TableOne from '../../components/TableOne'
 import TableTwo from '../../components/TableTwo'
+import MenuTemplate from '../../components/MenuTemplate'
 
 import './index.less'
 
@@ -121,7 +122,7 @@ class B extends React.Component {
 		const contentList = {
 			tab1: <TableOne columns={tab1Columns} dataSource={this.state.tab1Source}  />,
 			tab2: <TableTwo columns={tab2Columns} dataSource={this.state.tab2Source} />,
-			tab3: <Table columns={tab1Columns} dataSource={this.state.DataSource} />
+			tab3: <MenuTemplate />
 		};
     return (
       <div className='card-wrapper'>
@@ -133,6 +134,7 @@ class B extends React.Component {
         >
             <div className='content-wrapper'>
 							{contentList[this.state.key]}
+							{/* <MenuTemplate /> */}
             </div>        
         </Card>
       </div>

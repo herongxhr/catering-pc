@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router , Link, NavLink } from 'react-router-dom'
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon , Badge} from 'antd';
 
 import dan from '../../assest/pic/导航栏_工作台24.png'
 import center from '../../assest/pic/导航栏_菜单中心.png'
@@ -44,9 +44,11 @@ class Jheader extends Component {
 							<Menu.Item key="6">
 								<NavLink to='/parameter'>台账</NavLink>
 							</Menu.Item>
-							<Menu.Item key="7">
+							<Menu.Item key="7" className='right'>
 								<NavLink to='/message'>
-									<span className="iconfont">&#xe62b;</span>
+									<Badge count={5}>
+										<span className="iconfont">&#xe62b;</span>
+									</Badge>
 								</NavLink>
 							</Menu.Item>
 							<Menu.Item key="8">
@@ -55,10 +57,6 @@ class Jheader extends Component {
 								</NavLink>
 							</Menu.Item>
 						</Menu>
-						<div>
-							<span></span>
-							<div></div>
-						</div>
 					</Header>
 				</div>
 		);
