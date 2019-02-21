@@ -1,23 +1,33 @@
-import { queryCatalogF, queryHotGoods } from '../services/api';
+import { queryCatalog, queryHotGoods } from '../services/api';
 
 export default {
     namespace: 'accSupermarket',
     state: {
-        catalogF: [],
+        catalogF: {
+            curr: 0,
+            list: ['']
+        },
+        brand: {
+            curr: 0,
+            list: []
+        },
+        isCollect: {
+            curr: 0,
+            list: ['采购目录商品', '采购目录外商品']
+        },
         saveHotGoods: [],
+        filteredGoods: []
     },
     effects: {
         //请求辅料分类
-        *fetchCatalogF(_, { call, put }) {
-            console.log('123')
+        *fetchCatalog(_, { call, put }) {
             //call方法首参数为要调用的异步方法
-            const { data } = yield call(queryCatalogF);
-            console.log("model:data",data);
+            const data = yield call(queryCatalog);
             //put方法类似于dispatch方法
             yield put({
                 //本模块内方法的type不需要加namespace前缀
                 type: 'saveCatalogF',
-                payload: data.catalogF || [],
+                payload: data || [],
             });
         },
 
@@ -33,10 +43,12 @@ export default {
     },
     reducers: {
         saveCatalogF(state, { payload }) {
-            console.log(payload);
             return {
                 ...state,
-                catalogF: state.catalogF.concat(payload),
+                catalogF: {
+                    ...state.catalogF,
+                    list: payload
+                },
             };
         },
         saveHotGoods(state, { payload }) {

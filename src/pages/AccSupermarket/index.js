@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Breadcrumb, Input, Card, List } from 'antd';
+import TabLinks from '../../components/TabLinks';
 import './index.less';
 
 const { Search } = Input;
 
-class AccSupermarket extends React.Component {
+class AccSupermarket extends PureComponent {
+	filterByCatalog = () => {
+
+	}
+
+	filterByBrand = () => {
+
+	}
+
 	componentDidMount() {
 		const { dispatch } = this.props;
 		//请求辅料分类
 		dispatch({
-			type: 'accSupermarket/fetchCatalogF',
+			type: 'accSupermarket/fetchCatalog',
 		});
 
 		//获取热销产品，每个分类1-2个
@@ -20,6 +29,12 @@ class AccSupermarket extends React.Component {
 	}
 
 	render() {
+		console.log(this.props);
+		const {
+			accSupermarket: { catalogF }
+		} = this.props;
+		console.log(catalogF);
+
 		return (
 			<div className="supermarket-root">
 				<div className="header-container">
@@ -30,11 +45,17 @@ class AccSupermarket extends React.Component {
 				</div>
 				<div className="section-wrapper">
 					<div className="goods-filter">
+						<TabLinks 
+							linksData = {catalogF}
+						/>
 						<div className="filter-row"><span className="filter-title">分类</span>
-							{/* {this.state.data.map((item, index) => {
-								return <a key={index}>{item}</a>
-							})} */}
 							<a type="primary">全部</a>
+							{
+								catalogF.list.filter(item => item.type === 'F')
+									.sort((a, b) => +a.sort - +b.sort)
+									.map(item => <a key={item.id}>{item.catalog_name}</a>)
+							}
+
 						</div>
 						<div className="filter-row"><span className="filter-title">品牌</span><a type="primary">全部</a></div>
 						<div className="filter-row"><span className="filter-title">收录</span><a type="primary">全部</a>

@@ -18,7 +18,7 @@ export default async function request(options) {
     if (isShowLoading) {
         ReactDOM.render(<Spin />, document.getElementById('ajaxLoading'));
     }
-    let baseApi = ' https://easy-mock.com/mock/5c6cf43f2ecce005c352d626';
+    let baseApi = 'http://yapi.uanla.test:7777/mock/17';
     try {
         const response = await axios({
             method: options.method,
@@ -35,8 +35,8 @@ export default async function request(options) {
         if (response.status >= 200 && response.status < 300) {
             //res为后台返回的json对象
             let res = response.data;
-            if (res.code === 200) {
-                return res;
+            if (res.code == 0) {
+                return res.data;
             } else {
                 message.info(res.msg);
             }

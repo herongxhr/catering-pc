@@ -3,14 +3,14 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
-export function queryCatalogF() {
+export function queryCatalog() {
     return request({
         method: 'get',
-        url: '/goods/catalog',
+        url: '/catering/accsupermarket/catalog',
         data: {
             showLoading: true,
             params: {
-                subcatalog: 'F'
+                isF: 'y'
             }
         }
     });
