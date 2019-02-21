@@ -1,9 +1,8 @@
 import dva from 'dva';
-import RouterConfig from './RouterConfig';
+import dynamic from 'dva/dynamic';
+
 import createHistory from 'history/createBrowserHistory';
-//dva的model
-import globalModel from '../src/models/global';
-import accSupermarket from './models/accSupermarket';
+import RouterConfig from './RouterConfig';
 import './style/common.less';
 
 //创建应用
@@ -12,10 +11,15 @@ const app = dva({
 });
 //加载插件
 // app.use({});
+
 //创建model
-app.model(accSupermarket);
+require('./models').default.forEach(key => {
+    app.model(key.default)
+});
+
 //创建视图
 app.router(RouterConfig);
+
 //启动应用
 app.start('#root');
 

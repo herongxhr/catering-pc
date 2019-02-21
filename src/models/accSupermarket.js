@@ -1,27 +1,45 @@
-import { queryCatalogF } from '../services/api';
+import { queryCatalogF, queryHotGoods } from '../services/api';
 
 export default {
     namespace: 'accSupermarket',
     state: {
         catalogF: [],
+        saveHotGoods: [],
     },
     effects: {
-        //其中payload为视图层dispatch方法所传
-        //作为call方法首参数异步方法的参数再传入
-        *fetch(_, { call, put }) {
+        //请求辅料分类
+        *fetchCatalogF(_, { call, put }) {
+            console.log('123')
             //call方法首参数为要调用的异步方法
-            const response = yield call(queryCatalogF);
-            console.log(response);
+            const { data } = yield call(queryCatalogF);
+            console.log("model:data",data);
             //put方法类似于dispatch方法
             yield put({
                 //本模块内方法的type不需要加namespace前缀
-                type: 'getCatalogF',
-                payload: response.body.catalogF || [],
+                type: 'saveCatalogF',
+                payload: data.catalogF || [],
             });
-        }
+        },
+
+        // 获取热销产品，每个分类1-2个
+        // *fetchHotGoods({ payload }, { call, put }) {
+        //     const { data } = yield call(queryHotGoods, payload);
+        //     yield put ({
+        //         type: 'saveHotGoods',
+        //         payload: data.saveHotGoods || [],
+        //     })
+
+        // }
     },
     reducers: {
-        getCatalogF(state, { payload }) {
+        saveCatalogF(state, { payload }) {
+            console.log(payload);
+            return {
+                ...state,
+                catalogF: state.catalogF.concat(payload),
+            };
+        },
+        saveHotGoods(state, { payload }) {
             console.log(payload);
             return {
                 ...state,

@@ -1,8 +1,6 @@
 //用于获取初始化项目（一般是首页）的数据
-import { queryCatalogF } from '../services/api';
-
 export default {
-    namespace: 'global',
+    namespace: 'home',
     state: {
     },
 

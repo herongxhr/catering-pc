@@ -16,6 +16,26 @@ export function queryCatalogF() {
     });
 }
 
+export function queryHotGoods() {
+    return request({
+        method: 'get',
+        url: '/goods/hots',
+        data: {
+            showLoading: true,
+        }
+    });
+}
+
+export function queryRule(params) {
+    return request({
+        method: 'get',
+        url: '/goods/catalogF/good',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
 // export async function queryBrandList(catalog) {
 //     return axios('/goods/brand/page/');
 // }
