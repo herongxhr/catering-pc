@@ -26,6 +26,16 @@ export function queryTodoList() {
 
     });
 }
+// export function queryTodoList() {
+//     return request({
+//         method: 'post',
+//         url: '/catering/workbench/todoList',
+//         data: {
+//             showLoading: true,
+//         }
+
+//     });
+// } 
 // export async function queryBrandList(catalog) {
 //     return axios('/goods/brand/page/');
 // }
