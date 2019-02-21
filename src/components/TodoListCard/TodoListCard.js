@@ -39,7 +39,6 @@ const columns = [{
   }];
 class TodoListCard extends Component {
   componentDidMount() {
-    console.log(queryTodoList());
 
   }
   render() {

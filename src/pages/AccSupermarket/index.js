@@ -1,15 +1,21 @@
 import React from 'react';
-import { queryCatalogF } from '../../services/api';
-import { Layout, Breadcrumb, Input, Card, Row, Col, Button, List } from 'antd';
+import { connect } from 'dva';
+import {  Breadcrumb, Input, Card, List } from 'antd';
 import './index.less';
 
 const { Search } = Input;
 
 class AccSupermarket extends React.Component {
-	componentDidMount() {
-		queryCatalogF();
+	handleClick = () => {
+		const { dispatch } = this.props;
+		//请求辅料分类
+		dispatch({
+			type: 'accSupermarket/fetch',
+		})
+		console.log("props is:",this.props);
 	}
 	render() {
+		console.log("props is:",this.props);
 		return (
 			<div className="supermarket-root">
 				<div className="header-container">
@@ -20,10 +26,15 @@ class AccSupermarket extends React.Component {
 				</div>
 				<div className="section-wrapper">
 					<div className="goods-filter">
-						<div className="filter-row"><span className="filter-title">分类</span><a type="primary">全部</a></div>
+						<div className="filter-row"><span className="filter-title">分类</span>
+							{/* {this.state.data.map((item, index) => {
+								return <a key={index}>{item}</a>
+							})} */}
+							<a type="primary">全部</a>
+						</div>
 						<div className="filter-row"><span className="filter-title">品牌</span><a type="primary">全部</a></div>
 						<div className="filter-row"><span className="filter-title">收录</span><a type="primary">全部</a>
-							<a>采购目录中商品</a>
+							<a onClick={this.handleClick}>采购目录中商品</a>
 							<a>采购目录外商品</a>
 						</div>
 					</div>
@@ -84,4 +95,7 @@ class AccSupermarket extends React.Component {
 	}
 }
 
-export default AccSupermarket;
+// AccSupermarket;
+export default connect(( {accSupermarket} ) => ({
+	accSupermarket,
+}))(AccSupermarket);

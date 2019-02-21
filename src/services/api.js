@@ -1,6 +1,6 @@
 //https://github.com/ljharb/qs
 //qs.stringify(object, [options]);
-import { stringify } from 'qs';
+//import { stringify } from 'qs';
 import request from '../utils/request';
 
 export function queryCatalogF() {
@@ -13,7 +13,6 @@ export function queryCatalogF() {
                 subcatalog: 'F'
             }
         }
-
     });
 }
 export function queryTodoList() {
@@ -23,9 +22,9 @@ export function queryTodoList() {
         data: {
             showLoading: true,
         }
-
     });
 }
+
 // export function queryTodoList() {
 //     return request({
 //         method: 'post',

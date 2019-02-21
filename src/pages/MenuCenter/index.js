@@ -6,6 +6,7 @@ import SubHeader from '../../components/SubHeader'
 import WrappedInlineForm from '../../components/InlineForm'
 import TableOne from '../../components/TableOne'
 import TableTwo from '../../components/TableTwo'
+import MenuTemplate from '../../components/MenuTemplate'
 
 
 import './index.less'
@@ -135,6 +136,7 @@ class B extends React.Component {
         >
             <div className='content-wrapper'>
 							{contentList[this.state.key]}
+							{/* <MenuTemplate /> */}
             </div>        
         </Card>
       </div>

@@ -7,6 +7,7 @@ import { Card, Button, Tabs,Radio,Table } from 'antd';
 import moment from 'moment'
 import Charts from 'ant-design-pro/lib/Charts';
 import { Pie, yuan } from 'ant-design-pro/lib/Charts';
+import { connect } from 'dva';
 
 const TabPane = Tabs.TabPane;
 const operations = <span className='extra'>查看全部</span>;
@@ -49,6 +50,24 @@ const salesPieData = [
 ];
 
 class A extends Component {
+  // queryTodoList = () => {
+	// 	const { dispatch } = this.props;
+	// 	//请求待办事项
+	// 	dispatch({
+	// 		type: 'home/queryTodoLists',
+	// 	})
+	// 	console.log("props is:",this.props);
+	// }
+  componentDidMount() {
+    const { dispatch } = this.props;
+    console.log(dispatch);
+		//请求待办事项
+		dispatch({
+			type: 'home/queryTodoLists',
+		})
+		console.log("props is:",this.props);
+  }
+
   render() {
     const title= <div className='device'>设备最后开机时间</div>
     const footer = <div style={{textAlign:'center',fontSize:14,color:'#54C4CE'}}>查看全部</div>
@@ -113,4 +132,6 @@ class A extends Component {
   }
 }
 
-export default A;
+export default connect(( {home} ) => ({
+	home,
+}))(A);;
