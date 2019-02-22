@@ -14,35 +14,53 @@
       background-color: rgba(255, 255, 255, 1);
       box-shadow: @box-shadow;
   }
+  // 展示筛选区域
   .section-wrapper{
       margin: 20px auto;
       width: 1160px;
-      height: 198px;
-      padding: 20px;
-      box-shadow:@box-shadow;
+      display: flex;
+      justify-content: center;
+      box-shadow: @box-shadow;
       background-color: rgba(255, 255, 255, 1); 
-        .filter-title {
-            margin-left: 30px;
-            display: inline-block;
-            width: 50px;
-            height: 20px;
-            text-align: left;
-            font-weight: bolder;
-            color: rgba(0, 0, 0, 1);
-      }
-      .collectLink{
-        cursor: pointer;
-        display: inline-block;
-        margin: 11px 10px;
-        width: 182px;
-        height: 32px;
-        line-height: 32px;
-        text-align: center;
-        border-radius: 4px;
-        color: rgba(0, 0, 0 , 0.65);
-      }
   }
-
+  // 展示筛选后的商品
+  .searchResultWrapper{
+    width: 1176px;
+    margin: 0 auto;
+    .goodsList {
+      display: flex;
+      justify-content: space-between;
+      .listItem {
+        display: inline-block;
+        margin: 0 8px 16px 8px;      
+        padding: 10px;
+        background-color: #fff;
+        .goodsCard {
+          width: 258px;
+          height: 375px;
+          .ant-card-body {
+            padding: 0;
+            margin:10px 0 6px;
+            height: 81px;
+            display: flex;
+            align-content: flex-end;
+          }
+          .cardMeta {
+            margin: 0;
+            height: 81px;
+            background-color: #fff;
+            width: 258px;
+          }
+          .goodsTitle {
+            font-size: 14px;
+          }
+          .goodsProvider{
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
   .card {
     :global {
       .ant-card-meta-title {

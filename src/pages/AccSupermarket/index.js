@@ -1,41 +1,133 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Breadcrumb, Input, Card, List } from 'antd';
-import TabLinks from '../../components/TabLinks';
+import { Breadcrumb, Input, Card, List, InputNumber } from 'antd';
+import GoodsFilter from '../../components/GoodsFilter';
 import './index.less';
+import goodsWine from './wine.png';
 
 const { Search } = Input;
 
 class AccSupermarket extends PureComponent {
-	componentDidMount() {
-		const { dispatch } = this.props;
-		//请求辅料分类
-		dispatch({
-			type: 'accSupermarket/fetchCatalog',
-		});
+	handChangeValue = () => {
 
-		//获取热销产品，每个分类1-2个
-		// dispatch({
-		// 	type: 'accSupermarket/fetchHotGoods',
-		// });
+	}
+    /**
+     * 点击链接按要求请求后台数据
+     * 有三个筛选条件，还有一个默认条件选择辅料
+     * 写在api方法queryGoods中
+     * @param{number} currCatalog 当前所选分类
+     * @param{number} currBrand 当前所选分类
+     * @param{number} currCollectStatus 当前所选分类
+     */
+	filterGoods = (currCatalog = 0, currBrand = 0, currCollectStatus = 0) => {
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'accSupermarket/fetchGoodsF',
+			payload: {
+				currCatalog,
+				currBrand,
+				currCollectStatus
+			},
+		})
+	}
+	componentDidMount() {
+		this.filterGoods();
 	}
 
 	render() {
-		console.log(this.props);
-		const {
-			accSupermarket: {
-				catalogList,
-				currCatalog,
-				brandList,
-				currBrand,
-				collectStatusList,
-				currCollectStatus,
-			}
-		} = this.props;
-		console.log(catalogList, brandList);
-		const allCatalogStyle = !currCatalog ? 'filterLink active' : "filterLink";
-		const allBrandStyle = !currBrand ? 'filterLink active' : "filterLink";
-		const allCollectStyle = !currCollectStatus ? 'filterLink active' : "filterLink";
+		const cardData = [
+			{
+				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
+				price: 45,
+				priceType: "元/箱",
+				description: "浙江帝景生态农业开发有限公司",
+			},
+			{
+				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
+				price: 45,
+				priceType: "元/箱",
+				description: "浙江帝景生态农业开发有限公司",
+			},
+			{
+				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
+				price: 45,
+				priceType: "元/箱",
+				description: "浙江帝景生态农业开发有限公司",
+			},
+			{
+				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
+				price: 45,
+				priceType: "元/箱",
+				description: "浙江帝景生态农业开发有限公司",
+			},
+			{
+				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
+				price: 45,
+				priceType: "元/箱",
+				description: "浙江帝景生态农业开发有限公司",
+			},
+			{
+				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
+				price: 45,
+				priceType: "元/箱",
+				description: "浙江帝景生态农业开发有限公司",
+			},
+			{
+				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
+				price: 45,
+				priceType: "元/箱",
+				description: "浙江帝景生态农业开发有限公司",
+			},
+			{
+				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
+				price: 45,
+				priceType: "元/箱",
+				description: "浙江帝景生态农业开发有限公司",
+			},
+		];
+
+		const goodsList = (
+			<List className="goodsList"
+				dataSource={cardData}
+				renderItem={item => {
+					const goodsTitle = (
+						<div className="goodsTitle">{item.title}</div>
+					)
+					const goodsDescription = (
+						<div>
+							<h4>￥ {item.price} {item.priceType}</h4>
+							<div className="goodsProvider">{item.description}</div>
+						</div>
+					)
+					return (
+						<List.Item
+							className="listItem"
+						>
+							<Card
+								className="goodsCard"
+								bordered={false}
+								actions={[<InputNumber
+									defaultValue={1}
+									min={1}
+									size="small"
+									onChange={this.handChangeValue}
+								/>, <a>加入购物车</a>]}
+								hoverable
+								cover={<img alt="example" src={goodsWine} />}
+							>
+								<Card.Meta
+									className="cardMeta"
+									title={goodsTitle}
+									description={goodsDescription}
+								/>
+							</Card>
+						</List.Item>
+					)
+				}
+				}
+			/>
+		)
+
 		return (
 			<div className="supermarket-root">
 				<div className="header-container">
@@ -44,121 +136,13 @@ class AccSupermarket extends PureComponent {
 					</Breadcrumb>
 					<Search className="goodsSearch" placeholder="请输入关键字进行搜索" onSearch={() => ({})} />
 				</div>
+				{/* 筛选区域 */}
 				<div className="section-wrapper">
-					<p>
-						<span className="filter-title">分类</span>
-						<a className={allCatalogStyle}>全部</a>
-						<TabLinks
-							linksData={catalogList}
-							currSelect={currCatalog}
-							{...this.props}
-						/>
-					</p>
-					<p>
-						<span className="filter-title">品牌</span>
-						<a className={allBrandStyle}>全部</a>
-						<TabLinks
-							linksData={brandList}
-							currSelect={currBrand}
-							{...this.props}
-						/>
-					</p>
-					<p>
-						<span className="filter-title">收录</span>
-						<a className={allCollectStyle}>全部</a>
-						<TabLinks
-							linksData={collectStatusList}
-							currSelect={currCollectStatus}
-							{...this.props}
-						/>
-					</p>
+					<GoodsFilter clickToFilter={this.filterGoods} {...this.props.accSupermarket} />
 				</div>
-				<div>
-					<List
-					>
-						<List.Item
-							style={{
-								background: "#fff"
-								, padding: 10
-							}}
-						>
-							<Card
-								bodyStyle={{ padding: "10px" }}
-								bordered={false}
-								hoverable
-								style={{ width: 278 }}
-								cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-								actions={[<a>操作一</a>, <a>加入购物车</a>]}>
-								<Card.Meta
-									title="谷常多 稻米油 压榨 浓香 花生油 5L"
-									description="浙江帝景生态农业开发有限公司"
-								>
-								</Card.Meta>
-							</Card>
-						</List.Item>
-						<List.Item
-							style={{
-								background: "#fff"
-								, padding: 10
-							}}
-						>
-							<Card
-								bodyStyle={{ padding: "10px" }}
-								bordered={false}
-								hoverable
-								style={{ width: 278 }}
-								cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-								actions={[<a>操作一</a>, <a>加入购物车</a>]}>
-								<Card.Meta
-									title="谷常多 稻米油 压榨 浓香 花生油 5L"
-									description="浙江帝景生态农业开发有限公司"
-								>
-								</Card.Meta>
-							</Card>
-						</List.Item>
-						<List.Item
-							style={{
-								background: "#fff"
-								, padding: 10
-							}}
-						>
-							<Card
-								bodyStyle={{ padding: "10px" }}
-								bordered={false}
-								hoverable
-								style={{ width: 278 }}
-								cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-								actions={[<a>操作一</a>, <a>加入购物车</a>]}>
-								<Card.Meta
-									title="谷常多 稻米油 压榨 浓香 花生油 5L"
-									description="浙江帝景生态农业开发有限公司"
-								>
-								</Card.Meta>
-							</Card>
-						</List.Item>
-						<List.Item
-							style={{
-								background: "#fff"
-								, padding: 10
-							}}
-						>
-							<Card
-								bodyStyle={{ padding: "10px" }}
-								bordered={false}
-								hoverable
-								style={{ width: 278 }}
-								cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-								actions={[<a>操作一</a>, <a>加入购物车</a>]}>
-								<Card.Meta
-									title="谷常多 稻米油 压榨 浓香 花生油 5L"
-									description="浙江帝景生态农业开发有限公司"
-								>
-								</Card.Meta>
-							</Card>
-						</List.Item>
-					</List>
+				<div className="searchResultWrapper">
+					{goodsList}
 				</div>
-				{/* <MarketCommodity /> */}
 			</div>
 		)
 	}

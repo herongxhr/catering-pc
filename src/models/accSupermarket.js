@@ -1,13 +1,27 @@
-import { queryCatalog, queryHotGoods } from '../services/api';
+import { queryGoodsF } from '../services/api';
 
 export default {
     namespace: 'accSupermarket',
     state: {
-        catalogList: [],
+        catalogList: [
+            {
+                id: 0,
+                catalog_name: "全部",
+            }
+        ],
         currCatalog: 0,
-        brandList: [],
+        brandList: [
+            {
+                id: 0,
+                brand_name: "全部",
+            }
+        ],
         currBrand: 0,
-        collectStatusList: [
+        collectStatus: [
+            {
+                id: 0,
+                status_name: "全部"
+            },
             {
                 id: 1,
                 status_name: "采购目录中商品"
@@ -18,55 +32,63 @@ export default {
             }
         ],
         currCollectStatus: 0,
-        saveHotGoods: [],
-        filteredGoods: []
+        goodList: [
+            // {
+            //     id,
+            //     brand,
+            //     isCollected,
+            //     img,
+            //     price,
+            //     goods_name,
+            //     provider,
+            // }
+        ],
+        pageSize: 12,
+        currPage: 1,
     },
     effects: {
-        //请求辅料分类
-        *fetchCatalog(_, { call, put }) {
+        // payload = {
+        //     currCatalog,
+        //     currBrand,
+        //     currCollectStatus
+        // }
+        *fetchGoodsF({ payload }, { call, put }) {
             //call方法首参数为要调用的异步方法
-            const data = yield call(queryCatalog);
+            const data = yield call(queryGoodsF, payload);
             //put方法类似于dispatch方法
             yield put({
                 //本模块内方法的type不需要加namespace前缀
-                type: 'saveCatalog',
-                payload: data || [],
+                type: 'saveGoods',
+                payload: {
+                    data,
+                    ...payload,
+                },
             });
         },
     },
 
     reducers: {
-        saveCatalog(state, { payload }) {
-            return {
-                ...state,
-                catalogList: payload,
-            };
-        },
-        saveHotGoods(state, { payload }) {
-            console.log(payload);
-            return {
-                ...state,
-                catalogF: state.catalogF.concat(payload),
-            };
-        },
-        doFilter(state, { payload }) {
-            if (payload.catalog_name) {
-                return {
-                    ...state,
-                    currCatalog: payload.id,
-                }
-            } else if (payload.brand_name) {
-                return {
-                    ...state,
-                    currBrand: payload.id
-                }
-            } else {
-                return {
-                    ...state,
-                    currCollectStatus: payload.id,
-                }
-            }
+        saveGoods(state, { payload }) {
+            const {
+                data: {
+                    catalog_list,
+                    brand_list,
+                    goods_list
+                },
+                currCatalog,
+                currBrand,
+                currCollectStatus,
+            } = payload;
 
-        }
+            return {
+                ...state,
+                catalogList: state.catalogList.slice(0, 1).concat(...catalog_list),
+                brandList: state.brandList.slice(0, 1).concat(...brand_list),
+                goodsList: goods_list,
+                currCatalog,
+                currBrand,
+                currCollectStatus
+            };
+        },
     },
 };
