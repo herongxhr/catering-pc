@@ -59,18 +59,18 @@ class E extends React.Component {
 		this.setState({ [type]: key });
 	}
 	
-	// componentDidMount() {
-  //   Axios.ajax({
-  //     url:'/delivery'
-  //   }).then((value) => {
-  //     this.setState({
-  //       DataSource:value
-  //     })
-  //   })
-	// }
+	componentDidMount() {
+    Axios.ajax({
+      url:'/delivery'
+    }).then((value) => {
+      this.setState({
+        DataSource:value
+      })
+    })
+	}
 
   render() {
-    const dataSource = delivery.result
+    const dataSource = this.state.DataSource
 		const contentList = {
 			tab1: <Table columns={tab1Columns} dataSource={dataSource} />,
 			tab2: <Table columns={tab1Columns} dataSource={dataSource} />,
@@ -80,7 +80,7 @@ class E extends React.Component {
       <div>
         <Card
           style={{ width: '100%' }}
-          title={<SubHeader title='菜单中心' subTitle='统一菜单' />}
+          title={<SubHeader title='配送验收' subTitle='统一菜单' />}
           tabList={tabList}
           activeTabKey={this.state.key}
           onTabChange={(key) => { this.onTabChange(key, 'key'); }}

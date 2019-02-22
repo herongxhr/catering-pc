@@ -1,6 +1,5 @@
 import React from 'react'
 import { Card,Table,Tag,Tabs } from 'antd'
-import axios from 'axios'
 import Axios from '../../axios'
 import SubHeader from '../../components/SubHeader'
 import WrappedInlineForm from '../../components/InlineForm'
@@ -10,7 +9,6 @@ import MenuTemplate from '../../components/MenuTemplate'
 
 import './index.less'
 
-const baseURL =	'https://www.easy-mock.com/mock/5c4c02ec50f5ab309c7dec17/DataSource'
 const TabPane = Tabs.TabPane;
 
 const tabList = [{
@@ -87,35 +85,37 @@ const tab2Columns = [{
 
 
 const requests = [{
-	url:`${baseURL}/mymenu`
+	url:`/mymenu`
 },{
-	url:`${baseURL}/menuItem`
+	url:`/menuItem`
 }]
 
 
 
 class B extends React.Component {
   state = {
-    key: 'tab1',
+		key: 'tab1',
+		tab:0,
 		tab1Source:[],
-		tab2Source:[]
+		tab2Source:[],
   }
 
   onTabChange = (key, type) => {
-		this.setState({ [type]: key });
+		const titleList = ['tab1','tab2','tab3']
+		const count = titleList.indexOf(key) //通过改变count来修改传入SubHeader的值
+		this.setState({ 
+			[type]: key,
+			tab:count
+		 });
 	}
 	
 	componentDidMount() {
-		let promises = []
-		for(let i = 0; i <  requests.length; i++) {
-			promises.push(axios.get(requests[i].url))
-		}
-		axios.all(promises).then(axios.spread((...args) => {
+		Axios.ajaxGroup(requests).then((dataSource) => {
 			this.setState({
-				tab1Source:args[1].data.result,
-				tab2Source:args[0].data.result,
+				tab1Source:dataSource[1].data.result,
+				tab2Source:dataSource[0].data.result,
 			})
-		}))
+		})
 	}
 
   render() {
@@ -124,12 +124,14 @@ class B extends React.Component {
 			tab2: <TableTwo columns={tab2Columns} dataSource={this.state.tab2Source} />,
 			tab3: <MenuTemplate />
 		};
+		const titleList = ['统一菜单','我的菜单','菜单模板']
     return (
       <div className='card-wrapper'>
         <Card
-          title={<SubHeader title='菜单中心' subTitle='统一菜单' />}
+          title={<SubHeader title='菜单中心' subTitle={titleList[this.state.tab]} cascade={this.state.tab1} />}
           tabList={tabList}
-          activeTabKey={this.state.key}
+					activeTabKey={this.state.key}
+					defaultActiveTabKey={this.state.key}
           onTabChange={(key) => { this.onTabChange(key, 'key'); }}
         >
             <div className='content-wrapper'>
