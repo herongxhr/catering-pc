@@ -15,6 +15,7 @@ import Dosing from './pages/acount/Dosing'
 import Supply from './pages/acount/Supply'
 import CreateTemplate from './pages/CreateTemplate'
 import Details from './pages/Details'
+import Test from './pages/Test'
 
 
 
@@ -45,7 +46,7 @@ class IRouter extends React.Component {
                           </Switch>
                         </Setting>
                       }></Route>
-                      {/* <Route path='/test' component={}></Route> */}
+                      <Route path='/test' component={Test}></Route>
                       <Redirect to="/home" />
                   </Switch>
                 </App>

@@ -1,19 +1,27 @@
 import React from 'react'
-import './index.less'
-import { Breadcrumb } from 'antd';
+import { Breadcrumb , Button } from 'antd';
+import { withRouter } from 'react-router'
 
-class SubHeader extends React.Component {
+import './index.less'
+
+class Sub extends React.Component {
+  handleClick = () => {
+    this.props.history.push('/order')
+  }
+
   render() {
     return(
       <div className='SubHeader'>
        <Breadcrumb>
-          <Breadcrumb.Item><a href="/menubar">{this.props.title}</a></Breadcrumb.Item>
-          <Breadcrumb.Item><a href="/menubar">{this.props.subTitle}</a></Breadcrumb.Item>
-          <Breadcrumb.Item><a href="/createtemplate">{this.props.cascade}</a></Breadcrumb.Item>
+          <Breadcrumb.Item><a href="/order">{this.props.title}</a></Breadcrumb.Item>
+          <Breadcrumb.Item>{this.props.subTitle}</Breadcrumb.Item>
         </Breadcrumb>
+        <Button onClick={this.handleClick}>返回</Button>
       </div>
     )
   }
 }
+
+const SubHeader = withRouter(Sub)
 
 export default SubHeader

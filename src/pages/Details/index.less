@@ -1,23 +1,58 @@
-.card-body {
-  .card-content {
+.Details {
+  .SubHeader {
+    height: 60px;
     display: flex;
-    justify-content: space-between;
-    .card-content-title {
-      color: #000000;
-      font-size: 14px;
-    }
-    .right {
-      color: rgba(0, 0, 0, 0.45);
-    }
-    span {
-      color: rgba(0, 0, 0, 0.45);
-      font-size: 12px;
+    align-items: center;
+  }
+  .DetailsOperation {
+    width: 1200px;
+    .card-body {
+      .card-header {
+        .card-header-title {
+          font-size: 20px;
+          .iconfont {
+            margin-right: 10px;
+            background-color: orange;
+            color: white;
+            font-size: 20px;
+          }
+        }
+        .right{
+          text-align: right;
+          button {
+            margin-right: 13px;
+          }
+        }
+      }
+      .card-content {
+        font-size: 14px;
+        .card-content-top {
+          padding-top: 20px!important;
+        }
+        div {
+          p {
+            padding: 10px 10px 10px 40px;
+          }
+        }
+        div:nth-child(3) {
+          div{
+            text-align: right;
+            p:nth-child(2) {
+              font-size: 18px;
+              color: #000000;
+            }
+          }
+        }
+      }
     }
   }
-  .card-group {
-    display: flex;
+  .DetailContent {
+    width: 1160px;
+    margin-top: 10px;
+    height: 689px;
   }
 }
 .ant-card-body {
   background: white;
 }
+
