@@ -14,7 +14,7 @@ export default {
              //console.log(data);
             yield put({
                 type: 'saveTodoLists',
-                payload: data.data || [],
+                payload: data || [],
             });
         },
         *querytodayMenu(_, { call, put }) {
@@ -23,7 +23,7 @@ export default {
             //console.log(data);
             yield put({
                 type: 'saveTodayMenu',
-                payload: data.data || {},
+                payload: data || {},
             });
         },
         *querydeviceInfo({payload}, { call, put }) {
@@ -32,7 +32,7 @@ export default {
             //console.log(data);
             yield put({
                 type: 'savedeviceInfo',
-                payload: data.data || {},
+                payload: data || {},
             });
         },
         
