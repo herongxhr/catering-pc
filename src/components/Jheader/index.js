@@ -44,14 +44,17 @@ class Jheader extends Component {
 							<Menu.Item key="6">
 								<NavLink to='/parameter'>台账</NavLink>
 							</Menu.Item>
-							<Menu.Item key="7" className='right'>
+							<Menu.Item key="7">
+								<NavLink to='/test'>测试</NavLink>
+							</Menu.Item>
+							<Menu.Item key="8" className='right'>
 								<NavLink to='/message'>
 									<Badge count={5}>
 										<span className="iconfont">&#xe62b;</span>
 									</Badge>
 								</NavLink>
 							</Menu.Item>
-							<Menu.Item key="8">
+							<Menu.Item key="9">
 								<NavLink to='/setting'>
 									<span className="iconfont">&#xe620;</span>
 								</NavLink>

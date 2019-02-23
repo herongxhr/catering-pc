@@ -8,6 +8,11 @@ const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
 class OrderForm extends React.Component {
+
+  handleChange = (value) => {
+    console.log(`selected ${value}`);
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     return(
@@ -18,7 +23,7 @@ class OrderForm extends React.Component {
                 initialValue:'1',
             })(
               <Select     
-                style={{ width: 200 }}              
+                style={{ width: 200 }}
               > 
                 <Option value="1">全部</Option>
                 <Option value="2">本年</Option>
@@ -34,10 +39,11 @@ class OrderForm extends React.Component {
         <FormItem label='订单来源' style={{ margin:20 }}>
           {
             getFieldDecorator('source',{
-                initialValue:'',
+                initialValue:'1',
             })(
               <Select     
-                style={{ width: 200 }}              
+                style={{ width: 200 }}
+                onChange={this.handleChange}                            
               > 
                 <Option value="1">全部</Option>
                 <Option value="2">菜单生成</Option>

@@ -1,6 +1,9 @@
 import React from 'react'
 import { Form , Select , Input, Button , Row, Col , Badge , Card , Tag } from 'antd'
+import { Link } from 'react-router-dom'
 import { template } from '../../DataConfig'
+import Cartoon from '../Cartoon'
+
 import './index.less'
 
 const FormItem = Form.Item;
@@ -12,6 +15,7 @@ const { Meta } = Card;
 
 
 class Template extends React.Component {
+
   render(){
     const { getFieldDecorator } = this.props.form;
     const styles = {
@@ -49,10 +53,15 @@ class Template extends React.Component {
               )
             }
           </FormItem>
+          <FormItem className='cartoon-wraper'>
+            <Cartoon />
+          </FormItem>
         </Form>
         <Row style={{marginTop:20}}>
           <Col span={2}>
-            <Button type="primary">创建模板</Button>
+            <Button type="primary" >
+              <Link to='/createtemplate'>创建模板</Link>
+            </Button>
           </Col>
           <Col span={4} offset={18}>
             <ButtonGroup>
@@ -68,6 +77,7 @@ class Template extends React.Component {
           {
             template.map(item => (
               <Card
+                key={item.key}
                 className='card'
                 style={{ ...styles }}
                 actions={[<span>创建:2018-11-01</span>,<span>修改:2018-11-02</span>]}
