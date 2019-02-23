@@ -12,7 +12,7 @@ export default {
             console.log(data);
             yield put({
                 type: 'saveDistributionList',
-                payload: data.data || {},
+                payload: data || {},
             });
         },
         
