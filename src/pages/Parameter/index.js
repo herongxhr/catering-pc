@@ -1,25 +1,27 @@
 import React from 'react'
-import SubHeader from '../../components/SubHeader'
+import Bread from '../../components/Bread'
 import { Card,Row,Col } from 'antd'
 import ParameterTable from '../../components/ParameterTable'
-
 
 import './index.less'
 
 class Parameter extends React.Component {
   render() {
+    const bread = [{
+      href:'parameter',
+      breadContent:'台账'
+    },{
+      href:'catalog',
+      breadContent:'采购目录'
+    }]
     return(
       <div className='Parameter'>
-        <Card
-				style={{ width: '100%' }}
-				title={<SubHeader title='采购订单' subTitle='' />}
-				>
-					<Row>
-						<Col xl={{span: 15, offset: 4}}>
+        <Bread bread={bread} />
+          <Row>
+            <Col xl={{span: 14, offset: 5}} style={{marginTop:15}}>
               <ParameterTable />
-						</Col>
-					</Row>
-				</Card>
+            </Col>
+          </Row>
       </div>
     )
   }

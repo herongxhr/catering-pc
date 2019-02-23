@@ -1,25 +1,24 @@
 import React from 'react'
 import OrderTable from '../../components/OrderTable'
-import SubHeader from '../../components/SubHeader'
+import Bread from '../../components/Bread'
 import { Card, Row, Col } from 'antd'
 
 import './index.less'
 
 class D extends React.Component {
 	render() {
+		const bread = [{
+			href:'/order',
+			breadContent:'采购订单'
+		}]
 		return(
 			<div className='PurchaseOrder'>
-				<Card
-				style={{ width: '100%' }}
-				title={<SubHeader title='采购订单' subTitle='' />}
-				onTabChange={(key) => { this.onTabChange(key, 'key'); }}
-				>
+					<Bread bread={bread} />
 					<Row>
-						<Col xl={{span: 15, offset: 4}}>
+						<Col xl={{span: 14, offset: 5}} style={{marginTop:15}}>
 							<OrderTable />
 						</Col>
 					</Row>
-				</Card>
 			</div>
 		)
 	}
