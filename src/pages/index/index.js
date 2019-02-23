@@ -8,6 +8,7 @@ import moment from 'moment'
 import Charts from 'ant-design-pro/lib/Charts';
 import { Pie, yuan, } from 'ant-design-pro/lib/Charts';
 import { connect } from 'dva';
+import { withRouter } from "react-router";
 
 const TabPane = Tabs.TabPane;
 const operations = <span className='extra'>查看全部</span>;
@@ -52,7 +53,7 @@ const salesPieData = [
 
 class A extends Component {
   state={
-    
+    tabkey:'today'
   }
   queryTodoList = () => {
 		const { dispatch } = this.props;
@@ -75,6 +76,7 @@ class A extends Component {
 			type: 'home/querydeviceInfo',
 		})
   }
+
   componentDidMount() {
     this.queryTodoList()
     this.querytodayMenu()
@@ -104,9 +106,15 @@ class A extends Component {
               <TodoListCard todoList = {todoList}/>
               <div className='tools'>
                 <Card title="常用工具" bordered={false} style={{ width: 350 }}>
-                  <Button className='toolsbtn cgml'>采购目录</Button>
-                  <Button className='toolsbtn'>本月台账</Button>
-                  <Button className='toolsbtn'>缺货上报</Button>
+                  <Button className='toolsbtn cgml' onClick={() =>{
+                    this.props.history.push('/order')
+                  }}>采购目录</Button>
+                  <Button className='toolsbtn' onClick={() =>{
+                    this.props.history.push('/parameter')
+                  }}>本月台账</Button>
+                  <Button className='toolsbtn' onClick={() =>{
+                    this.props.history.push('/OutStock')
+                  }}>缺货上报</Button>
                 </Card>
               </div>
             </div>
@@ -149,6 +157,7 @@ class A extends Component {
   }
 }
 
+const ShowARouter = withRouter(A);
 export default connect(( {home} ) => ({
   home,
-}))(A);;
+}))(ShowARouter);;

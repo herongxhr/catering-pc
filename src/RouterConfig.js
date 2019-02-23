@@ -14,6 +14,7 @@ import BasicConfig from './pages/acount/basicConfig';
 import SecurityView from './pages/acount/SecurityView';
 import Dosing from './pages/acount/Dosing';
 import Supply from './pages/acount/Supply';
+import OutStock from './pages/OutStock/index';
 
 export default function RouterConfig({ history }) {
   return (
@@ -21,7 +22,7 @@ export default function RouterConfig({ history }) {
       <Route path='/' render={() =>
         <App>
           <Switch>
-            <Route path="/home" component={A} />
+            <Route path="/home" component={A}></Route>
             <Route path="/menubar" component={B} />
             <Route path="/supermarket" component={C}></Route>
             <Route path="/order" component={D}></Route>
@@ -39,6 +40,7 @@ export default function RouterConfig({ history }) {
                 </Switch>
               </Setting>
             }></Route>
+             <Route path="/outstock" component={OutStock}></Route>
             <Redirect to="/home" />
           </Switch>
         </App>
