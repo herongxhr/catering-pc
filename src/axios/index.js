@@ -9,6 +9,7 @@ export default class Axios {
         loading.style.display = 'block';
         
         let baseApi = 'http://yapi.uanla.test:7777/mock/17/catering';
+        let baseApi = 'http://yapi.uanla.test:7777/mock/17';
         return new Promise((resolve,reject)=>{
             axios({
                 url:options.url,

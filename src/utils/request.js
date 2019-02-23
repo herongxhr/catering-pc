@@ -27,7 +27,7 @@ export default async function request(options) {
             params: (options.data && options.data.params) || '',
         });
         //关闭加载中
-        if (isShowLoading) {
+        if ( isShowLoading ) {
             loading = document.getElementById('ajaxLoading');
             loading.style.display = 'none';
         }

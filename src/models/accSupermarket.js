@@ -54,7 +54,12 @@ export default {
         // }
         *fetchGoodsF({ payload }, { call, put }) {
             //call方法首参数为要调用的异步方法
+<<<<<<< HEAD
             const data = yield call(queryGoodsF, payload);
+=======
+            const { data } = yield call(queryCatalogF);
+            console.log("model:data", data);
+>>>>>>> f577426d5c7cf7fe234b74c05afda3aa9515b7db
             //put方法类似于dispatch方法
             yield put({
                 //本模块内方法的type不需要加namespace前缀
@@ -64,9 +69,25 @@ export default {
                     ...payload,
                 },
             });
+<<<<<<< HEAD
         },
     },
 
+=======
+        }
+
+    },
+
+    // 获取热销产品，每个分类1-2个
+    // *fetchHotGoods({ payload }, { call, put }) {
+    //     const { data } = yield call(queryHotGoods, payload);
+    //     yield put ({
+    //         type: 'saveHotGoods',
+    //         payload: data.saveHotGoods || [],
+    //     })
+
+    // }
+>>>>>>> f577426d5c7cf7fe234b74c05afda3aa9515b7db
     reducers: {
         saveGoods(state, { payload }) {
             const {

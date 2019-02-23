@@ -7,6 +7,7 @@ import TableOne from '../../components/TableOne'
 import TableTwo from '../../components/TableTwo'
 import MenuTemplate from '../../components/MenuTemplate'
 
+
 import './index.less'
 
 const TabPane = Tabs.TabPane;
@@ -122,7 +123,8 @@ class B extends React.Component {
 		const contentList = {
 			tab1: <TableOne columns={tab1Columns} dataSource={this.state.tab1Source}  />,
 			tab2: <TableTwo columns={tab2Columns} dataSource={this.state.tab2Source} />,
-			tab3: <MenuTemplate />
+		//tab3: <Table columns={tab1Columns} dataSource={this.state.DataSource} />
+			tab3: <Table columns={tab1Columns} dataSource={this.state.DataSource} />
 		};
 		const titleList = ['统一菜单','我的菜单','菜单模板']
     return (
