@@ -32,14 +32,14 @@ export default {
             }
         ],
         currCollectStatus: 0,
-        goodList: [
+        goodsList: [
             // {
             //     id,
             //     brand,
             //     isCollected,
             //     img,
             //     price,
-            //     goods_name,
+            //     goodsName,
             //     provider,
             // }
         ],

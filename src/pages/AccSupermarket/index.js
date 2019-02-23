@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Breadcrumb, Input, Card, List, InputNumber } from 'antd';
+import { Breadcrumb, Input, Card, List, InputNumber, Icon, Badge } from 'antd';
 import GoodsFilter from '../../components/GoodsFilter';
+import GoodsCard from '../../components/GoodsCard';
 import './index.less';
 import goodsWine from './wine.png';
 
@@ -31,99 +32,38 @@ class AccSupermarket extends PureComponent {
 		})
 	}
 	componentDidMount() {
+		console.log('didmout', this.props);
 		this.filterGoods();
 	}
 
 	render() {
-		const cardData = [
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-		];
 
-		const goodsList = (
+		const {
+			goodsList,
+		} = this.props;
+		// 购物车
+		const shoppingCartDom = (
+			<div className="shoppingCart">
+				<Badge className="cartInner" count={6} showZero >
+					<Icon type="shopping-cart" style={{ fontSize: 20 }} />
+					<div className="cartText">购物车</div>
+				</Badge>
+			</div>
+		)
+
+		// 商品展示
+		const goodsListDom = (
 			<List className="goodsList"
-				dataSource={cardData}
-				renderItem={item => {
-					const goodsTitle = (
-						<div className="goodsTitle">{item.title}</div>
-					)
-					const goodsDescription = (
-						<div>
-							<h4>￥ {item.price} {item.priceType}</h4>
-							<div className="goodsProvider">{item.description}</div>
-						</div>
-					)
-					return (
+				dataSource={goodsList}
+				renderItem={item =>
+					(
 						<List.Item
 							className="listItem"
+							key={item.id}
 						>
-							<Card
-								className="goodsCard"
-								bordered={false}
-								actions={[<InputNumber
-									defaultValue={1}
-									min={1}
-									size="small"
-									onChange={this.handChangeValue}
-								/>, <a>加入购物车</a>]}
-								hoverable
-								cover={<img alt="example" src={goodsWine} />}
-							>
-								<Card.Meta
-									className="cardMeta"
-									title={goodsTitle}
-									description={goodsDescription}
-								/>
-							</Card>
+							<GoodsCard className="goodsCard" {...item} />
 						</List.Item>
 					)
-				}
 				}
 			/>
 		)
@@ -138,17 +78,17 @@ class AccSupermarket extends PureComponent {
 				</div>
 				{/* 筛选区域 */}
 				<div className="section-wrapper">
-					<GoodsFilter clickToFilter={this.filterGoods} {...this.props.accSupermarket} />
+					<GoodsFilter clickToFilter={this.filterGoods} {...this.props} />
 				</div>
 				<div className="searchResultWrapper">
-					{goodsList}
+					{goodsListDom}
 				</div>
+				{shoppingCartDom}
 			</div>
 		)
 	}
 }
 
-// AccSupermarket;
 export default connect(({ accSupermarket }) => ({
-	accSupermarket,
+	...accSupermarket,
 }))(AccSupermarket);
