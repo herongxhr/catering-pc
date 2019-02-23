@@ -113,7 +113,7 @@ class A extends Component {
                     this.props.history.push('/parameter')
                   }}>本月台账</Button>
                   <Button className='toolsbtn' onClick={() =>{
-                    this.props.history.push('/OutStock')
+                    this.props.history.push('/outstock')
                   }}>缺货上报</Button>
                 </Card>
               </div>
