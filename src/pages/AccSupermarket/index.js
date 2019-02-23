@@ -1,21 +1,25 @@
 import React from 'react';
 import { connect } from 'dva';
-import {  Breadcrumb, Input, Card, List } from 'antd';
+import { Breadcrumb, Input, Card, List } from 'antd';
 import './index.less';
 
 const { Search } = Input;
 
 class AccSupermarket extends React.Component {
-	handleClick = () => {
+	componentDidMount() {
 		const { dispatch } = this.props;
 		//请求辅料分类
 		dispatch({
-			type: 'accSupermarket/fetch',
-		})
-		console.log("props is:",this.props);
+			type: 'accSupermarket/fetchCatalogF',
+		});
+
+		//获取热销产品，每个分类1-2个
+		// dispatch({
+		// 	type: 'accSupermarket/fetchHotGoods',
+		// });
 	}
+
 	render() {
-		console.log("props is:",this.props);
 		return (
 			<div className="supermarket-root">
 				<div className="header-container">
@@ -40,20 +44,17 @@ class AccSupermarket extends React.Component {
 					</div>
 				</div>
 				<div>
-					<List>
-						<List.Item >
+					<List
+					>
+						<List.Item
+							style={{
+								background: "#fff"
+								, padding: 10
+							}}
+						>
 							<Card
-								hoverable
-								style={{ width: 278, height: 375 }}
-								cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-								actions={[<a>操作一</a>, <a>加入购物车</a>]}>
-								<Card.Meta
-									title="谷常多 稻米油 压榨 浓香 花生油 5L"
-									description="浙江帝景生态农业开发有限公司"
-								>
-								</Card.Meta>
-							</Card>
-							<Card
+								bodyStyle={{ padding: "10px" }}
+								bordered={false}
 								hoverable
 								style={{ width: 278 }}
 								cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
@@ -64,7 +65,16 @@ class AccSupermarket extends React.Component {
 								>
 								</Card.Meta>
 							</Card>
+						</List.Item>
+						<List.Item
+							style={{
+								background: "#fff"
+								, padding: 10
+							}}
+						>
 							<Card
+								bodyStyle={{ padding: "10px" }}
+								bordered={false}
 								hoverable
 								style={{ width: 278 }}
 								cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
@@ -75,7 +85,36 @@ class AccSupermarket extends React.Component {
 								>
 								</Card.Meta>
 							</Card>
+						</List.Item>
+						<List.Item
+							style={{
+								background: "#fff"
+								, padding: 10
+							}}
+						>
 							<Card
+								bodyStyle={{ padding: "10px" }}
+								bordered={false}
+								hoverable
+								style={{ width: 278 }}
+								cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
+								actions={[<a>操作一</a>, <a>加入购物车</a>]}>
+								<Card.Meta
+									title="谷常多 稻米油 压榨 浓香 花生油 5L"
+									description="浙江帝景生态农业开发有限公司"
+								>
+								</Card.Meta>
+							</Card>
+						</List.Item>
+						<List.Item
+							style={{
+								background: "#fff"
+								, padding: 10
+							}}
+						>
+							<Card
+								bodyStyle={{ padding: "10px" }}
+								bordered={false}
 								hoverable
 								style={{ width: 278 }}
 								cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
@@ -96,6 +135,6 @@ class AccSupermarket extends React.Component {
 }
 
 // AccSupermarket;
-export default connect(( {accSupermarket} ) => ({
+export default connect(({ accSupermarket }) => ({
 	accSupermarket,
 }))(AccSupermarket);

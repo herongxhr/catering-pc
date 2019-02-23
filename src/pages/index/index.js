@@ -6,7 +6,7 @@ import Accepting from '../../components/Accepting/Accepting'
 import { Card, Button, Tabs,Radio,Table } from 'antd';
 import moment from 'moment'
 import Charts from 'ant-design-pro/lib/Charts';
-import { Pie, yuan } from 'ant-design-pro/lib/Charts';
+import { Pie, yuan, } from 'ant-design-pro/lib/Charts';
 import { connect } from 'dva';
 
 const TabPane = Tabs.TabPane;
@@ -21,6 +21,7 @@ const columns = [{
   key: 'time',
   //render:(time)=><span>{moment(time).format('YYYY-MM-DD HH:mm:ss')}</span>
 }];
+
 const data = [{
   key: '1',
   device: '晨检仪',
@@ -50,27 +51,43 @@ const salesPieData = [
 ];
 
 class A extends Component {
-  // queryTodoList = () => {
-	// 	const { dispatch } = this.props;
-	// 	//请求待办事项
-	// 	dispatch({
-	// 		type: 'home/queryTodoLists',
-	// 	})
-	// 	console.log("props is:",this.props);
-	// }
-  componentDidMount() {
-    const { dispatch } = this.props;
-    console.log(dispatch);
+  state={
+    
+  }
+  queryTodoList = () => {
+		const { dispatch } = this.props;
 		//请求待办事项
 		dispatch({
 			type: 'home/queryTodoLists',
 		})
-		console.log("props is:",this.props);
+  }
+  querytodayMenu = () => {
+		const { dispatch } = this.props;
+		//请求待办事项
+		dispatch({
+			type: 'home/querytodayMenu',
+		})
+  }
+  querydeviceInfo = () => {
+		const { dispatch } = this.props;
+		//请求待办事项
+		dispatch({
+			type: 'home/querydeviceInfo',
+		})
+  }
+  componentDidMount() {
+    this.queryTodoList()
+    this.querytodayMenu()
+    this.querydeviceInfo()
   }
 
   render() {
     const title= <div className='device'>设备最后开机时间</div>
     const footer = <div style={{textAlign:'center',fontSize:14,color:'#54C4CE'}}>查看全部</div>
+    const { home }= this.props
+    const todoList = home.todoList || [];
+    const todayMenu = home.todayMenu || {};
+    const deviceInfo = home.deviceInfo || [];
     return ( 
       <div className="App">
         <div>{this.props.children}</div>
@@ -84,7 +101,7 @@ class A extends Component {
           </div>
           <div className="App-content-data">
             <div>
-              <TodoListCard />
+              <TodoListCard todoList = {todoList}/>
               <div className='tools'>
                 <Card title="常用工具" bordered={false} style={{ width: 350 }}>
                   <Button className='toolsbtn cgml'>采购目录</Button>
@@ -93,12 +110,12 @@ class A extends Component {
                 </Card>
               </div>
             </div>
-            <TodayMenuCard />
+            <TodayMenuCard todayMenu={todayMenu}/>
           </div>
           <div className="App-content-accepting"> 
             <Tabs tabBarExtraContent={operations}>
-              <TabPane tab="今日验收" key="1"><Accepting /></TabPane>
-              <TabPane tab="明日验收" key="2"><Accepting /></TabPane>
+              <TabPane tab="今日验收" key="today"><Accepting /></TabPane>
+              <TabPane tab="明日验收" key="tomorrow"><Accepting /></TabPane>
             </Tabs>
           </div>
           <div className='App-content-paying-wrapper'>
@@ -123,7 +140,7 @@ class A extends Component {
               </div>
             </div>
             <div className='App-content-opening'>
-            <Table showHeader={false} title={()=>title} columns={columns} dataSource={data} footer={() => footer} pagination={false} />
+            <Table showHeader={false} title={()=>title} columns={columns} dataSource={deviceInfo} footer={() => footer} pagination={false} />  
             </div>
           </div>
         </div>
@@ -133,5 +150,5 @@ class A extends Component {
 }
 
 export default connect(( {home} ) => ({
-	home,
+  home,
 }))(A);;

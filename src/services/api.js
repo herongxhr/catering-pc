@@ -17,24 +17,64 @@ export function queryCatalogF() {
 }
 export function queryTodoList() {
     return request({
-        method: 'post',
+        method: 'get',
         url: '/catering/workbench/todoList',
         data: {
             showLoading: true,
         }
     });
 }
+//获取验收情况
+export function queryList(params) {
+    return request({
+        method: 'post',
+        url: '/catering/workbench/distributionList',
+        data: {
+            showLoading: true,
+            params,
+        }
+    });
+}
+export function querydeviceInfo() {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/deviceInfo',
+        data: {
+            showLoading: true,
+        }
+    });
+}
 
-// export function queryTodoList() {
-//     return request({
-//         method: 'post',
-//         url: '/catering/workbench/todoList',
-//         data: {
-//             showLoading: true,
-//         }
+export function querytodayMenu() {
+    return request({
+        method: 'post',
+        url: '/catering/workbench/todayMenu',
+        data: {
+            showLoading: true,
+        }
 
-//     });
-// } 
+    });
+} 
+export function queryHotGoods() {
+    return request({
+        method: 'get',
+        url: '/goods/hots',
+        data: {
+            showLoading: true,
+        }
+    });
+}
+
+export function queryRule(params) {
+    return request({
+        method: 'get',
+        url: '/goods/catalogF/good',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
 // export async function queryBrandList(catalog) {
 //     return axios('/goods/brand/page/');
 // }

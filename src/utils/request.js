@@ -27,7 +27,7 @@ export default async function request(options) {
             params: (options.data && options.data.params) || '',
         });
         //关闭加载中
-        if (isShowLoading) {
+        if ( isShowLoading ) {
             loading = document.getElementById('ajaxLoading');
             loading.style.display = 'none';
         }
@@ -35,7 +35,8 @@ export default async function request(options) {
         if (response.status >= 200 && response.status < 300) {
             //res为后台返回的json对象
             let res = response.data;
-            if (res.code === 200) {
+            if (res.code == 0) {
+                console.log(res);
                 return res;
             } else {
                 message.info(res.msg);
