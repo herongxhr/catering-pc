@@ -45,6 +45,7 @@ export default {
         ],
         pageSize: 12,
         currPage: 1,
+        showCartDrawer: false,
     },
     effects: {
         // payload = {
@@ -90,5 +91,19 @@ export default {
                 currCollectStatus
             };
         },
+        // 显示购物车页面
+        showCartDrawer(state) {
+            return {
+                ...state,
+                showCartDrawer: true,
+            }
+        },
+        // 显示购物车详情
+        hideCartDrawer(state) {
+            return {
+                ...state,
+                showCartDrawer: false,
+            }
+        }
     },
 };

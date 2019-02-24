@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Breadcrumb, Input, Card, List, InputNumber, Icon, Badge } from 'antd';
+import { Breadcrumb, Input, Card, List, InputNumber, Icon, Badge, Drawer } from 'antd';
 import GoodsFilter from '../../components/GoodsFilter';
 import GoodsCard from '../../components/GoodsCard';
+import CartPageBody from '../../components/CartPageBody';
 import './index.less';
 import goodsWine from './wine.png';
 
@@ -31,6 +32,21 @@ class AccSupermarket extends PureComponent {
 			},
 		})
 	}
+
+	showCartDrawer = () => {
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'accSupermarket/showCartDrawer',
+		})
+
+	}
+	hideCartDrawer = () => {
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'accSupermarket/hideCartDrawer',
+		})
+
+	}
 	componentDidMount() {
 		console.log('didmout', this.props);
 		this.filterGoods();
@@ -40,15 +56,24 @@ class AccSupermarket extends PureComponent {
 
 		const {
 			goodsList,
+			showCartDrawer,
 		} = this.props;
+		// 购物车商品数量
+		const cartWithIconBade = (
+			<Badge onClick={this.showCartDrawer} className="cartInner" count={6} showZero >
+				<Icon type="shopping-cart" style={{ fontSize: 20 }} />
+				<div className="cartText">购物车</div>
+			</Badge>
+		)
+
 		// 购物车
 		const shoppingCartDom = (
-			<div className="shoppingCart">
-				<Badge className="cartInner" count={6} showZero >
-					<Icon type="shopping-cart" style={{ fontSize: 20 }} />
-					<div className="cartText">购物车</div>
-				</Badge>
-			</div>
+			<div className="shoppingCart">{cartWithIconBade}</div>
+		)
+
+		// 购物车详情标题
+		const cartPageTitle = (
+			<div className="cartPageTitle">{cartWithIconBade}</div>
 		)
 
 		// 商品展示
@@ -84,6 +109,19 @@ class AccSupermarket extends PureComponent {
 					{goodsListDom}
 				</div>
 				{shoppingCartDom}
+				<div className="cartDrawer">
+					<Drawer
+						placement="right"
+						title={cartPageTitle}
+						closable={true}
+						width={470}
+						onClose={this.hideCartDrawer}
+						visible={showCartDrawer}
+						zIndex={99999}
+					>
+						<CartPageBody {...this.props}/>
+					</Drawer>
+				</div>
 			</div>
 		)
 	}
