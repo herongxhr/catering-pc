@@ -119,7 +119,7 @@ class AccSupermarket extends PureComponent {
 						visible={showCartDrawer}
 						zIndex={99999}
 					>
-						<CartPageBody {...this.props}/>
+						<CartPageBody className="CartPageBody" {...this.props}/>
 					</Drawer>
 				</div>
 			</div>
