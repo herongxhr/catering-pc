@@ -6,6 +6,7 @@ import SubHeader from '../../components/SubHeader'
 import WrappedInlineForm from '../../components/InlineForm'
 import TableOne from '../../components/TableOne'
 import TableTwo from '../../components/TableTwo'
+import MenuTemplate from '../../components/MenuTemplate'
 
 import './index.less'
 
@@ -91,8 +92,6 @@ const requests = [{
 	url:`${baseURL}/menuItem`
 }]
 
-
-
 class B extends React.Component {
   state = {
     key: 'tab1',
@@ -121,7 +120,7 @@ class B extends React.Component {
 		const contentList = {
 			tab1: <TableOne columns={tab1Columns} dataSource={this.state.tab1Source}  />,
 			tab2: <TableTwo columns={tab2Columns} dataSource={this.state.tab2Source} />,
-			tab3: <Table columns={tab1Columns} dataSource={this.state.DataSource} />
+			tab3: <TableTwo columns={tab2Columns} dataSource={this.state.tab2Source} />
 		};
     return (
       <div className='card-wrapper'>
@@ -131,9 +130,9 @@ class B extends React.Component {
           activeTabKey={this.state.key}
           onTabChange={(key) => { this.onTabChange(key, 'key'); }}
         >
-            <div className='content-wrapper'>
-							{contentList[this.state.key]}
-            </div>        
+					<div className='content-wrapper'>
+						{contentList[this.state.key]}					
+					</div>        
         </Card>
       </div>
     );
