@@ -1,18 +1,15 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Breadcrumb, Input, Card, List, InputNumber, Icon, Badge, Drawer } from 'antd';
+import { Breadcrumb, Input, List, Icon, Badge, } from 'antd';
+import CartPage from '../CartPage';
 import GoodsFilter from '../../components/GoodsFilter';
-import GoodsCard from '../../components/GoodsCard';
-import CartPageBody from '../../components/CartPageBody';
+import GoodsCardList from '../../components/GoodsCardList';
+
 import './index.less';
-import goodsWine from './wine.png';
 
 const { Search } = Input;
 
 class AccSupermarket extends PureComponent {
-	handChangeValue = () => {
-
-	}
     /**
      * 点击链接按要求请求后台数据
      * 有三个筛选条件，还有一个默认条件选择辅料
@@ -33,6 +30,7 @@ class AccSupermarket extends PureComponent {
 		})
 	}
 
+	// 显示购物车页面
 	showCartDrawer = () => {
 		const { dispatch } = this.props;
 		dispatch({
@@ -40,88 +38,47 @@ class AccSupermarket extends PureComponent {
 		})
 
 	}
-	hideCartDrawer = () => {
-		const { dispatch } = this.props;
-		dispatch({
-			type: 'accSupermarket/hideCartDrawer',
-		})
 
-	}
 	componentDidMount() {
-		console.log('didmout', this.props);
 		this.filterGoods();
 	}
 
 	render() {
-
-		const {
-			goodsList,
-			showCartDrawer,
-		} = this.props;
-		// 购物车商品数量
-		const cartWithIconBade = (
-			<Badge onClick={this.showCartDrawer} className="cartInner" count={6} showZero >
-				<Icon type="shopping-cart" style={{ fontSize: 20 }} />
-				<div className="cartText">购物车</div>
-			</Badge>
-		)
-
-		// 购物车
-		const shoppingCartDom = (
-			<div className="shoppingCart">{cartWithIconBade}</div>
-		)
-
-		// 购物车详情标题
-		const cartPageTitle = (
-			<div className="cartPageTitle">{cartWithIconBade}</div>
-		)
-
-		// 商品展示
-		const goodsListDom = (
-			<List className="goodsList"
-				dataSource={goodsList}
-				renderItem={item =>
-					(
-						<List.Item
-							className="listItem"
-							key={item.id}
-						>
-							<GoodsCard className="goodsCard" {...item} />
-						</List.Item>
-					)
-				}
-			/>
+		// 悬浮购物车图标
+		const cartSquare = (
+			<div className="shoppingCart">
+				<Badge onClick={this.showCartDrawer} className="cartInner" count={6} >
+					<Icon type="shopping-cart" style={{ fontSize: 20 }} />
+					<div className="cartText">购物车</div>
+				</Badge>
+			</div>
 		)
 
 		return (
 			<div className="supermarket-root">
+				{/* 页面头部：面包屑+搜索框 */}
 				<div className="header-container">
 					<Breadcrumb style={{ marginLeft: 24 }}>
 						<Breadcrumb.Item>辅料超市</Breadcrumb.Item>
 					</Breadcrumb>
 					<Search className="goodsSearch" placeholder="请输入关键字进行搜索" onSearch={() => ({})} />
 				</div>
+
 				{/* 筛选区域 */}
 				<div className="section-wrapper">
 					<GoodsFilter clickToFilter={this.filterGoods} {...this.props} />
 				</div>
-				<div className="searchResultWrapper">
-					{goodsListDom}
+
+				{/* 筛选商品结果列表 */}
+				<div className="goodsCardList">
+					<GoodsCardList  {...this.props} />
 				</div>
-				{shoppingCartDom}
-				<div className="cartDrawer">
-					<Drawer
-						placement="right"
-						title={cartPageTitle}
-						closable={true}
-						width={470}
-						onClose={this.hideCartDrawer}
-						visible={showCartDrawer}
-						zIndex={99999}
-					>
-						<CartPageBody className="CartPageBody" {...this.props}/>
-					</Drawer>
-				</div>
+				
+				{/* 悬浮购物车图标 */}
+				{cartSquare}
+
+				{/* 购物车详情页 */}
+				<CartPage {...this.props} />
 			</div>
 		)
 	}

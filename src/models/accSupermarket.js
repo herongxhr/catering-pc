@@ -46,6 +46,7 @@ export default {
         pageSize: 12,
         currPage: 1,
         showCartDrawer: false,
+        shoppingCart: []
     },
     effects: {
         // payload = {
