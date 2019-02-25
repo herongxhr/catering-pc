@@ -1,85 +1,132 @@
-import React from 'react';
-import MarketCommodity from '../../components/SuperMarket';
-import { Breadcrumb, Input, Card, Row, Col, Button, List } from 'antd';
-import styles from './index.less';
+import React, { PureComponent } from 'react';
+import { connect } from 'dva';
+import { Breadcrumb, Input, Card, List, InputNumber, Icon, Badge, Drawer } from 'antd';
+import GoodsFilter from '../../components/GoodsFilter';
+import GoodsCard from '../../components/GoodsCard';
+import CartPageBody from '../../components/CartPageBody';
+import './index.less';
+import goodsWine from './wine.png';
 
 const { Search } = Input;
 
-class C extends React.Component {
+class AccSupermarket extends PureComponent {
+	handChangeValue = () => {
+
+	}
+    /**
+     * 点击链接按要求请求后台数据
+     * 有三个筛选条件，还有一个默认条件选择辅料
+     * 写在api方法queryGoods中
+     * @param{number} currCatalog 当前所选分类
+     * @param{number} currBrand 当前所选分类
+     * @param{number} currCollectStatus 当前所选分类
+     */
+	filterGoods = (currCatalog = 0, currBrand = 0, currCollectStatus = 0) => {
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'accSupermarket/fetchGoodsF',
+			payload: {
+				currCatalog,
+				currBrand,
+				currCollectStatus
+			},
+		})
+	}
+
+	showCartDrawer = () => {
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'accSupermarket/showCartDrawer',
+		})
+
+	}
+	hideCartDrawer = () => {
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'accSupermarket/hideCartDrawer',
+		})
+
+	}
+	componentDidMount() {
+		console.log('didmout', this.props);
+		this.filterGoods();
+	}
+
 	render() {
+
+		const {
+			goodsList,
+			showCartDrawer,
+		} = this.props;
+		// 购物车商品数量
+		const cartWithIconBade = (
+			<Badge onClick={this.showCartDrawer} className="cartInner" count={6} showZero >
+				<Icon type="shopping-cart" style={{ fontSize: 20 }} />
+				<div className="cartText">购物车</div>
+			</Badge>
+		)
+
+		// 购物车
+		const shoppingCartDom = (
+			<div className="shoppingCart">{cartWithIconBade}</div>
+		)
+
+		// 购物车详情标题
+		const cartPageTitle = (
+			<div className="cartPageTitle">{cartWithIconBade}</div>
+		)
+
+		// 商品展示
+		const goodsListDom = (
+			<List className="goodsList"
+				dataSource={goodsList}
+				renderItem={item =>
+					(
+						<List.Item
+							className="listItem"
+							key={item.id}
+						>
+							<GoodsCard className="goodsCard" {...item} />
+						</List.Item>
+					)
+				}
+			/>
+		)
+
 		return (
-			<div className={styles.standardList}>
-				<div>
-					<Breadcrumb>
+			<div className="supermarket-root">
+				<div className="header-container">
+					<Breadcrumb style={{ marginLeft: 24 }}>
 						<Breadcrumb.Item>辅料超市</Breadcrumb.Item>
 					</Breadcrumb>
-					<Search className={styles.goodsSearch} placeholder="请输入关键字进行搜索" onSearch={() => ({})} />
+					<Search className="goodsSearch" placeholder="请输入关键字进行搜索" onSearch={() => ({})} />
 				</div>
-				<Card bordered={false}>
-					<Row>
-						<Col>123</Col>
-					</Row>
-					<Row>
-						<Col>123</Col>
-					</Row>
-					<Row>
-						<Col>123</Col>
-					</Row>
-				</Card>
-				<div>
-					<List>
-						<List.Item >
-							<Card
-								hoverable
-								style={{ width: 278 }}
-								cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-								actions={[<a>操作一</a>, <a>加入购物车</a>]}>
-								<Card.Meta
-									title="谷常多 稻米油 压榨 浓香 花生油 5L"
-									description="浙江帝景生态农业开发有限公司"
-								>
-								</Card.Meta>
-							</Card>
-							<Card
-								hoverable
-								style={{ width: 278 }}
-								cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-								actions={[<a>操作一</a>, <a>加入购物车</a>]}>
-								<Card.Meta
-									title="谷常多 稻米油 压榨 浓香 花生油 5L"
-									description="浙江帝景生态农业开发有限公司"
-								>
-								</Card.Meta>
-							</Card>
-							<Card
-								hoverable
-								style={{ width: 278 }}
-								cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-								actions={[<a>操作一</a>, <a>加入购物车</a>]}>
-								<Card.Meta
-									title="谷常多 稻米油 压榨 浓香 花生油 5L"
-									description="浙江帝景生态农业开发有限公司"
-								>
-								</Card.Meta>
-							</Card>
-							<Card
-								hoverable
-								style={{ width: 278 }}
-								cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-								actions={[<a>操作一</a>, <a>加入购物车</a>]}>
-								<Card.Meta
-									title="谷常多 稻米油 压榨 浓香 花生油 5L"
-									description="浙江帝景生态农业开发有限公司"
-								>
-								</Card.Meta>
-							</Card>
-						</List.Item>
-					</List>
+				{/* 筛选区域 */}
+				<div className="section-wrapper">
+					<GoodsFilter clickToFilter={this.filterGoods} {...this.props} />
 				</div>
-				{/* <MarketCommodity /> */}
+				<div className="searchResultWrapper">
+					{goodsListDom}
+				</div>
+				{shoppingCartDom}
+				<div className="cartDrawer">
+					<Drawer
+						placement="right"
+						title={cartPageTitle}
+						closable={true}
+						width={470}
+						onClose={this.hideCartDrawer}
+						visible={showCartDrawer}
+						zIndex={99999}
+					>
+						<CartPageBody className="CartPageBody" {...this.props}/>
+					</Drawer>
+				</div>
 			</div>
 		)
 	}
 }
 
-export default C
+export default connect(({ accSupermarket }) => ({
+	...accSupermarket,
+}))(AccSupermarket);

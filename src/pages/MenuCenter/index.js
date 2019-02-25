@@ -1,6 +1,5 @@
 import React from 'react'
-import { Card,Table,Tag,Tabs } from 'antd'
-import axios from 'axios'
+import { Card,Table,Tag,Tabs,Row,Col } from 'antd'
 import Axios from '../../axios'
 import SubHeader from '../../components/SubHeader'
 import WrappedInlineForm from '../../components/InlineForm'
@@ -10,7 +9,6 @@ import MenuTemplate from '../../components/MenuTemplate'
 
 import './index.less'
 
-const baseURL =	'https://www.easy-mock.com/mock/5c4c02ec50f5ab309c7dec17/DataSource'
 const TabPane = Tabs.TabPane;
 
 const tabList = [{
@@ -24,34 +22,7 @@ const tabList = [{
 	tab:'菜单模板'
 }];
 
-const tab1Columns = [{
-  title: '菜单编号',
-  dataIndex: 'menuID',
-  key: 'menuID',
-}, {
-  title: '周次',
-  dataIndex: 'weekly',
-  key: 'weekly',
-}, {
-  title: '日期',
-  dataIndex: 'date',
-  key: 'date',
-}, {
-	title: '下达单位',
-  dataIndex: 'unit',
-	key: 'unit',
-}, {
-	title: '下达时间',
-  dataIndex: 'time',
-  key: 'time',
-}, {
-	title: '执行状态',
-  dataIndex: 'status',
-	key: 'status',
-	render(status){
-		return status == 1?'已执行':'未执行'
-	}
-}];
+
 
 const tab2Columns = [{
 	title: '菜单编号',
@@ -87,52 +58,54 @@ const tab2Columns = [{
 
 
 const requests = [{
-	url:`${baseURL}/mymenu`
+	url:`/mymenu`
 },{
-	url:`${baseURL}/menuItem`
+	url:`/menuItem`
 }]
 
 class B extends React.Component {
   state = {
-    key: 'tab1',
+		key: 'tab1',
+		tab:0,
 		tab1Source:[],
-		tab2Source:[]
+		Data1Source:[],
+		tab2Source:[],
   }
 
   onTabChange = (key, type) => {
-		this.setState({ [type]: key });
+		const titleList = ['tab1','tab2','tab3']
+		const count = titleList.indexOf(key) //通过改变count来修改传入SubHeader的值
+		this.setState({ 
+			[type]: key,
+			tab:count
+		 });
 	}
 	
-	componentDidMount() {
-		let promises = []
-		for(let i = 0; i <  requests.length; i++) {
-			promises.push(axios.get(requests[i].url))
-		}
-		axios.all(promises).then(axios.spread((...args) => {
-			this.setState({
-				tab1Source:args[1].data.result,
-				tab2Source:args[0].data.result,
-			})
-		}))
-	}
+
 
   render() {
 		const contentList = {
-			tab1: <TableOne columns={tab1Columns} dataSource={this.state.tab1Source}  />,
+			tab1: <TableOne />,
 			tab2: <TableTwo columns={tab2Columns} dataSource={this.state.tab2Source} />,
-			tab3: <TableTwo columns={tab2Columns} dataSource={this.state.tab2Source} />
+			tab3: <MenuTemplate />
 		};
+		const titleList = ['统一菜单','我的菜单','菜单模板']
     return (
       <div className='card-wrapper'>
+				<SubHeader title='菜单中心' subTitle={titleList[this.state.tab]} cascade={this.state.tab1} />
         <Card
-          title={<SubHeader title='菜单中心' subTitle='统一菜单' />}
           tabList={tabList}
-          activeTabKey={this.state.key}
+					activeTabKey={this.state.key}
+					defaultActiveTabKey={this.state.key}
           onTabChange={(key) => { this.onTabChange(key, 'key'); }}
         >
-					<div className='content-wrapper'>
-						{contentList[this.state.key]}					
-					</div>        
+					<Row type="flex" justify="center">
+						<Col xl={{span: 15}}>
+							<div className='content-wrapper'>
+								{contentList[this.state.key]}					
+							</div>
+						</Col>
+					</Row>        
         </Card>
       </div>
     );

@@ -1,16 +1,4 @@
-.ant-card{
-  margin:0 auto;
-}
-.ant-card-wider-padding .ant-card-head {
-  height:100px;
-}
 .ant-card-head .ant-tabs{
-  width:1200px;
-  margin:0 auto;
-}
-.content-wrapper{
-  background: white;
-  padding:20px;
   width:1200px;
   margin:0 auto;
 }
@@ -18,4 +6,34 @@
   padding: 16px;
   font-size:14px;
   margin-left:30px;
+}
+.card-wrapper {
+  .SubHeader {
+    width: 1200px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0px;
+  }
+  .ant-card {
+    border:0px solid black;
+    .ant-card-head {
+      height: 55px;
+      background: rgba(240,242,245);
+      .ant-tabs {
+        background:white;
+        height:55px;
+      }
+    }
+  }
+  .ant-card-body {
+    background: rgba(240,242,245);
+    .content-wrapper{
+      background: white;
+      margin:0 auto;
+      .ant-table-wrapper {
+        padding: 20px;
+      }
+    }
+  }
 }

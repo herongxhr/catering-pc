@@ -12,7 +12,10 @@ import BaseView from './pages/acount/BaseView'
 import BasicConfig from './pages/acount/basicConfig'
 import SecurityView from './pages/acount/SecurityView'
 import Dosing from './pages/acount/Dosing'
-import Supply from './pages/acount/Supply' 
+import Supply from './pages/acount/Supply'
+import CreateTemplate from './pages/CreateTemplate'
+import Details from './pages/Details'
+import Test from './pages/Test'
 
 
 
@@ -23,8 +26,10 @@ class IRouter extends React.Component {
             <Route path='/'  render={()=> 
                 <App>
                   <Switch>
-                      <Route path="/home" component={A} />
+                      <Route path="/home"  component={A} />
                       <Route path="/menubar" component={B} />
+                      <Route path='/createtemplate' component={CreateTemplate} />
+                      <Route path='/details' component={Details} />
                       <Route path="/supermarket" component={C}></Route>
                       <Route path="/order" component={D}></Route>
                       <Route path="/delivery" component={E}></Route>
@@ -41,6 +46,7 @@ class IRouter extends React.Component {
                           </Switch>
                         </Setting>
                       }></Route>
+                      <Route path='/test' component={Test}></Route>
                       <Redirect to="/home" />
                   </Switch>
                 </App>

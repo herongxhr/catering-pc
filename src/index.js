@@ -1,9 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import IRouter from './Router'
-import './style/common.less'
+import dva from 'dva';
+import dynamic from 'dva/dynamic';
 
-ReactDOM.render(<IRouter />, document.getElementById('root'));
+import createHistory from 'history/createBrowserHistory';
+import RouterConfig from './RouterConfig';
+import './style/common.less';
+
+//创建应用
+const app = dva({
+    history: createHistory(),
+});
+//加载插件
+// app.use({});
+
+//创建model
+require('./models').default.forEach(key => {
+    app.model(key.default)
+});
+
+//创建视图
+app.router(RouterConfig);
+
+//启动应用
+app.start('#root');
 
 //import './index.css';
 //import * as serviceWorker from './serviceWorker';

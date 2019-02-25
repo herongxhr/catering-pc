@@ -1,8 +1,8 @@
 import React from 'react'
 import { Card,Table,Tag,Row,Col  } from 'antd'
 import Axios from '../../axios'
-import SubHeader from '../../components/SubHeader'
-import { delivery } from '../../DataConfig'
+import Bread from '../../components/Bread'
+import DeliveryForm from './DeliveryForm'
 
 import './index.less'
 
@@ -59,36 +59,44 @@ class E extends React.Component {
 		this.setState({ [type]: key });
 	}
 	
-	// componentDidMount() {
-  //   Axios.ajax({
-  //     url:'/delivery'
-  //   }).then((value) => {
-  //     this.setState({
-  //       DataSource:value
-  //     })
-  //   })
-	// }
+	componentDidMount() {
+    Axios.ajax({
+      url:'/delivery'
+    }).then((value) => {
+      this.setState({
+        DataSource:value
+      })
+    })
+	}
 
   render() {
-    const dataSource = delivery.result
+    const dataSource = this.state.DataSource
 		const contentList = {
 			tab1: <Table columns={tab1Columns} dataSource={dataSource} />,
 			tab2: <Table columns={tab1Columns} dataSource={dataSource} />,
 			tab3: <Table columns={tab1Columns} dataSource={dataSource} />
     };
+    const bread = [{
+      href:'/delivery',
+      breadContent:'配送验收'
+    },{
+      href:'/wait',
+      breadContent:'待配送'
+    }]
     return (
-      <div>
+      <div className='DeliveryAcce'>
+        <Bread bread={bread}  />
         <Card
           style={{ width: '100%' }}
-          title={<SubHeader title='菜单中心' subTitle='统一菜单' />}
           tabList={tabList}
           activeTabKey={this.state.key}
           onTabChange={(key) => { this.onTabChange(key, 'key'); }}
         >
-        	<Row>
-						<Col xl={{span: 15, offset: 4}}>
+        	<Row type="flex" justify="center">
+						<Col xl={{span: 15}}>
               <div style={{ background: '#ECECEC' }}>
                 <div style={{ background: 'white'}}>
+                  <DeliveryForm />
                   {contentList[this.state.key]}
                 </div>
               </div>

@@ -55,7 +55,7 @@ class InForm extends React.Component {
             )
           }
         </FormItem>
-        <FormItem style={{marginLeft:240,marginTop:20}}>
+        <FormItem style={{marginLeft:220,marginTop:20}}>
           <ButtonGroup>
             <Button>全部</Button>
             <Button>本月</Button>

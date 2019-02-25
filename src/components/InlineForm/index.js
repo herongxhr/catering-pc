@@ -1,18 +1,20 @@
 import React from 'react'
-import { Form , Select , DatePicker , Input  } from "antd";
-import './index.less'
+import { Form , Select , DatePicker , Input } from "antd";
+
+
 const Option = Select.Option;
 
 const Search = Input.Search;
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
+
 class InlineForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     return(
-      <Form layout="inline">
-        <FormItem label='日期选择' style={{ margin:20 }}>
+      <Form layout="inline" style={{paddingTop:20}} >
+        <FormItem label='日期选择' style={{marginLeft:30}}>
           {
             getFieldDecorator('date',{
                 initialValue:'1',
@@ -30,7 +32,7 @@ class InlineForm extends React.Component {
             )
           }
         </FormItem>
-        <FormItem  style={{ marginTop:20 }}>
+        {/* <FormItem style={{marginLeft:20}}>
           {
             getFieldDecorator('search',{
                 initialValue:'',
@@ -42,7 +44,7 @@ class InlineForm extends React.Component {
             />
             )
           }
-        </FormItem>
+        </FormItem> */}
       </Form>
     )
   }

@@ -1,72 +1,102 @@
 @import '~antd/lib/style/themes/default.less';
 
-.standardList {
-    :global {
-      .ant-card-head {
-        border-bottom: none;
-      }
-      .ant-card-head-title {
-        line-height: 32px;
-        padding: 24px 0;
-      }
-      .ant-card-extra {
-        padding: 24px 0;
-      }
-      .ant-list-pagination {
-        text-align: right;
-        margin-top: 24px;
-      }
-      .ant-avatar-lg {
-        width: 48px;
-        height: 48px;
-        line-height: 48px;
-      }
-    }
-    .headerInfo {
-      position: relative;
-      text-align: center;
-      & > span {
-        color: @text-color-secondary;
+@box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.1);
+
+.supermarket-root {
+  width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  .header-container {
+      height: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 1);
+      box-shadow: @box-shadow;
+  }
+  // 展示筛选区域
+  .section-wrapper{
+      margin: 20px auto;
+      width: 1160px;
+      display: flex;
+      justify-content: center;
+      box-shadow: @box-shadow;
+      background-color: rgba(255, 255, 255, 1); 
+  }
+  // 展示筛选后的商品
+  .searchResultWrapper{
+    width: 1176px;
+    margin: 0 auto;
+    .goodsList {
+      display: flex;
+      justify-content: space-between;
+      .listItem {
         display: inline-block;
-        font-size: @font-size-base;
-        line-height: 22px;
-        margin-bottom: 4px;
+        margin: 0 8px 16px 8px;      
+        padding: 10px;
+        background-color: #fff;
       }
-      & > p {
-        color: @heading-color;
-        font-size: 24px;
-        line-height: 32px;
-        margin: 0;
-      }
-      & > em {
-        background-color: @border-color-split;
-        position: absolute;
-        height: 56px;
-        width: 1px;
-        top: 0;
-        right: 0;
-      }
-    }
-    .listContent {
-      font-size: 0;
-      .listContentItem {
-        color: @text-color-secondary;
-        display: inline-block;
-        vertical-align: middle;
-        font-size: @font-size-base;
-        margin-left: 40px;
-        > span {
-          line-height: 20px;
-        }
-        > p {
-          margin-top: 4px;
-          margin-bottom: 0;
-          line-height: 22px;
-        }
-      }
-    }
-    .extraContentSearch {
-      margin-left: 16px;
-      width: 272px;
     }
   }
+  .goodsSearch {
+    margin-right: 22px;
+    width: 300px;
+  }
+}
+
+// 购物车
+.shoppingCart {
+  cursor: pointer;
+  position: fixed;
+  left: calc(50% + 600px);
+  top: 50%;
+  z-index: 9999;
+  display: table;
+  text-align: center;
+  width: 60px;
+  height: 60px;
+  line-height: 20px;
+  border-radius: 4px 0px 0px 4px;
+  box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0);
+  .cartInner {
+    color: rgba(245, 34, 45, 1);
+    display: table-cell;
+    vertical-align: middle;
+    .cartText {
+      margin-top: 5px;
+      color: rgba(0, 0, 0, 0.65);
+    }
+  }
+}
+
+@media screen and (max-width: @screen-lg) {
+  .contentLink {
+    a {
+      margin-right: 16px;
+    }
+  }
+}
+@media screen and (max-width: @screen-md) {
+  .extraImg {
+    display: none;
+  }
+}
+
+@media screen and (max-width: @screen-sm) {
+  .pageHeaderContent {
+    padding-bottom: 30px;
+  }
+  .contentLink {
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 1000px;
+    a {
+      margin-right: 16px;
+    }
+    img {
+      margin-right: 4px;
+    }
+  }
+}
