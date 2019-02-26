@@ -15,13 +15,10 @@ import SecurityView from './pages/acount/SecurityView';
 import Dosing from './pages/acount/Dosing';
 import Supply from './pages/acount/Supply';
 import OutStock from './pages/OutStock/index';
-<<<<<<< HEAD
 import PurCatalog from './pages/PurCatalog/index';
-=======
 import CreateTemplate from './pages/CreateTemplate'
 import Details from './pages/Details'
 import Test from './pages/Test'
->>>>>>> aeb035c21c17074d6272874ed723fc7983d97447
 
 export default function RouterConfig({ history }) {
   return (
@@ -50,12 +47,9 @@ export default function RouterConfig({ history }) {
                 </Switch>
               </Setting>
             }></Route>
-<<<<<<< HEAD
              <Route path="/outstock" component={OutStock}></Route>
              <Route path="/purcatalog" component={PurCatalog}></Route>
-=======
             <Route path='/test' component={Test}></Route>
->>>>>>> aeb035c21c17074d6272874ed723fc7983d97447
             <Redirect to="/home" />
           </Switch>
         </App>
