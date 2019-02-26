@@ -1,6 +1,6 @@
-import React from 'react'
-import Report from '../../components/Report/Report'
-import TwoBread from '../../components/TwoBread'
+import React from 'react';
+import Report from '../../components/Report';
+import TwoBread from '../../components/TwoBread';
 import { Card, Row, Col } from 'antd'
 
 import './index.less'
