@@ -1,7 +1,7 @@
 import React from 'react'
 import OrderTable from '../../components/OrderTable'
 import Bread from '../../components/Bread'
-import { Card, Row, Col } from 'antd'
+import { Row, Col } from 'antd'
 
 import './index.less'
 

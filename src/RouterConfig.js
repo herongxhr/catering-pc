@@ -19,6 +19,7 @@ import PurCatalog from './pages/PurCatalog/index';
 import CreateTemplate from './pages/CreateTemplate'
 import Details from './pages/Details'
 import Test from './pages/Test'
+import Particulars from './pages/Particulars'
 
 export default function RouterConfig({ history }) {
   return (
@@ -35,6 +36,7 @@ export default function RouterConfig({ history }) {
             <Route path="/delivery" component={E}></Route>
             <Route path="/outStock" component={OutStock}></Route>
             <Route path="/parameter" component={Parameter}></Route>
+            <Route path="/particulars" component={Particulars}></Route>
             <Route path="/Setting" render={() =>
               <Setting>
                 <Switch>

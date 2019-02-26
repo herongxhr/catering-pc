@@ -103,6 +103,7 @@ class B extends React.Component {
 						<Col xl={{span: 15}}>
 							<div className='content-wrapper'>
 								{contentList[this.state.key]}					
+								{/* <MenuTemplate /> */}
 							</div>
 						</Col>
 					</Row>        
