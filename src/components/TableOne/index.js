@@ -86,7 +86,7 @@ class TableOne extends React.Component {
             </Dropdown>
           </ButtonGroup>  
         </div>
-        <Table columns={tab1Columns} dataSource={this.state.DataSource} />
+        <Table columns={tab1Columns} dataSource={this.state.DataSource} rowKey="id" />
       </div>
     )
   }

@@ -81,7 +81,7 @@ class Template extends React.Component {
                 key={item.key}
                 className='card'
                 style={{ ...styles }}
-                actions={[<span>创建:2018-11-01</span>,<span>修改:2018-11-02</span>]}
+                actions={[<span>创建:2018-11-01</span>]}
                 hoverable={true}
               >
                 <div className='card-body'>
