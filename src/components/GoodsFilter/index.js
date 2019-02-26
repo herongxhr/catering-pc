@@ -14,6 +14,7 @@ export default class GoodsFilter extends React.Component {
             showMoreText: !this.state.showMoreText,
         })
     }
+    
     render() {
         const {
             clickToFilter,

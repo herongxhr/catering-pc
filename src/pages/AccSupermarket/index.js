@@ -1,16 +1,15 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Breadcrumb, Input, Card, List, InputNumber } from 'antd';
+import { Breadcrumb, Input, List, Icon, Badge, } from 'antd';
+import CartPage from '../CartPage';
 import GoodsFilter from '../../components/GoodsFilter';
+import GoodsCardList from '../../components/GoodsCardList';
+
 import './index.less';
-import goodsWine from './wine.png';
 
 const { Search } = Input;
 
 class AccSupermarket extends PureComponent {
-	handChangeValue = () => {
-
-	}
     /**
      * 点击链接按要求请求后台数据
      * 有三个筛选条件，还有一个默认条件选择辅料
@@ -30,125 +29,61 @@ class AccSupermarket extends PureComponent {
 			},
 		})
 	}
+
+	// 显示购物车页面
+	showCartDrawer = () => {
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'accSupermarket/showCartDrawer',
+		})
+
+	}
+
 	componentDidMount() {
 		this.filterGoods();
 	}
 
 	render() {
-		const cardData = [
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-			{
-				title: '谷常多 稻米油 压榨 浓香 花生油 5L',
-				price: 45,
-				priceType: "元/箱",
-				description: "浙江帝景生态农业开发有限公司",
-			},
-		];
-
-		const goodsList = (
-			<List className="goodsList"
-				dataSource={cardData}
-				renderItem={item => {
-					const goodsTitle = (
-						<div className="goodsTitle">{item.title}</div>
-					)
-					const goodsDescription = (
-						<div>
-							<h4>￥ {item.price} {item.priceType}</h4>
-							<div className="goodsProvider">{item.description}</div>
-						</div>
-					)
-					return (
-						<List.Item
-							className="listItem"
-						>
-							<Card
-								className="goodsCard"
-								bordered={false}
-								actions={[<InputNumber
-									defaultValue={1}
-									min={1}
-									size="small"
-									onChange={this.handChangeValue}
-								/>, <a>加入购物车</a>]}
-								hoverable
-								cover={<img alt="example" src={goodsWine} />}
-							>
-								<Card.Meta
-									className="cardMeta"
-									title={goodsTitle}
-									description={goodsDescription}
-								/>
-							</Card>
-						</List.Item>
-					)
-				}
-				}
-			/>
+		// 悬浮购物车图标
+		const cartSquare = (
+			<div className="shoppingCart">
+				<Badge onClick={this.showCartDrawer} className="cartInner" count={6} >
+					<Icon type="shopping-cart" style={{ fontSize: 20 }} />
+					<div className="cartText">购物车</div>
+				</Badge>
+			</div>
 		)
 
 		return (
 			<div className="supermarket-root">
+				{/* 页面头部：面包屑+搜索框 */}
 				<div className="header-container">
 					<Breadcrumb style={{ marginLeft: 24 }}>
 						<Breadcrumb.Item>辅料超市</Breadcrumb.Item>
 					</Breadcrumb>
 					<Search className="goodsSearch" placeholder="请输入关键字进行搜索" onSearch={() => ({})} />
 				</div>
+
 				{/* 筛选区域 */}
 				<div className="section-wrapper">
-					<GoodsFilter clickToFilter={this.filterGoods} {...this.props.accSupermarket} />
+					<GoodsFilter clickToFilter={this.filterGoods} {...this.props} />
 				</div>
-				<div className="searchResultWrapper">
-					{goodsList}
+
+				{/* 筛选商品结果列表 */}
+				<div className="goodsCardList">
+					<GoodsCardList  {...this.props} />
 				</div>
+				
+				{/* 悬浮购物车图标 */}
+				{cartSquare}
+
+				{/* 购物车详情页 */}
+				<CartPage {...this.props} />
 			</div>
 		)
 	}
 }
 
-// AccSupermarket;
 export default connect(({ accSupermarket }) => ({
-	accSupermarket,
+	...accSupermarket,
 }))(AccSupermarket);
