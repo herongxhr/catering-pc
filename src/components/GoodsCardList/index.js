@@ -27,32 +27,31 @@ export default class GoodsCardList extends React.Component {
 
     // 判断商品是否在cart中
     checkGoods(goodsId) {
-        let cart = this.state.cart;
-        return cart.some(item => item.id === goodsId);
+        return this.state.cart.some(item => item.id === goodsId);
     }
 
     // 只要修改数量，将改过数量的商品的id和改后的值保存到state中
-    handleValueChange = (value, id) => {
-        console.log(id, value);
-        if (this.checkGoods(id)) {
+    handleValueChange = (goodsQty, goodsId) => {
+        console.log(goodsId, goodsQty);
+        if (this.checkGoods(goodsId)) {
             this.setState({
                 cart: this.state.cart.map(item => {
-                    if (item.id === id) {
+                    if (item.id === goodsId) {
                         return {
-                            id,
-                            qty: item.qty + value,
+                            goodsId,
+                            qty: item.qty + +goodsQty,
                         }
                     }
                     return item;
-                })
-            })
+                }),
+            });
         } else {
             this.setState({
                 cart: this.state.cart.concat({
-                    id,
-                    value,
-                })
-            })
+                    goodsId,
+                    goodsQty,
+                }),
+            });
         }
         console.log(this.state.cart);
     }
