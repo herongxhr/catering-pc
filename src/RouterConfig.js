@@ -2,11 +2,11 @@ import React from 'react';
 import { Router, Route, Switch, Redirect } from 'dva/router';
 //路由对应的组件
 import App from './App'
-import A from './pages/Index/index'
-import B from './pages/MenuCenter'
-import C from './pages/AccSupermarket'
-import D from './pages/PurOrder'
-import E from './pages/DeliveryAcce'
+import Index from './pages/Index/index'
+import MenuCenter from './pages/MenuCenter'
+import AccSupermarket from './pages/AccSupermarket'
+import PurOrder from './pages/PurOrder'
+import DeliveryAcce from './pages/DeliveryAcce'
 import Parameter from './pages/Parameter';
 import Setting from './pages/Setting';
 import BaseView from './pages/acount/BaseView';
@@ -26,13 +26,13 @@ export default function RouterConfig({ history }) {
       <Route path='/' render={() =>
         <App>
           <Switch>
-            <Route path="/home" component={A} />
-            <Route path="/menubar" component={B} />
+            <Route path="/home" component={Index} />
+            <Route path="/menubar" component={MenuCenter} />
             <Route path='/createtemplate' component={CreateTemplate} />
             <Route path='/details' component={Details} />
-            <Route path="/supermarket" component={C}></Route>
-            <Route path="/order" component={D}></Route>
-            <Route path="/delivery" component={E}></Route>
+            <Route path="/supermarket" component={AccSupermarket}></Route>
+            <Route path="/order" component={PurOrder}></Route>
+            <Route path="/delivery" component={DeliveryAcce}></Route>
             <Route path="/outStock" component={OutStock}></Route>
             <Route path="/parameter" component={Parameter}></Route>
             <Route path="/Setting" render={() =>
@@ -47,8 +47,8 @@ export default function RouterConfig({ history }) {
                 </Switch>
               </Setting>
             }></Route>
-             <Route path="/outstock" component={OutStock}></Route>
-             <Route path="/purcatalog" component={PurCatalog}></Route>
+            <Route path="/outstock" component={OutStock}></Route>
+            <Route path="/purcatalog" component={PurCatalog}></Route>
             <Route path='/test' component={Test}></Route>
             <Redirect to="/home" />
           </Switch>
