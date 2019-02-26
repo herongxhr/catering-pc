@@ -5,28 +5,56 @@ import './index.less';
 
 export default class GoodsCardList extends React.Component {
     state = {
-        num: 1,
-        goodsId: null,
+        cart: []
     }
 
-    HandleAddToCart = (id, num) => {
+
+
+    HandleAddToCart = (id) => {
         const { dispatch } = this.props;
-        num = id === this.state.goodsId ? this.state.num : 1;
-        console.log(num);
+        // 在state中保存的改过数量的商品数组中
+        // 找到本id对应的数量，如果没有就默认为1
+        let qty = this.state.goodsInCart.find(item => item.id === id) || 1;
+        console.log(qty);
         dispatch({
             type: 'accSupermarket/addToCart',
             payload: {
                 id,
-                num,
+                qty,
             }
         })
     }
 
+    // 判断商品是否在cart中
+    checkGoods(goodsId) {
+        let cart = this.state.cart;
+        return cart.some(item => item.id === goodsId);
+    }
+
+    // 只要修改数量，将改过数量的商品的id和改后的值保存到state中
     handleValueChange = (value, id) => {
-        this.setState({
-            num: value,
-            goodsId: id
-        })
+        console.log(id, value);
+        if (this.checkGoods(id)) {
+            this.setState({
+                cart: this.state.cart.map(item => {
+                    if (item.id === id) {
+                        return {
+                            id,
+                            qty: item.qty + value,
+                        }
+                    }
+                    return item;
+                })
+            })
+        } else {
+            this.setState({
+                cart: this.state.cart.concat({
+                    id,
+                    value,
+                })
+            })
+        }
+        console.log(this.state.cart);
     }
 
     render() {
@@ -65,7 +93,7 @@ export default class GoodsCardList extends React.Component {
                                     />,
                                     <Button
                                         type="primary"
-                                        onClick={() => this.HandleAddToCart(item.id, this.state.num)} >
+                                        onClick={() => this.HandleAddToCart(item.id)} >
                                         加入购物车 </Button>
                                 ]}
                                 hoverable
