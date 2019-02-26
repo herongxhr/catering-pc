@@ -2,7 +2,7 @@ import React from 'react'
 import { Table,Tabs,Button,Radio,Badge,Divider,Menu, Dropdown,  } from 'antd'
 import Axios from '../../axios'
 import WrappedReportForm from '../../components/ReportForm'
-import WrappedReportButton from '../../components/ReportButton'
+import WrappedReportButton from '../../components/ReportButton';
 import './Report.less'
 
 const TabPane = Tabs.TabPane;
