@@ -40,17 +40,15 @@ const Columns = [{
   
 class Accepting extends Component {
     state={
-        todayData:[],
-        tomorrowData:[],
         pagination: {},
     }
     queryList = (params = {}) => {
-      const { dispatch } = this.props;
+      const { dispatch,key } = this.props;
       //请求待办事项
       dispatch({
         type: 'accept/queryList',
         payload:{
-          timeType:'today',
+          timeType:key,
           ...params
         }
       })
@@ -72,7 +70,6 @@ class Accepting extends Component {
     render() {
       const { accept }= this.props
       const distributionList = accept.distributionList.records || [];
-      console.log(distributionList)
         return ( 
         <div className="accepting">
            <Table 
@@ -80,7 +77,7 @@ class Accepting extends Component {
            dataSource={distributionList} 
            onChange={this.handleTableChange} 
            pagination={this.state.pagination}
-           rowKey={record => record.uuid}/> 
+           rowKey="id"/> 
         </div>
         );
     }

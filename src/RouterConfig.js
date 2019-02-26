@@ -2,7 +2,7 @@ import React from 'react';
 import { Router, Route, Switch, Redirect } from 'dva/router';
 //路由对应的组件
 import App from './App'
-import A from './pages/index/index'
+import A from './pages/Index/index'
 import B from './pages/MenuCenter'
 import C from './pages/AccSupermarket'
 import D from './pages/PurOrder'
@@ -15,6 +15,7 @@ import SecurityView from './pages/acount/SecurityView';
 import Dosing from './pages/acount/Dosing';
 import Supply from './pages/acount/Supply';
 import OutStock from './pages/OutStock/index';
+import PurCatalog from './pages/PurCatalog/index';
 
 export default function RouterConfig({ history }) {
   return (
@@ -41,6 +42,7 @@ export default function RouterConfig({ history }) {
               </Setting>
             }></Route>
              <Route path="/outstock" component={OutStock}></Route>
+             <Route path="/purcatalog" component={PurCatalog}></Route>
             <Redirect to="/home" />
           </Switch>
         </App>
