@@ -4,9 +4,8 @@ import TodayMenuCard from '../../components/TodayMenuCard/TodayMenuCard'
 import TodoListCard from '../../components/TodoListCard/TodoListCard'
 import Accepting from '../../components/Accepting/Accepting'
 import { Card, Button, Tabs,Radio,Table } from 'antd';
+import AnalyChart from '../../components/AnalyChart'
 import moment from 'moment'
-import Charts from 'ant-design-pro/lib/Charts';
-import { Pie, yuan, } from 'ant-design-pro/lib/Charts';
 import { connect } from 'dva';
 import { withRouter } from "react-router";
 
@@ -53,7 +52,7 @@ const salesPieData = [
 
 class A extends Component {
   state={
-    tabkey:'today'
+    tabkey:'today',
   }
   queryTodoList = () => {
 		const { dispatch } = this.props;
@@ -90,6 +89,9 @@ class A extends Component {
     const todoList = home.todoList || [];
     const todayMenu = home.todayMenu || {};
     const deviceInfo = home.deviceInfo || [];
+    var timestamp = Date.parse(new Date());
+    const date = moment(timestamp).format("YYYY-MM-DD dddd")
+    const weeks = moment(timestamp).format("WW")
     return ( 
       <div className="App">
         <div>{this.props.children}</div>
@@ -97,8 +99,8 @@ class A extends Component {
           <div className="App-content-header">
             <div className='App-pic'></div>
             <div className='App-time'>
-              <h3>第32周</h3>
-              <h6>2018-12-02 周一</h6>
+              <h3>第{weeks}周</h3>
+              <h6>{date}</h6>
             </div>
           </div>
           <div className="App-content-data">
@@ -107,7 +109,7 @@ class A extends Component {
               <div className='tools'>
                 <Card title="常用工具" bordered={false} style={{ width: 350 }}>
                   <Button className='toolsbtn cgml' onClick={() =>{
-                    this.props.history.push('/order')
+                    this.props.history.push('/purcatalog')
                   }}>采购目录</Button>
                   <Button className='toolsbtn' onClick={() =>{
                     this.props.history.push('/parameter')
@@ -121,9 +123,9 @@ class A extends Component {
             <TodayMenuCard todayMenu={todayMenu}/>
           </div>
           <div className="App-content-accepting"> 
-            <Tabs tabBarExtraContent={operations}>
-              <TabPane tab="今日验收" key="today"><Accepting /></TabPane>
-              <TabPane tab="明日验收" key="tomorrow"><Accepting /></TabPane>
+            <Tabs tabBarExtraContent={operations} onChange={(key)=>{this.setState({tabkey:key})}}>
+              <TabPane tab="今日验收" key="today"><Accepting key={this.state.tabkey}/></TabPane>
+              <TabPane tab="明日验收" key="tomorrow"><Accepting key={this.state.tabkey}/></TabPane>
             </Tabs>
           </div>
           <div className='App-content-paying-wrapper'>
@@ -139,12 +141,7 @@ class A extends Component {
                   </div>
               </div>
               <div>
-                  <Pie
-                      hasLegend
-                      data={salesPieData}
-                      valueFormat={val => <span dangerouslySetInnerHTML={{ __html: yuan(val) }} />}
-                      height={206}
-                    />
+                    <AnalyChart></AnalyChart>
               </div>
             </div>
             <div className='App-content-opening'>

@@ -1,8 +1,26 @@
 import React from 'react';
-import { Card, InputNumber, List } from 'antd';
+import { InputNumber } from 'antd';
+import GoodsIcon from './wine.png';
 import './index.less';
 
 export default class CartPageBody extends React.Component {
+    state = {
+        isMouseOver: false,
+    }
+
+    // 鼠标覆盖
+    handMouseOver = () => {
+        this.setState({
+            isMouseOver: true,
+        })
+    }
+    // 鼠标离开
+    handMouseOut = () => {
+        this.setState({
+            isMouseOver: false,
+        })
+    }
+
     render() {
         const {
             className,
@@ -16,27 +34,22 @@ export default class CartPageBody extends React.Component {
             attribute
         } = this.props;
 
-        const goodsTitle = (
-            <span>{brand} {name}{attribute}</span>
-        );
+        const goodsItemWrapperStyle = this.state.isMouseOver ? "goodsItemWrapper itemMouseOver" : "goodsItemWrapper";
 
-        const goodsDescription = (
-            <div>
-                <h4>￥ {price} {priceType}</h4>
-                <div className="goodsProvider">{provider}</div>
-            </div>
-        )
-
-        const cartPageDom = (
-            <div className="goodsItemWrapper">
+        const goodsItemDom = (
+            <div
+                onMouseOver={this.handMouseOver}
+                onMouseOut={this.handMouseOut}
+                className={goodsItemWrapperStyle}
+            >
                 <div className="thumb">
-                    <img src={img} alt={`${brand}${name}`} />
+                    <img src={GoodsIcon} alt={`${brand}${name}`} />
                 </div>
-                <div className="content">
+                <span className="content">
                     <div className="details">
                         <div>{brand} {name}{attribute}</div>
                         <div>￥ {price} {priceType}</div>
-                        <div style={{ fontSize: "12px" }}>{provider}</div>
+                        <div style={{ fontSize: "12px", color: "rgba(0,0,0,0.45)" }}>{provider}</div>
                     </div>
                     <div className="actions">
                         <a>删除</a>
@@ -47,13 +60,13 @@ export default class CartPageBody extends React.Component {
                             onChange={() => { }}
                         />
                     </div>
-                </div>
+                </span>
             </div>
         )
 
         return (
             <div className={className}>
-                {cartPageDom}
+                {goodsItemDom}
             </div>
         )
     }

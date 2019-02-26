@@ -1,8 +1,8 @@
 import React from 'react'
-import { Table,Tag,Tabs,Button,Radio,Badge,Divider,Menu, Dropdown,Modal  } from 'antd'
+import { Table,Tabs,Button,Radio,Badge,Divider,Menu, Dropdown,  } from 'antd'
 import Axios from '../../axios'
-import WrappedReportForm from '../reportForm'
-import WrappedReportButton from '../../components/reportButton'
+import WrappedReportForm from '../../components/ReportForm'
+import WrappedReportButton from '../../components/ReportButton'
 import './Report.less'
 
 const TabPane = Tabs.TabPane;
@@ -55,8 +55,8 @@ class Report extends React.Component {
   state = {
     DataSource:[],
     tableSource:[],
-    disabled:'true',
-    visible:'false'
+    disabled:true,
+    visible:false
   }
 
   componentDidMount() {

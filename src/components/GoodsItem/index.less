@@ -1,23 +1,44 @@
 .goodsItemWrapper {
+    display: flex;
+    align-items: center;
     width: 470px;
     height:110px;
     padding: 10px;
+    a {
+        visibility: hidden;
+    }
+}
+.itemMouseOver {
+    box-shadow: 0 0 1px 2px rgba(84,196,206,1);
+    a {
+        visibility: visible;
+    }
 }
 .thumb {
     display: inline-block;
     width: 80px;
     height: 80px;
     margin: 0;
+    img {
+        width: 100%;
+    }
 }
 .content {
-    display: inline-block;
-    margin-left: 0 20px;
-    .detail {
+    display: flex;
+    justify-content: space-between;
+    width: 360px;
+    height: 80px;
+    margin: 0 20px;
+    .details {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
     .actions {
-        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+        width: 114px;
     }
 }
