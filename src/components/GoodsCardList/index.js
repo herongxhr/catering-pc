@@ -8,52 +8,41 @@ export default class GoodsCardList extends React.Component {
         cart: []
     }
 
-
-
-    HandleAddToCart = (id) => {
-        const { dispatch } = this.props;
-        // 在state中保存的改过数量的商品数组中
-        // 找到本id对应的数量，如果没有就默认为1
-        let qty = this.state.goodsInCart.find(item => item.id === id) || 1;
-        console.log(qty);
-        dispatch({
-            type: 'accSupermarket/addToCart',
-            payload: {
-                id,
-                qty,
-            }
-        })
-    }
-
-    // 判断商品是否在cart中
-    checkGoods(goodsId) {
-        return this.state.cart.some(item => item.id === goodsId);
-    }
-
-    // 只要修改数量，将改过数量的商品的id和改后的值保存到state中
-    handleValueChange = (goodsQty, goodsId) => {
-        console.log(goodsId, goodsQty);
-        if (this.checkGoods(goodsId)) {
+    // 只要修改数量，将改过数量的商品
+    // 商品的id和改后的值保存到state中
+    handleValueChange = (qty, id) => {
+        if (this.state.cart.some(item => item.id == id)) {
+            // console.log('old goods');
             this.setState({
                 cart: this.state.cart.map(item => {
-                    if (item.id === goodsId) {
-                        return {
-                            goodsId,
-                            qty: item.qty + +goodsQty,
-                        }
+                    if (item.id == id) {
+                        return { id, qty }
                     }
                     return item;
                 }),
             });
         } else {
+            // console.log('new goods');
             this.setState({
                 cart: this.state.cart.concat({
-                    goodsId,
-                    goodsQty,
+                    id,
+                    qty,
                 }),
             });
         }
-        console.log(this.state.cart);
+        // console.log("valueChange", this.state.cart);
+    }
+
+    HandleAddToCart = (id) => {
+        const { dispatch } = this.props;
+        // 在state中保存的改过数量的商品数组中
+        // 找到本id对应的数量，如果没有就默认为1
+        let quantity = (this.state.cart.length && this.state.cart.find(item => item.id == id).qty) || 1;
+        dispatch({
+            type: 'accSupermarket/addToCart',
+            payload: { id, quantity }
+        })
+        console.log("id", id, "qty", quantity);
     }
 
     render() {
