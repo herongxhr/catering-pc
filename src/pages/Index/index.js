@@ -4,7 +4,8 @@ import TodayMenuCard from '../../components/TodayMenuCard/TodayMenuCard'
 import TodoListCard from '../../components/TodoListCard/TodoListCard'
 import Accepting from '../../components/Accepting/Accepting'
 import { Card, Button, Tabs,Radio,Table } from 'antd';
-import AnalyChart from '../../components/AnalyChart'
+import Charts from 'ant-design-pro/lib/Charts';
+import { Pie, yuan } from 'ant-design-pro/lib/Charts';
 import moment from 'moment'
 import { connect } from 'dva';
 import { withRouter } from "react-router";
@@ -22,19 +23,6 @@ const columns = [{
   //render:(time)=><span>{moment(time).format('YYYY-MM-DD HH:mm:ss')}</span>
 }];
 
-const data = [{
-  key: '1',
-  device: '晨检仪',
-  time: '2019-01-28  07：29：35',
-}, {
-  key: '2',
-  device: '验货机',
-  time: '2019-01-28  07：29：35',
-}, {
-  key: '3',
-  device: '易检设备',
-  time:'2019-01-28  07：29：35',
-}];
 const salesPieData = [
   {
     x: '家用电器',
@@ -141,7 +129,12 @@ class A extends Component {
                   </div>
               </div>
               <div>
-                    <AnalyChart></AnalyChart>
+                  <Pie
+                    hasLegend
+                    data={salesPieData}
+                    valueFormat={val => <span dangerouslySetInnerHTML={{ __html: yuan(val) }} />}
+                    height={206}
+                  />
               </div>
             </div>
             <div className='App-content-opening'>

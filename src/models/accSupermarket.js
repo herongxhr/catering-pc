@@ -99,11 +99,42 @@ export default {
                 showCartDrawer: true,
             }
         },
-        // 显示购物车详情
+        // 隐藏购物车详情
         hideCartDrawer(state) {
             return {
                 ...state,
                 showCartDrawer: false,
+            }
+        },
+        // 加商品到购物车
+        addToCart(state, { payload }) {
+            return {
+                ...state,
+                shoppingCart: state.shoppingCart.concat(payload),
+            }
+        },
+        // 修改购物车内商品数量
+        changeCartNum(state, { payload }) {
+            let { id, value } = payload;
+            return {
+                ...state,
+                shoppingCart: state.shoppingCart.map(item => {
+                    if (item.id == id) {
+                        return {
+                            id,
+                            quanlity: value,
+                        }
+                    }
+                    return item;
+                })
+            }
+        },
+        // 删除购物车中商品
+        deleteCartGoods(state, { payload }) {
+            let { id } = payload;
+            return {
+                ...state,
+                shoppingCart: state.shoppingCart.filter(item => item.id != id),
             }
         }
     },

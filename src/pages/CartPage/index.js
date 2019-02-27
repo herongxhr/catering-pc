@@ -11,17 +11,44 @@ export default class CartPage extends React.Component {
             type: 'accSupermarket/hideCartDrawer',
         })
     }
+    // 返回id相匹配的商品
+    getDetailByGoodsId = (id) => {
+        const { goodsList } = this.props;
+        return goodsList.find(item => item.id == id);
+    }
+    // 改变商品数量
+    handleChangeNum = (id, value) => {
+        const { dispatch } = this.props;
+        console.log("商品数量变为:", value);
+        dispatch({
+            type: "accSupermarket/changeCartNum",
+            payload: { id, value }
+        })
+    }
 
+    // 删除购物车中商品
+    handleDeleteGoods = (id) => {
+        const { dispatch } = this.props;
+        console.log("要删除的商品id", id);
+        dispatch({
+            type: "accSupermarket/deleteCartGoods",
+            payload: {
+                id,
+            }
+        })
+    }
     render() {
+        console.log("props in cartPage", this.props)
         const {
             className,
             showCartDrawer,
-            goodsList,
+            shoppingCart,
         } = this.props;
-
+        // 购物车中商品数量
+        let countCart = shoppingCart.length;
         // 购物车详情标题
         const cartPageTitle = (
-            <Badge onClick={this.showCartDrawer} className="titleWithBadge fixedTop" count={6} >
+            <Badge onClick={this.showCartDrawer} className="titleWithBadge fixedTop" count={countCart} >
                 <Icon type="shopping-cart" style={{ fontSize: 20, color: "rgba(0, 0, 0, 0.25)" }} />
                 <span className="cartText">购物车</span>
             </Badge>
@@ -29,7 +56,7 @@ export default class CartPage extends React.Component {
 
         const cartPageFooter = (
             <div className="cartPageFooter fixedBottom">
-                <span className="goodsInCartCount">共有 6 件商品
+                <span className="goodsInCartCount">共有 {countCart} 件商品
                     <Icon
                         type="exclamation-circle"
                         theme="filled"
@@ -54,14 +81,19 @@ export default class CartPage extends React.Component {
                 >
                     <div className="cartPageBody">
                         <List
-                            dataSource={goodsList}
+                            dataSource={shoppingCart}
                             renderItem={item => {
                                 return (
                                     <List.Item
-                                        style={{padding:0}}
+                                        style={{ padding: 0 }}
                                         key={item.id}
                                     >
-                                        <GoodsItem {...item} />
+                                        <GoodsItem
+                                            changeNum={this.handleChangeNum}
+                                            deleteGoods={this.handleDeleteGoods}
+                                            count={item.quantity}
+                                            {...this.getDetailByGoodsId(item.id)}
+                                        />
                                     </List.Item>
                                 )
                             }

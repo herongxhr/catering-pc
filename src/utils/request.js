@@ -18,7 +18,7 @@ export default async function request(options) {
     if (isShowLoading) {
         ReactDOM.render(<Spin />, document.getElementById('ajaxLoading'));
     }
-    let baseApi = 'http://yapi.uanla.test:7777/mock/17';
+    let baseApi = 'http://yapi.jgzh.com:7777/mock/17';
     try {
         const response = await axios({
             method: options.method,
