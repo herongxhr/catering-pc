@@ -1,15 +1,11 @@
 import React from 'react'
-import { Card,Table,Tag,Tabs,Row,Col } from 'antd'
-import Axios from '../../axios'
+import { Card,Tabs,Row,Col } from 'antd'
 import SubHeader from '../../components/SubHeader'
-import WrappedInlineForm from '../../components/InlineForm'
 import TableOne from '../../components/TableOne'
 import TableTwo from '../../components/TableTwo'
 import MenuTemplate from '../../components/MenuTemplate'
 
 import './index.less'
-
-const TabPane = Tabs.TabPane;
 
 const tabList = [{
   key: 'tab1',

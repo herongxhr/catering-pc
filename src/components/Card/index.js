@@ -1,9 +1,10 @@
 import React from 'react'
 import { Card , Divider } from 'antd'
+import { withRouter } from 'react-router'
 
 import './index.less'
 
-class MyCard extends React.Component {
+class MyTemplateCard extends React.Component {
   state = {
     cardHover:true
   }
@@ -17,6 +18,10 @@ class MyCard extends React.Component {
     this.setState({
       cardHover:true
     })  
+  }
+
+  handleHistory = () => {
+    this.props.history.push('/Particulars')
   }
 
   render() {
@@ -50,11 +55,14 @@ class MyCard extends React.Component {
         hoverable={true}
         onMouseOver={this.handleMouseOver}
         onMouseLeave={this.handleMouseOut}
+        onClick={this.handleHistory}
       >
         {this.props.children}
       </Card>
     )
   }
 }
+
+const MyCard = withRouter(MyTemplateCard)
 
 export default MyCard

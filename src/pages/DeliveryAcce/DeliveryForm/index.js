@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form , Select , DatePicker , Input , Button  } from "antd";
+import { Form , Select , DatePicker , Input , Button , Menu , Dropdown , Icon } from "antd";
 
 import './index.less'
 
@@ -12,11 +12,13 @@ const ButtonGroup = Button.Group;
 class InForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
-      labelCol:{
-        xs:22,
-      }
-    }
+    const menu = (
+      <Menu onClick={this.handleMenuClick}>
+        <Menu.Item key="1">明日</Menu.Item>
+        <Menu.Item key="2">近三天</Menu.Item>
+        <Menu.Item key="2">本周</Menu.Item>
+      </Menu>
+    )
     return(
       <Form layout="inline">
         <FormItem label='日期选择' style={{ margin:20 }}>
@@ -55,11 +57,15 @@ class InForm extends React.Component {
             )
           }
         </FormItem>
-        <FormItem style={{marginLeft:180,marginTop:20}}>
+        <FormItem style={{marginLeft:260,marginTop:20}}>
           <ButtonGroup>
             <Button>全部</Button>
             <Button>本月</Button>
-            <Button>本年</Button>
+            <Dropdown overlay={menu}>
+              <Button>
+                <span>更多</span>
+              </Button>
+            </Dropdown>
           </ButtonGroup>        
         </FormItem>
       </Form>

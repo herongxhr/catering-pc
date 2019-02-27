@@ -140,15 +140,18 @@ class Particulars extends React.Component {
             <Step title="采购订单" description="待采购" />
             <Step title="下达订单" description="" />
           </Steps>
-          <div style={{display:'flex',justifyContent:'space-between'}} className='PaContent'>
-            <div>
-             <Checkbox onChange={this.onChange}>配料详情</Checkbox>
-             <Checkbox onChange={this.onChange}>收起空餐饮</Checkbox>
+          <Card>
+            <div style={{display:'flex',justifyContent:'space-between'}} className='PaContent'>
+              <div>
+              <Checkbox onChange={this.onChange}>配料详情</Checkbox>
+              <Checkbox onChange={this.onChange}>收起空餐饮</Checkbox>
+              </div>
+              <div>
+                图片模式<Switch defaultChecked onChange={this.onChange} />
+              </div>            
             </div>
-            <div>
-              图片模式<Switch defaultChecked onChange={this.onChange} />
-            </div>            
-          </div>
+          </Card>
+
           <Table columns={columns} dataSource={data} bordered></Table>
       </div>
     )

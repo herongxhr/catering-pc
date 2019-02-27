@@ -16,10 +16,10 @@ import Dosing from './pages/acount/Dosing';
 import Supply from './pages/acount/Supply';
 import OutStock from './pages/OutStock/index';
 import PurCatalog from './pages/PurCatalog/index';
-import CreateTemplate from './pages/CreateTemplate'
 import Details from './pages/Details'
 import Test from './pages/Test'
 import Particulars from './pages/Particulars'
+import Edit from './pages/Edit'
 
 export default function RouterConfig({ history }) {
   return (
@@ -29,7 +29,6 @@ export default function RouterConfig({ history }) {
           <Switch>
             <Route path="/home" component={Index} />
             <Route path="/menubar" component={MenuCenter} />
-            <Route path='/createtemplate' component={CreateTemplate} />
             <Route path='/details' component={Details} />
             <Route path="/supermarket" component={AccSupermarket}></Route>
             <Route path="/order" component={PurOrder}></Route>
@@ -37,6 +36,7 @@ export default function RouterConfig({ history }) {
             <Route path="/outStock" component={OutStock}></Route>
             <Route path="/parameter" component={Parameter}></Route>
             <Route path="/particulars" component={Particulars}></Route>
+            <Route path="/edit" component={Edit}></Route>
             <Route path="/Setting" render={() =>
               <Setting>
                 <Switch>

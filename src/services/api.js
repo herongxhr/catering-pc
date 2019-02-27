@@ -76,6 +76,16 @@ export function queryRule(params) {
         }
     })
 }
+export function unifiedMenusAlready(params) {
+    console.log(params)
+    return request({
+        method: 'post',
+        url:'/catering/unifiedMenus',
+        data:{
+            params,
+        }
+    })
+}
 // export async function queryBrandList(catalog) {
 //     return axios('/goods/brand/page/');
 // }

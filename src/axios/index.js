@@ -2,21 +2,23 @@ import axios from 'axios'
 import { Modal } from 'antd'
 
 export default class Axios {
-
+    //老请求数据接口
     static ajax(options){
         let loading;
         loading = document.getElementById('ajaxLoading');
         loading.style.display = 'block';
 
-        let baseApi = 'http://yapi.uanla.test:7777/mock/17/catering';
+        let baseApi = 'http://yapi.jgzh.com:7777/mock/17/catering';
         return new Promise((resolve,reject)=>{
             axios({
                 url:options.url,
                 method:'get',
                 baseURL:baseApi,
             }).then((response)=>{
+								debugger;
                 loading = document.getElementById('ajaxLoading');
-                loading.style.display = 'none';
+								loading.style.display = 'none';
+								console.log(response)
                 if (response.status === 200){
                     let res = response.data
                     if (res.code === 0){
@@ -33,13 +35,15 @@ export default class Axios {
             })
         });
     }
-    
+		
+		//新请求数据接口
     static request(options){
         let loading;
         loading = document.getElementById('ajaxLoading');
         loading.style.display = 'block';
 
-        let baseApi = 'http://yapi.uanla.test:7777/mock/17/catering';
+				let baseApi = 'http://yapi.jgzh.com:7777/mock/17/catering';
+				
         return new Promise((resolve,reject)=>{
             axios({
                 url:options.url,
@@ -47,7 +51,7 @@ export default class Axios {
                 baseURL:baseApi,
             }).then((response)=>{
                 loading = document.getElementById('ajaxLoading');
-                loading.style.display = 'none';
+								loading.style.display = 'none';
                 if (response.status === 200){
                     let res = response.data
                     if (res.code === 0){
@@ -63,10 +67,12 @@ export default class Axios {
                 }
             })
         });
-	}
+		}
+
+		
 		
     static ajaxGroup(requests) {
-			let baseApi = 'http://yapi.uanla.test:7777/mock/17/catering';
+			let baseApi = 'http://yapi.jgzh.com:7777/mock/17/catering';
       let promises = []
 			for(let i = 0; i <  requests.length; i++) {
 				promises.push(axios.get(`${baseApi}${requests[i].url}`))

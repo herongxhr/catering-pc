@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table,Tag,Tabs,Button,Radio,Badge,Divider } from 'antd'
+import { Table,Tag,Button,Radio,Badge,Divider,Dropdown,Menu,Icon } from 'antd'
 import Axios from '../../axios'
 import WrappedOrderForm from '../OrderForm'
 
@@ -86,12 +86,23 @@ class OrderTable extends React.Component {
   }
 
   render() {
+    const menu = (
+      <Menu onClick={this.handleMenuClick}>
+        <Menu.Item key="1">辅料订单</Menu.Item>
+        <Menu.Item key="2">食材订单</Menu.Item>
+      </Menu>
+    )
     return(
       <div className='orderTable'>
           <WrappedOrderForm />
           <div style={{display:'flex',justifyContent:'space-between'}}>
             <div>
-              <Button type='primary' icon="plus">新建菜单</Button>
+              <Dropdown overlay={menu}>
+                <Button type='primary' >
+                <Icon type="plus" />  
+                <span>新建</span>
+                </Button>
+              </Dropdown>
             </div>
             <div>
               <Radio.Group defaultValue="all" onChange={this.handleFormLayoutChange}>

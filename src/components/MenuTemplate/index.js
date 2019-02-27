@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form , Select , Input, Button , Badge ,  Tag } from 'antd'
+import { Form , Select , Input, Button , Badge ,  Tag , Icon } from 'antd'
 import { Link } from 'react-router-dom'
 import Cartoon from '../Cartoon'
 import MyCard from '../Card'
@@ -15,9 +15,16 @@ const Search = Input.Search;
 const ButtonGroup = Button.Group;
 
 class Template extends React.Component {
+  state = {
+    changeColor:true
+  }
+  colorChange =  () => {
+    this.setState({
+      changeColor:!this.state.changeColor
+    })
+  }
   render(){
     const { getFieldDecorator } = this.props.form;
-    console.log(this.props.template)
     return (
       <div className='Template'>
         <div style={{display:'flex',justifyContent:'space-between'}} className='TemplateHeader'>
@@ -36,15 +43,21 @@ class Template extends React.Component {
               }
             </FormItem>
             <FormItem>
+              <div className='top-down'>
+                <Icon type="caret-up" onClick={this.colorChange} className={this.state.changeColor? 'blue-color' : null} />
+                <Icon type="caret-down" onClick={this.colorChange} className={this.state.changeColor? null : 'blue-color'} />
+              </div>
+            </FormItem>
+            <FormItem>
               {
                 getFieldDecorator('state',{
                     initialValue:'模板名称/标签'
                 })(
                   <Search
-                  placeholder="input search text"
-                  onSearch={value => console.log(value)}
-                  style={{ width: 300 }}
-                />              
+                    placeholder="input search text"
+                    onSearch={value => console.log(value)}
+                    style={{ width: 300 }}
+                  />              
                 )
               }
             </FormItem>
