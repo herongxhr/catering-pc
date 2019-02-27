@@ -1,19 +1,24 @@
 import React from 'react'
 import { Table,Tag,Tabs,Button } from 'antd'
 import WrappedInlineForm from '../InlineForm'
+import { withRouter } from 'react-router'
 
 import './index.less'
 
 const ButtonGroup = Button.Group;
 
-class TableTwo extends React.Component {
+class MyTableTwo extends React.Component {
+  handleChange = () => {
+    this.props.history.push('./Particulars')
+  }
+
   render() {
     return(
       <div className='tableTwo'>
         <WrappedInlineForm />
         <div style={{display:'flex',justifyContent:'space-between'}} className='sub-group'>
           <div>
-            <Button type='primary' icon="plus">新建菜单</Button>
+            <Button type='primary' icon="plus" onClick={this.handleChange}>新建菜单</Button>
           </div>
           <div>
             <ButtonGroup>
@@ -28,5 +33,7 @@ class TableTwo extends React.Component {
     )
   }
 }
+
+const TableTwo = withRouter(MyTableTwo)
 
 export default TableTwo

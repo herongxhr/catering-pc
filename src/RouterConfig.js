@@ -16,7 +16,6 @@ import Dosing from './pages/acount/Dosing';
 import Supply from './pages/acount/Supply';
 import OutStock from './pages/OutStock/index';
 import PurCatalog from './pages/PurCatalog/index';
-import CreateTemplate from './pages/CreateTemplate'
 import Details from './pages/Details'
 import Test from './pages/Test'
 // 国际化配置
@@ -28,6 +27,8 @@ import 'moment/locale/zh-cn';
 import './style/common.less';
 
 moment.locale('zh-cn');
+import Particulars from './pages/Particulars'
+import Edit from './pages/Edit'
 
 export default function RouterConfig({ history }) {
   return (

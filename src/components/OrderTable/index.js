@@ -85,6 +85,7 @@ class OrderTable extends React.Component {
   }
 
   render() {
+<<<<<<< HEAD
     return (
       <div className='orderTable'>
         <WrappedOrderForm />
@@ -98,6 +99,36 @@ class OrderTable extends React.Component {
               <Radio.Button value="noOrder" onClick={this.noOrder}>未下单</Radio.Button>
               <Radio.Button value="ordered" onClick={this.order}>已下单</Radio.Button>
             </Radio.Group>
+=======
+    const menu = (
+      <Menu onClick={this.handleMenuClick}>
+        <Menu.Item key="1">辅料订单</Menu.Item>
+        <Menu.Item key="2">食材订单</Menu.Item>
+      </Menu>
+    )
+    return(
+      <div className='orderTable'>
+          <WrappedOrderForm />
+          <div style={{display:'flex',justifyContent:'space-between'}}>
+            <div>
+              <Dropdown overlay={menu}>
+                <Button type='primary' >
+                <Icon type="plus" />  
+                <span>新建</span>
+                </Button>
+              </Dropdown>
+            </div>
+            <div>
+              <Radio.Group defaultValue="all" onChange={this.handleFormLayoutChange}>
+                <Radio.Button value="all" onClick={this.all}>全部</Radio.Button>
+                <Radio.Button value="未下单" onClick={this.notOrder}>未下单</Radio.Button>
+                <Radio.Button value="已下单" onClick={this.order}>已下单</Radio.Button>
+              </Radio.Group>
+            </div>
+          </div>  
+          <div style={{marginTop:30}}>
+            <Table columns={tabColumns} dataSource={this.state.tableSource} />
+>>>>>>> 2dea13f5a4a65e1f087b954dde95d897154cf4a9
           </div>
         </div>
         <div style={{ marginTop: 30 }}>

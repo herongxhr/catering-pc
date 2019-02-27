@@ -85,7 +85,7 @@ class E extends React.Component {
     }]
     return (
       <div className='DeliveryAcce'>
-        <Bread bread={bread}  />
+        <Bread bread={bread} style={{marginBottom:0}} />
         <Card
           style={{ width: '100%' }}
           tabList={tabList}

@@ -1,5 +1,4 @@
 import React from 'react'
-import SubHeader from '../../components/SubHeader'
 import { Card , Checkbox , Form , Button } from 'antd'
 
 import './index.less'
@@ -21,11 +20,9 @@ class Create extends React.Component {
     const { getFieldDecorator } = this.props.form;
     return(
       <div className='createTemplate'>
-        <Card
-          title={<SubHeader title='菜单中心' subTitle='菜单模板' cascade='创建模板'/>}
-        >
+        
           <Card
-            title='创建模板'
+            title='表格结构设置'
           >
             <p>请选择用餐日</p>
             <Form layout="inline">
@@ -92,12 +89,47 @@ class Create extends React.Component {
                   )
                 }
               </FormItem>
+            </Form>
+            <Form layout='inline'>
+              <p>请选择餐次</p>
               <FormItem>
-                <Button onClick={this.handleSubmit}>submit</Button>
+                {
+                  getFieldDecorator('breakfast', {
+                      initialValue: false
+                  })(
+                    <Checkbox onChange={this.onChange}>早餐</Checkbox>,
+                  )
+                }
+              </FormItem>
+              <FormItem>
+                {
+                  getFieldDecorator('lunch', {
+                      initialValue: false
+                  })(
+                    <Checkbox onChange={this.onChange}>中餐</Checkbox>,
+                  )
+                }
+              </FormItem>
+              <FormItem>
+                {
+                  getFieldDecorator('dessert', {
+                      initialValue: false
+                  })(
+                    <Checkbox onChange={this.onChange}>点心</Checkbox>,
+                  )
+                }
+              </FormItem>
+              <FormItem>
+                {
+                  getFieldDecorator('supper', {
+                      initialValue: false
+                  })(
+                    <Checkbox onChange={this.onChange}>晚餐</Checkbox>,
+                  )
+                }
               </FormItem>
             </Form>
           </Card>
-        </Card>
       </div>
 
     )
