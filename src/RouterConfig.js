@@ -23,12 +23,12 @@ import { LocaleProvider } from 'antd';
 import zh_cn from 'antd/lib/locale-provider/zh_CN';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
-
 import './style/common.less';
-
-moment.locale('zh-cn');
 import Particulars from './pages/Particulars'
 import Edit from './pages/Edit'
+
+moment.locale('zh-cn');
+
 
 export default function RouterConfig({ history }) {
   return (
@@ -39,7 +39,6 @@ export default function RouterConfig({ history }) {
             <Switch>
               <Route path="/home" component={Index} />
               <Route path="/menubar" component={MenuCenter} />
-              <Route path='/createtemplate' component={CreateTemplate} />
               <Route path='/details' component={Details} />
               <Route path="/supermarket" component={AccSupermarket}></Route>
               <Route path="/order" component={PurOrder}></Route>
