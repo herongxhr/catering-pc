@@ -1,7 +1,7 @@
 import dva from 'dva';
 import createHistory from 'history/createBrowserHistory';
 import RouterConfig from './RouterConfig';
-import './style/common.less';
+
 
 //创建应用
 const app = dva({
