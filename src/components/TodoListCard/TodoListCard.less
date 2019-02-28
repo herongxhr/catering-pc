@@ -2,16 +2,27 @@
     width: 350px;
     height: 265px;
     background:#fff;
-    font-size: 14px;
     margin-bottom:20px;
+    color:rgba(0,0,0,0.85);
+    .ant-divider, .ant-divider-horizontal{
+        margin:0;
+    }
 }
-.all{
-    font-size: 12px;
+.todoTitle{
+    height:65;
+    width:117px;
+    margin-left:20px;
+    line-height: 65px; 
+    font-size:16px;
 }
-.ant-table-thead > tr > th {
-    background: #fafafa;
-    text-align: left;
-    color: rgba(0, 0, 0, 0.85);
-    font-weight: 600;
-    border-bottom: 1px solid #e8e8e8;
+.todoItem{
+    display: flex;
+    justify-content: space-between;
+   padding: 15px 20px;
+   width:350;
+   height: 50px;
+   >span{
+      display: block;
+   }
 }
+

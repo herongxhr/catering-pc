@@ -125,10 +125,17 @@ p {
     font-weight: 500;
     color: rgba(0, 0, 0, 0.85);
     font-family: 'PingFangSC-PingFangSC-regular';
-
     li> {
       margin-bottom: 30px;
-
+      >.antd-pro-charts-pie-dot{
+        position: relative;
+        top: -1px;
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        margin-right: 8px;
+        border-radius: 8px;
+      }
       .antd-pro-charts-pie-percent {
         margin-right: 15px;
         color: rgba(0, 0, 0, 0.5)
@@ -153,6 +160,9 @@ p {
   width: 350px;
   height: 290px;
   margin-left: 20px;
+  .ant-divider, .ant-divider-horizontal{
+    margin:0;
+}
 }
 
 .App-content-paying,
@@ -171,6 +181,23 @@ p {
   }
 }
 
+.timeTitle{
+  height:65;
+  width:226px;
+  margin-left:20px;
+  line-height: 65px; 
+  font-size:16px;
+}
+.openingItem{
+  display: flex;
+  justify-content: space-between;
+  padding: 19px 24px 18px 20px;
+  width:350;
+  height: 54px;
+ >span{
+    display: block;
+ }
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

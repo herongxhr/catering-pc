@@ -19,6 +19,8 @@ import PurCatalog from './pages/PurCatalog/index';
 import CreateTemplate from './pages/CreateTemplate'
 import Details from './pages/Details'
 import Test from './pages/Test'
+import ReportDetail from './pages/ReportDetail/index'
+import ExcipientDetail from './pages/ExcipientDetail'
 
 export default function RouterConfig({ history }) {
   return (
@@ -33,7 +35,6 @@ export default function RouterConfig({ history }) {
             <Route path="/supermarket" component={C}></Route>
             <Route path="/order" component={D}></Route>
             <Route path="/delivery" component={E}></Route>
-            <Route path="/outStock" component={OutStock}></Route>
             <Route path="/parameter" component={Parameter}></Route>
             <Route path="/Setting" render={() =>
               <Setting>
@@ -49,6 +50,8 @@ export default function RouterConfig({ history }) {
             }></Route>
              <Route path="/outstock" component={OutStock}></Route>
              <Route path="/purcatalog" component={PurCatalog}></Route>
+             <Route path="/reportdetail" component={ReportDetail}></Route>
+             <Route path="/excipientdetail" component={ExcipientDetail}></Route>
             <Route path='/test' component={Test}></Route>
             <Redirect to="/home" />
           </Switch>

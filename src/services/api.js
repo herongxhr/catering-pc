@@ -28,7 +28,7 @@ export function queryTodoList() {
 //获取验收情况
 export function queryList(params) {
     return request({
-        method: 'post',
+        method: 'get',
         url: '/catering/workbench/distributionList',
         data: {
             showLoading: true,
@@ -36,7 +36,17 @@ export function queryList(params) {
         }
     });
 }
-export function querydeviceInfo() {
+export function queryStatistics(params) {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/unpaidStatistics',
+        data: {
+            showLoading: true,
+            params,
+        }
+    });
+}
+export function querydeviceInfo() {    
     return request({
         method: 'get',
         url: '/catering/workbench/deviceInfo',
@@ -48,7 +58,7 @@ export function querydeviceInfo() {
 
 export function querytodayMenu() {
     return request({
-        method: 'post',
+        method: 'get',
         url: '/catering/workbench/todayMenu',
         data: {
             showLoading: true,
@@ -56,6 +66,16 @@ export function querytodayMenu() {
 
     });
 } 
+export function queryReportmissing(params) {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/reportmissing',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
 export function queryHotGoods() {
     return request({
         method: 'get',
