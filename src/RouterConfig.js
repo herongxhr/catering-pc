@@ -18,43 +18,52 @@ import OutStock from './pages/OutStock/index';
 import PurCatalog from './pages/PurCatalog/index';
 import Details from './pages/Details'
 import Test from './pages/Test'
+// 国际化配置
+import { LocaleProvider } from 'antd';
+import zh_cn from 'antd/lib/locale-provider/zh_CN';
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+import './style/common.less';
 import Particulars from './pages/Particulars'
 import Edit from './pages/Edit'
+
+moment.locale('zh-cn');
+
 
 export default function RouterConfig({ history }) {
   return (
     <Router history={history}>
       <Route path='/' render={() =>
-        <App>
-          <Switch>
-            <Route path="/home" component={Index} />
-            <Route path="/menubar" component={MenuCenter} />
-            <Route path='/details' component={Details} />
-            <Route path="/supermarket" component={AccSupermarket}></Route>
-            <Route path="/order" component={PurOrder}></Route>
-            <Route path="/delivery" component={DeliveryAcce}></Route>
-            <Route path="/outStock" component={OutStock}></Route>
-            <Route path="/parameter" component={Parameter}></Route>
-            <Route path="/particulars" component={Particulars}></Route>
-            <Route path="/edit" component={Edit}></Route>
-            <Route path="/Setting" render={() =>
-              <Setting>
-                <Switch>
-                  <Route path="/Setting/imformation" component={BaseView}></Route>
-                  <Route path="/Setting/set" component={BasicConfig}></Route>
-                  <Route path="/Setting/security" component={SecurityView}></Route>
-                  <Route path="/Setting/supply" component={Supply}></Route>
-                  <Route path="/Setting/cuisine" component={Dosing}></Route>
-                  <Redirect to="/Setting/imformation" />
-                </Switch>
-              </Setting>
-            }></Route>
-            <Route path="/outstock" component={OutStock}></Route>
-            <Route path="/purcatalog" component={PurCatalog}></Route>
-            <Route path='/test' component={Test}></Route>
-            <Redirect to="/home" />
-          </Switch>
-        </App>
+        <LocaleProvider locale={zh_cn}>
+          <App>
+            <Switch>
+              <Route path="/home" component={Index} />
+              <Route path="/menubar" component={MenuCenter} />
+              <Route path='/details' component={Details} />
+              <Route path="/supermarket" component={AccSupermarket}></Route>
+              <Route path="/order" component={PurOrder}></Route>
+              <Route path="/delivery" component={DeliveryAcce}></Route>
+              <Route path="/outStock" component={OutStock}></Route>
+              <Route path="/parameter" component={Parameter}></Route>
+              <Route path="/Setting" render={() =>
+                <Setting>
+                  <Switch>
+                    <Route path="/Setting/information" component={BaseView}></Route>
+                    <Route path="/Setting/set" component={BasicConfig}></Route>
+                    <Route path="/Setting/security" component={SecurityView}></Route>
+                    <Route path="/Setting/supply" component={Supply}></Route>
+                    <Route path="/Setting/cuisine" component={Dosing}></Route>
+                    <Redirect to="/Setting/information" />
+                  </Switch>
+                </Setting>
+              }></Route>
+              <Route path="/outstock" component={OutStock}></Route>
+              <Route path="/purcatalog" component={PurCatalog}></Route>
+              <Route path='/test' component={Test}></Route>
+              <Redirect to="/home" />
+            </Switch>
+          </App>
+        </LocaleProvider>
       } />
     </Router>
   )
