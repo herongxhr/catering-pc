@@ -19,32 +19,6 @@ const TabPane = Tabs.TabPane;
 const operations = <span className='extra'>查看全部</span>;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-<<<<<<< HEAD:src/pages/index/index.js
-=======
-const columns = [{
-  dataIndex: 'device',
-  key: 'device',
-}, {
-  dataIndex: 'time',
-  key: 'time',
-  //render:(time)=><span>{moment(time).format('YYYY-MM-DD HH:mm:ss')}</span>
-}];
-
-const salesPieData = [
-  {
-    x: '家用电器',
-    y: 4544,
-  },
-  {
-    x: '食用酒水',
-    y: 3321,
-  },
-  {
-    x: '个护健康',
-    y: 3113,
-  },
-];
->>>>>>> 1b56687ab8f0a4b1832feb06923875a273109e50:src/pages/Index/index.js
 
 class A extends Component {
   state={
@@ -148,11 +122,7 @@ class A extends Component {
               <div>
                   <Pie
                     hasLegend
-<<<<<<< HEAD:src/pages/index/index.js
                     data={home.statistics}
-=======
-                    data={salesPieData}
->>>>>>> 1b56687ab8f0a4b1832feb06923875a273109e50:src/pages/Index/index.js
                     valueFormat={val => <span dangerouslySetInnerHTML={{ __html: yuan(val) }} />}
                     height={206}
                   />
