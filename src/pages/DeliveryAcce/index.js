@@ -1,7 +1,8 @@
-import React from 'react'
-import { Card,Table,Tag,Row,Col  } from 'antd'
+import React from 'react';
+import { connect } from 'dva';
+import { Card, Table, Tag, Row, Col } from 'antd'
 import Axios from '../../axios'
-import Bread from '../../components/Bread'
+import BreadcrumbComponent from '../../components/BreadcrumbComponent'
 import DeliveryForm from './DeliveryForm'
 
 import './index.less'
@@ -12,9 +13,9 @@ const tabList = [{
 }, {
   key: 'tab2',
   tab: '待验收',
-},{
-	key:'tab3',
-	tab:'已验收'
+}, {
+  key: 'tab3',
+  tab: '已验收'
 }]
 
 const tab1Columns = [{
@@ -30,82 +31,73 @@ const tab1Columns = [{
   dataIndex: 'Delivery',
   key: 'Delivery',
 }, {
-	title: '摘要',
+  title: '摘要',
   dataIndex: 'abstract',
-	key: 'abstract',
-	render: abstract => (
+  key: 'abstract',
+  render: abstract => (
     <span>
-      {abstract.map((item,i) => <Tag color="blue" key={i}>{item}</Tag>)}
+      {abstract.map((item, i) => <Tag color="blue" key={i}>{item}</Tag>)}
     </span>
   ),
 }, {
-	title: '操作',
+  title: '操作',
   dataIndex: 'Operation',
   key: 'Operation',
 }];
 
-
-
-
-
 class E extends React.Component {
   state = {
     key: 'tab1',
-		noTitleKey: 'app',
-		DataSource:[]
+    noTitleKey: 'app',
+    DataSource: []
   }
 
   onTabChange = (key, type) => {
-		this.setState({ [type]: key });
-	}
-	
-	componentDidMount() {
+    this.setState({ [type]: key });
+  }
+
+  componentDidMount() {
     Axios.ajax({
-      url:'/delivery'
+      url: '/delivery'
     }).then((value) => {
       this.setState({
-        DataSource:value
+        DataSource: value
       })
     })
-	}
+  }
 
   render() {
+    const { location } = this.props;
     const dataSource = this.state.DataSource
-		const contentList = {
-			tab1: <Table columns={tab1Columns} dataSource={dataSource} />,
-			tab2: <Table columns={tab1Columns} dataSource={dataSource} />,
-			tab3: <Table columns={tab1Columns} dataSource={dataSource} />
+    const contentList = {
+      tab1: <Table columns={tab1Columns} dataSource={dataSource} />,
+      tab2: <Table columns={tab1Columns} dataSource={dataSource} />,
+      tab3: <Table columns={tab1Columns} dataSource={dataSource} />
     };
-    const bread = [{
-      href:'/delivery',
-      breadContent:'配送验收'
-    },{
-      href:'/wait',
-      breadContent:'待配送'
-    }]
+
     return (
       <div className='DeliveryAcce'>
-        <Bread bread={bread} style={{marginBottom:0}} />
+        <BreadcrumbComponent {...location} />
         <Card
           style={{ width: '100%' }}
           tabList={tabList}
           activeTabKey={this.state.key}
           onTabChange={(key) => { this.onTabChange(key, 'key'); }}
         >
-        	<Row type="flex" justify="center">
-						<Col xl={{span: 15}}>
+          <Row type="flex" justify="center">
+            <Col xl={{ span: 15 }}>
               <div style={{ background: '#ECECEC' }}>
-                <div style={{ background: 'white'}}>
+                <div style={{ background: 'white' }}>
                   <DeliveryForm />
                   {contentList[this.state.key]}
                 </div>
               </div>
-						</Col>
-					</Row>
+            </Col>
+          </Row>
         </Card>
       </div>
     );
   }
 }
 
-export default E
+export default connect(({ }) => ({}))(E);

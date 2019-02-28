@@ -38,14 +38,23 @@ export default function RouterConfig({ history }) {
           <App>
             <Switch>
               <Route path="/home" component={Index} />
-              <Route path="/menubar" component={MenuCenter} />
-              <Route path='/details' component={Details} />
-              <Route path="/supermarket" component={AccSupermarket}></Route>
-              <Route path="/order" component={PurOrder}></Route>
-              <Route path="/delivery" component={DeliveryAcce}></Route>
-              <Route path="/outStock" component={OutStock}></Route>
-              <Route path="/parameter" component={Parameter}></Route>
-              <Route path="/Setting" render={() =>
+              <Route path="/menubar/" exact component={MenuCenter} />
+              <Route path="/menubar/public/" exact component={MenuCenter} />
+              <Route path="/menubar/public/detail/" component={MenuCenter} />
+              <Route path="/menubar/private/" exact component={MenuCenter} />
+              <Route path="/menubar/private/new/" component={MenuCenter} />
+              <Route path="/menubar/private/detail/" exact component={MenuCenter} />
+              <Route path="/menubar/template/" exact component={MenuCenter} />
+              <Route path="/menubar/template/new" component={MenuCenter} />
+              <Route path='/details/' component={Details} />
+              <Route path="/supermarket/" component={AccSupermarket}></Route>
+              <Route path="/order/" exact component={PurOrder}></Route>
+              <Route path="/order/new/" component={PurOrder}></Route>
+              <Route path="/order/detail/" component={PurOrder}></Route>
+              <Route path="/delivery/" component={DeliveryAcce}></Route>
+              <Route path="/outStock/" component={OutStock}></Route>
+              <Route path="/parameter/" component={Parameter}></Route>
+              <Route path="/Setting/" render={() =>
                 <Setting>
                   <Switch>
                     <Route path="/Setting/information" component={BaseView}></Route>
