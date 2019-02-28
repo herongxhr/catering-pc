@@ -1,14 +1,13 @@
 import React from 'react'
 import { Form , Select , DatePicker , Input  } from "antd";
 import './index.less'
-const Option = Select.Option;
 
+const Option = Select.Option;
 const Search = Input.Search;
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
-class OrderForm extends React.Component {
-
+class OrderFilter extends React.Component {
   handleChange = (value) => {
     console.log(`selected ${value}`);
   }
@@ -72,7 +71,7 @@ class OrderForm extends React.Component {
   }
 }
 
-const WrappedOrderForm = Form.create()(OrderForm)
+const WrappedOrderForm = Form.create()(OrderFilter)
 
 export default WrappedOrderForm;
 

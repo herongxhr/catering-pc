@@ -63,7 +63,6 @@ export function querytodayMenu() {
         data: {
             showLoading: true,
         }
-
     });
 } 
 export function queryReportmissing(params) {
@@ -92,6 +91,16 @@ export function queryRule(params) {
         url: '/goods/catalogF/good',
         data: {
             showLoading: true,
+            params,
+        }
+    })
+}
+export function unifiedMenusAlready(params) {
+    console.log(params)
+    return request({
+        method: 'post',
+        url:'/catering/unifiedMenus',
+        data:{
             params,
         }
     })

@@ -2,6 +2,8 @@ import React from 'react'
 import { Table , Button , Dropdown , Menu , Badge} from 'antd'
 import WrappedInlineForm from '../InlineForm'
 import Axios from '../../axios'
+import axios from 'axios'
+import { connect } from 'dva'
 
 import './index.less'
 
@@ -46,11 +48,30 @@ const tab1Columns = [{
 
 class TableOne extends React.Component {
   state = {
-    DataSource:[]
+    DataSource:null,
+    status:1
   }
 
+  
   handleMenuClick = (e) => {
     console.log('click', e);
+  }
+
+  handleHeaderClick = () => {
+    // const { dispatch,key } = this.props;
+    // //请求待办事项
+    // dispatch({
+    //   type: 'unifiedMenus/queryList',
+    //   payload:{
+    //     status:this.state.status,
+    //   }
+    // })
+    axios.post('http://yapi.jgzh.com/mock/17/catering/unifiedMenus', {
+      status:0
+    })
+    .then(function (response) {
+      console.log(response);
+    })
   }
 
   componentDidMount() {
@@ -58,7 +79,7 @@ class TableOne extends React.Component {
       url:'/unifiedMenus'
     }).then((res) => {
       this.setState({
-        DataSource:res.records
+        DataSource:res
       })
     })
   }
@@ -72,13 +93,25 @@ class TableOne extends React.Component {
         <Menu.Item key="2">已失效</Menu.Item>
       </Menu>
     );
+    let tableSource
+    if(this.state.DataSource) {
+      const DataSource = this.state.DataSource
+      let key = Object.keys(DataSource)[1]
+      let value = Object.values(DataSource)[1]
+      if(DataSource) {
+        tableSource = DataSource.camenus.records
+        let test =  tableSource.map(item => item[key] = value)
+      }
+    }
+
+    
     return(
       <div className='TableOne'>
         <div style={{display:'flex',justifyContent:'space-between'}}>
           <WrappedInlineForm />
           <ButtonGroup>
             <Button>全部</Button>
-            <Button>未执行</Button>
+            <Button onClick={this.handleHeaderClick}>未执行</Button>
             <Dropdown overlay={menu}>
               <Button>
                 更多
@@ -86,10 +119,14 @@ class TableOne extends React.Component {
             </Dropdown>
           </ButtonGroup>  
         </div>
-        <Table columns={tab1Columns} dataSource={this.state.DataSource} rowKey="id" />
+        <Table columns={tab1Columns} dataSource={tableSource} rowKey="id" />
       </div>
     )
   }
 }
 
-export default TableOne
+
+
+export default connect(( {unifiedMenus} ) => ({
+  unifiedMenus,
+}))(TableOne); 

@@ -41,13 +41,15 @@ class AccSupermarket extends PureComponent {
 
 	componentDidMount() {
 		this.filterGoods();
+
 	}
 
 	render() {
+		const { shoppingCart } = this.props;
 		// 悬浮购物车图标
 		const cartSquare = (
 			<div className="shoppingCart">
-				<Badge onClick={this.showCartDrawer} className="cartInner" count={6} >
+				<Badge onClick={this.showCartDrawer} className="cartInner" count={shoppingCart.length} >
 					<Icon type="shopping-cart" style={{ fontSize: 20 }} />
 					<div className="cartText">购物车</div>
 				</Badge>

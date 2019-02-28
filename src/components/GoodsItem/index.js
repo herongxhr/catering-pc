@@ -24,6 +24,10 @@ export default class CartPageBody extends React.Component {
     render() {
         const {
             className,
+            changeNum,
+            deleteGoods,
+            id,
+            count,
             name,
             brand,
             price,
@@ -34,39 +38,38 @@ export default class CartPageBody extends React.Component {
             attribute
         } = this.props;
 
-        const goodsItemWrapperStyle = this.state.isMouseOver ? "goodsItemWrapper itemMouseOver" : "goodsItemWrapper";
-
-        const goodsItemDom = (
-            <div
-                onMouseOver={this.handMouseOver}
-                onMouseOut={this.handMouseOut}
-                className={goodsItemWrapperStyle}
-            >
-                <div className="thumb">
-                    <img src={GoodsIcon} alt={`${brand}${name}`} />
-                </div>
-                <span className="content">
-                    <div className="details">
-                        <div>{brand} {name}{attribute}</div>
-                        <div>￥ {price} {priceType}</div>
-                        <div style={{ fontSize: "12px", color: "rgba(0,0,0,0.45)" }}>{provider}</div>
-                    </div>
-                    <div className="actions">
-                        <a>删除</a>
-                        <InputNumber
-                            defaultValue={1}
-                            min={1}
-                            size="small"
-                            onChange={() => { }}
-                        />
-                    </div>
-                </span>
-            </div>
-        )
+        const goodsItemWrapperStyle =
+            this.state.isMouseOver ? "goodsItemWrapper itemMouseOver" : "goodsItemWrapper";
 
         return (
             <div className={className}>
-                {goodsItemDom}
+                <div
+                    onMouseOver={this.handMouseOver}
+                    onMouseOut={this.handMouseOut}
+                    className={goodsItemWrapperStyle}
+                >
+                    <div className="thumb">
+                        <img src={GoodsIcon} alt={`${brand}${name}`} />
+                    </div>
+                    <span className="content">
+                        <div className="details">
+                            <div>{brand} {name}{attribute}</div>
+                            <div>￥ {price} {priceType}</div>
+                            <div style={{ fontSize: "12px", color: "rgba(0,0,0,0.45)" }}>{provider}</div>
+                        </div>
+                        <div className="actions">
+                            {/* 删除按钮 */}
+                            <a onClick={() => deleteGoods(id)}>删除</a>
+                            {/* 修改购物车商品数量 */}
+                            <InputNumber
+                                defaultValue={count}
+                                min={1}
+                                size="small"
+                                onChange={(value, id) => changeNum(id, value)}
+                            />
+                        </div>
+                    </span>
+                </div>
             </div>
         )
     }

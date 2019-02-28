@@ -1,34 +1,34 @@
 import React from 'react'
-import { Form , Select , Input, Button , Row, Col , Badge , Card , Tag } from 'antd'
+import { Form , Select , Input, Button , Badge ,  Tag , Icon } from 'antd'
 import { Link } from 'react-router-dom'
-import { template } from '../../DataConfig'
 import Cartoon from '../Cartoon'
+import MyCard from '../Card'
+import { template } from '../../DataConfig'
+import { connect } from 'dva';
 
 import './index.less'
+
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const Search = Input.Search;
 const ButtonGroup = Button.Group;
-const { Meta } = Card;
-
-
 
 class Template extends React.Component {
-
+  state = {
+    changeColor:true
+  }
+  colorChange =  () => {
+    this.setState({
+      changeColor:!this.state.changeColor
+    })
+  }
   render(){
     const { getFieldDecorator } = this.props.form;
-    const styles = {
-      width: 340,
-      height: 202,
-      marginRight: 15,
-      marginTop: 20,
-      marginLeft:25
-    }
     return (
       <div className='Template'>
         <div style={{display:'flex',justifyContent:'space-between'}} className='TemplateHeader'>
-            <Form layout="inline">
+          <Form layout="inline">
             <FormItem label='排序' colon={true}>
               {
                 getFieldDecorator('state',{
@@ -43,15 +43,21 @@ class Template extends React.Component {
               }
             </FormItem>
             <FormItem>
+              <div className='top-down'>
+                <Icon type="caret-up" onClick={this.colorChange} className={this.state.changeColor? 'blue-color' : null} />
+                <Icon type="caret-down" onClick={this.colorChange} className={this.state.changeColor? null : 'blue-color'} />
+              </div>
+            </FormItem>
+            <FormItem>
               {
                 getFieldDecorator('state',{
                     initialValue:'模板名称/标签'
                 })(
                   <Search
-                  placeholder="input search text"
-                  onSearch={value => console.log(value)}
-                  style={{ width: 300 }}
-                />              
+                    placeholder="input search text"
+                    onSearch={value => console.log(value)}
+                    style={{ width: 300 }}
+                  />              
                 )
               }
             </FormItem>
@@ -73,17 +79,12 @@ class Template extends React.Component {
             </Button>
           </ButtonGroup>
         </div>
-        
+
         <div className='card-group'>
           {
-            template.map(item => (
-              <Card
-                key={item.key}
-                className='card'
-                style={{ ...styles }}
-                actions={[<span>创建:2018-11-01</span>]}
-                hoverable={true}
-              >
+            template.map(item => 
+              (
+              <MyCard key={item.key}>
                 <div className='card-body'>
                   <p className='card-content'>
                     <span className='card-content-title'>
@@ -116,12 +117,12 @@ class Template extends React.Component {
                   <Tag color="volcano">高蛋白</Tag>
                   <Tag color="orange">1日5餐</Tag>
                 </div>
-              </Card>
-            ))
+              </MyCard>
+              )
+            )
           }
         </div>
       </div>
-
     )
   }
 }
@@ -129,5 +130,7 @@ class Template extends React.Component {
 const MenuTemplate = Form.create()(Template)
 
 
-export default MenuTemplate
+export default connect(({template})=> ({
+  template
+}))(MenuTemplate)
 

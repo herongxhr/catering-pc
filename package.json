@@ -2,6 +2,7 @@
   "name": "ap-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://catering.jgzh.com",
   "dependencies": {
     "ant-design-pro": "^2.2.1",
     "antd": "^3.13.2",

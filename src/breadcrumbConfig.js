@@ -1,0 +1,16 @@
+export default {
+    '/': '首页',
+    '/home/': '首页',
+    '/menubar/': '菜单中心',
+    '/supermarket/': '辅料超市',
+    '/order/': '采购订单',
+    '/delivery/': '配送验收',
+    '/parameter/': '台帐',
+    '/parameter/purcatalog/': '采购目录',
+    '/parameter/detail/': '详情',
+    '/setting/information/': '设置',
+    '/setting/set/': '设置',
+    '/setting/security/': '设置',
+    '/setting/cuisine/': '设置',
+    '/setting/': '设置',
+}
