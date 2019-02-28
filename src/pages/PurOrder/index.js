@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import OrderTable from '../../components/OrderTable';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
-import { Card, Row, Col } from 'antd';
+import {  Row, Col } from 'antd';
 
 import './index.less';
 

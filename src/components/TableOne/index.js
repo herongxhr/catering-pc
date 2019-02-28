@@ -2,6 +2,7 @@ import React from 'react'
 import { Table , Button , Dropdown , Menu , Badge} from 'antd'
 import WrappedInlineForm from '../InlineForm'
 import Axios from '../../axios'
+import axios from 'axios'
 import { connect } from 'dva'
 
 import './index.less'
@@ -57,13 +58,19 @@ class TableOne extends React.Component {
   }
 
   handleHeaderClick = () => {
-    const { dispatch,key } = this.props;
-    //请求待办事项
-    dispatch({
-      type: 'unifiedMenus/queryList',
-      payload:{
-        status:this.state.status,
-      }
+    // const { dispatch,key } = this.props;
+    // //请求待办事项
+    // dispatch({
+    //   type: 'unifiedMenus/queryList',
+    //   payload:{
+    //     status:this.state.status,
+    //   }
+    // })
+    axios.post('http://yapi.jgzh.com/mock/17/catering/unifiedMenus', {
+      status:0
+    })
+    .then(function (response) {
+      console.log(response);
     })
   }
 

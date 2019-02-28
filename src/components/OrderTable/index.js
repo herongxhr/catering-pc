@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, Tag, Tabs, Button, Radio, Badge, Divider } from 'antd';
 import WrappedOrderForm from '../OrderFilter';
+import { order } from '../../DataConfig'
 
 import './index.less'
 
@@ -21,7 +22,10 @@ const tabColumns = [
         '1': '辅料超市',
         '2': '新建',
       }
-      return <Tag color="magenta">{orderArray[ResultSource]}</Tag>
+      return <Tag color="magenta">
+        {/* {orderArray[ResultSource]} */}
+        ResultSource
+      </Tag>
     }
   },
   {
@@ -101,7 +105,7 @@ class OrderTable extends React.Component {
           </div>
         </div>
         <div style={{ marginTop: 30 }}>
-          <Table columns={tabColumns} dataSource={this.state.tableSource} />
+          <Table columns={tabColumns} dataSource={order.result} />
         </div>
       </div>
     )
