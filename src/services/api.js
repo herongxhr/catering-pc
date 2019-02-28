@@ -51,7 +51,17 @@ export function queryList(params) {
         }
     });
 }
-export function querydeviceInfo() {
+export function queryStatistics(params) {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/unpaidStatistics',
+        data: {
+            showLoading: true,
+            params,
+        }
+    });
+}
+export function querydeviceInfo() {    
     return request({
         method: 'get',
         url: '/catering/workbench/deviceInfo',
@@ -69,6 +79,16 @@ export function querytodayMenu() {
             showLoading: true,
         }
     });
+} 
+export function queryReportmissing(params) {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/reportmissing',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
 }
 export function queryHotGoods() {
     return request({

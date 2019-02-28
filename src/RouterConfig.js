@@ -18,6 +18,10 @@ import OutStock from './pages/OutStock/index';
 import PurCatalog from './pages/PurCatalog/index';
 import details from './pages/Details'
 import Test from './pages/Test'
+<<<<<<< HEAD
+import ReportDetail from './pages/ReportDetail/index'
+import ExcipientDetail from './pages/ExcipientDetail'
+=======
 // 国际化配置
 import { LocaleProvider } from 'antd';
 import zh_cn from 'antd/lib/locale-provider/zh_CN';
@@ -29,11 +33,44 @@ import Edit from './pages/Edit'
 
 moment.locale('zh-cn');
 
+>>>>>>> 1b56687ab8f0a4b1832feb06923875a273109e50
 
 export default function RouterConfig({ history }) {
   return (
     <Router history={history}>
       <Route path='/' render={() =>
+<<<<<<< HEAD
+        <App>
+          <Switch>
+            <Route path="/home" component={A} />
+            <Route path="/menubar" component={B} />
+            <Route path='/createtemplate' component={CreateTemplate} />
+            <Route path='/details' component={Details} />
+            <Route path="/supermarket" component={C}></Route>
+            <Route path="/order" component={D}></Route>
+            <Route path="/delivery" component={E}></Route>
+            <Route path="/parameter" component={Parameter}></Route>
+            <Route path="/Setting" render={() =>
+              <Setting>
+                <Switch>
+                  <Route path="/Setting/imformation" component={BaseView}></Route>
+                  <Route path="/Setting/set" component={BasicConfig}></Route>
+                  <Route path="/Setting/security" component={SecurityView}></Route>
+                  <Route path="/Setting/supply" component={Supply}></Route>
+                  <Route path="/Setting/cuisine" component={Dosing}></Route>
+                  <Redirect to="/Setting/imformation" />
+                </Switch>
+              </Setting>
+            }></Route>
+             <Route path="/outstock" component={OutStock}></Route>
+             <Route path="/purcatalog" component={PurCatalog}></Route>
+             <Route path="/reportdetail" component={ReportDetail}></Route>
+             <Route path="/excipientdetail" component={ExcipientDetail}></Route>
+            <Route path='/test' component={Test}></Route>
+            <Redirect to="/home" />
+          </Switch>
+        </App>
+=======
         <LocaleProvider locale={zh_cn}>
           <App>
             <Switch>
@@ -73,6 +110,7 @@ export default function RouterConfig({ history }) {
             </Switch>
           </App>
         </LocaleProvider>
+>>>>>>> 1b56687ab8f0a4b1832feb06923875a273109e50
       } />
     </Router>
   )

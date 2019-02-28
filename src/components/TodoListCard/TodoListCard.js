@@ -1,29 +1,21 @@
 import React, { Component } from 'react';
 import './TodoListCard.less';
-import {  Table ,Badge} from 'antd';
-
-
-const columns = [{
-    title: '待办事项',
-    dataIndex: 'name',
-    key: 'name',
-  }, {
-    dataIndex: 'count',
-    key: 'count',
-    align: 'right',
-    className: 'all',
-    render: count => (
-      <span>
-        <Badge count={count} style={{ backgroundColor: '#FF9500', boxShadow: '0 0 0 1px #d9d9d9 inset',border:'none' }} />
-      </span>
-    ), 
-  }];
+import {  Divider,Badge  } from 'antd';
 
 class TodoListCard extends Component {
   render() {
+    const { todoList }= this.props
     return (
       <div className="TodoListCard">
-        <Table rowKey={record => record.uid} columns={columns} dataSource={this.props.todoList} pagination={false}/>
+          <div className='todoTitle'>待办事项</div>
+          <Divider />
+          <div className='todoItem'><span>待执行菜单</span><span><Badge count={todoList.pendingExecuteOrder} style={{ backgroundColor: '#FF9500'}} /></span></div>
+          <Divider />
+          <div className='todoItem'><span>待下单</span><span><Badge count={todoList.pendingOrder} style={{ backgroundColor: '#FF9500'}} /></span></div>
+          <Divider />
+          <div className='todoItem'><span>换货审核</span><span><Badge count={todoList.exchangeReview} style={{ backgroundColor: '#FF9500'}} /></span></div>
+          <Divider />
+          <div className='todoItem'><span>待验收</span><span><Badge count={todoList.acceptance} style={{ backgroundColor: '#FF9500'}} /></span></div>
       </div>
     );
   }

@@ -3,8 +3,13 @@ import './index.less';
 import TodayMenuCard from '../../components/TodayMenuCard/TodayMenuCard'
 import TodoListCard from '../../components/TodoListCard/TodoListCard'
 import Accepting from '../../components/Accepting/Accepting'
+<<<<<<< HEAD:src/pages/index/index.js
+import { Card, Button, Tabs,Radio,Divider } from 'antd';
+import { Link } from 'react-router-dom';
+=======
 import { Card, Button, Tabs,Radio,Table } from 'antd';
 import Charts from 'ant-design-pro/lib/Charts';
+>>>>>>> 1b56687ab8f0a4b1832feb06923875a273109e50:src/pages/Index/index.js
 import { Pie, yuan } from 'ant-design-pro/lib/Charts';
 import moment from 'moment'
 import { connect } from 'dva';
@@ -14,33 +19,11 @@ const TabPane = Tabs.TabPane;
 const operations = <span className='extra'>查看全部</span>;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-const columns = [{
-  dataIndex: 'device',
-  key: 'device',
-}, {
-  dataIndex: 'time',
-  key: 'time',
-  //render:(time)=><span>{moment(time).format('YYYY-MM-DD HH:mm:ss')}</span>
-}];
-
-const salesPieData = [
-  {
-    x: '家用电器',
-    y: 4544,
-  },
-  {
-    x: '食用酒水',
-    y: 3321,
-  },
-  {
-    x: '个护健康',
-    y: 3113,
-  },
-];
 
 class A extends Component {
   state={
     tabkey:'today',
+    time:'month',
   }
   queryTodoList = () => {
 		const { dispatch } = this.props;
@@ -58,21 +41,29 @@ class A extends Component {
   }
   querydeviceInfo = () => {
 		const { dispatch } = this.props;
-		//请求待办事项
 		dispatch({
 			type: 'home/querydeviceInfo',
 		})
   }
-
+  queryStatistics = (params = {}) => {
+    const { dispatch } = this.props;
+    //请求待办事项
+    dispatch({
+      type: 'home/queryStatistics',
+      payload:{
+        timeType:this.state.time,
+        ...params
+      }
+    })
+  }
   componentDidMount() {
     this.queryTodoList()
     this.querytodayMenu()
     this.querydeviceInfo()
+    this.queryStatistics()
   }
 
   render() {
-    const title= <div className='device'>设备最后开机时间</div>
-    const footer = <div style={{textAlign:'center',fontSize:14,color:'#54C4CE'}}>查看全部</div>
     const { home }= this.props
     const todoList = home.todoList || [];
     const todayMenu = home.todayMenu || {};
@@ -121,7 +112,7 @@ class A extends Component {
               <div style={{display:'flex',justifyContent:'space-between'}}>
                   <p style={{width:226,height:65,fontSize:16,lineHeight:4,rgba:(0,0,0,0.85)}}>应付款统计分析</p>
                   <div> 
-                    <RadioGroup defaultValue="month">
+                    <RadioGroup defaultValue="month" onChange={(e)=>{this.setState({time:e.target.value})}}>
                       <RadioButton value="month">本月</RadioButton>
                       <RadioButton value="quarter">本季度</RadioButton>
                       <RadioButton value="year">本年</RadioButton>
@@ -131,15 +122,23 @@ class A extends Component {
               <div>
                   <Pie
                     hasLegend
-                    data={salesPieData}
+                    data={home.statistics}
                     valueFormat={val => <span dangerouslySetInnerHTML={{ __html: yuan(val) }} />}
                     height={206}
                   />
               </div>
             </div>
             <div className='App-content-opening'>
-            <Table showHeader={false} title={()=>title} columns={columns} dataSource={deviceInfo} footer={() => footer} pagination={false} />  
-            </div>
+              <div className='timeTitle'>设备最后开机时间</div>
+                <Divider />
+                <div className='openingItem'><span>晨检仪</span><span>{deviceInfo.morningDetector}</span></div>
+                <Divider />
+                <div className='openingItem'><span>验货机</span><span>{deviceInfo.inspectionMachine}</span></div>
+                <Divider />
+                <div className='openingItem'><span>易检设备</span><span>{deviceInfo.inspectionEquipment}</span></div>
+                <Divider />
+                <div style={{width:350,height:54,textAlign:'center',marginTop:18,color:'#54C4CE'}}>查看全部</div>
+              </div>
           </div>
         </div>
       </div>
@@ -150,4 +149,4 @@ class A extends Component {
 const ShowARouter = withRouter(A);
 export default connect(( {home} ) => ({
   home,
-}))(ShowARouter);;
+}))(ShowARouter);

@@ -7,8 +7,8 @@ import './index.less'
 
 const tabColumns = [{
   title: '食材名称',
-  dataIndex: 'name',
-  key: 'name',
+  dataIndex: 'ingredientName',
+  key: 'ingredientName',
 }, {
   title: '计量单位',
   dataIndex: 'unit',
@@ -51,7 +51,6 @@ class PurCatalog extends React.Component {
     return (
       <div className='purCata'>
         <Card
-          style={{ width: '100%' }}
           title={<TwoBread title='工作台' subTitle='采购目录' />}
           onTabChange={(key) => { this.onTabChange(key, 'key'); }}
         >

@@ -8,7 +8,7 @@ class TodayMenuCard extends Component {
     const breakfast = todayMenu.breakfast || []
     const lunch = todayMenu.lunch || []
     const dessert = todayMenu.dessert || []
-    const dinner = todayMenu.dinner || []
+    const dinner = todayMenu.dinner ||[]
     return (
       <div className="MenuCard">
         <div className='title'>今日菜单</div>
@@ -17,13 +17,13 @@ class TodayMenuCard extends Component {
             <div>早餐</div>
             <ul>
               {
-                (breakfast) ?
+                (breakfast.length >0) ?
                   breakfast.map((data, index) => <li key={index}>{data}</li>) : <Empty
                     image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
                     description={
                       <span>
                         暂未排餐哦~
-                    </span>
+                      </span>
                     }
                   />
               }
@@ -33,7 +33,7 @@ class TodayMenuCard extends Component {
             <div>中餐</div>
             <ul>
               {
-                (lunch) ?
+                (lunch.length >0) ?
                   lunch.map((data, index) => <li key={index}>{data}</li>) : <Empty
                     image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
                     description={
@@ -49,7 +49,7 @@ class TodayMenuCard extends Component {
             <div>点心</div>
             <ul>
               {
-                (dessert) ?
+                (dessert.length >0) ?
                   (dessert.map((data, index) => <li key={index}>{data}</li>)) : (<Empty
                     image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
                     description={
@@ -65,7 +65,7 @@ class TodayMenuCard extends Component {
             <div>晚餐</div>
             <ul>
               {
-                (dinner) ?
+                (dinner.length>0) ?
                   dinner.map((data, index) => <li key={index}>{data}</li>) : <Empty
                     image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
                     description={

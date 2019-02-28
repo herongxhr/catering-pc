@@ -9,7 +9,7 @@ export default {
         *queryList({ payload }, { call, put }) {
             //call方法首参数为要调用的异步方法
             const  data  = yield call(queryList,payload);
-            console.log(data);
+            //console.log(data);
             yield put({
                 type: 'saveDistributionList',
                 payload: data || {},
