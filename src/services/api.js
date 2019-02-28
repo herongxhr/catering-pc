@@ -53,7 +53,6 @@ export function querytodayMenu() {
         data: {
             showLoading: true,
         }
-
     });
 } 
 export function queryHotGoods() {

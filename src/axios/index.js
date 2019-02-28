@@ -15,7 +15,6 @@ export default class Axios {
                 method:'get',
                 baseURL:baseApi,
             }).then((response)=>{
-								debugger;
                 loading = document.getElementById('ajaxLoading');
 								loading.style.display = 'none';
 								console.log(response)
