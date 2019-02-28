@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
-import Jheader from './components/Jheader'
-import { Layout, Menu, Breadcrumb } from 'antd';
-const { Content, Footer } = Layout;
+import Jheader from './components/Jheader';
+import { Layout } from 'antd';
+
+const { Content } = Layout;
 
 class App extends Component {
   render() {
-    // const style = {
-    //   width: 1200,
-    //   margin: '0 auto',
-    // }
     return (
-      <Layout className="layout">
+      <Layout >
         <Jheader />
-        <Content /*style={style}*/>
+        <Content >
           {this.props.children}
         </Content>
-      </Layout>
+      </Layout >
     );
   }
 }

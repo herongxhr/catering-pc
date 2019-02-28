@@ -10,6 +10,7 @@ import { Spin, message } from 'antd';
  * url属性为请求的相对地址
  * data为参数对象，data中showLoading为是否显示加载器
  * data中的params属性为axios方法参数对象中的params属性
+ * data中的axiosData为axios中post方法的数据体
  * 
  */
 export default async function request(options) {
@@ -25,9 +26,10 @@ export default async function request(options) {
             url: options.url,
             baseURL: baseApi,
             params: (options.data && options.data.params) || '',
+            data: (options.data && options.data.axiosData) || {},
         });
         //关闭加载中
-        if ( isShowLoading ) {
+        if (isShowLoading) {
             loading = document.getElementById('ajaxLoading');
             loading.style.display = 'none';
         }

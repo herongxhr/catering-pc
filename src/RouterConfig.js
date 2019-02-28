@@ -16,7 +16,7 @@ import Dosing from './pages/acount/Dosing';
 import Supply from './pages/acount/Supply';
 import OutStock from './pages/OutStock/index';
 import PurCatalog from './pages/PurCatalog/index';
-import Details from './pages/Details'
+import details from './pages/Details'
 import Test from './pages/Test'
 // 国际化配置
 import { LocaleProvider } from 'antd';
@@ -40,17 +40,17 @@ export default function RouterConfig({ history }) {
               <Route path="/home" component={Index} />
               <Route path="/menubar/" exact component={MenuCenter} />
               <Route path="/menubar/public/" exact component={MenuCenter} />
-              <Route path="/menubar/public/detail/" component={MenuCenter} />
+              <Route path="/menubar/public/details/" component={MenuCenter} />
               <Route path="/menubar/private/" exact component={MenuCenter} />
               <Route path="/menubar/private/new/" component={MenuCenter} />
-              <Route path="/menubar/private/detail/" exact component={MenuCenter} />
+              <Route path="/menubar/private/details/" exact component={MenuCenter} />
               <Route path="/menubar/template/" exact component={MenuCenter} />
               <Route path="/menubar/template/new" component={MenuCenter} />
-              <Route path='/details/' component={Details} />
+              <Route path='/details/' component={details} />
               <Route path="/supermarket/" component={AccSupermarket}></Route>
               <Route path="/order/" exact component={PurOrder}></Route>
               <Route path="/order/new/" component={PurOrder}></Route>
-              <Route path="/order/detail/" component={PurOrder}></Route>
+              <Route path="/order/details/" component={PurOrder}></Route>
               <Route path="/delivery/" component={DeliveryAcce}></Route>
               <Route path="/outStock/" component={OutStock}></Route>
               <Route path="/parameter/" component={Parameter}></Route>

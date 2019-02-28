@@ -16,6 +16,21 @@ export function queryGoodsF({ params }) {
         }
     });
 }
+
+/**
+ * 使用post方法
+ * @param {object | Array} data axios()的post方法的数据体
+ */
+export function createGoodsF(data) {
+    return request({
+        method: 'get',
+        url: '/catering/accsupermarket/queryGoodF',
+        data: {
+            showLoading: true,
+            axiosData: data,
+        }
+    });
+}
 export function queryTodoList() {
     return request({
         method: 'get',
@@ -28,7 +43,7 @@ export function queryTodoList() {
 //获取验收情况
 export function queryList(params) {
     return request({
-        method: 'post',
+        method: 'get',
         url: '/catering/workbench/distributionList',
         data: {
             showLoading: true,
@@ -48,13 +63,13 @@ export function querydeviceInfo() {
 
 export function querytodayMenu() {
     return request({
-        method: 'post',
+        method: 'get',
         url: '/catering/workbench/todayMenu',
         data: {
             showLoading: true,
         }
     });
-} 
+}
 export function queryHotGoods() {
     return request({
         method: 'get',
@@ -79,8 +94,8 @@ export function unifiedMenusAlready(params) {
     console.log(params)
     return request({
         method: 'post',
-        url:'/catering/unifiedMenus',
-        data:{
+        url: '/catering/unifiedMenus',
+        data: {
             params,
         }
     })
@@ -92,3 +107,23 @@ export function unifiedMenusAlready(params) {
 // export async function queryGoodSku({ catalog, brand }) {
 //     return axios(`/goods/${catalog}/${brand}`);
 // }
+
+// 采购订单专区
+export function queryPurOrder() {
+    return request({
+        method: 'get',
+        url: '/catering/purOrder',
+        data: {
+            showLoading: true,
+        }
+    })
+}
+export function queryOrderDetails() {
+    return request({
+        method: 'get',
+        url: '/catering/orderDetails',
+        data: {
+            showLoading: true,
+        }
+    })
+}

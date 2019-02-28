@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Breadcrumb, Input, List, Icon, Badge, } from 'antd';
+import { Breadcrumb, Input, Icon, Badge, } from 'antd';
 import CartPage from '../CartPage';
 import GoodsFilter from '../../components/GoodsFilter';
 import GoodsCardList from '../../components/GoodsCardList';
@@ -60,10 +60,13 @@ class AccSupermarket extends PureComponent {
 			<div className="supermarket-root">
 				{/* 页面头部：面包屑+搜索框 */}
 				<div className="header-container">
-					<Breadcrumb style={{ marginLeft: 24 }}>
-						<Breadcrumb.Item>辅料超市</Breadcrumb.Item>
-					</Breadcrumb>
-					<Search className="goodsSearch" placeholder="请输入关键字进行搜索" onSearch={() => ({})} />
+					<div className="headeInner">
+						<Breadcrumb className="breadcrumb">
+							<Breadcrumb.Item>辅料超市</Breadcrumb.Item>
+						</Breadcrumb>
+						<Search className="goodsSearch" placeholder="请输入关键字进行搜索" onSearch={() => ({})} />
+					</div>
+
 				</div>
 
 				{/* 筛选区域 */}
@@ -75,7 +78,7 @@ class AccSupermarket extends PureComponent {
 				<div className="goodsCardList">
 					<GoodsCardList  {...this.props} />
 				</div>
-				
+
 				{/* 悬浮购物车图标 */}
 				{cartSquare}
 
