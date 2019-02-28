@@ -10,6 +10,7 @@ import { Pie, yuan } from 'ant-design-pro/lib/Charts';
 import moment from 'moment'
 import { connect } from 'dva';
 import { withRouter } from "react-router";
+import homeBanner from './homeBanner.png';
 
 const TabPane = Tabs.TabPane;
 const operations = <span className='extra'>查看全部</span>;
@@ -72,7 +73,9 @@ class A extends Component {
         <div>{this.props.children}</div>
         <div className="App-content">
           <div className="App-content-header">
-            <div className='App-pic'></div>
+            <div className='App-pic'>
+              <img src={homeBanner} />
+            </div>
             <div className='App-time'>
               <h3>第{weeks}周</h3>
               <h6>{date}</h6>

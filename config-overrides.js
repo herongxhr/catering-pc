@@ -9,6 +9,8 @@ module.exports = override(
     addLessLoader({
         javascriptEnabled: true,
         modifyVars: {
+            //头部背景色
+            '@layout-header-background': '#1F253E',
             //字体
             '@font-family': `'PingFang SC', 'Microsoft YaHei',  Arial, 'Helvetica Neue'`,
             //代码

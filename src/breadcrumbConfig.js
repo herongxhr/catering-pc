@@ -9,7 +9,7 @@ export default {
     '/menubar/private/details/': '详情',
     '/menubar/template/': '详情',
     '/menubar/template/new/': '详情',
-    '/supermarket/': '辅料超市',
+    '/accSupermarket/': '辅料超市',
     '/order/': '采购订单',
     '/delivery/': '配送验收',
     '/parameter/': '台帐',

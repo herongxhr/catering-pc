@@ -99,7 +99,7 @@ class TableOne extends React.Component {
       let key = Object.keys(DataSource)[1]
       let value = Object.values(DataSource)[1]
       if(DataSource) {
-        tableSource = DataSource.camenus.records
+        tableSource = DataSource.camenus; /*.records*/
         let test =  tableSource.map(item => item[key] = value)
       }
     }

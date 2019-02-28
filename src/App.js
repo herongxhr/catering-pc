@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
-import Jheader from './components/Jheader';
-import { Layout } from 'antd';
+import BaseMenu from './components/BaseMenu';
+import { Layout, Table, } from 'antd';
 
-const { Content } = Layout;
+const { Content, Header } = Layout;
 
 class App extends Component {
   render() {
     return (
       <Layout >
-        <Jheader />
+        <Header style={{
+          width: '100%',
+          height: 70,
+          background: '#1F253E',
+        }}>
+          <BaseMenu />
+        </Header>
         <Content >
           {this.props.children}
         </Content>
