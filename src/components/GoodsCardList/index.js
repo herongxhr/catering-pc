@@ -11,11 +11,11 @@ export default class GoodsCardList extends React.Component {
     // 只要修改数量，将改过数量的商品
     // 商品的id和改后的值保存到state中
     handleValueChange = (qty, id) => {
-        if (this.state.cart.some(item => item.id == id)) {
+        if (this.state.cart.some(item => item.id === id)) {
             // console.log('old goods');
             this.setState({
                 cart: this.state.cart.map(item => {
-                    if (item.id == id) {
+                    if (item.id === id) {
                         return { id, qty }
                     }
                     return item;
@@ -37,12 +37,11 @@ export default class GoodsCardList extends React.Component {
         const { dispatch } = this.props;
         // 在state中保存的改过数量的商品数组中
         // 找到本id对应的数量，如果没有就默认为1
-        let quantity = (this.state.cart.length && this.state.cart.find(item => item.id == id).qty) || 1;
+        let quantity = (this.state.cart.length && this.state.cart.find(item => item.id === id).qty) || 1;
         dispatch({
             type: 'accSupermarket/addToCart',
             payload: { id, quantity }
         })
-        console.log("id", id, "qty", quantity);
     }
 
     render() {

@@ -14,7 +14,7 @@ export default class CartPage extends React.Component {
     // 返回id相匹配的商品
     getDetailByGoodsId = (id) => {
         const { goodsList } = this.props;
-        return goodsList.find(item => item.id == id);
+        return goodsList.find(item => item.id === id);
     }
     // 改变商品数量
     handleChangeNum = (id, value) => {
