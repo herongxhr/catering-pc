@@ -1,22 +1,14 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Card, Table, Tag, Row, Col } from 'antd'
+import { Card, Table, Tag, Row, Col, Tabs } from 'antd'
 import Axios from '../../axios'
 import BreadcrumbComponent from '../../components/BreadcrumbComponent'
-import DeliveryForm from './DeliveryForm'
+import DeliveryTable from './DeliveryTable'
 
 import './index.less'
 
-const tabList = [{
-  key: 'tab1',
-  tab: '待配送',
-}, {
-  key: 'tab2',
-  tab: '待验收',
-}, {
-  key: 'tab3',
-  tab: '已验收'
-}]
+const TabPane = Tabs.TabPane;
+
 
 const tab1Columns = [{
   title: '配送单号',
@@ -47,13 +39,7 @@ const tab1Columns = [{
 
 class E extends React.Component {
   state = {
-    key: 'tab1',
-    noTitleKey: 'app',
     DataSource: []
-  }
-
-  onTabChange = (key, type) => {
-    this.setState({ [type]: key });
   }
 
   componentDidMount() {
@@ -69,32 +55,20 @@ class E extends React.Component {
   render() {
     const { location } = this.props;
     const dataSource = this.state.DataSource
-    const contentList = {
-      tab1: <Table columns={tab1Columns} dataSource={dataSource} />,
-      tab2: <Table columns={tab1Columns} dataSource={dataSource} />,
-      tab3: <Table columns={tab1Columns} dataSource={dataSource} />
-    };
-
     return (
       <div className='DeliveryAcce'>
         <BreadcrumbComponent {...location} />
-        <Card
-          style={{ width: '100%' }}
-          tabList={tabList}
-          activeTabKey={this.state.key}
-          onTabChange={(key) => { this.onTabChange(key, 'key'); }}
-        >
-          <Row type="flex" justify="center">
-            <Col xl={{ span: 15 }}>
-              <div style={{ background: '#ECECEC' }}>
-                <div style={{ background: 'white' }}>
-                  <DeliveryForm />
-                  {contentList[this.state.key]}
-                </div>
-              </div>
-            </Col>
-          </Row>
-        </Card>
+        <Tabs defaultActiveKey="1" onChange={this.callback}>
+					<TabPane tab="待配送(8)" key="1">
+            <DeliveryTable />
+					</TabPane>
+					<TabPane tab="待验收(4)" key="2">
+            <DeliveryTable />
+					</TabPane>
+          <TabPane tab="已验收" key="3">
+            <DeliveryTable />
+					</TabPane>
+				</Tabs>
       </div>
     );
   }

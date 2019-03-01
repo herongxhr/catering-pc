@@ -113,7 +113,7 @@ export function queryRule(params) {
 export function unifiedMenusAlready(params) {
     console.log(params)
     return request({
-        method: 'post',
+        method: 'get',
         url: '/catering/unifiedMenus',
         data: {
             params,
