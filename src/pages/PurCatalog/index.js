@@ -1,32 +1,11 @@
 import React from 'react'
 import WrappedPurForm from '../../components/PurForm'
 import TwoBread from '../../components/TwoBread'
-import { Card, Radio, Table, Alert } from 'antd'
-
+import BreadcrumbComponent from '../../components/BreadcrumbComponent'
+import { Card, Radio, Table, Alert,Tooltip } from 'antd'
+import { connect } from 'dva';
 import './index.less'
 
-const tabColumns = [{
-  title: '食材名称',
-  dataIndex: 'ingredientName',
-  key: 'ingredientName',
-}, {
-  title: '计量单位',
-  dataIndex: 'unit',
-  key: 'unit',
-}, {
-  title: '分类',
-  dataIndex: 'type',
-  key: 'type',
-}, {
-  title: '价格（元）',
-  dataIndex: 'price',
-  key: 'price',
-}, {
-  title: '最新定价时间',
-  dataIndex: 'newtime',
-  key: 'newtime',
-}
-];
 class PurCatalog extends React.Component {
   state = {
     DataSource: [],
@@ -40,20 +19,69 @@ class PurCatalog extends React.Component {
       tableSource: dataSource
     })
   }
-
   pass = () => {
     var dataSource = this.state.DataSource.filter(item => item.status == 0)
     this.setState({
       tableSource: dataSource
     })
   }
+  queryPurCatalog = (params = {}) =>{
+    const { dispatch } = this.props;
+    //请求待办事项
+    dispatch({
+      type:'purCatalog/queryPurCatalog',
+      payload:{
+       ...params
+      }
+    })
+  }
+  
+  componentDidMount (){
+    this.queryPurCatalog()
+    }
+    showModal = () =>{
+      var tooltip=this.myref;
+      tooltip.style.display='block'
+    }
   render() {
+    const {purCatalog,location} = this.props;
+    const catalogData = purCatalog.catalogData;
+    const tabColumns = [{
+      title: '食材名称',
+      dataIndex: 'ingredientName',
+      key: 'ingredientName',
+      render: text => <a href="/ingredetail">{text}</a>,
+      width:'260'
+    }, {
+      title: '计量单位',
+      dataIndex: 'unit',
+      key: 'unit',
+    }, {
+      title: '分类',
+      dataIndex: 'type',
+      key: 'type',
+    }, {
+      title: '价格（元）',
+      dataIndex: 'price',
+      key: 'price',
+      render: text =>{
+      return(
+            <Tooltip title="查看定价记录" >
+              <span onClick={this.showModal} className='tooltipwrapper'>
+                {text}
+                <ul className='tooltip' ref={ref=>{this.myref=ref}}></ul>
+              </span>
+            </Tooltip>)},
+    }, {
+      title: '最新定价时间',
+      dataIndex: 'newtime',
+      key: 'newtime',
+    }
+    ];
     return (
       <div className='purCata'>
-        <Card
-          title={<TwoBread title='工作台' subTitle='采购目录' />}
-          onTabChange={(key) => { this.onTabChange(key, 'key'); }}
-        >
+      <BreadcrumbComponent {...location} />
+        <Card>
           <div className='cataTable'>
             <WrappedPurForm />
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 30 }}>
@@ -67,7 +95,7 @@ class PurCatalog extends React.Component {
               </div>
             </div>
             <div style={{ marginTop: 20 }}>
-              <Table columns={tabColumns} dataSource={this.state.tableSource} />
+              <Table columns={tabColumns} dataSource={catalogData} rowKey="id" />
             </div>
           </div>
         </Card>
@@ -76,4 +104,6 @@ class PurCatalog extends React.Component {
   }
 }
 
-export default PurCatalog
+export default connect(({ purCatalog}) => ({
+  purCatalog,    
+}))(PurCatalog)

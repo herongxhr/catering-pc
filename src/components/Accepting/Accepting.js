@@ -42,19 +42,9 @@ class Accepting extends Component {
     state={
         pagination: {},
     }
-    queryList = (params = {}) => {
-      const { dispatch,key } = this.props;
-      //请求待办事项
-      dispatch({
-        type: 'accept/queryList',
-        payload:{
-          timeType:key,
-          ...params
-        }
-      })
-    }
+    
     componentDidMount() {
-       this.queryList()
+       this.props.queryList()
       }
       handleTableChange = (pagination) =>{
         const pager = { ...this.state.pagination };
@@ -62,14 +52,13 @@ class Accepting extends Component {
         this.setState({
           pagination: pager,
         });
-        this.queryList({
+        this.props.queryList({
           current:pagination.current,
           pageSize:pagination.pageSize
         })
       }
     render() {
-      const { accept }= this.props
-      const distributionList = accept.distributionList.records || [];
+      const { distributionList }= this.props
         return ( 
         <div className="accepting">
            <Table 

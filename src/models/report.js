@@ -8,7 +8,7 @@ export default {
     effects: {     
         *queryReportmissing({ payload }, { call, put }) {
             //call方法首参数为要调用的异步方法
-            const  data  = yield call(queryReportmissing);
+            const  data  = yield call(queryReportmissing,payload);
             console.log(data);
             yield put({
                 type: 'savereportList',
