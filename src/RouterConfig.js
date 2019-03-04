@@ -16,10 +16,11 @@ import Dosing from './pages/acount/Dosing';
 import Supply from './pages/acount/Supply';
 import OutStock from './pages/OutStock/index';
 import PurCatalog from './pages/PurCatalog/index';
-import details from './pages/Details';
-import Test from './pages/Test';
-import ReportDetail from './pages/ReportDetail/index';
-import ExcipientDetail from './pages/ExcipientDetail';
+import details from './pages/Details'
+import Test from './pages/Test'
+import ReportDetail from './pages/ReportDetail/index'
+import ExcipientDetail from './pages/ExcipientDetail'
+import IngreDetail from './pages/IngreDetail'
 import PurOrderDetails from './pages/PurOrderDetails';
 // 国际化配置
 import { LocaleProvider } from 'antd';
@@ -40,7 +41,9 @@ export default function RouterConfig({ history }) {
         <LocaleProvider locale={zh_cn}>
           <App>
             <Switch>
-              <Route path="/home" component={Index} />
+              <Route path="/home" exact component={Index} />
+              <Route path="/home/purCatalog/" component={PurCatalog} />
+              <Route path="/home/outStock" component={OutStock} />
               <Route path="/menubar/" exact component={MenuCenter} />
               <Route path="/menubar/public/" exact component={MenuCenter} />
               <Route path="/menubar/public/details/" component={MenuCenter} />
@@ -71,6 +74,9 @@ export default function RouterConfig({ history }) {
               }></Route>
               <Route path="/outstock" component={OutStock}></Route>
               <Route path="/purcatalog" component={PurCatalog}></Route>
+              <Route path="/reportdetail" component={ReportDetail}></Route>
+              <Route path="/excipientdetail" component={ExcipientDetail}></Route>
+              <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path='/test' component={Test}></Route>
               <Redirect to="/home" />
             </Switch>

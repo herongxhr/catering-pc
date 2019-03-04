@@ -18,10 +18,6 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
 class A extends Component {
-  state = {
-    tabkey: 'today',
-    time: 'month',
-  }
   queryTodoList = () => {
     const { dispatch } = this.props;
     //请求待办事项
@@ -47,11 +43,26 @@ class A extends Component {
     //请求待办事项
     dispatch({
       type: 'home/queryStatistics',
-      payload: {
-        timeType: this.state.time,
+      payload:{
         ...params
+       }
+    })
+  }
+  queryList = (params = {}) =>{
+    const { dispatch, } = this.props;
+    //请求待办事项
+    dispatch({
+      type: 'accept/queryList',
+      payload:{
+       ...params
       }
     })
+  }
+  handleAccet = (value) =>{
+    this.queryList({timeType:value})
+  }
+  handleStatistics = (e) =>{
+    this.queryStatistics({timeType:e.target.value})
   }
   componentDidMount() {
     this.queryTodoList()
@@ -61,10 +72,11 @@ class A extends Component {
   }
 
   render() {
-    const { home } = this.props
+    const { home,accept } = this.props
     const todoList = home.todoList || [];
     const todayMenu = home.todayMenu || {};
     const deviceInfo = home.deviceInfo || [];
+    const distributionList = accept.distributionList.records || [];
     var timestamp = Date.parse(new Date());
     const date = moment(timestamp).format("YYYY-MM-DD dddd")
     const weeks = moment(timestamp).format("WW")
@@ -87,13 +99,13 @@ class A extends Component {
               <div className='tools'>
                 <Card title="常用工具" bordered={false} style={{ width: 350 }}>
                   <Button className='toolsbtn cgml' onClick={() => {
-                    this.props.history.push('/purcatalog')
+                    this.props.history.push('/home/purCatalog')
                   }}>采购目录</Button>
                   <Button className='toolsbtn' onClick={() => {
                     this.props.history.push('/parameter')
                   }}>本月台账</Button>
                   <Button className='toolsbtn' onClick={() => {
-                    this.props.history.push('/outstock')
+                    this.props.history.push('/home/outStock')
                   }}>缺货上报</Button>
                 </Card>
               </div>
@@ -101,9 +113,9 @@ class A extends Component {
             <TodayMenuCard todayMenu={todayMenu} />
           </div>
           <div className="App-content-accepting">
-            <Tabs tabBarExtraContent={operations} onChange={(key) => { this.setState({ tabkey: key }) }}>
-              <TabPane tab="今日验收" key="today"><Accepting key={this.state.tabkey} /></TabPane>
-              <TabPane tab="明日验收" key="tomorrow"><Accepting key={this.state.tabkey} /></TabPane>
+            <Tabs tabBarExtraContent={operations} onChange={this.handleAccet}>
+              <TabPane tab="今日验收" key="today"><Accepting queryList={this.queryList} distributionList = {distributionList}/></TabPane>
+              <TabPane tab="明日验收" key="tomorrow"><Accepting queryList={this.queryList} distributionList = {distributionList}/></TabPane>
             </Tabs>
           </div>
           <div className='App-content-paying-wrapper'>
@@ -111,7 +123,7 @@ class A extends Component {
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <p style={{ width: 226, height: 65, fontSize: 16, lineHeight: 4, rgba: (0, 0, 0, 0.85) }}>应付款统计分析</p>
                 <div>
-                  <RadioGroup defaultValue="month" onChange={(e) => { this.setState({ time: e.target.value }) }}>
+                  <RadioGroup defaultValue="month" onChange={this.handleStatistics}>
                     <RadioButton value="month">本月</RadioButton>
                     <RadioButton value="quarter">本季度</RadioButton>
                     <RadioButton value="year">本年</RadioButton>
@@ -146,6 +158,6 @@ class A extends Component {
 }
 
 const ShowARouter = withRouter(A);
-export default connect(({ home }) => ({
-  home,
+export default connect(({ home ,accept}) => ({
+  home,accept
 }))(ShowARouter);

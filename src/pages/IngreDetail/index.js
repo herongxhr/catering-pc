@@ -4,23 +4,25 @@ import TwoBread from '../../components/TwoBread';
 import { Divider,Row, Col } from 'antd';
 import Img from "./pic.jpg"
 
-class ExcipientDetail extends Component{
+class IngreDetail extends Component{
     render(){
         return(
-            <div className='excipientDetail'>
+            <div className='ingreDetail'>
                 <div className='wrapper'>
                     <TwoBread title='一级目录' subTitle='详情'/>
                 </div>
-                <div className='excidetailwrapper'>
-                    <div className='excidetailcontent'>
+                <div className='ingredetailwrapper'>
+                    <div className='ingredetailcontent'>
                         <div className='goodmess'>
                             <div className='goodmessTitle'>
                                 商品信息
                             </div>
-                            <ul className='exciMess'>
+                            <ul className='ingreMess'>
                                 <li>名称：<span>豆瓣酱</span></li>
                                 <li style={{marginLeft:100,marginRight:100}}>分类：<span>厨房调味</span></li>
-                                <li>储存方法：<span>常温保存</span></li>
+                                <li>别名：<span>油鸡，土鸡</span></li> 
+                                <li>上市季节：<span>全年</span></li>
+                                <li style={{marginLeft:100}}>计量单位：<span>斤</span></li> 
                             </ul>
                         </div>
                         <Divider />
@@ -28,10 +30,12 @@ class ExcipientDetail extends Component{
                             <div className='regmessTitle'>
                                 规格信息
                             </div>
-                            <ul className='exciBrand'>
+                            <ul className='ingreBrand'>
                                 <li>品牌：<span>海天</span></li>
-                                <li style={{marginLeft:100,marginRight:100}}>规格描述：<span>1.6升/瓶</span></li>
-                                <li>备注：<span>备注信息信息</span></li>
+                                <li style={{marginLeft:100,marginRight:100}}>品种：<span>油鸡</span></li>
+                                <li>饲养方式：<span>散养</span></li>
+                                <li>分类：<span>大公鸡</span></li>
+                                <li style={{marginLeft:100,}}>商品毛重：<span>1.25</span></li>
                             </ul>
                         </div>
                         <Divider />
@@ -106,4 +110,4 @@ class ExcipientDetail extends Component{
         )
     }
 }
-export default ExcipientDetail;
+export default IngreDetail;

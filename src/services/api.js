@@ -47,7 +47,9 @@ export function queryList(params) {
         url: '/catering/workbench/distributionList',
         data: {
             showLoading: true,
-            params,
+            params:{
+                ...params,
+            },
         }
     });
 }
@@ -145,6 +147,15 @@ export function queryOrderDetails() {
     return request({
         method: 'get',
         url: '/catering/orderDetails',
+        data: {
+            showLoading: true,
+        }
+    })
+}
+export function queryPurCatalog() {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/purchasingcatalog',
         data: {
             showLoading: true,
         }
