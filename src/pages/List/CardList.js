@@ -4,9 +4,6 @@ import { Card, Button, Icon, List } from 'antd';
 
 import styles from './CardList.less';
 
-@connect(({ list }) => ({
-    list,
-}))
 class CardList extends PureComponent {
     componentDidMount() {
         const { distpatch } = this.props;
@@ -28,14 +25,14 @@ class CardList extends PureComponent {
                 <List
                     rowKey="id"
                     loading={loading}
-                    grid={{ gutter: 24, lg: 4, md: 3, sm: 3, xs: 2}}
+                    grid={{ gutter: 24, lg: 4, md: 3, sm: 3, xs: 2 }}
                     dataSource={['', ...list]}
                     renderItem={item =>
                         item ? (
-                            <List.Item 
-                            key={item.id}
-                            actions={}
-                            extra={}
+                            <List.Item
+                                key={item.id}
+                                actions={}
+                                extra={}
                             >
                                 <Card hoverable className={styles.card} actions={[<a>操作一</a>, <a>操作二</a>]}>
                                     <Card.Meta
@@ -57,3 +54,6 @@ class CardList extends PureComponent {
 
     }
 }
+export default connect(({ list }) => ({
+    list,
+}))(CardList);

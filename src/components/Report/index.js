@@ -16,7 +16,7 @@ const tabColumns = [{
   title: '类型',
   dataIndex: 'type',
   key: 'type',
-  render(type){
+  render(type) {
     return type == 0 ? <span>食材</span> : <span>辅料</span>
   }
 }, {
@@ -27,7 +27,7 @@ const tabColumns = [{
   title: '备注',
   dataIndex: 'remark',
   key: 'remark',
-  width:'270'
+  width: '270'
 }, {
   title: '状态',
   dataIndex: 'status',
@@ -42,11 +42,11 @@ const tabColumns = [{
   render(action) {
     return (
       action == 1 ? <div className='opertion'>
-      <a className='orders'>催促</a> <Divider type="vertical" /> <a className='delete'>撤回申请</a>
-    </div> : <span className='check'>查看详情</span>)
+        <a className='orders'>催促</a> <Divider type="vertical" /> <a className='delete'>撤回申请</a>
+      </div> : <span className='check'>查看详情</span>)
   }
 }];
-const data=[{
+const data = [{
   "key": 1,
   "date": "2019-01-29",
   "type": "0",
@@ -69,7 +69,7 @@ const data=[{
   "name": "老豆腐",
   "remark": "手工制作的带洞的",
   "status": "0"
-},  
+},
 {
   "key": 4,
   "date": "2019-01-26",
@@ -91,7 +91,7 @@ class Report extends React.Component {
     //请求待办事项
     dispatch({
       type: 'report/queryReportmissing',
-      payload:{
+      payload: {
         ...params
       }
     })
@@ -101,7 +101,7 @@ class Report extends React.Component {
   }
   onClick = (value) => {
     console.log(value)
-  }; 
+  };
   render() {
     const menu = (
       <Menu onClick={this.onClick}>
@@ -117,7 +117,7 @@ class Report extends React.Component {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <WrappedReportButton />
           <div>
-            <Radio.Group defaultValue="all" onChange={(value)=>{console.log(value.target.value)}}>
+            <Radio.Group defaultValue="all" onChange={(value) => { console.log(value.target.value) }}>
               <Radio.Button value="all" >全部</Radio.Button>
               <Radio.Button value="nopass">未审核</Radio.Button>
               <Dropdown overlay={menu}><Radio.Button value="more">更多</Radio.Button></Dropdown>
@@ -126,13 +126,13 @@ class Report extends React.Component {
         </div>
         <div style={{ marginTop: 20 }}>
           <Table columns={tabColumns} dataSource={reportList}
-            onRow={(record)=>{
-                    return{
-                      onClick : (e) =>{
-                        this.props.history.push({ pathname:"/reportdetail", query:{id:record.id} })
-                       }    
-                    }
-               }}
+            onRow={(record) => {
+              return {
+                onClick: (e) => {
+                  this.props.history.push({ pathname: "/reportdetail", query: { id: record.id } })
+                }
+              }
+            }}
           />
         </div>
       </div>
@@ -140,6 +140,6 @@ class Report extends React.Component {
   }
 }
 const ShowReportRouter = withRouter(Report);
-export default connect(( {report} ) => ({
+export default connect(({ report }) => ({
   report,
 }))(ShowReportRouter);
