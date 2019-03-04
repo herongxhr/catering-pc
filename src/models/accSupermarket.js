@@ -119,7 +119,7 @@ export default {
             return {
                 ...state,
                 shoppingCart: state.shoppingCart.map(item => {
-                    if (item.id == id) {
+                    if (item.id === id) {
                         return {
                             id,
                             quanlity: value,
@@ -134,7 +134,7 @@ export default {
             let { id } = payload;
             return {
                 ...state,
-                shoppingCart: state.shoppingCart.filter(item => item.id != id),
+                shoppingCart: state.shoppingCart.filter(item => item.id !== id),
             }
         }
     },

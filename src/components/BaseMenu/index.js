@@ -39,7 +39,7 @@ class BaseMenu extends Component {
 						</Link>
 					</Menu.Item>
 					<Menu.Item key="purOrder">
-						<Link to='/order/'>
+						<Link to='/purOrder/'>
 							<Icon type="profile"></Icon>
 							<span>采购订单</span>
 						</Link>

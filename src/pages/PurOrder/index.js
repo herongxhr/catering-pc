@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown } from 'antd';
-import WrappedOrderForm from '../../components/OrderFilter';
+import { Link } from 'dva/router';
+import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon } from 'antd';
+import WrappedOrderFilter from '../../components/OrderFilter';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
 
 import './index.less';
@@ -15,10 +16,10 @@ const tabColumns = [
 	},
 	{
 		title: '订单来源',
-		key: 'orderType',
-		dataIndex: 'orderType',
-		render: (orderType) => {
-			switch (orderType) {
+		key: 'channel',
+		dataIndex: 'channel',
+		render: (channel) => {
+			switch (channel) {
 				case 'N':
 					return <Tag color="orange">自建订单</Tag>;
 				case 'M':
@@ -60,73 +61,95 @@ const tabColumns = [
 				(<div className='opertion'>
 					<a className='orders' >下单</a> <Divider type="vertical" /> <a className='delete'>删除</a>
 				</div>) :
-				(<a className='acceptance'>配送验收情况</a>)
+				(<Link to='/purOrder/details/' className='acceptance'>配送验收情况</Link>)
 		}
 	}
 ];
 
 class PurOrder extends React.Component {
-	componentDidMount() {
+	// 请求订单数据
+	getOrderData = ({
+		dateRange = Date.parse(new Date()),
+		channel = "",
+	} = {}) => {
 		const { dispatch } = this.props;
 		dispatch({
 			type: 'purOrder/fetchData',
+			payload: {
+				dateRange,
+				channel,
+			},
 		})
 	}
 
-	all = () => {
-		this.setState({
-			tableSource: this.state.DataSource
+	handleFilterByStatus = (e) => {
+		const { dispatch, rawData } = this.props;
+		let status = e.target.value;
+		const filteredData = rawData.filter(order => order.status === status);
+		dispatch({
+			type: 'purOrder/filterOrder',
+			payload: {
+				rawData,
+				filteredData,
+			},
 		})
 	}
 
-	noOrder = () => {
-		var dataSource = this.state.DataSource.filter(item => item.status == 1)
-		this.setState({
-			tableSource: dataSource
-		})
+	componentDidMount() {
+		this.getOrderData();
+
 	}
 
-	order = () => {
-		var dataSource = this.state.DataSource.filter(item => item.status == 0)
-		this.setState({
-			tableSource: dataSource
-		})
-	}
 	render() {
 		const {
 			className,
 			location,
-			orderData,
+			rawData,
+			orderedData,
 		} = this.props;
-		const menu = (
-			<Menu>
-				<Menu.Item key="FOrder">辅料订单</Menu.Item>
-				<Menu.Item key="SOrder">食材订单</Menu.Item>
-			</Menu>
-		);
+
+		// 点击新建时会下拉的按钮
+		const dropdownBtn = () => {
+			const menu = (
+				<Menu>
+					<Menu.Item key="FOrder">食材订单</Menu.Item>
+					<Menu.Item key="SOrder">辅料订单</Menu.Item>
+				</Menu>
+			)
+			return (
+				<span>
+					<Dropdown overlay={menu}>
+						<Button type="primary">
+							<Icon type="plus" />新建<Icon type="down" />
+						</Button>
+					</Dropdown>
+				</span>
+			)
+		}
+		// 表格数据
+		const tableData = `${orderedData}` ? orderedData : rawData;
 		return (
 			<div className={className}>
+				{/* 面包屑 */}
 				<BreadcrumbComponent {...location} />
 				<div className="orderWrapper">
-					<WrappedOrderForm className="wrappedOrderForm" />
+					{/* 排序筛选部分 */}
+					<WrappedOrderFilter
+						handleFilter={this.getOrderData}
+						className="wrappedOrderForm" />
 					<div className="buttonsWrapper">
+						{/* 新建及按钮组部分 */}
+						{dropdownBtn()}
 						<span>
-							<Dropdown.Button type="primary" overlay={menu}>
-								新建
-							</Dropdown.Button>
-							<Button type='primary' icon="plus">新建</Button>
-						</span>
-						<span>
-							<Radio.Group defaultValue="all" onChange={this.handleFormLayoutChange} >
-								<Radio.Button value="all" onClick={this.all}>全部</Radio.Button>
-								<Radio.Button value="noOrder" onClick={this.noOrder}>未下单</Radio.Button>
-								<Radio.Button value="ordered" onClick={this.order}>已下单</Radio.Button>
+							<Radio.Group defaultValue="" onChange={this.handleFilterByStatus} >
+								<Radio.Button value="">全部</Radio.Button>
+								<Radio.Button value="0">未下单</Radio.Button>
+								<Radio.Button value="1">已下单</Radio.Button>
 							</Radio.Group>
 						</span>
 					</div>
 					<div style={{ marginTop: 30 }}>
-						<Table columns={tabColumns} dataSource={orderData} />
-
+						<Table columns={tabColumns} dataSource={tableData} />
 					</div>
 				</div>
 			</div>

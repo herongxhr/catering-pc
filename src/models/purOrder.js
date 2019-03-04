@@ -3,11 +3,12 @@ import { queryPurOrder, queryOrderDetails } from '../services/api';
 export default {
     namespace: 'purOrder',
     state: {
-        orderData: [],
+        orderedData: [],
+        rawData: [],
     },
     effects: {
-        *fetchData(_, { call, put }) {
-            const data = yield call(queryPurOrder);
+        *fetchData({ payload }, { call, put }) {
+            const data = yield call(queryPurOrder, payload);
             yield put({
                 type: 'savePurOrderData',
                 payload: data.purOrder,
@@ -18,7 +19,14 @@ export default {
         savePurOrderData(state, { payload }) {
             return {
                 ...state,
-                orderData: payload,
+                rawData: payload,
+            }
+        },
+        filterOrder(state, { payload }) {
+            return {
+                ...state,
+                orderedData: payload.filteredData,
+                rawData: payload.rawData
             }
         }
     }

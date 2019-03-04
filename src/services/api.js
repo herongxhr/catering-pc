@@ -63,7 +63,7 @@ export function queryStatistics(params) {
         }
     });
 }
-export function querydeviceInfo() {    
+export function querydeviceInfo() {
     return request({
         method: 'get',
         url: '/catering/workbench/deviceInfo',
@@ -81,7 +81,7 @@ export function querytodayMenu() {
             showLoading: true,
         }
     });
-} 
+}
 export function queryReportmissing(params) {
     return request({
         method: 'get',
@@ -115,7 +115,7 @@ export function queryRule(params) {
 export function unifiedMenusAlready(params) {
     console.log(params)
     return request({
-        method: 'post',
+        method: 'get',
         url: '/catering/unifiedMenus',
         data: {
             params,
@@ -131,12 +131,15 @@ export function unifiedMenusAlready(params) {
 // }
 
 // 采购订单专区
-export function queryPurOrder() {
+export function queryPurOrder(params) {
     return request({
         method: 'get',
         url: '/catering/purOrder',
         data: {
             showLoading: true,
+            params: {
+                ...params
+            }
         }
     })
 }

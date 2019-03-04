@@ -17,11 +17,7 @@ class Parameter extends React.Component {
     return(
       <div className='Parameter'>
         <Bread bread={bread} />
-          <Row type="flex" justify="center">
-            <Col xl={{span: 15}} style={{marginTop:15,paddingLeft:15,paddingRight:15}}>
-              <ParameterTable />
-            </Col>
-          </Row>
+        <ParameterTable />
       </div>
     )
   }
