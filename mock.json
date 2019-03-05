@@ -1,228 +1,357 @@
-{
-    "code": 0,
-    "msg": "sucess",
-    "data": {
-        "purOrder": [
-            {
-                "key": 1,
-                "date": "2006-06-12",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "1",
+[
+    {
+        "code": 0,
+        "msg": "sucess",
+        "data": {
+            "purOrder": [
+                {
+                    "key": 1,
+                    "date": "2006-06-12",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "1",
+                    "channel": "M",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12312456
+                },
+                {
+                    "key": 2,
+                    "date": "1975-07-05",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "1",
+                    "channel": "N",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12334456
+                },
+                {
+                    "key": 3,
+                    "date": "1993-11-29",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "1",
+                    "channel": "M",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 15423456
+                },
+                {
+                    "key": 4,
+                    "date": "1996-07-05",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "1",
+                    "channel": "N",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12356456
+                },
+                {
+                    "key": 5,
+                    "date": "1981-07-23",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "1",
+                    "channel": "M",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 14523456
+                },
+                {
+                    "key": 6,
+                    "date": "1986-03-31",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "1",
+                    "channel": "M",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12346756
+                },
+                {
+                    "key": 7,
+                    "date": "2014-05-11",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "1",
+                    "channel": "M",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12342356
+                },
+                {
+                    "key": 8,
+                    "date": "2012-06-30",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "0",
+                    "channel": "M",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12397456
+                },
+                {
+                    "key": 9,
+                    "date": "1975-09-17",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "0",
+                    "channel": "S",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12383456
+                },
+                {
+                    "key": 10,
+                    "date": "1990-11-14",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "1",
+                    "channel": "S",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12583456
+                },
+                {
+                    "key": 11,
+                    "date": "1970-08-18",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "0",
+                    "channel": "S",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12243456
+                },
+                {
+                    "key": 12,
+                    "date": "1998-12-06",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "1",
+                    "channel": "S",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12345456
+                },
+                {
+                    "key": 13,
+                    "date": "1981-03-31",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "0",
+                    "channel": "N",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 123456
+                },
+                {
+                    "key": 14,
+                    "date": "1996-08-01",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "1",
+                    "channel": "N",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12322456
+                },
+                {
+                    "key": 15,
+                    "date": "1996-12-21",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "0",
+                    "channel": "N",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12344456
+                },
+                {
+                    "key": 16,
+                    "date": "1986-10-22",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "0",
+                    "channel": "N",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12366456
+                },
+                {
+                    "key": 17,
+                    "date": "1978-07-23",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "0",
+                    "channel": "N",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12348856
+                },
+                {
+                    "key": 18,
+                    "date": "2014-08-28",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "0",
+                    "channel": "N",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12399456
+                },
+                {
+                    "key": 19,
+                    "date": "2016-02-17",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "1",
+                    "channel": "N",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12253456
+                },
+                {
+                    "key": 20,
+                    "date": "1999-01-17",
+                    "abstract": "胡萝卜丶山药丶番茄丶香蕉",
+                    "status": "1",
+                    "channel": "N",
+                    "distribution_date": "2019-3-8",
+                    "comment": "快点送啊",
+                    "totalAmount": "8888",
+                    "orderId": 12324526
+                }
+            ]
+        }
+    },
+    {
+        "code": 0,
+        "msg": "success",
+        "data": {
+            "orderInfo": {
+                "orderId": 4376707259234154,
+                "createTime": "2011-06-29 23:41:25",
+                "orderTime": "1972-08-01 12:39:47",
+                "distributionDate": "2005-12-03",
+                "abstract": "萝卜青菜大豆猪肉等等",
+                "status": 0,
                 "channel": "M",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12312456
+                "remark": "要新鲜活泼乱蹦的",
+                "totalAmount": 1241780.52
             },
-            {
-                "key": 2,
-                "date": "1975-07-05",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "1",
-                "channel": "N",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12334456
-            },
-            {
-                "key": 3,
-                "date": "1993-11-29",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "1",
-                "channel": "M",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 15423456
-            },
-            {
-                "key": 4,
-                "date": "1996-07-05",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "1",
-                "channel": "N",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12356456
-            },
-            {
-                "key": 5,
-                "date": "1981-07-23",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "1",
-                "channel": "M",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 14523456
-            },
-            {
-                "key": 6,
-                "date": "1986-03-31",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "1",
-                "channel": "M",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12346756
-            },
-            {
-                "key": 7,
-                "date": "2014-05-11",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "1",
-                "channel": "M",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12342356
-            },
-            {
-                "key": 8,
-                "date": "2012-06-30",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "0",
-                "channel": "M",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12397456
-            },
-            {
-                "key": 9,
-                "date": "1975-09-17",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "0",
-                "channel": "S",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12383456
-            },
-            {
-                "key": 10,
-                "date": "1990-11-14",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "1",
-                "channel": "S",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12583456
-            },
-            {
-                "key": 11,
-                "date": "1970-08-18",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "0",
-                "channel": "S",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12243456
-            },
-            {
-                "key": 12,
-                "date": "1998-12-06",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "1",
-                "channel": "S",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12345456
-            },
-            {
-                "key": 13,
-                "date": "1981-03-31",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "0",
-                "channel": "N",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 123456
-            },
-            {
-                "key": 14,
-                "date": "1996-08-01",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "1",
-                "channel": "N",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12322456
-            },
-            {
-                "key": 15,
-                "date": "1996-12-21",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "0",
-                "channel": "N",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12344456
-            },
-            {
-                "key": 16,
-                "date": "1986-10-22",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "0",
-                "channel": "N",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12366456
-            },
-            {
-                "key": 17,
-                "date": "1978-07-23",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "0",
-                "channel": "N",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12348856
-            },
-            {
-                "key": 18,
-                "date": "2014-08-28",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "0",
-                "channel": "N",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12399456
-            },
-            {
-                "key": 19,
-                "date": "2016-02-17",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "1",
-                "channel": "N",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12253456
-            },
-            {
-                "key": 20,
-                "date": "1999-01-17",
-                "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-                "status": "1",
-                "channel": "N",
-                "distribution_date": "2019-3-8",
-                "comment": "快点送啊",
-                "totalAmount": "8888",
-                "orderId": 12324526
-            }
-        ]
+            "goodsDetail": [
+                {
+                    "id": "1156450685",
+                    "name": "萝卜",
+                    "price": 8721,
+                    "unit": "斤",
+                    "quantity": 8698,
+                    "supplier": "横店大青香绿色产业有限公司",
+                    "requiredDate": "2002-04-13"
+                },
+                {
+                    "id": "3449026354",
+                    "name": "大青菜",
+                    "price": 8707,
+                    "unit": "斤",
+                    "quantity": 3266,
+                    "supplier": "横店大青香绿色产业有限公司",
+                    "requiredDate": "1978-01-07"
+                },
+                {
+                    "id": "1148044598",
+                    "name": "小黄瓜",
+                    "price": 6735,
+                    "unit": "斤",
+                    "quantity": 9482,
+                    "supplier": "横店大青香绿色产业有限公司",
+                    "requiredDate": "1978-06-15"
+                },
+                {
+                    "id": "4348665309",
+                    "name": "猪后腿肉",
+                    "price": 7586,
+                    "unit": "斤",
+                    "quantity": 9518,
+                    "supplier": "横店大青香绿色产业有限公司",
+                    "requiredDate": "1970-02-05"
+                },
+                {
+                    "id": "1541450685",
+                    "name": "萝卜",
+                    "price": 8721,
+                    "unit": "斤",
+                    "quantity": 8698,
+                    "supplier": "横店大青香绿色产业有限公司",
+                    "requiredDate": "2002-04-13"
+                },
+                {
+                    "id": "3449026354",
+                    "name": "大青菜",
+                    "price": 8707,
+                    "unit": "斤",
+                    "quantity": 3266,
+                    "supplier": "横店大青香绿色产业有限公司",
+                    "requiredDate": "1978-01-07"
+                },
+                {
+                    "id": "1180444498",
+                    "name": "小黄瓜",
+                    "price": 6735,
+                    "unit": "斤",
+                    "quantity": 9482,
+                    "supplier": "东阳市康优食品有限公司",
+                    "requiredDate": "1978-06-15"
+                },
+                {
+                    "id": "4386556309",
+                    "name": "猪后腿肉",
+                    "price": 7586,
+                    "unit": "斤",
+                    "quantity": 9518,
+                    "supplier": "东阳市康优食品有限公司",
+                    "requiredDate": "1970-02-05"
+                },
+                {
+                    "id": "1145450685",
+                    "name": "萝卜",
+                    "price": 8721,
+                    "unit": "斤",
+                    "quantity": 8698,
+                    "supplier": "横店大青香绿色产业有限公司",
+                    "requiredDate": "2002-04-13"
+                },
+                {
+                    "id": "3902546354",
+                    "name": "大青菜",
+                    "price": 8707,
+                    "unit": "斤",
+                    "quantity": 3266,
+                    "supplier": "东阳市康优食品有限公司",
+                    "requiredDate": "1978-01-07"
+                },
+                {
+                    "id": "1180454498",
+                    "name": "小黄瓜",
+                    "price": 6735,
+                    "unit": "斤",
+                    "quantity": 9482,
+                    "supplier": "横店大青香绿色产业有限公司",
+                    "requiredDate": "1978-06-15"
+                },
+                {
+                    "id": "4386645309",
+                    "name": "猪后腿肉",
+                    "price": 7586,
+                    "unit": "斤",
+                    "quantity": 9518,
+                    "supplier": "东阳市康优食品有限公司",
+                    "requiredDate": "1970-02-05"
+                },
+            ]
+        }
     }
-}
+]

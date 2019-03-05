@@ -39,6 +39,7 @@ export default {
             //     isCollected,
             //     img,
             //     price,
+            //     unit
             //     goodsName,
             //     provider,
             // }
@@ -108,10 +109,33 @@ export default {
         },
         // 加商品到购物车
         addToCart(state, { payload }) {
-            return {
-                ...state,
-                shoppingCart: state.shoppingCart.concat(payload),
+            const { id, quantity } = payload;
+            // 看一下购物车里，有没有要加的商品
+            let isExist = state.shoppingCart.find(item => item.id === id);
+            // 如果有的话,改一下数量
+            if (isExist) {
+                return {
+                    ...state,
+                    shoppingCart: state.shoppingCart.map(item => {
+                        if (item.id === id) {
+                            return {
+                                id,
+                                quantity: item.quantity + quantity,
+                            }
+                        }
+                        return item;
+                    }),
+                }
+            } else {
+                return {
+                    ...state,
+                    shoppingCart: state.shoppingCart.concat({
+                        id,
+                        quantity,
+                    }),
+                }
             }
+            // 如果购物车为空，直接把商品加进去
         },
         // 修改购物车内商品数量
         changeCartNum(state, { payload }) {
@@ -122,7 +146,7 @@ export default {
                     if (item.id === id) {
                         return {
                             id,
-                            quanlity: value,
+                            quantity: value,
                         }
                     }
                     return item;

@@ -33,7 +33,6 @@ import Edit from './pages/Edit';
 
 moment.locale('zh-cn');
 
-
 export default function RouterConfig({ history }) {
   return (
     <Router history={history}>

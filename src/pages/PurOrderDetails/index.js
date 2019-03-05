@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { Button, Menu, Row, Col, } from 'antd';
+import { Button, Card, Row, Col, Table, Tag } from 'antd';
 import classNames from 'classnames';
 import DescriptionList from '../../components/DescriptionList';
 import BreadcrumbComponents from '../../components/BreadcrumbComponent';
@@ -11,25 +11,76 @@ import styles from './index.module.less';
 const { Description } = DescriptionList;
 const ButtonGroup = Button.Group;
 
+// 定义表格列
+const tabColumns = [
+    {
+        title: '商品',
+        key: "goodsName",
+        dataIndex: "goodsName"
+    },
+    {
+        title: '单位',
+        key: "unit",
+        dataIndex: "unit"
+    },
+    {
+        title: '单价',
+        key: "price",
+        dataIndex: "price"
+    },
+    {
+        title: '数量',
+        key: "quantity",
+        dataIndex: "quantity"
+    },
+    {
+        title: '供应商',
+        key: "provider",
+        dataIndex: "provider"
+    },
+    {
+        title: '配送日期',
+        key: "deliveryDate",
+        dataIndex: "deliveryDate"
+    },
+]
+const action = (
+    <Fragment>
+        <ButtonGroup>
+            <Button>打印</Button>
+            <Button>删除</Button>
+            <Button>调整</Button>
+        </ButtonGroup>
+        <Button type="primary">下单</Button>
+    </Fragment>
+);
+
 class PurOrderDetails extends React.Component {
+
     componentDidMount() {
         const { dispatch, location } = this.props;
+        const { id } = location.query;
+        dispatch({
+            type: 'orderById/fetchGoodsByOrderId',
+            payload: id
+        });
     }
 
     render() {
         const {
             location,
-            orderData,
+            orderInfo,
+            goodsDetail
         } = this.props;
         const { id } = location.query;
         const {
             orderId,
-            //status,
-            date,
+            createTime,
+            distributionDate,
             channel,
-            totalAmount,
-            comment,
-        } = orderData.filter(order => order.orderId == id)[0];
+            remark,
+            totalAmount
+        } = orderInfo;
 
         let orderChannel;
         if (channel === 'M') {
@@ -39,17 +90,6 @@ class PurOrderDetails extends React.Component {
         } else {
             orderChannel = '自建订单';
         }
-
-        const action = (
-            <Fragment>
-                <ButtonGroup>
-                    <Button>打印</Button>
-                    <Button>删除</Button>
-                    <Button>调整</Button>
-                </ButtonGroup>
-                <Button type="primary">下单</Button>
-            </Fragment>
-        );
 
         const extra = (
             <Row>
@@ -67,12 +107,15 @@ class PurOrderDetails extends React.Component {
         const description = (
             <DescriptionList className={styles.headerList} size="small" col="2">
                 <Description term="订单来源">{orderChannel}</Description>
-                <Description term="采购区间">2017-07-07 ~ 2017-08-08</Description>
-                <Description term="创建时间">{date}</Description>
-                <Description term="备注内容">{comment}</Description>
+                <Description term="采购区间">{distributionDate}</Description>
+                <Description term="创建时间">{createTime}</Description>
+                <Description term="备注内容">{remark}</Description>
             </DescriptionList>
         );
 
+        const cardTitle = (
+            <span className={styles.cardTitle}>商品明细：<Tag color="cyan">共10条</Tag></span>
+        );
         return (
             <div>
                 <BreadcrumbComponents {...location} />
@@ -86,12 +129,29 @@ class PurOrderDetails extends React.Component {
                     content={description}
                     extraContent={extra}
                     {...this.props}
-                />
+                >
+                    <Card
+                        title={cardTitle}
+                        className={styles.tableCard}
+                        bordered={false}
+                        headStyle={{ padding: "14px 30px 6px" }}
+                        bodyStyle={{ padding: "0 30px" }}
+                    >
+                        <Table
+                            pagination
+                            loading={false}
+                            columns={tabColumns}
+                            dataSource={goodsDetail}
+                        />
+                    </Card>
+                </PageHeadWrapper>
+
             </div>
         )
     }
 }
 
-export default connect(({ purOrder }) => ({
-    orderData: purOrder.rawData
+export default connect(({ orderById }) => ({
+    orderInfo: orderById.orderInfo,
+    goodsDetail: orderById.goodsDetail
 }))(PurOrderDetails);

@@ -47,7 +47,7 @@ export function queryList(params) {
         url: '/catering/workbench/distributionList',
         data: {
             showLoading: true,
-            params:{
+            params: {
                 ...params,
             },
         }
@@ -152,6 +152,20 @@ export function queryOrderDetails() {
         }
     })
 }
+
+export function queryGoodsByOrderId(id) {
+    return request({
+        method: 'get',
+        url: '/catering/queryGoodsByOrderId',
+        data: {
+            showLoading: true,
+            params: {
+                id,
+            }
+        }
+    })
+}
+
 export function queryPurCatalog() {
     return request({
         method: 'get',

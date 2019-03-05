@@ -3,7 +3,6 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon } from 'antd';
 import { routerRedux } from 'dva/router';
-import { stringify } from 'qs'
 import WrappedOrderFilter from '../../components/OrderFilter';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
 

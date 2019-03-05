@@ -51,7 +51,7 @@ export default class GoodsCardList extends React.Component {
         } = this.props;
 
         return (
-            <div className={className} >
+            <div >
                 <List
                     className="goodsList"
                     column={4}

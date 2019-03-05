@@ -33,7 +33,7 @@ export default class CartPageBody extends React.Component {
             price,
             priceType,
             provider,
-            isCollected,
+            // isCollected,
             img,
             attribute
         } = this.props;
