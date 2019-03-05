@@ -32,7 +32,7 @@ const data=[{
   "name": "老豆腐",
   "remark": "手工制作的带洞的",
   "status": "0"
-},  
+},
 {
   "key": 4,
   "date": "2019-01-26",
@@ -146,6 +146,6 @@ class Report extends React.Component {
   }
 }
 const ShowReportRouter = withRouter(Report);
-export default connect(( {report} ) => ({
+export default connect(({ report }) => ({
   report,
 }))(ShowReportRouter);

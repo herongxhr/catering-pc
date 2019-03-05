@@ -1,7 +1,7 @@
 import React from 'react'
 import Bread from '../../components/Bread'
 import { Card , Button , Row, Col , Checkbox , Switch , Table} from 'antd'
-import { Steps } from 'antd';
+import { Steps , Tag  } from 'antd';
 import { connect } from 'dva'
 
 
@@ -87,7 +87,7 @@ const columns = [{
   dataIndex: 'address',
 }];
 
-class Particulars extends React.Component {
+class EditTemplate extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props
 		dispatch({
@@ -108,11 +108,11 @@ class Particulars extends React.Component {
       href:'/menubar',
       breadContent:'统一菜单'
     },{
-      href:'/particulars',
+      href:'/EditTemplate',
       breadContent:'创建模板'
     }]
     return(
-      <div className='Particulars'>
+      <div className='edit-template'>
 				<Bread bread={bread}  />
         <Card className='DetailsOperation' style={{width:1200,marginTop:-7}}>
           <div className='card-body'>
@@ -130,33 +130,36 @@ class Particulars extends React.Component {
             </Row>
             <Row className='card-content'>
               <Col span={8} >
-                <p className='card-content-top'>周次:第52周</p>
-                <p>日期：2018-12-01 至  2018-12-07</p>
+                <p className='card-content-top'>使用次数:0次</p>
+                <Tag color="magenta">幼儿园</Tag>
+                <Tag color="red">春季</Tag>
+                <Tag color="volcano">高蛋白</Tag>
+                <Tag color="orange">3餐7日</Tag>
               </Col>
               <Col span={8}>
-                <p className='card-content-top'>下达单位：浙江省教育局</p>
-                <p>下达时间：2018-11-25   11：09</p>
+                <p className='card-content-top'>上次使用：未使用</p>
+                {/* <p>下达时间：2018-11-25   11：09</p> */}
               </Col>
-              <Col span={8}>
+              {/* <Col span={8}>
                 <Col span={12}><p className='card-content-top'></p><p></p></Col >
                 <Col span={12}><p className='card-content-top'>状态</p><p>待执行</p></Col >            
-              </Col>
+              </Col> */}
             </Row>
           </div> 
         </Card>
-        <Steps current={1} progressDot>
+        {/* <Steps current={1} progressDot>
           <Step title="菜单下达" description="2018-11-25 11:09" />
           <Step title="采购订单" description="待采购" />
           <Step title="下达订单" description="" />
-        </Steps>
-        <Card>
+        </Steps> */}
+        <Card style={{marginTop:10,border:0}}>
           <div style={{display:'flex',justifyContent:'space-between'}} className='PaContent'>
             <div>
               <Checkbox onChange={this.onChange}>配料详情</Checkbox>
               <Checkbox onChange={this.onChange}>收起空餐饮</Checkbox>
             </div>
             <div>
-              图片模式<Switch onChange={this.onChange} style={{marginLeft:10}}/>
+              图片模式<Switch  onChange={this.onChange} style={{marginLeft:7}} />
             </div>            
           </div>
         </Card>
@@ -168,4 +171,4 @@ class Particulars extends React.Component {
 
 export default connect(( {unifiedMenus} ) => ({
   unifiedMenus,
-}))(Particulars)
+}))(EditTemplate)

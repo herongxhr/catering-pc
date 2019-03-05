@@ -2,10 +2,12 @@ import React from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon } from 'antd';
+import { routerRedux } from 'dva/router';
+import { stringify } from 'qs'
 import WrappedOrderFilter from '../../components/OrderFilter';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
 
-import './index.less';
+import styles from './index.module.less';
 // 定义表格列
 const tabColumns = [
 	{
@@ -13,7 +15,7 @@ const tabColumns = [
 		key: 'orderId',
 		dataIndex: 'orderId',
 		filterMultiple: true,
-	},
+	},	
 	{
 		title: '订单来源',
 		key: 'channel',
@@ -55,11 +57,12 @@ const tabColumns = [
 	{
 		title: '操作',
 		key: 'orderActions',
-		dataIndex: 'status',
-		render: (status) => {
-			return status === "0" ?
+		render: (text, record) => {
+			return record.status === "0" ?
 				(<div className='opertion'>
-					<a className='orders' >下单</a> <Divider type="vertical" /> <a className='delete'>删除</a>
+					<Link to={`/purOrder/details/: ${record.orderId}`} className='orders'>下单</Link>
+					<Divider type="vertical" />
+					<a className='delete'>删除</a>
 				</div>) :
 				(<Link to='/purOrder/details/' className='acceptance'>配送验收情况</Link>)
 		}
@@ -82,6 +85,22 @@ class PurOrder extends React.Component {
 		})
 	}
 
+	// 点击表格行跳转到相应详情页
+	handleGotoDetails = (e, { orderId, status }) => {
+		const { dispatch } = this.props;
+		if (status === '0') {
+			dispatch(routerRedux.push({
+				pathname: '/purOrder/details',
+				query: { id: orderId },
+			}))
+		} else {
+			// dispatch(routerRedux.push({
+			// 	pathname: '/purOrder/details',
+			// 	query: { id: records.id }
+			// }))
+		}
+	}
+
 	handleFilterByStatus = (e) => {
 		const { dispatch, rawData } = this.props;
 		let status = e.target.value;
@@ -97,7 +116,6 @@ class PurOrder extends React.Component {
 
 	componentDidMount() {
 		this.getOrderData();
-
 	}
 
 	render() {
@@ -132,7 +150,7 @@ class PurOrder extends React.Component {
 			<div className={className}>
 				{/* 面包屑 */}
 				<BreadcrumbComponent {...location} />
-				<div className="orderWrapper">
+				<div className={styles.orderWrapper}>
 					{/* 排序筛选部分 */}
 					<WrappedOrderFilter
 						handleFilter={this.getOrderData}
@@ -149,7 +167,17 @@ class PurOrder extends React.Component {
 						</span>
 					</div>
 					<div style={{ marginTop: 30 }}>
-						<Table columns={tabColumns} dataSource={tableData} />
+						<Table
+							columns={tabColumns}
+							dataSource={tableData}
+							onRow={(record) => {
+								return {
+									onClick: (e) => {
+										this.handleGotoDetails(e, record)
+									}
+								}
+							}}
+						/>
 					</div>
 				</div>
 			</div>

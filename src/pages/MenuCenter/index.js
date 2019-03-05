@@ -78,7 +78,7 @@ class MenuCenter extends React.Component {
 						<TableOne  />
 					</TabPane>
 					<TabPane tab="我的菜单" key="2">
-						<TableTwo columns={tab2Columns} dataSource={this.state.tab2Source} />
+						<TableTwo />
 					</TabPane>
 					<TabPane tab="菜单模板" key="3">
 					 <MenuTemplate />

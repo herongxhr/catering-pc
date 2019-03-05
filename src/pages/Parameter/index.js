@@ -1,8 +1,6 @@
 import React from 'react'
 import Bread from '../../components/Bread'
-import { Card,Row,Col } from 'antd'
 import ParameterTable from '../../components/ParameterTable'
-
 import './index.less'
 
 class Parameter extends React.Component {
