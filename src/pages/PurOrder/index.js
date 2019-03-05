@@ -59,7 +59,7 @@ const tabColumns = [
 		render: (text, record) => {
 			return record.status === "0" ?
 				(<div className='opertion'>
-					<Link to={`/purOrder/details/: ${record.orderId}`} className='orders'>下单</Link>
+					<Link to={`/purOrder/details/${record.orderId}`} className='orders'>下单</Link>
 					<Divider type="vertical" />
 					<a className='delete'>删除</a>
 				</div>) :

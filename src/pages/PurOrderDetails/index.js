@@ -15,8 +15,8 @@ const ButtonGroup = Button.Group;
 const tabColumns = [
     {
         title: '商品',
-        key: "goodsName",
-        dataIndex: "goodsName"
+        key: "name",
+        dataIndex: "name"
     },
     {
         title: '单位',
@@ -35,13 +35,13 @@ const tabColumns = [
     },
     {
         title: '供应商',
-        key: "provider",
-        dataIndex: "provider"
+        key: "supplier",
+        dataIndex: "supplier"
     },
     {
         title: '配送日期',
-        key: "deliveryDate",
-        dataIndex: "deliveryDate"
+        key: "requiredDate",
+        dataIndex: "requiredDate"
     },
 ]
 const action = (
@@ -56,36 +56,21 @@ const action = (
 );
 
 class PurOrderDetails extends React.Component {
-
-    componentDidMount() {
-        const { dispatch, location } = this.props;
-        const { id } = location.query;
-        dispatch({
-            type: 'orderById/fetchGoodsByOrderId',
-            payload: id
-        });
-    }
-
     render() {
         const {
             location,
-            orderInfo,
-            goodsDetail
+            orderDetail: {
+                orderInfo,
+                goodsDetail,
+            },
+            currOrderId,
         } = this.props;
-        const { id } = location.query;
-        const {
-            orderId,
-            createTime,
-            distributionDate,
-            channel,
-            remark,
-            totalAmount
-        } = orderInfo;
 
+        console.log('1', this.props);
         let orderChannel;
-        if (channel === 'M') {
+        if (orderInfo.channel === 'M') {
             orderChannel = '菜单生成';
-        } else if (channel === 'S') {
+        } else if (orderInfo.channel === 'S') {
             orderChannel = '辅料订单';
         } else {
             orderChannel = '自建订单';
@@ -99,7 +84,7 @@ class PurOrderDetails extends React.Component {
                 </Col>
                 <Col xs={24} sm={12}>
                     <div className={styles.textSecondary}>总金额</div>
-                    <div className={styles.heading}>{`¥ ${totalAmount}元`}</div>
+                    <div className={styles.heading}>{`¥ ${orderInfo.totalAmount}元`}</div>
                 </Col>
             </Row>
         );
@@ -107,9 +92,9 @@ class PurOrderDetails extends React.Component {
         const description = (
             <DescriptionList className={styles.headerList} size="small" col="2">
                 <Description term="订单来源">{orderChannel}</Description>
-                <Description term="采购区间">{distributionDate}</Description>
-                <Description term="创建时间">{createTime}</Description>
-                <Description term="备注内容">{remark}</Description>
+                <Description term="采购区间">{orderInfo.distributionDate}</Description>
+                <Description term="创建时间">{orderInfo.createTime}</Description>
+                <Description term="备注内容">{orderInfo.remark}</Description>
             </DescriptionList>
         );
 
@@ -121,7 +106,7 @@ class PurOrderDetails extends React.Component {
                 <BreadcrumbComponents {...location} />
                 {/* 页头容器 */}
                 <PageHeadWrapper
-                    title={`采购单号：${orderId}`}
+                    title={`采购单号：${currOrderId}`}
                     logo={
                         <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png" />
                     }
@@ -152,6 +137,5 @@ class PurOrderDetails extends React.Component {
 }
 
 export default connect(({ orderById }) => ({
-    orderInfo: orderById.orderInfo,
-    goodsDetail: orderById.goodsDetail
+    ...orderById,
 }))(PurOrderDetails);

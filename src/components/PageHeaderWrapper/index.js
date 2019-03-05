@@ -11,7 +11,7 @@ const PageHeaderWrapper = ({
     top,
     ...restPropss
 }) => (
-        <div style={{ margin: '-24px -24px 0' }} className={wrapperClassName}>
+        <div style={{ /*margin: '-24px -24px 0'*/ }} className={wrapperClassName}>
             {top}
             <PageHeader
                 wide={contentWidth === 'Fixed'}
