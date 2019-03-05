@@ -7,7 +7,6 @@ export default {
             orderInfo: {},
             goodsDetail: []
         },
-        currOrderId: '',
     },
 
     effects: {
@@ -18,8 +17,7 @@ export default {
             yield put({
                 type: 'saveGoods',
                 payload: {
-                    data,
-                    id: payload
+                    data
                 },
             })
         }
@@ -29,7 +27,6 @@ export default {
             return {
                 ...state,
                 orderDetail: payload.data,
-                currOrderId: payload.id
             };
         }
     },
@@ -39,7 +36,7 @@ export default {
                 if (location.pathname === '/purOrder/details') {
                     dispatch({
                         type: 'fetchGoodsByOrderId',
-                        payload: location.query.id,
+                        payload: location.state.id,
                     })
                 }
             })

@@ -1,11 +1,9 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
 import { Button, Card, Row, Col, Table, Tag } from 'antd';
-import classNames from 'classnames';
 import DescriptionList from '../../components/DescriptionList';
 import BreadcrumbComponents from '../../components/BreadcrumbComponent';
 import PageHeadWrapper from '../../components/PageHeaderWrapper';
-
 import styles from './index.module.less';
 
 const { Description } = DescriptionList;
@@ -63,10 +61,8 @@ class PurOrderDetails extends React.Component {
                 orderInfo,
                 goodsDetail,
             },
-            currOrderId,
         } = this.props;
 
-        console.log('1', this.props);
         let orderChannel;
         if (orderInfo.channel === 'M') {
             orderChannel = '菜单生成';
@@ -99,14 +95,14 @@ class PurOrderDetails extends React.Component {
         );
 
         const cardTitle = (
-            <span className={styles.cardTitle}>商品明细：<Tag color="cyan">共10条</Tag></span>
+            <span className={styles.cardTitle}>商品明细：<Tag color="cyan">共{goodsDetail.length}条</Tag></span>
         );
         return (
             <div>
                 <BreadcrumbComponents {...location} />
                 {/* 页头容器 */}
                 <PageHeadWrapper
-                    title={`采购单号：${currOrderId}`}
+                    title={`采购单号：${location.state.id}`}
                     logo={
                         <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png" />
                     }
