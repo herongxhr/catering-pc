@@ -112,11 +112,64 @@ export function queryRule(params) {
         }
     })
 }
+
+//菜单中心专区
 export function unifiedMenusAlready(params) {
     console.log(params)
     return request({
         method: 'get',
         url: '/catering/unifiedMenus',
+        data: {
+            params,
+        }
+    })
+}
+
+export function myMenu() {
+    return request({
+        method:'get',
+        url:'/catering/myMenus',
+        data: {
+            showLoading:true
+        }
+    })
+}
+
+export function myTemplate() {
+    return request({
+        method:'get',
+        url:'/catering/camenuTemplate/my',
+        data: {
+            showLoading:true
+        }
+    })
+}
+
+export function isRecommend() {
+    return request({
+        method:'get',
+        url:'/catering/camenuTemplate/hasRecommend',
+        data: {
+            showLoading:true
+        }
+    })
+}
+
+export function recommendTemplate() {
+    return request({
+        method:'get',
+        url:'/catering/camenuTemplate/my_1551273630829',
+        data: {
+            showLoading:true
+        }
+    })
+}
+
+export function myCopy(params) {
+    console.log(params)
+    return request({
+        method:'get',
+        url:'/catering/camenuTemplate/my/item/copy',
         data: {
             params,
         }
@@ -151,7 +204,7 @@ export function queryOrderDetails() {
             showLoading: true,
         }
     })
-}
+} 
 
 export function queryGoodsByOrderId(id) {
     return request({

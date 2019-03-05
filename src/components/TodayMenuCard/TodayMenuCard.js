@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './TodayMenuCard.less';
+import { Scrollbars } from 'react-custom-scrollbars';
+
 import { Empty } from 'antd';
 
 class TodayMenuCard extends Component {
@@ -15,7 +17,7 @@ class TodayMenuCard extends Component {
         <div className='todaymenu'>
           <div className='breakfast'>
             <div>早餐</div>
-            <ul>
+            <Scrollbars style={{width:180, height:334,marginTop:2}}>
               {
                 (breakfast.length >0) ?
                   breakfast.map((data, index) => <li key={index}>{data}</li>) : <Empty
@@ -27,11 +29,11 @@ class TodayMenuCard extends Component {
                     }
                   />
               }
-            </ul>
+            </Scrollbars>
           </div>
           <div className='lunch'>
             <div>中餐</div>
-            <ul>
+            <Scrollbars style={{width:180, height:334,marginTop:2}}>
               {
                 (lunch.length >0) ?
                   lunch.map((data, index) => <li key={index}>{data}</li>) : <Empty
@@ -43,11 +45,11 @@ class TodayMenuCard extends Component {
                     }
                   />
               }
-            </ul>
+            </Scrollbars>
           </div>
           <div className='dessert'>
             <div>点心</div>
-            <ul>
+            <Scrollbars style={{width:180, height:334,marginTop:2}}>
               {
                 (dessert.length >0) ?
                   (dessert.map((data, index) => <li key={index}>{data}</li>)) : (<Empty
@@ -59,11 +61,11 @@ class TodayMenuCard extends Component {
                     }
                   />)
               }
-            </ul>
+            </Scrollbars>
           </div>
           <div className='dinner'>
             <div>晚餐</div>
-            <ul>
+            <Scrollbars style={{width:180, height:334,marginTop:2}}>
               {
                 (dinner.length>0) ?
                   dinner.map((data, index) => <li key={index}>{data}</li>) : <Empty
@@ -75,7 +77,7 @@ class TodayMenuCard extends Component {
                     }
                   />
               }
-            </ul>
+            </Scrollbars>
           </div>
         </div>
 

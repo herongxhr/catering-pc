@@ -1,13 +1,13 @@
 import React from 'react'
-import { Form , Select , DatePicker , Input , Button , Menu , Dropdown , Icon } from "antd";
+import { Form , Select , DatePicker , Input , Button , Menu , Dropdown , Radio } from "antd";
 
 import './index.less'
 
 const Option = Select.Option;
-const Search = Input.Search;
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
-const ButtonGroup = Button.Group;
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
 
 class InForm extends React.Component {
   render() {
@@ -58,15 +58,13 @@ class InForm extends React.Component {
           }
         </FormItem>
         <FormItem style={{marginLeft:260,marginTop:20}}>
-          <ButtonGroup>
-            <Button>全部</Button>
-            <Button>本月</Button>
+          <RadioGroup onChange={this.onChange} defaultValue="all">
+            <RadioButton value="all">全部</RadioButton>
+            <RadioButton value="month">本月</RadioButton>
             <Dropdown overlay={menu}>
-              <Button>
-                <span>更多</span>
-              </Button>
+              <RadioButton value="more">更多</RadioButton>
             </Dropdown>
-          </ButtonGroup>        
+          </RadioGroup>        
         </FormItem>
       </Form>
     )

@@ -19,6 +19,7 @@ const Columns = [{
       title: '摘要',
     dataIndex: 'abstract',
       key: 'abstract',
+      width:260
     //   render: abstract => (
     //   <span>
     //     {abstract.map((item,i) => item)}
@@ -66,7 +67,9 @@ class Accepting extends Component {
            dataSource={distributionList} 
            onChange={this.handleTableChange} 
            pagination={this.state.pagination}
-           rowKey="id"/> 
+           rowKey="id"
+           pagination={false}
+           /> 
         </div>
         );
     }

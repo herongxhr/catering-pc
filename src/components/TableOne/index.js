@@ -1,11 +1,15 @@
 import React from 'react'
-import { Table , Button , Dropdown , Menu , Badge} from 'antd'
+import { Table , Button , Dropdown , Menu , Badge , Radio , axios} from 'antd'
 import WrappedInlineForm from '../InlineForm'
 import { connect } from 'dva'
+import { withRouter } from 'react-router'
 
 import './index.less'
 
+
 const ButtonGroup = Button.Group;
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
 
 const tab1Columns = [{
   title: '菜单编号',
@@ -43,12 +47,20 @@ const tab1Columns = [{
   }
 }];
 
-class TableOne extends React.Component {
+class MyTableOne extends React.Component {
   state = {
     DataSource:null,
     status:1
   }
 
+  componentDidMount() {
+    const { dispatch } = this.props
+		dispatch({
+			type:'unifiedMenus/queryList',
+			payload:{a:1}
+    })
+
+	}
   
   render() {
     const menu = (
@@ -59,7 +71,6 @@ class TableOne extends React.Component {
     );
 
     const { unifiedMenus }  = this.props
-    console.log(unifiedMenus)
     const DataSource = unifiedMenus.MenusList.records
     return(
       <div className='TableOne'>
@@ -75,12 +86,19 @@ class TableOne extends React.Component {
             </Dropdown>
           </ButtonGroup>  
         </div>
-        <Table columns={tab1Columns} dataSource={DataSource} rowKey="id" style={{padding:'0px 25px'}} />
+        <Table columns={tab1Columns} dataSource={DataSource} rowKey="id" style={{padding:'0px 25px'}} onRow={(record) => {
+          return {
+            onClick:(event) => {
+              this.props.history.push('/menubar/public/details')
+            }
+          }
+        }} />
       </div>
     )
   }
 }
 
+const TableOne = withRouter(MyTableOne)
 
 
 export default connect(( {unifiedMenus} ) => ({
