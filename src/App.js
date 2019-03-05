@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'dva';
 import BaseMenu from './components/BaseMenu';
 import { Layout, Table, } from 'antd';
 
@@ -6,6 +7,7 @@ const { Content, Header } = Layout;
 
 class App extends Component {
   render() {
+    console.log(this.props);
     return (
       <Layout >
         <Header style={{
@@ -23,4 +25,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(({ }) => ({}))(App);

@@ -1,17 +1,21 @@
 import React, { PureComponent } from 'react';
-import { Tabs, Skeleton } from 'antd';
+import { Skeleton } from 'antd';
 import classNames from 'classnames';
-import styles from './index.less';
-import BreadcrumbView from './breadcrumb';
+import styles from './index.module.less';
+// import BreadcrumbView from './breadcrumb';
 
-const { TabPane } = Tabs;
+// const { TabPane } = Tabs;
+// 此组件主要是完成头部内容的结构及其样式
+// 其中内容区，操作区，其它内容区都的结构由外面传入
 export default class PageHeader extends PureComponent {
-    onChange = key => {
-        const { onTabChange } = this.props;
-        if (onTabChange) {
-            onTabChange(key);
-        }
-    };
+
+    // 原型中不需要Tabs
+    // onChange = key => {
+    //     const { onTabChange } = this.props;
+    //     if (onTabChange) {
+    //         onTabChange(key);
+    //     }
+    // };
 
     render() {
         const {
@@ -20,35 +24,42 @@ export default class PageHeader extends PureComponent {
             action,
             content,
             extraContent,
-            tabList,
             className,
-            tabActiveKey,
-            tabDefaultActiveKey,
-            tabBarExtraContent,
             loading = false,
             wide = false,
-            hiddenBreadcrumb = false,
+            // tabList,
+            // tabActiveKey,
+            // tabDefaultActiveKey,
+            // tabBarExtraContent,
+            // hiddenBreadcrumb = false,
         } = this.props;
 
+        console.log('1234', this.props);
+
         const clsString = classNames(styles.pageHeader, className);
-        const activeKeyProps = {};
-        if (tabDefaultActiveKey !== undefined) {
-            activeKeyProps.defaultActiveKey = tabDefaultActiveKey;
-        }
-        if (tabActiveKey !== undefined) {
-            activeKeyProps.activeKey = tabActiveKey;
-        }
+        // const activeKeyProps = {};
+        // // 默认打开的tab页面
+        // if (tabDefaultActiveKey !== undefined) {
+        //     activeKeyProps.defaultActiveKey = tabDefaultActiveKey;
+        // }
+        // // 指定的打开的tab页面
+        // if (tabActiveKey !== undefined) {
+        //     activeKeyProps.activeKey = tabActiveKey;
+        // }
         return (
             <div className={clsString}>
                 <div className={wide ? styles.wide : ''}>
                     <Skeleton
+                        // 显示占位图
                         loading={loading}
-                        title={false}
+                        // 显示标题
+                        title={true}
+                        // 显示动画
                         active
                         paragraph={{ rows: 3 }}
                         avatar={{ size: 'large', shape: 'circle' }}
                     >
-                        {hiddenBreadcrumb ? null : <BreadcrumbView {...this.props} />}
+                        {/* {hiddenBreadcrumb ? null : <BreadcrumbView {...this.props} />} */}
                         <div className={styles.detail}>
                             {logo && <div className={styles.logo}>{logo}</div>}
                             <div className={styles.main}>
@@ -62,7 +73,7 @@ export default class PageHeader extends PureComponent {
                                 </div>
                             </div>
                         </div>
-                        {tabList && tabList.length ? (
+                        {/* {tabList && tabList.length ? (
                             <Tabs
                                 className={styles.tabs}
                                 {...activeKeyProps}
@@ -73,7 +84,7 @@ export default class PageHeader extends PureComponent {
                                     <TabPane tab={item.tab} key={item.key} />
                                 ))}
                             </Tabs>
-                        ) : null}
+                        ) : null} */}
                     </Skeleton>
                 </div>
             </div>

@@ -3,83 +3,73 @@
     "msg": "in anim mollit ad consectetur",
     "data":[
       {
-        "ingredientName": 1550825451035,
-        "unit": "32000020080308852X",
-        "type": 1550825451035,
-        "price": "420000197409123672",
-        "newtime": "340000199907233355",
-        "status": "new" 
+        "ingredientName": "整鸡(百年栗园/有机/老母鸡/1.25kg)",
+        "unit": "斤",
+        "type": "肉禽类",
+        "price": "28",
+        "newtime": "2018-11-12"
       },
       {
-        "acceptTime": 1550825451035,
-        "cateringId": "32000020080308852X",
-        "distributionDate": 1550825451035,
-        "distributionNo": "420000197409123672",
-        "id": "340000199907233355",
-        "orderNo": "460000197601080032" 
+        "ingredientName": "整鸡(百年栗园/有机/老母鸡/1.25kg)",
+        "unit": "斤",
+        "type": "肉禽类",
+        "price": "28",
+        "newtime": "2018-11-12" 
       },
       {
-        "acceptTime": 1550825451035,
-        "cateringId": "32000020080308852X",
-        "distributionDate": 1550825451035,
-        "distributionNo": "420000197409123672",
-        "id": "340000199907233355",
-        "orderNo": "460000197601080032" 
+        "ingredientName": "整鸡(百年栗园/有机/老母鸡/1.25kg)",
+        "unit": "斤",
+        "type": "肉禽类",
+        "price": "28",
+        "newtime": "2018-11-12"
       },
       {
-        "acceptTime": 1550825451041,
-        "cateringId": "630000199112121084",
-        "distributionDate": 1550825451041,
-        "distributionNo": "220000201101091944",
-        "id": "370000200604157157",
-        "orderNo": "130000200812294688"
+        "ingredientName": "整鸡(百年栗园/有机/老母鸡/1.25kg)",
+        "unit": "斤",
+        "type": "肉禽类",
+        "price": "28",
+        "newtime": "2018-11-12" 
       },
       {
-        "acceptTime": 1550825451035,
-        "cateringId": "32000020080308852X",
-        "distributionDate": 1550825451035,
-        "distributionNo": "420000197409123672",
-        "id": "340000199907233355",
-        "orderNo": "460000197601080032" 
+        "ingredientName": "整鸡(百年栗园/有机/老母鸡/1.25kg)",
+        "unit": "斤",
+        "type": "肉禽类",
+        "price": "28",
+        "newtime": "2018-11-12" 
       },
       {
-        "acceptTime": 1550825451046,
-        "cateringId": "430000197405079637",
-        "distributionDate": 1550825451047,
-        "distributionNo": "230000200009056924",
-        "id": "650000198212153074",
-        "orderNo": "210000201710024980",
+        "ingredientName": "整鸡(百年栗园/有机/老母鸡/1.25kg)",
+        "unit": "斤",
+        "type": "肉禽类",
+        "price": "28",
+        "newtime": "2018-11-12" 
       },
       {
-        "acceptTime": 1550825451035,
-        "cateringId": "32000020080308852X",
-        "distributionDate": 1550825451035,
-        "distributionNo": "420000197409123672",
-        "id": "340000199907233355",
-        "orderNo": "460000197601080032" 
+        "ingredientName": "整鸡(百年栗园/有机/老母鸡/1.25kg)",
+        "unit": "斤",
+        "type": "肉禽类",
+        "price": "28",
+        "newtime": "2018-11-12" 
       },
       {
-        "acceptTime": 1550825451035,
-        "cateringId": "32000020080308852X",
-        "distributionDate": 1550825451035,
-        "distributionNo": "420000197409123672",
-        "id": "340000199907233355",
-        "orderNo": "460000197601080032" 
+        "ingredientName": "整鸡(百年栗园/有机/老母鸡/1.25kg)",
+        "unit": "斤",
+        "type": "肉禽类",
+        "price": "28",
+        "newtime": "2018-11-12" 
       },
       {
-        "acceptTime": 1550825451035,
-        "cateringId": "32000020080308852X",
-        "distributionDate": 1550825451035,
-        "distributionNo": "420000197409123672",
-        "id": "340000199907233355",
-        "orderNo": "460000197601080032" 
-      },{
-        "acceptTime": 1550825451035,
-        "cateringId": "32000020080308852X",
-        "distributionDate": 1550825451035,
-        "distributionNo": "420000197409123672",
-        "id": "340000199907233355",
-        "orderNo": "460000197601080032" 
+        "ingredientName": "整鸡(百年栗园/有机/老母鸡/1.25kg)",
+        "unit": "斤",
+        "type": "肉禽类",
+        "price": "28",
+        "newtime": "2018-11-12" 
+      }, {
+        "ingredientName": "整鸡(百年栗园/有机/老母鸡/1.25kg)",
+        "unit": "斤",
+        "type": "肉禽类",
+        "price": "28",
+        "newtime": "2018-11-12" 
       }
     ]   
   }
