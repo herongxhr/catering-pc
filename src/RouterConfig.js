@@ -16,19 +16,12 @@ import Dosing from './pages/acount/Dosing';
 import Supply from './pages/acount/Supply';
 import OutStock from './pages/OutStock/index';
 import PurCatalog from './pages/PurCatalog/index';
-<<<<<<< HEAD
-import details from './pages/Details'
-import Test from './pages/Test'
-import ReportDetail from './pages/ReportDetail/index'
-import ExcipientDetail from './pages/ExcipientDetail'
 import IngreDetail from './pages/IngreDetail'
-=======
-import details from './pages/Details';
+import ExcipientDetail from './pages/ExcipientDetail'
+import details from './pages/Details'
+import PurOrderDetails from './pages/PurOrderDetails'
+import ReportDetail from './pages/ReportDetail'
 import Test from './pages/Test';
-import ReportDetail from './pages/ReportDetail/index';
-import ExcipientDetail from './pages/ExcipientDetail';
-import PurOrderDetails from './pages/PurOrderDetails';
->>>>>>> a83f286a64c9d32104b8d07dadb2cc7158f9c5b6
 // 国际化配置
 import { LocaleProvider } from 'antd';
 import zh_cn from 'antd/lib/locale-provider/zh_CN';

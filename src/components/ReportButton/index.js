@@ -19,7 +19,7 @@ class ReportButton extends React.Component {
   
     handleOk = (e) => {
       e.preventDefault();
-      this.props.form.validateFields(['name','remark'],(err, values) => {
+      this.props.form.validateFields((err, values) => {
         if (!err) {
           this.setState({
             visible: false,
@@ -76,8 +76,8 @@ class ReportButton extends React.Component {
             {getFieldDecorator('urgent', {
                   initialValue:true,
             })(
-              <Checkbox onChange={()=>{this.setState({checked:true})
-              if(this.state.checked){this.props.validateFields('phone')}}}>紧急<span style={{color:'rgba(0,0,0,0.45)',fontSize:12}}>（勾选此选项后，请务必填写您的联系电话，以便工作人员与您进行联系）</span></Checkbox>
+              <Checkbox onChange={()=>{this.setState({checked:!this.state.checked})
+            }}>紧急<span style={{color:'rgba(0,0,0,0.45)',fontSize:12}}>（勾选此选项后，请务必填写您的联系电话，以便工作人员与您进行联系）</span></Checkbox>
             )}
             </Form.Item>
             <Form.Item
@@ -85,7 +85,7 @@ class ReportButton extends React.Component {
             >
             {getFieldDecorator('phone', {
                     initialValue:'',
-                    rules:[{required:true, message:'联系电话不能为空'}]
+                    rules:[{required:this.state.checked, message:'联系电话不能为空'}]
             })(
               <Input placeholder='请输入' style={{width:260}}/>
             )}
