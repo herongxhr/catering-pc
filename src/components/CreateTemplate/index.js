@@ -19,8 +19,7 @@ class Create extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     return(
-      <div className='createTemplate'>
-        
+      <div className='createTemplate'>     
           <Card
             title='表格结构设置'
           >
@@ -131,7 +130,6 @@ class Create extends React.Component {
             </Form>
           </Card>
       </div>
-
     )
   }
 }

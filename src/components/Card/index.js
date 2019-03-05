@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card , Divider } from 'antd'
 import { withRouter } from 'react-router'
+import { connect } from 'dva';
 
 import './index.less'
 
@@ -21,7 +22,16 @@ class MyTemplateCard extends React.Component {
   }
 
   handleHistory = () => {
-    this.props.history.push('/Particulars')
+    this.props.history.push('/menubar/template/newtemplate')
+  }
+
+  handleCopy = () => {
+    const { dispatch,id } = this.props
+		dispatch({
+			type:'unifiedMenus/queryMyCopy',
+			payload:{templateId:id}
+    })
+    window.location.reload()
   }
 
   render() {
@@ -33,18 +43,19 @@ class MyTemplateCard extends React.Component {
       marginLeft:25
     }
     let cardFooter = null
+    const { actions } = this.props
     if(this.state.cardHover) {
-      cardFooter = <span>创建:2018-11-01</span>
+      cardFooter = <span>创建:{actions}</span>
     } else {
       cardFooter = 
       <div className='cardFooter' style={{width:340,margin:0}}>
-        <span className='cardFooterItem' style={{ margin: 0,fontSize:16 }}>复制</span>
+        <span className='cardFooterItem' style={{ margin: 0,fontSize:16 }} onClick={this.handleCopy}>复制</span>
         <Divider type="vertical" />
         <span className='cardFooterItem' style={{ margin: 0,fontSize:16 }}>删除</span>
         <Divider type="vertical" />
         <span className='cardFooterItem' style={{ margin: 0,fontSize:16 }}>修改</span>
-        <Divider type="vertical" />
-        <span className='cardFooterItem' style={{ margin: 0,fontSize:16 }}>使用</span>
+        {/* <Divider type="vertical" />
+        <span className='cardFooterItem' style={{ margin: 0,fontSize:16 }}>使用</span> */}
       </div>
     }
     return(
@@ -65,4 +76,6 @@ class MyTemplateCard extends React.Component {
 
 const MyCard = withRouter(MyTemplateCard)
 
-export default MyCard
+export default connect(({unifiedMenus})=> ({
+  unifiedMenus
+}))(MyCard)

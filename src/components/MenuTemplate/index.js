@@ -1,9 +1,9 @@
 import React from 'react'
-import { Form , Select , Input, Button , Badge ,  Tag , Icon } from 'antd'
+import { Form , Select , Input, Button , Badge ,  Tag , Icon , Radio  } from 'antd'
 import { Link } from 'react-router-dom'
 import Cartoon from '../Cartoon'
 import MyCard from '../Card'
-import { template } from '../../DataConfig'
+// import { template } from '../../DataConfig'
 import { connect } from 'dva';
 
 import './index.less'
@@ -13,18 +13,74 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const Search = Input.Search;
 const ButtonGroup = Button.Group;
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
 
 class Template extends React.Component {
   state = {
-    changeColor:true
+    changeColor:true,
+    template:[]
   }
+
   colorChange =  () => {
     this.setState({
       changeColor:!this.state.changeColor
     })
   }
+
+  queryMytemplate = (params = {}) => {
+    const { dispatch } = this.props;
+    //请求待办事项
+    dispatch({
+      type: 'unifiedMenus/queryMytemplate',
+    })
+    // this.setState({
+    //   template:this.props.unifiedMenus.myTemplate.records
+    // })
+  }
+
+  static getDerivedStateFromProps(props) {
+    return {
+      template: props.unifiedMenus.myTemplate.records
+    }
+  }
+
+  queryRecommend = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type:'unifiedMenus/queryRecommend'
+    })
+  }
+
+  queryRecommendTemplate = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type:'unifiedMenus/queryRecommendTemplate'
+    })
+  }
+
+  // handleRecommend = () => {
+  //   this.queryRecommendTemplate()
+  // }
+  
+  componentDidMount() {
+    this.queryMytemplate()
+    this.queryRecommend()
+  }
+
+  onChange = (e) => {
+    if(e.target.value == '1') {
+      this.queryMytemplate()
+    }
+    if(e.target.value == '2') {
+      this.queryRecommendTemplate()
+    }
+  }
+
   render(){
+    const { unifiedMenus } = this.props
     const { getFieldDecorator } = this.props.form;
+    const template = unifiedMenus.myTemplate.records
     return (
       <div className='Template'>
         <div style={{display:'flex',justifyContent:'space-between'}} className='TemplateHeader'>
@@ -63,63 +119,70 @@ class Template extends React.Component {
             </FormItem>
           </Form>
           <div className='cartoon-wraper'>
-              <Cartoon />
+              {unifiedMenus.myRecommend ? <Cartoon /> : null}
           </div>
         </div>
 
         <div style={{display:'flex',justifyContent:'space-between'}} className='TemplateSubheader'>
           <Button type="primary" >
-              <Link to='/createtemplate'>创建模板</Link>
+              <Link to='/menubar/template/new'>创建模板</Link>
           </Button>
-          <ButtonGroup>
+          {/* <ButtonGroup>
             <Button style={{width:70,height:32}}>我的</Button>
             <Button style={{width:80,height:32}}>
-              <span>推荐</span>
+              <span onClick={this.handleRecommend}>推荐</span>
               <Badge count={8} offset={[10,-6]} />
-            </Button>
-          </ButtonGroup>
+            </Button> */}
+            <RadioGroup onChange={this.onChange} defaultValue="1">
+              <RadioButton value="1">我的</RadioButton>
+              <RadioButton value="2">
+               <span>推荐</span>
+               <Badge count={this.state.template?this.state.template.length:null} offset={[10,-6]} />
+              </RadioButton>
+            </RadioGroup>
         </div>
 
         <div className='card-group'>
           {
-            template.map(item => 
+            this.state.template ? template.map(item => 
               (
-              <MyCard key={item.key}>
+              <MyCard key={item.id} id={item.id} actions={'2019-02-27'}>
                 <div className='card-body'>
                   <p className='card-content'>
                     <span className='card-content-title'>
-                      {item.title}
+                      {item.templateName}
                     </span>
                     <span className='right' style={{ fontSize: 14 }}>
-                      {item.subTitle}
+                      {item.used}
                     </span>
                   </p>
                   <p className='card-content'>
                     <span>
-                      {item.meal}
+                      {item.echoMealTimeses}
                     </span>
                     <span className='right'>
-                      {item.subMeal}
+                      上次使用
                     </span>
                   </p>
                   <p className='card-content'>
                     <span>
-                      {item.data}
+                      {item.echoZjs}
                     </span>
                     <span className='right'>
-                      {item.subData}
+                      {/* {item.lastTime} */}
+                      2019-02-27
                     </span>
                   </p>
                 </div>
                 <div className='card-footer'>
-                  <Tag color="magenta">中小学</Tag>
-                  <Tag color="red">夏季</Tag>
-                  <Tag color="volcano">高蛋白</Tag>
-                  <Tag color="orange">1日5餐</Tag>
+                  <Tag color="magenta">{item.tags.split(',')[0]}</Tag>
+                  <Tag color="red">{item.tags.split(',')[1]}</Tag>
+                  <Tag color="volcano">{item.tags.split(',')[2]}</Tag>
+                  <Tag color="orange">{item.tags.split(',')[3]}</Tag>
                 </div>
               </MyCard>
               )
-            )
+            ) : null
           }
         </div>
       </div>
@@ -130,7 +193,7 @@ class Template extends React.Component {
 const MenuTemplate = Form.create()(Template)
 
 
-export default connect(({template})=> ({
-  template
+export default connect(({unifiedMenus})=> ({
+  unifiedMenus
 }))(MenuTemplate)
 

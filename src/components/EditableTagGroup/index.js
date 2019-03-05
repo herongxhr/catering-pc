@@ -3,16 +3,17 @@ import {
   Tag, Input, Tooltip, Icon,
 } from 'antd';
 
+import './index.less'
+
 class EditableTagGroup extends React.Component {
   state = {
-    tags: ['Unremovable', '高蛋白', '高营养'],
+    tags: ['幼儿园', '高蛋白', '高营养','三餐五日'],
     inputVisible: false,
     inputValue: '',
   };
 
   handleClose = (removedTag) => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
-    console.log(tags);
     this.setState({ tags });
   }
 
@@ -31,7 +32,6 @@ class EditableTagGroup extends React.Component {
     if (inputValue && tags.indexOf(inputValue) === -1) {
       tags = [...tags, inputValue];
     }
-    console.log(tags);
     this.setState({
       tags,
       inputVisible: false,
@@ -44,7 +44,7 @@ class EditableTagGroup extends React.Component {
   render() {
     const { tags, inputVisible, inputValue } = this.state;
     return (
-      <div>
+      <div class='editableTagGroup'>
         {tags.map((tag, index) => {
           const isLongTag = tag.length > 20;
           const tagElem = (
@@ -71,7 +71,7 @@ class EditableTagGroup extends React.Component {
             onClick={this.showInput}
             style={{ background: '#fff', borderStyle: 'dashed' }}
           >
-            <Icon type="plus" /> New Tag
+            <Icon type="plus" /> 添加
           </Tag>
         )}
       </div>
