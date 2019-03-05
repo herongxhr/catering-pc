@@ -114,7 +114,7 @@ class Particulars extends React.Component {
     return(
       <div className='Particulars'>
 				<Bread bread={bread}  />
-        <Card className='DetailsOperation' style={{width:1200}}>
+        <Card className='DetailsOperation' style={{width:1200,marginTop:-7}}>
           <div className='card-body'>
             <Row className='card-header'>
               <Col span={12} className='card-header-title'>
@@ -156,7 +156,7 @@ class Particulars extends React.Component {
               <Checkbox onChange={this.onChange}>收起空餐饮</Checkbox>
             </div>
             <div>
-              图片模式<Switch defaultChecked onChange={this.onChange} />
+              图片模式<Switch onChange={this.onChange} style={{marginLeft:10}}/>
             </div>            
           </div>
         </Card>

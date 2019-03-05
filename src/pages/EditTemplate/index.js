@@ -114,7 +114,7 @@ class EditTemplate extends React.Component {
     return(
       <div className='edit-template'>
 				<Bread bread={bread}  />
-        <Card className='DetailsOperation' style={{width:1200}}>
+        <Card className='DetailsOperation' style={{width:1200,marginTop:-7}}>
           <div className='card-body'>
             <Row className='card-header'>
               <Col span={12} className='card-header-title'>
