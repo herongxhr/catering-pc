@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Tabs, Skeleton } from 'antd';
 import classNames from 'classnames';
-import styles from './index.less';
+import './index.less';
 import BreadcrumbView from './breadcrumb';
 
 const { TabPane } = Tabs;
@@ -15,7 +15,7 @@ export default class PageHeader extends PureComponent {
 
     render() {
         const {
-            title = '',
+            title,
             logo,
             action,
             content,
@@ -30,7 +30,7 @@ export default class PageHeader extends PureComponent {
             hiddenBreadcrumb = false,
         } = this.props;
 
-        const clsString = classNames(styles.pageHeader, className);
+        const clsString = classNames("pageHeader", className);
         const activeKeyProps = {};
         if (tabDefaultActiveKey !== undefined) {
             activeKeyProps.defaultActiveKey = tabDefaultActiveKey;
@@ -40,7 +40,7 @@ export default class PageHeader extends PureComponent {
         }
         return (
             <div className={clsString}>
-                <div className={wide ? styles.wide : ''}>
+                <div className={wide ? "wide" : ''}>
                     <Skeleton
                         loading={loading}
                         title={false}
@@ -49,22 +49,22 @@ export default class PageHeader extends PureComponent {
                         avatar={{ size: 'large', shape: 'circle' }}
                     >
                         {hiddenBreadcrumb ? null : <BreadcrumbView {...this.props} />}
-                        <div className={styles.detail}>
-                            {logo && <div className={styles.logo}>{logo}</div>}
-                            <div className={styles.main}>
-                                <div className={styles.row}>
-                                    <h1 className={styles.title}>{title}</h1>
-                                    {action && <div className={styles.action}>{action}</div>}
+                        <div className={"detail"}>
+                            {logo && <div className={"logo"}>{logo}</div>}
+                            <div className={"main"}>
+                                <div className={"row"}>
+                                    {title && <h1 className={"title"}>{title}</h1>}
+                                    {action && <div className={"action"}>{action}</div>}
                                 </div>
-                                <div className={styles.row}>
-                                    {content && <div className={styles.content}>{content}</div>}
-                                    {extraContent && <div className={styles.extraContent}>{extraContent}</div>}
+                                <div className={row}>
+                                    {content && <div className={"content"}>{content}</div>}
+                                    {extraContent && <div className={"extraContent"}>{extraContent}</div>}
                                 </div>
                             </div>
                         </div>
                         {tabList && tabList.length ? (
                             <Tabs
-                                className={styles.tabs}
+                                className={"tabs"}
                                 {...activeKeyProps}
                                 onChange={this.onChange}
                                 tabBarExtraContent={tabBarExtraContent}

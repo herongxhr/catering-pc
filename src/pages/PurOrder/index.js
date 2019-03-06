@@ -67,40 +67,42 @@ const tabColumns = [
 ];
 
 class PurOrder extends React.Component {
+	state = {
+		setFilter: {
+			dateRange: ['', ''],
+			channel: '',
+			status: ''
+		}
+	}
+
 	// 请求订单数据
-	getOrderData = ({
-		dateRange = Date.parse(new Date()),
-		channel = "",
-	} = {}) => {
+	getOrderData = (params) => {
 		const { dispatch } = this.props;
+		console.log("query", params);
 		dispatch({
-			type: 'purOrder/fetchData',
-			payload: {
-				dateRange,
-				channel,
-			},
+			type: 'purOrder/fetchOrderData',
+			payload: { ...params },
 		})
+		console.log('finish')
 	}
 
-	handleFilterByStatus = (e) => {
-		const { dispatch, rawData } = this.props;
-		let status = e.target.value;
-		const filteredData = rawData.filter(order => order.status === status);
-		dispatch({
-			type: 'purOrder/filterOrder',
-			payload: {
-				rawData,
-				filteredData,
-			},
-		})
-	}
-
-	componentDidMount() {
-		this.getOrderData();
-
+	handleFilter = (args) => {
+		let newArgs = {};
+		if (args.dateRange) {
+			newArgs = { dateRange: args.dateRange }
+		} else if (args.channel) {
+			newArgs = { channel: args.channel }
+		} else {
+			newArgs = { status: args.status }
+		}
+		this.setState(
+			Object.assign(this.state.setFilter, newArgs),
+			this.getOrderData(this.state.setFilter)
+		);
 	}
 
 	render() {
+		console.log(this.state.setFilter);
 		const {
 			className,
 			location,
@@ -127,7 +129,7 @@ class PurOrder extends React.Component {
 			)
 		}
 		// 表格数据
-		const tableData = `${orderedData}` ? orderedData : rawData;
+		const tableData = orderedData.length ? orderedData : rawData;
 		return (
 			<div className={className}>
 				{/* 面包屑 */}
@@ -135,20 +137,24 @@ class PurOrder extends React.Component {
 				<div className="orderWrapper">
 					{/* 排序筛选部分 */}
 					<WrappedOrderFilter
-						handleFilter={this.getOrderData}
+						handleFilter={this.handleFilter}
 						className="wrappedOrderForm" />
 					<div className="buttonsWrapper">
 						{/* 新建及按钮组部分 */}
 						{dropdownBtn()}
 						<span>
-							<Radio.Group defaultValue="" onChange={this.handleFilterByStatus} >
-								<Radio.Button value="">全部</Radio.Button>
+							<Radio.Group defaultValue="all" onChange={e => {
+								this.handleFilter({
+									status: e.target.value
+								})
+							}} >
+								<Radio.Button value="all">全部</Radio.Button>
 								<Radio.Button value="0">未下单</Radio.Button>
 								<Radio.Button value="1">已下单</Radio.Button>
 							</Radio.Group>
 						</span>
 					</div>
-					<div style={{ marginTop: 30 }}>
+					<div style={{ mArgsinTop: 30 }}>
 						<Table columns={tabColumns} dataSource={tableData} />
 					</div>
 				</div>

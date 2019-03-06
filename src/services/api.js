@@ -129,7 +129,7 @@ export function unifiedMenusAlready(params) {
 // }
 
 // 采购订单专区
-export function queryPurOrder(params) {
+export function queryOrderData(params) {
     return request({
         method: 'get',
         url: '/catering/purOrder',
