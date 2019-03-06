@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Tabs, Button, Radio, Badge, Divider, Menu, Dropdown,Modal } from 'antd'
+import { Table, Tabs, Button, Radio, Badge, Divider,Popconfirm, message } from 'antd'
 import { connect } from 'dva';
 import WrappedReportForm from '../ReportForm'
 import WrappedReportButton from '../ReportButton';
@@ -50,35 +50,18 @@ class Report extends React.Component {
     visible: false,
     reportKey:'all'
   }
-
-  onClick = (value) => {
-    this.props.queryReportmissing({more:value.key})
-  };
   handleReport = (e) =>{
     const { queryReportmissing } = this.props;
     queryReportmissing({status:e.target.value})
   } 
-  handleUrg = () =>{
+  //催促
+  handleUrg = (id)=>{
+    console.log(id,"111")
     this.setState({disabled:true})
   }
-  showModal = () => {
-    this.setState({
-      visible: true,
-    })
-  }
-
-  handleOk = (e) => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  }
-
-  handleCancel = (e) => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
+  //删除申请
+  confirm = (id) =>{
+    console.log(id,"222")
   }
   render() {
     const tabColumns = [{
@@ -110,30 +93,24 @@ class Report extends React.Component {
           return <span><Badge status="warning" />未审核</span>
         }
         if(status == 0){
-          return <span>已通过</span>
-        }
-        if(status == 2){
-          return <span>未通过</span>
-        }
-             
+          return <span>已回执</span>
+        }      
       }
     }, {
       title: '操作',
       dataIndex: 'status',
       key: 'status',
-      render(action) {
+      render(action,record) {
         return (
           action == 1 ? <div className='opertion'>
-          <Button className='orders' disabled={_this.state.disabled} onClick={()=>{_this.setState({disabled:true})}}>催促</Button> <Divider type="vertical" /> <a className='delete' onClick={_this.showModal} >撤回申请</a>
-        </div> : <span className='check'>查看详情</span>)
+          <a className='orders' disabled={_this.state.disabled} onClick={_this.handleUrg.bind(this,record.id)}>催促</a> 
+          <Divider type="vertical" />
+          <Popconfirm title="确定继续操作?" onConfirm={_this.confirm.bind(this,record.id)}>
+            <a className='delete'>删除申请</a>
+          </Popconfirm> 
+          </div> : <span className='check'>查看详情</span>)
       }
     }];
-    const menu = (
-      <Menu onClick={this.onClick}>
-        <Menu.Item key="pass">已通过</Menu.Item>
-        <Menu.Item key="notpass">未通过</Menu.Item>
-      </Menu>
-    );
     const { reportList } = this.props
     const _this = this
     return (
@@ -144,8 +121,8 @@ class Report extends React.Component {
           <div>
             <Radio.Group defaultValue="all" onChange={this.handleReport}>
               <Radio.Button value="all" >全部</Radio.Button>
-              <Radio.Button value="nopass">未审核</Radio.Button>
-              <Dropdown overlay={menu}><Radio.Button value="more">更多</Radio.Button></Dropdown>
+              <Radio.Button value="unreviewed">未审核</Radio.Button>
+              <Radio.Button value="receipt">已回执</Radio.Button>
             </Radio.Group>
           </div>
         </div>
@@ -164,16 +141,6 @@ class Report extends React.Component {
                }}
           />
         </div>
-        <Modal
-          title="Basic Modal"
-          visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-        >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-        </Modal>
       </div>
     )
   }

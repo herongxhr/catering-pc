@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Upload, Select, Button , Card } from 'antd';
 import PhoneView from './PhoneView';
+import CitySelect from './citySelect'
 
 import './BaseView.less';
 
@@ -34,7 +35,15 @@ class Imformation extends Component {
     });
   };
 
-
+  handleSubmit = ()=>{
+    let userInfo = this.props.form.getFieldsValue();
+    // this.props.form.validateFields((err,values)=>{
+    //     if(!err){
+    //         message.success(`${userInfo.userName} 恭喜你，您通过本次表单组件学习，当前密码为：${userInfo.userPwd}`)
+    //     }
+    // })
+    console.log(userInfo)
+  }
 
   getViewDom = ref => {
     this.view = ref;
@@ -77,19 +86,9 @@ class Imformation extends Component {
               })(<Input placeholder='横店中心小学' />)}
             </FormItem>
             <FormItem label='个人简介'>
-              {getFieldDecorator('profile', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'a',
-                  },
-                ],
-              })(
-                <Input.TextArea
-                  placeholder='a'
-                  rows={4}
-                />
-              )}
+              {getFieldDecorator('city')
+                (<CitySelect />)
+              }
             </FormItem>
             <FormItem label='国家/地区'>
               {getFieldDecorator('country', {
@@ -136,7 +135,7 @@ class Imformation extends Component {
                 ],
               })(<PhoneView />)}
             </FormItem>
-            <Button type="primary">
+            <Button type="primary" onClick={this.handleSubmit}>
               更新信息
             </Button>
           </Form>

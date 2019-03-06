@@ -146,7 +146,7 @@ class Template extends React.Component {
           {
             this.state.template ? template.map(item => 
               (
-              <MyCard key={item.id} id={item.id} actions={'2019-02-27'}>
+              <MyCard key={item.id} id={item.id} actions={'2019-02-27'} className='my-card'>
                 <div className='card-body'>
                   <p className='card-content'>
                     <span className='card-content-title'>

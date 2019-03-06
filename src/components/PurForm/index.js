@@ -6,7 +6,7 @@ import 'moment/locale/zh-cn';
 const Option = Select.Option;
 
 const Search = Input.Search;
-const FormItem = Form.Item;
+const FormItem = Form.Item;  
 const { RangePicker } = DatePicker;
 
 
@@ -22,7 +22,7 @@ class PurForm extends React.Component {
     return(
       <LocaleProvider locale={zh_CN}>
       <div>
-      <Form layout="inline">
+      <Form layout="inline" onSubmit={this.handleSubmit}>
         <FormItem label='食材类别'>
           {
             getFieldDecorator('foodType',{
@@ -41,17 +41,17 @@ class PurForm extends React.Component {
 
         <FormItem label='定价时间'>
           {
-            getFieldDecorator('time',{
+            getFieldDecorator('orderTime',{
                 initialValue:'',
             })(
-              <DatePicker style={{width:240}}/>
+              <RangePicker onChange={this.handleChange} style={{width:240}}/>
             )
           }
         </FormItem>
 
         <FormItem>
           {
-            getFieldDecorator('search',{
+            getFieldDecorator('searchKey',{
                 initialValue:'',
             })(
               <Search

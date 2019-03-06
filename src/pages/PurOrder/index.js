@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
 import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon } from 'antd';
 import { routerRedux } from 'dva/router';
-import { stringify } from 'qs'
 import WrappedOrderFilter from '../../components/OrderFilter';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
 
@@ -15,7 +13,7 @@ const tabColumns = [
 		key: 'orderId',
 		dataIndex: 'orderId',
 		filterMultiple: true,
-	},	
+	},
 	{
 		title: '订单来源',
 		key: 'channel',
@@ -56,15 +54,14 @@ const tabColumns = [
 	},
 	{
 		title: '操作',
-		key: 'orderActions',
 		render: (text, record) => {
 			return record.status === "0" ?
 				(<div className='opertion'>
-					<Link to={`/purOrder/details/: ${record.orderId}`} className='orders'>下单</Link>
+					<a onClick={() => this.previewOrder(record.orderId)} className='orders'>下单</a>
 					<Divider type="vertical" />
 					<a className='delete'>删除</a>
 				</div>) :
-				(<Link to='/purOrder/details/' className='acceptance'>配送验收情况</Link>)
+				(<a className='acceptance'>配送验收情况</a>)
 		}
 	}
 ];
@@ -85,21 +82,29 @@ class PurOrder extends React.Component {
 		})
 	}
 
-	// 点击表格行跳转到相应详情页
-	handleGotoDetails = (e, { orderId, status }) => {
-		const { dispatch } = this.props;
-		if (status === '0') {
-			dispatch(routerRedux.push({
-				pathname: '/purOrder/details',
-				query: { id: orderId },
-			}))
-		} else {
-			// dispatch(routerRedux.push({
-			// 	pathname: '/purOrder/details',
-			// 	query: { id: records.id }
-			// }))
-		}
+	previewOrder = id => {
+		this.props.dispatch(routerRedux.push({
+			pathname: `/purOrder/details`,
+			state: {id}
+		}))
 	}
+
+	// 点击表格行跳转到相应详情页
+	// handleGotoDetails = (e, { orderId, status }) => {
+	// 	const { dispatch } = this.props;
+	// 	if (status === '0') {
+	// 		this.previewOrder(orderId);
+	// 		// dispatch(routerRedux.push({
+	// 		// 	pathname: '/purOrder/details',
+	// 		// 	query: { id: orderId },
+	// 		// }))
+	// 	} else {
+	// 		// dispatch(routerRedux.push({
+	// 		// 	pathname: '/purOrder/details',
+	// 		// 	query: { id: records.id }
+	// 		// }))
+	// 	}
+	// }
 
 	handleFilterByStatus = (e) => {
 		const { dispatch, rawData } = this.props;
@@ -172,8 +177,8 @@ class PurOrder extends React.Component {
 							dataSource={tableData}
 							onRow={(record) => {
 								return {
-									onClick: (e) => {
-										this.handleGotoDetails(e, record)
+									onClick: () => {
+										this.previewOrder(record.orderId)
 									}
 								}
 							}}

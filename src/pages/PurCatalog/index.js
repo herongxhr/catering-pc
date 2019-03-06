@@ -2,7 +2,7 @@ import React from 'react'
 import WrappedPurForm from '../../components/PurForm'
 import TwoBread from '../../components/TwoBread'
 import BreadcrumbComponent from '../../components/BreadcrumbComponent'
-import { Card, Radio, Table, Alert,Tooltip } from 'antd'
+import { Card, Radio, Table, Alert,Tooltip,Modal } from 'antd'
 import { connect } from 'dva';
 import './index.less'
 
@@ -39,10 +39,25 @@ class PurCatalog extends React.Component {
   componentDidMount (){
     this.queryPurCatalog()
     }
-    showModal = () =>{
-      var tooltip=this.myref;
-      tooltip.style.display='block'
-    }
+    showModal = () => {
+      this.setState({
+        visible: true
+      });
+    };
+  
+    handleOk = e => {
+      console.log(e);
+      this.setState({
+        visible: false
+      });
+    };
+  
+    handleCancel = e => {
+      console.log(e);
+      this.setState({
+        visible: false
+      });
+    };
   render() {
     const {purCatalog,location} = this.props;
     const catalogData = purCatalog.catalogData;
@@ -67,9 +82,8 @@ class PurCatalog extends React.Component {
       render: text =>{
       return(
             <Tooltip title="查看定价记录" >
-              <span onClick={this.showModal} className='tooltipwrapper'>
+              <span onMouseDown={this.showModal}>
                 {text}
-                <ul className='tooltip' ref={ref=>{this.myref=ref}}></ul>
               </span>
             </Tooltip>)},
     }, {
@@ -99,6 +113,21 @@ class PurCatalog extends React.Component {
             </div>
           </div>
         </Card>
+        <div className='modalList'>
+          <Modal
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            mask={false}
+            closable={false}
+            footer={null}
+            style={{ top: 300 ,right:-30}}
+          >
+            <p>Some contents...</p>
+            <p>Some contents...</p>
+            <p>Some contents...</p>
+          </Modal>
+        </div>
       </div>
     )
   }

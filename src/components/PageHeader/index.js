@@ -34,8 +34,6 @@ export default class PageHeader extends PureComponent {
             // hiddenBreadcrumb = false,
         } = this.props;
 
-        console.log('1234', this.props);
-
         const clsString = classNames(styles.pageHeader, className);
         // const activeKeyProps = {};
         // // 默认打开的tab页面

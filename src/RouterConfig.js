@@ -16,10 +16,8 @@ import Dosing from './pages/acount/Dosing';
 import Supply from './pages/acount/Supply';
 import OutStock from './pages/OutStock/index';
 import PurCatalog from './pages/PurCatalog/index';
-import details from './pages/Details'
-import Test from './pages/Test'
-import ReportDetail from './pages/ReportDetail/index'
 import ExcipientDetail from './pages/ExcipientDetail'
+import ReportDetail from './pages/ReportDetail'
 import IngreDetail from './pages/IngreDetail'
 import PurOrderDetails from './pages/PurOrderDetails';
 // import CreateTemplate from './components/CreateTemplate'
@@ -36,7 +34,6 @@ import Edit from './pages/Edit';
 
 moment.locale('zh-cn');
 
-
 export default function RouterConfig({ history }) {
   return (
     <Router history={history}>
@@ -49,7 +46,6 @@ export default function RouterConfig({ history }) {
               <Route path="/menubar/public/details" exact component={Particulars} />
               <Route path="/menubar/template/newtemplate" exact component={EditTemplate} />
               <Route path="/menubar/template/new" component={Edit} />
-              <Route path='/details' component={details} />
               <Route path="/accSupermarket" component={AccSupermarket}></Route>
               <Route path="/purOrder" exact component={PurOrder}></Route>
               <Route path="/purOrder/new" component={PurOrder}></Route>
@@ -74,7 +70,6 @@ export default function RouterConfig({ history }) {
               <Route path="/reportdetail" component={ReportDetail}></Route>
               <Route path="/excipientdetail" component={ExcipientDetail}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
-              <Route path='/test' component={Test}></Route>
               <Redirect to="/home" />
             </Switch>
           </App>

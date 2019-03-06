@@ -47,7 +47,7 @@ export function queryList(params) {
         url: '/catering/workbench/distributionList',
         data: {
             showLoading: true,
-            params:{
+            params: {
                 ...params,
             },
         }

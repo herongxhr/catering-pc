@@ -1,4 +1,4 @@
-@import '~antd/lib/style/themes/default.less';
+//@import '~antd/lib/style/themes/default.less';
 .App-content {
   min-height: 240px;
   background: #F0F0F2;
@@ -90,10 +90,16 @@ font-weight: 700;
     font-size: 16px;
     font-weight: 600
   }
-
   .ant-tabs-nav {
     margin-left: 20px;
   }
+  .ant-tabs-content {
+    /* height: 100vh; */
+  }
+  .ant-tabs-bar .ant-tabs-nav-container {
+    /* width: 1160px; */
+    margin: 0px auto;
+}
 }
 
 .extra {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'dva/router';
 import { Drawer, Badge, Icon, List } from 'antd';
 import GoodsItem from '../../components/GoodsItem';
 import './index.less';
@@ -63,7 +64,7 @@ export default class CartPage extends React.Component {
                         style={{ fontSize: 18, marginLeft: 20, color: "rgba(245, 34, 45, 1)" }}
                     />
                 </span>
-                <span className="createOrder">生成采购单</span>
+                <Link to="/purOrder/details" className="createOrder">生成采购单</Link>
             </div>
         )
         return (
