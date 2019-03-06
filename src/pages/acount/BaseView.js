@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import { Form, Input, Upload, Select, Button } from 'antd';
+import React, { Component } from 'react';
+import { Form, Input, Upload, Select, Button , Card } from 'antd';
 import PhoneView from './PhoneView';
 
 import './BaseView.less';
@@ -45,8 +45,16 @@ class Imformation extends Component {
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <div className='baseView' ref={this.getViewDom}>
+      <div className='baseView' ref={this.getViewDom} >
         <div className='left'>
+          <div className='setting-title'>
+            <div className='setting-main-title'>
+              基本资料
+            </div>
+            <div className='setting-sub-title'>
+            -  单位基本资料设置
+            </div>
+          </div>
           <Form layout='vertical' onSubmit={this.handleSubmit} hideRequiredMark>
             <FormItem label='单位全称'>
               {getFieldDecorator('company', {
