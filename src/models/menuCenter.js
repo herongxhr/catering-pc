@@ -4,6 +4,7 @@ export default {
     namespace: 'menuCenter',
     state: {
         menuData: [],
+        templates: []
     },
     // effects: {
     //     *fetchData(_, { call, put }) {

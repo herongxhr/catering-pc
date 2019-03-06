@@ -175,6 +175,7 @@ class PurOrder extends React.Component {
 						<Table
 							columns={tabColumns}
 							dataSource={tableData}
+							rowKey="key"
 							onRow={(record) => {
 								return {
 									onClick: () => {

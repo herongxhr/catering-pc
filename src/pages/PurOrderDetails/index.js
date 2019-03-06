@@ -121,6 +121,7 @@ class PurOrderDetails extends React.Component {
                         <Table
                             pagination
                             loading={false}
+                            rowKey='id'
                             columns={tabColumns}
                             dataSource={goodsDetail}
                         />

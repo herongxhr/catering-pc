@@ -20,6 +20,8 @@ import ExcipientDetail from './pages/ExcipientDetail'
 import ReportDetail from './pages/ReportDetail'
 import IngreDetail from './pages/IngreDetail'
 import PurOrderDetails from './pages/PurOrderDetails';
+import ArrangeDishes from '../src/components/ArrangeDishes';
+import SelectIngredients from '../src/components/SelectIngredients';
 // import CreateTemplate from './components/CreateTemplate'
 // 国际化配置
 import { LocaleProvider } from 'antd';
@@ -70,6 +72,8 @@ export default function RouterConfig({ history }) {
               <Route path="/reportdetail" component={ReportDetail}></Route>
               <Route path="/excipientdetail" component={ExcipientDetail}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
+              <Route path="/arrangeDishes" component={ArrangeDishes}></Route>
+              <Route path="/selectIngredients" component={SelectIngredients}></Route>
               <Redirect to="/home" />
             </Switch>
           </App>
