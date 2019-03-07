@@ -1,8 +1,9 @@
-import React, { Fragment, PureComponent } from 'react';
-import { Input } from 'antd';
-import './PhoneView.less';
+import React, { Fragment, PureComponent } from 'react'
+import { Input } from 'antd'
 
-class PhoneView extends PureComponent {
+import './PhoneNumber.less'
+
+class PhoneNumber extends React.Component {
   render() {
     const {  value , onChange } = this.props;
     // const value = '0752-268888888'
@@ -10,27 +11,27 @@ class PhoneView extends PureComponent {
     if (value) {
       values = value.split('-');
     }
-    return (
+    return(
       <Fragment>
         <Input
-          className='area_code'
+          placeholder='陈超洋'
+          className='phone-code'
           value={values[0]}
           onChange={e => {
             onChange(`${e.target.value}-${values[1]}`);
           }}
-          placeholder='0752'
         />
         <Input
-          className='phone_number'
+          placeholder='15858134718'
+          className='phone-area'
           onChange={e => {
             onChange(`${values[0]}-${e.target.value}`);
           }}
           value={values[1]}
-          placeholder='268888888'
         />
       </Fragment>
-    );
+    )
   }
 }
 
-export default PhoneView;
+export default PhoneNumber

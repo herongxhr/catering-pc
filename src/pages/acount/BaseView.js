@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Form, Input, Upload, Select, Button , Card } from 'antd';
 import PhoneView from './PhoneView';
-import CitySelect from './citySelect'
+import CitySelect from './citySelect';
+import PhoneNumber from './PhoneNumber';
 
 import './BaseView.less';
 
@@ -11,6 +12,7 @@ const { Option } = Select;
 
 const validatorPhone = (rule, value, callback) => {
   const values = value.split('-');
+  console.log(values)
   if (!values[0]) {
     callback('Please input your area code!');
   }
@@ -85,46 +87,35 @@ class Imformation extends Component {
                 ],
               })(<Input placeholder='横店中心小学' />)}
             </FormItem>
-            <FormItem label='个人简介'>
+            <FormItem label='单位地址'>
               {getFieldDecorator('city')
                 (<CitySelect />)
               }
             </FormItem>
-            <FormItem label='国家/地区'>
-              {getFieldDecorator('country', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'a',
-                  },
-                ],
-              })(
-                <Select style={{ maxWidth: 220 }}>
-                  <Option value="China">中国</Option>
-                </Select>
-              )}
-            </FormItem>
-            <FormItem label='所在省市'>
-              {getFieldDecorator('geographic', {
+            <FormItem label={<span>平台管理员/手机号<span style={{color:'#D9D9D9',marginLeft:10}}>(用于接收平台相关信息)</span></span>}>
+              {getFieldDecorator('Telephone', {
                 rules: [
                   {
                     required: true,
                     message: 'a',
                   }
                 ],
-              })(<Input />)}
+              })(<PhoneNumber />)}
             </FormItem>
-            <FormItem label='街道地址'>
-              {getFieldDecorator('address', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'a',
-                  },
-                ],
-              })(<Input />)}
+            <FormItem
+              label={<span>常用邮箱<span style={{color:'#D9D9D9',marginLeft:10}}>(用于接收平台相关信息与各类报表)</span></span>}
+            >
+              {getFieldDecorator('email', {
+                rules: [{
+                  type: 'email', message: '邮箱格式不正确',
+                }, {
+                  required: true, message: '请输入你的邮箱',
+                }],
+              })(
+                <Input placeholder='968874937@163.com' />
+              )}
             </FormItem>
-            <FormItem label='联系电话'>
+            <FormItem label={<span>固定电话<span style={{color:'#D9D9D9',marginLeft:10}}>(用于接收日常咨询)</span></span>}>
               {getFieldDecorator('phone', {
                 rules: [
                   {
