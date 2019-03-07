@@ -7,6 +7,7 @@ const { Content, Header } = Layout;
 
 class App extends Component {
   render() {
+    console.log(this.props);
     return (
       <Layout >
         <Header style={{

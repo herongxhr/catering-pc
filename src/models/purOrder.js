@@ -1,4 +1,4 @@
-import { queryPurOrder, queryOrderDetails } from '../services/api';
+import { queryOrderData } from '../services/api';
 
 export default {
     namespace: 'purOrder',
@@ -19,8 +19,8 @@ export default {
         rawData: [],
     },
     effects: {
-        *fetchData({ payload }, { call, put }) {
-            const data = yield call(queryPurOrder, payload);
+        *fetchOrderData({ payload }, { call, put }) {
+            const data = yield call(queryOrderData, payload);
             yield put({
                 type: 'savePurOrderData',
                 payload: data.purOrder,
