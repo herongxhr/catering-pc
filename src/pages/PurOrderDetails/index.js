@@ -62,7 +62,6 @@ class PurOrderDetails extends React.Component {
                 goodsDetail,
             },
         } = this.props;
-
         let orderChannel;
         if (orderInfo.channel === 'M') {
             orderChannel = '菜单生成';

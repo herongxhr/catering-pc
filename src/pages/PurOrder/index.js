@@ -67,22 +67,18 @@ const tabColumns = [
 
 class PurOrder extends React.Component {
 	state = {
-		setFilter: {
-			dateRange: ['', ''],
-			channel: '',
-			status: ''
-		}
+		dateRange: ['', ''],
+		channel: 'all',
+		status: 'all'
 	}
 
 	// 请求订单数据
 	getOrderData = (params) => {
 		const { dispatch } = this.props;
-		console.log("query", params);
 		dispatch({
 			type: 'purOrder/fetchOrderData',
 			payload: { ...params },
 		})
-		console.log('finish')
 	}
 
 	handleFilter = (args) => {
@@ -95,18 +91,16 @@ class PurOrder extends React.Component {
 			newArgs = { status: args.status }
 		}
 		this.setState(
-			Object.assign(this.state.setFilter, newArgs),
-			this.getOrderData(this.state.setFilter)
+			Object.assign(this.state, newArgs),
+			this.getOrderData(this.state)
 		);
 	}
 
 	componentDidMount() {
-		const { setFilter } = this.state;
-		this.getOrderData(setFilter);
+		this.getOrderData(this.state);
 	}
 
 	render() {
-		console.log(this.state.setFilter);
 		const {
 			className,
 			location,

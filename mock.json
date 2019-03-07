@@ -355,3 +355,159 @@
         }
     }
 ]
+
+{
+    "code": "0",
+    "msg": "success",
+    "data": {
+        "records": [
+            {
+                "id": "1232234970606242",
+                "type": "荤菜",
+                "foodName": "番茄炒蛋",
+                "img0": "ea aliqua veniam",
+                "img1": "laborum dolor non",
+                "img2": "aute nostrud incididunt",
+                "img3": "velit labore aliquip Excepteur",
+                "otherName": "consequat velit in",
+                "properties": "百年栗园/土猪肉/散养/1.25kg"
+            },
+            {
+                "id": "2212938970606242",
+                "type": "荤菜",
+                "foodName": "番茄炒蛋",
+                "img0": "ea aliqua veniam",
+                "img1": "laborum dolor non",
+                "img2": "aute nostrud incididunt",
+                "img3": "velit labore aliquip Excepteur",
+                "otherName": "consequat velit in",
+                "properties": "百年栗园/土猪肉/散养/1.25kg"
+            },
+            {
+                "id": "2342933450606242",
+                "type": "素菜",
+                "foodName": "青椒肉丝",
+                "img0": "ea aliqua veniam",
+                "img1": "laborum dolor non",
+                "img2": "aute nostrud incididunt",
+                "img3": "velit labore aliquip Excepteur",
+                "otherName": "consequat velit in",
+                "properties": "百年栗园/土猪肉/散养/1.25kg"
+            },
+            {
+                "id": "7092938975676242",
+                "type": "素菜",
+                "foodName": "est ipsum consequat",
+                "img0": "ea aliqua veniam",
+                "img1": "laborum dolor non",
+                "img2": "aute nostrud incididunt",
+                "img3": "velit labore aliquip Excepteur",
+                "otherName": "consequat velit in",
+                "properties": "百年栗园/土猪肉/散养/1.25kg"
+            },
+            {
+                "id": "709293123606242",
+                "type": "荤菜",
+                "foodName": "番茄炒蛋",
+                "img0": "ea aliqua veniam",
+                "img1": "laborum dolor non",
+                "img2": "aute nostrud incididunt",
+                "img3": "velit labore aliquip Excepteur",
+                "otherName": "consequat velit in",
+                "properties": "番茄20g/鸡蛋30g/番茄..."
+            },
+            {
+                "id": "7092890970606242",
+                "type": "荤菜",
+                "foodName": "青椒肉丝",
+                "img0": "ea aliqua veniam",
+                "img1": "laborum dolor non",
+                "img2": "aute nostrud incididunt",
+                "img3": "velit labore aliquip Excepteur",
+                "otherName": "consequat velit in",
+                "properties": "百年栗园/土猪肉/散养/1.25kg"
+            },
+            {
+                "id": "7023638970606242",
+                "type": "半荤",
+                "foodName": "青椒肉丝",
+                "img0": "ea aliqua veniam",
+                "img1": "laborum dolor non",
+                "img2": "aute nostrud incididunt",
+                "img3": "velit labore aliquip Excepteur",
+                "otherName": "consequat velit in",
+                "properties": "番茄20g/鸡蛋30g/番茄..."
+            },
+            {
+                "id": "7092938989006242",
+                "type": "荤菜",
+                "foodName": "est ipsum consequat",
+                "img0": "ea aliqua veniam",
+                "img1": "laborum dolor non",
+                "img2": "aute nostrud incididunt",
+                "img3": "velit labore aliquip Excepteur",
+                "otherName": "consequat velit in",
+                "properties": "番茄20g/鸡蛋30g/番茄..."
+            },
+            {
+                "id": "7092923470606242",
+                "type": "半荤",
+                "foodName": "红烧肉",
+                "img0": "ea aliqua veniam",
+                "img1": "laborum dolor non",
+                "img2": "aute nostrud incididunt",
+                "img3": "velit labore aliquip Excepteur",
+                "otherName": "consequat velit in",
+                "properties": "番茄20g/鸡蛋30g/番茄..."
+            },
+            {
+                "id": "7092568970606242",
+                "type": "半荤",
+                "foodName": "红烧肉",
+                "img0": "ea aliqua veniam",
+                "img1": "laborum dolor non",
+                "img2": "aute nostrud incididunt",
+                "img3": "velit labore aliquip Excepteur",
+                "otherName": "consequat velit in",
+                "properties": "百年栗园/土猪肉/散养/1.25kg"
+            },
+            {
+                "id": "7092937779006242",
+                "type": "荤菜",
+                "foodName": "est ipsum consequat",
+                "img0": "ea aliqua veniam",
+                "img1": "laborum dolor non",
+                "img2": "aute nostrud incididunt",
+                "img3": "velit labore aliquip Excepteur",
+                "otherName": "consequat velit in",
+                "properties": "百年栗园/土猪肉/散养/1.25kg"
+            },
+            {
+                "id": "7091113470606242",
+                "type": "半荤",
+                "foodName": "红烧肉",
+                "img0": "ea aliqua veniam",
+                "img1": "laborum dolor non",
+                "img2": "aute nostrud incididunt",
+                "img3": "velit labore aliquip Excepteur",
+                "otherName": "consequat velit in",
+                "properties": "番茄20g/鸡蛋30g/番茄..."
+            },
+            {
+                "id": "7092562220606242",
+                "type": "半荤",
+                "foodName": "红烧肉",
+                "img0": "ea aliqua veniam",
+                "img1": "laborum dolor non",
+                "img2": "aute nostrud incididunt",
+                "img3": "velit labore aliquip Excepteur",
+                "otherName": "consequat velit in",
+                "properties": "百年栗园/土猪肉/散养/1.25kg"
+            },
+        ],
+        "pages": 48168,
+        "current": 2314,
+        "size": 10,
+        "total": 659959974254084
+    }
+}

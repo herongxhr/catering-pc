@@ -2,7 +2,21 @@
 //qs.stringify(object, [options]);
 //import { stringify } from 'qs';
 import request from '../utils/request';
+// 菜单中心
+export function queryDishes(params) {
+    return request({
+        method: 'get',
+        url: '/catering/camenu/selectDishes',
+        data: {
+            showLoading: true,
+            params: {
+                ...params
+            }
+        }
+    })
+}
 
+// 辅料商城
 export function queryGoodsF({ params }) {
     return request({
         method: 'get',
@@ -127,40 +141,40 @@ export function unifiedMenusAlready(params) {
 
 export function myMenu() {
     return request({
-        method:'get',
-        url:'/catering/myMenus',
+        method: 'get',
+        url: '/catering/myMenus',
         data: {
-            showLoading:true
+            showLoading: true
         }
     })
 }
 
 export function myTemplate() {
     return request({
-        method:'get',
-        url:'/catering/camenuTemplate/my',
+        method: 'get',
+        url: '/catering/camenuTemplate/my',
         data: {
-            showLoading:true
+            showLoading: true
         }
     })
 }
 
 export function isRecommend() {
     return request({
-        method:'get',
-        url:'/catering/camenuTemplate/hasRecommend',
+        method: 'get',
+        url: '/catering/camenuTemplate/hasRecommend',
         data: {
-            showLoading:true
+            showLoading: true
         }
     })
 }
 
 export function recommendTemplate() {
     return request({
-        method:'get',
-        url:'/catering/camenuTemplate/my_1551273630829',
+        method: 'get',
+        url: '/catering/camenuTemplate/my_1551273630829',
         data: {
-            showLoading:true
+            showLoading: true
         }
     })
 }
@@ -168,8 +182,8 @@ export function recommendTemplate() {
 export function myCopy(params) {
     console.log(params)
     return request({
-        method:'get',
-        url:'/catering/camenuTemplate/my/item/copy',
+        method: 'get',
+        url: '/catering/camenuTemplate/my/item/copy',
         data: {
             params,
         }
@@ -204,7 +218,7 @@ export function queryOrderDetails() {
             showLoading: true,
         }
     })
-} 
+}
 
 export function queryGoodsByOrderId(id) {
     return request({

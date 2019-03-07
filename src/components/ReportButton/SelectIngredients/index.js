@@ -136,10 +136,12 @@ class SelectIngredients extends React.Component {
                                 <Option value="meatDish">荤菜</Option>
                                 <Option value="vegetable">素菜</Option>
                                 <Option value="halfAMeat">半荤</Option>
-                                <Option value="dessert">汤羹</Option>
+                                <Option value="dessert">点心</Option>
                                 <Option value="others">其它</Option>
                             </Select>
                         </label>
+
+
                         <Search
                             placeholder="请输入关键字进行搜索"
                             onSearch={() => { }}
@@ -150,13 +152,6 @@ class SelectIngredients extends React.Component {
                         style={{ height: 594 }}
                         columns={tableColumns}
                         dataSource={tableData}
-                        onRow={
-                            record => {
-                                return {
-
-                                }
-                            }
-                        }
                         rowKey="id"
                     />
                 </div>
