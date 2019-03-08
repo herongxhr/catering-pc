@@ -2,7 +2,7 @@ import React from 'react'
 import {
   Form, Input, Icon, Button, Select, InputNumber
 } from 'antd';
-import DosingUi from './DosingUi'
+
 
 import './Dosing.less'
 
@@ -68,11 +68,11 @@ class Dose extends React.Component {
           }],
         })(
           <Select style={{width:200}}>
-            <Option value="葱">葱</Option>
-            <Option value="猪">猪</Option>
-            <Option value="鼠">鼠</Option>
-            <Option value="牛">牛</Option>
-            <Option value="龙">龙</Option>
+            <Option value="1">葱</Option>
+            <Option value="2">猪</Option>
+            <Option value="3">鼠</Option>
+            <Option value="4">牛</Option>
+            <Option value="5">龙</Option>
           </Select>
         )}                      
         {
@@ -110,7 +110,6 @@ class Dose extends React.Component {
           </div>
         </div>
         <Form onSubmit={this.handleSubmit}>
-
           {formItems}
           <Form.Item >
             <Button type="dashed" onClick={this.add} style={{ width: '330px',height: '32px' }}>
@@ -122,7 +121,6 @@ class Dose extends React.Component {
           </Form.Item>
         </Form>
       </div>
-
     );
   }
 }
