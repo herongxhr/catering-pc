@@ -9,6 +9,37 @@ import './index.less'
 
 const ButtonGroup = Button.Group;
 
+const tab2Columns = [{
+	title: '菜单编号',
+	dataIndex: 'menuID',
+	key: 'menuID',
+}, {
+	title: '周次',
+	dataIndex: 'weekly',
+	key: 'weekly',
+}, {
+	title: '日期',
+	dataIndex: 'date',
+	key: 'date',
+}, {
+	title: '执行状态',
+	dataIndex: 'status',
+	key: 'status',
+	render(status) {
+		let config = {
+			'0': '已执行',
+			'1': '未执行',
+		}
+		return config[status]
+	}
+}, {
+	title: '操作',
+	dataIndex: 'operation',
+	key: 'operation',
+	render(operation) {
+		return operation == 1 ? <span style={{ color: 'blue' }}>删除</span> : ''
+	}
+}]
 const Columns = [{
 	title: '菜单编号',
 	dataIndex: 'menuCode',
@@ -46,7 +77,7 @@ const Columns = [{
 	}
 }]
 
-class MyTableTwo extends React.Component {
+class MyMenu extends React.Component {
   handleChange = () => {
     this.props.history.push('/menubar/public/details')
   }
@@ -88,8 +119,9 @@ class MyTableTwo extends React.Component {
   }
 }
 
-const TableTwo = withRouter(MyTableTwo)
+
+const TableTwo = withRouter(MyMenu)
 
 export default connect(( {unifiedMenus} ) => ({
   unifiedMenus,
-}))(TableTwo)
+}))(MyMenu)

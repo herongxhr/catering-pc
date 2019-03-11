@@ -1,87 +1,143 @@
 import React from 'react'
 import { Tabs } from 'antd'
 import { connect } from 'dva';
-import TableOne from '../../components/TableOne'
-import TableTwo from '../../components/TableTwo'
+import { routerRedux } from 'dva/router';
+import { Table, Badge, Pagination } from 'antd';
+import MyMenu from '../../components/MyMenu'
 import MenuTemplate from '../../components/MenuTemplate'
-
 import './index.less'
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
+import FilterByDateAndStatus from '../../components/FilterByDateAndStatus';
 
 const TabPane = Tabs.TabPane;
-
-const tab2Columns = [{
-	title: '菜单编号',
-	dataIndex: 'menuID',
-	key: 'menuID',
-}, {
-	title: '周次',
-	dataIndex: 'weekly',
-	key: 'weekly',
-}, {
-	title: '日期',
-	dataIndex: 'date',
-	key: 'date',
-}, {
-	title: '执行状态',
-	dataIndex: 'status',
-	key: 'status',
-	render(status) {
-		let config = {
-			'0': '已执行',
-			'1': '未执行',
-		}
-		return config[status]
-	}
-}, {
-	title: '操作',
-	dataIndex: 'operation',
-	key: 'operation',
-	render(operation) {
-		return operation == 1 ? <span style={{ color: 'blue' }}>删除</span> : ''
-	}
-}]
-
-
-const requests = [{
-	url: `/mymenu`
-}, {
-	url: `/menuItem`
-}]
-
 class MenuCenter extends React.Component {
-	state = {
-		key: 'tab1',
-		tab: 0,
-		tab1Source: [],
-		Data1Source: [],
-		tab2Source: [],
-	}
-
-	componentDidMount() {
-		const { dispatch } = this.props
+	handleFetchUnifiedMenu = (params) => {
+		console.log('params', params);
+		const { dispatch } = this.props;
+		const defultOptions = {
+			startDate: null,
+			endDate: null,
+			status: null,
+			current: 1,
+			pageSize: 10
+		}
 		dispatch({
-			type:'unifiedMenus/queryList',
-			payload:{a:1}
+			type: 'menuCenter/fetchUnifiedMenu',
+			payload: {
+				...defultOptions,
+				...params
+			}
 		})
 	}
 
+	handleTabsChange = key => {
+		const { dispatch } = this.props;
+		dispatch(routerRedux.push({
+			pathname: `/menubar/${key}`
+		}))
+	}
+
+	componentDidMount() {
+		this.handleFetchUnifiedMenu();
+	}
 
 	render() {
-		const { location ,  unifiedMenus} = this.props;
-		console.log(unifiedMenus)
+		const tableColumns = [
+			{
+				title: '菜单编号',
+				dataIndex: 'menuCode',
+				key: 'menuCode',
+			},
+			{
+				title: '周次',
+				dataIndex: 'week',
+				key: 'week',
+			},
+			{
+				title: '日期',
+				dataIndex: 'date',
+				key: 'date',
+			},
+			{
+				title: '下达单位',
+				dataIndex: 'superiorName',
+				key: 'superiorName',
+			},
+			{
+				title: '下达时间',
+				dataIndex: 'issuedTime',
+				key: 'issuedTime',
+			},
+			{
+				title: '执行状态',
+				dataIndex: 'status',
+				key: 'status',
+				render: (text) => {
+					if (text == '已执行') {
+						return (
+							<span>
+								<Badge status="success" />
+								<span>已执行</span>
+							</span>
+						)
+					} else {
+						return (
+							<span>
+								<Badge status="warning" />
+								<span>未执行</span>
+							</span>)
+					}
+				}
+			}
+		];
+		const { location, unifiedMenuData } = this.props;
+		const {
+			current,
+			pages,
+			records,
+			searchCount,
+			size,
+			total
+		} = unifiedMenuData;
 		return (
 			<div className='card-wrapper'>
 				<BreadcrumbComponent {...location} />
-				<Tabs defaultActiveKey="1" onChange={this.callback}>
-					<TabPane tab="统一菜单" key="1">
-						<TableOne  />
+				<Tabs
+					className="unifiedMenu"
+					defaultActiveKey=""
+					onChange={this.handleTabsChange}>
+					<TabPane tab="统一菜单" key="unified-menu">
+						<FilterByDateAndStatus
+							status={['全部', '未执行', '已执行']}
+							handleFilterChange={this.handleFetchUnifiedMenu}
+						/>
+						<Table
+							columns={tableColumns}
+							dataSource={records}
+							rowKey="id"
+							style={{ padding: '0px 25px' }}
+							onRow={(record) => {
+								return {
+									onClick: (event) => {
+										this.props.history.push('/menubar/public/details')
+									}
+								}
+							}}
+							pagination={
+								<Pagination
+									current={current}
+									onChange={(page, pageSize) =>
+										this.handleFetchUnifiedMenu({
+											page, pageSize
+										})}
+								/>}
+						/>
 					</TabPane>
-					<TabPane tab="我的菜单" key="2">
-						<TableTwo />
+					<TabPane tab="我的菜单" key="my-menu">
+						<MyMenu />
 					</TabPane>
-					<TabPane tab="菜单模板" key="3">
-					 <MenuTemplate />
+					<TabPane tab="菜单模板" key="menu-template">
+						<MenuTemplate />
 					</TabPane>
 				</Tabs>
 			</div>
@@ -89,6 +145,6 @@ class MenuCenter extends React.Component {
 	}
 }
 
-export default connect(({ unifiedMenus }) => ({ unifiedMenus
-
+export default connect(({ menuCenter }) => ({
+	unifiedMenuData: menuCenter.unifiedMenu
 }))(MenuCenter); 

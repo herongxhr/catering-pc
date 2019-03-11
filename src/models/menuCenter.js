@@ -1,8 +1,9 @@
-import { queryDishes } from '../services/api';
+import { queryDishes, queryUnifiedMenu } from '../services/api';
 
 export default {
     namespace: 'menuCenter',
     state: {
+        unifiedMenu: {},
         menuData: [],
         templates: [],
         dishesData: {},
@@ -21,6 +22,13 @@ export default {
     },
 
     effects: {
+        *fetchUnifiedMenu({ payload }, { call, put }) {
+            const data = yield call(queryUnifiedMenu, payload);
+            yield put({
+                type: 'saveUnifiedMenu',
+                payload: data,
+            })
+        },
         *fetchDishes({ payload }, { call, put }) {
             const data = yield call(queryDishes, payload);
             yield put({
@@ -36,6 +44,15 @@ export default {
                 ...state,
                 dishesData: { ...payload }
             }
+        },
+        saveUnifiedMenu(state, { payload }) {
+            return {
+                ...state,
+                unifiedMenu: {
+                    ...payload
+                }
+            }
+
         },
         // 根据flag确定是增加还是删除
         handleChangeList(state, { payload }) {

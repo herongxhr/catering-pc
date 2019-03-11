@@ -16,12 +16,13 @@ import Dosing from './pages/acount/Dosing';
 import Supply from './pages/acount/Supply';
 import OutStock from './pages/OutStock/index';
 import PurCatalog from './pages/PurCatalog/index';
-import ExcipientDetail from './pages/ExcipientDetail'
-import ReportDetail from './pages/ReportDetail'
-import IngreDetail from './pages/IngreDetail'
+import ExcipientDetail from './pages/ExcipientDetail';
+import ReportDetail from './pages/ReportDetail';
+import IngreDetail from './pages/IngreDetail';
 import PurOrderDetails from './pages/PurOrderDetails';
 import ArrangeDishes from '../src/components/ArrangeDishes';
 import SelectIngredients from '../src/components/SelectIngredients';
+import DeliveryAcceDetail from './pages/DeliveryAcceDetail';
 // import CreateTemplate from './components/CreateTemplate'
 // 国际化配置
 import { LocaleProvider } from 'antd';
@@ -30,8 +31,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 import './style/common.less';
 import Particulars from './pages/Particulars';
-import EditTemplate from './pages/EditTemplate'
-
+import EditTemplate from './pages/EditTemplate';
 import Edit from './pages/Edit';
 
 moment.locale('zh-cn');
@@ -43,9 +43,14 @@ export default function RouterConfig({ history }) {
         <LocaleProvider locale={zh_cn}>
           <App>
             <Switch>
-              <Route path="/home" component={Index} />
+              <Route path="/home" exact component={Index} />
+              <Route path="/home/purCatalog" component={PurCatalog} />
+              <Route path="/home/outStock" component={OutStock} />
               <Route path="/menubar" exact component={MenuCenter} />
-              <Route path="/menubar/public/details" exact component={Particulars} />
+              <Route path="/menubar/unified-menu" component={MenuCenter} />
+              <Route path="/menubar/my-menu" component={MenuCenter} />
+              <Route path="/menubar/menu-template" component={MenuCenter} />
+              <Route path="/menubar/public/details" component={Particulars} />
               <Route path="/menubar/template/newtemplate" exact component={EditTemplate} />
               <Route path="/menubar/template/new" component={Edit} />
               <Route path="/accSupermarket" component={AccSupermarket}></Route>
@@ -53,6 +58,7 @@ export default function RouterConfig({ history }) {
               <Route path="/purOrder/new" component={PurOrder}></Route>
               <Route path="/purOrder/details" component={PurOrderDetails}></Route>
               <Route path="/delivery" component={DeliveryAcce}></Route>
+              <Route path="/delivery/deliveryAcceDetail" component={DeliveryAcce}></Route>
               <Route path="/outStock" component={OutStock}></Route>
               <Route path="/parameter" component={Parameter}></Route>
               <Route path="/Setting" render={() =>
@@ -67,13 +73,13 @@ export default function RouterConfig({ history }) {
                   </Switch>
                 </Setting>
               }></Route>
-              <Route path="/outstock" component={OutStock}></Route>
-              <Route path="/purcatalog" component={PurCatalog}></Route>
+              <Route path="/purCatalog" component={PurCatalog}></Route>
               <Route path="/reportdetail" component={ReportDetail}></Route>
               <Route path="/excipientdetail" component={ExcipientDetail}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/arrangeDishes" component={ArrangeDishes}></Route>
               <Route path="/selectIngredients" component={SelectIngredients}></Route>
+              <Route path="/deliveryAcceDetail" component={DeliveryAcceDetail}></Route>
               <Redirect to="/home" />
             </Switch>
           </App>

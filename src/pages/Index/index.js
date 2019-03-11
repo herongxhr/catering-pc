@@ -5,7 +5,6 @@ import TodoListCard from '../../components/TodoListCard/TodoListCard'
 import Accepting from '../../components/Accepting/Accepting'
 import { Card, Button, Tabs, Radio, Divider } from 'antd';
 import { Link } from 'react-router-dom';
-import Charts from 'ant-design-pro/lib/Charts';
 import { Pie, yuan } from 'ant-design-pro/lib/Charts';
 import moment from 'moment'
 import { connect } from 'dva';
@@ -70,7 +69,6 @@ class A extends Component {
     this.querydeviceInfo()
     this.queryStatistics()
   }
-
   render() {
     const { home,accept } = this.props
     const todoList = home.todoList || [];
@@ -121,7 +119,7 @@ class A extends Component {
           <div className='App-content-paying-wrapper'>
             <div className='App-content-paying'>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <p style={{ width: 226, height: 65, fontSize: 16, lineHeight: 4, rgba: (0, 0, 0, 0.85) }}>应付款统计分析</p>
+                <p style={{ width: 226, height: 65, fontSize: 16, lineHeight: 4, rgba: (0, 0,     0, 0.85) }}>应付款统计分析</p>
                 <div>
                   <RadioGroup defaultValue="month" onChange={this.handleStatistics}>
                     <RadioButton value="month">本月</RadioButton>

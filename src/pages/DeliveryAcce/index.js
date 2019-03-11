@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Card, Table, Tag, Row, Col, Tabs } from 'antd'
-import Axios from '../../axios'
+import { Tabs } from 'antd'
 import BreadcrumbComponent from '../../components/BreadcrumbComponent'
 import DeliveryTable from './DeliveryTable'
 
@@ -9,64 +8,43 @@ import './index.less'
 
 const TabPane = Tabs.TabPane;
 
-
-const tab1Columns = [{
-  title: '配送单号',
-  dataIndex: 'order',
-  key: 'order',
-}, {
-  title: '供应商',
-  dataIndex: 'Supplier',
-  key: 'Supplier',
-}, {
-  title: '配送日期',
-  dataIndex: 'Delivery',
-  key: 'Delivery',
-}, {
-  title: '摘要',
-  dataIndex: 'abstract',
-  key: 'abstract',
-  render: abstract => (
-    <span>
-      {abstract.map((item, i) => <Tag color="blue" key={i}>{item}</Tag>)}
-    </span>
-  ),
-}, {
-  title: '操作',
-  dataIndex: 'Operation',
-  key: 'Operation',
-}];
-
 class E extends React.Component {
   state = {
-    DataSource: []
+    DataSource: [],
+    tabkey:'pendingDelivery',
   }
 
-  componentDidMount() {
-    Axios.ajax({
-      url: '/delivery'
-    }).then((value) => {
-      this.setState({
-        DataSource: value
-      })
+  queryDelivery = (params = {}) =>{
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'deliveryAcce/queryDelivery',
+      payload:{
+       ...params
+      }
     })
+  }
+  componentDidMount() {
+    this.queryDelivery()
+  }
+  callback = (value) =>{
+   this.setState({tabkey:value})
   }
 
   render() {
-    const { location } = this.props;
-    const dataSource = this.state.DataSource
+    const { location,deliveryAcce } = this.props;
+    const delivery = deliveryAcce.delivery || [];
     return (
       <div className='DeliveryAcce'>
-        <BreadcrumbComponent {...location} />
-        <Tabs defaultActiveKey="1" onChange={this.callback}>
-					<TabPane tab="待配送(8)" key="1">
-            <DeliveryTable />
+        <BreadcrumbComponent {...location} /> 
+        <Tabs defaultActiveKey="pendingDelivery" onChange={this.callback}>
+					<TabPane tab={'待配送'+'('+delivery.length+')'} key="pendingDelivery">
+            <DeliveryTable delivery={delivery} tabkey={this.state.tabkey}/>
 					</TabPane>
-					<TabPane tab="待验收(4)" key="2">
-            <DeliveryTable />
+					<TabPane tab={'待验收'+'('+delivery.length+')'} key="pendingAccept">
+            <DeliveryTable delivery={delivery} tabkey={this.state.tabkey}/>
 					</TabPane>
-          <TabPane tab="已验收" key="3">
-            <DeliveryTable />
+          <TabPane tab={'已验收'+'('+delivery.length+')'} key="accepted">
+            <DeliveryTable delivery={delivery} tabkey={this.state.tabkey}/>
 					</TabPane>
 				</Tabs>
       </div>
@@ -74,4 +52,6 @@ class E extends React.Component {
   }
 }
 
-export default connect(({ }) => ({}))(E);
+export default connect(({ deliveryAcce }) => ({
+  deliveryAcce,
+}))(E);

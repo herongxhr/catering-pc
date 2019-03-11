@@ -115,13 +115,13 @@ export function queryRule(params) {
 }
 
 //菜单中心专区
-export function unifiedMenusAlready(params) {
-    console.log(params)
+export function queryUnifiedMenu(params) {//获取统一菜单数据
     return request({
         method: 'get',
         url: '/catering/unifiedMenus',
         data: {
-            params,
+            showLoading: true,
+            params: { ...params }
         }
     })
 }
@@ -233,10 +233,20 @@ export function queryGoodsByOrderId(id) {
     })
 }
 
-export function queryPurCatalog() {
+export function queryPurCatalog(params) {
     return request({
         method: 'get',
         url: '/catering/workbench/purchasingcatalog',
+        data: {
+            showLoading: true,
+            params
+        }
+    })
+}
+export function queryDelivery() {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/delivery',
         data: {
             showLoading: true,
         }

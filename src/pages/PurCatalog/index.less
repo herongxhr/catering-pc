@@ -1,7 +1,7 @@
 .purCata {
   .ant-card-body {
     background: rgba(240, 242, 245);
-}
+  } 
   .cataTable{
     width: 1160px;
     margin: 0 auto;
@@ -64,11 +64,30 @@
   cursor: pointer;
 }
 }
-.modalList{
+.modal{
+  li{
+    list-style:disc;
+    color:rgba(0,0,0,0.65)
+  }
+  li:not(:first-child){
+    margin-top:30px;
+  }
   .ant-modal-content {
+    min-height: 90px;
     width: 235px;
+    position: relative;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    top:320px;
+    left:500px;
   }
-  .ant-modal-content .ant-modal-body {
-    height: 490px;
-  }
+  .ant-modal-body {
+    padding: 20px 53px 20px 20px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-wrap: break-word;
 }
+} 

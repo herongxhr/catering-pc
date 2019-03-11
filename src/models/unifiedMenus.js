@@ -1,4 +1,4 @@
-import {  unifiedMenusAlready ,  myMenu , myTemplate , isRecommend , recommendTemplate , myCopy} from '../services/api';
+import {  queryUnifiedMenu ,  myMenu , myTemplate , isRecommend , recommendTemplate , myCopy} from '../services/api';
 
 export default {
   namespace:'unifiedMenus',
@@ -13,7 +13,7 @@ export default {
   effects: {     
     *queryList({ payload }, { call, put }) {
         //call方法首参数为要调用的异步方法
-        const  data  = yield call(unifiedMenusAlready,payload);
+        const  data  = yield call(queryUnifiedMenu,payload);
         yield put({
             type: 'saveDistributionList',
             payload: data || {},

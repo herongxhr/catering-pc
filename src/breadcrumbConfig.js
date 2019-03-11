@@ -1,8 +1,8 @@
 export default {
     '/': '工作台',
     '/home/': '工作台',
-    "/home/purCatalog":"采购目录",
-    "/home/outStock":"缺样上报",
+    "/home/purCatalog/":"采购目录",
+    "/home/outStock/":"缺样上报",
     '/menubar/': '菜单中心',
     '/menubar/public/': '统一菜单',
     '/menubar/public/details/': '详情',
