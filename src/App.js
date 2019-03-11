@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import BaseMenu from './components/BaseMenu';
-import { Layout, Table, } from 'antd';
+import { Layout } from 'antd';
 
 const { Content, Header } = Layout;
 

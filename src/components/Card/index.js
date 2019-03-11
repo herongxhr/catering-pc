@@ -63,7 +63,7 @@ class MyTemplateCard extends React.Component {
         className='card'
         style={{ ...styles }}
         actions={[cardFooter]}
-        hoverable={true}
+        // hoverable={true}
         onMouseOver={this.handleMouseOver}
         onMouseLeave={this.handleMouseOut}
         onClick={this.handleHistory}
