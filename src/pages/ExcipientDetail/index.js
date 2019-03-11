@@ -96,8 +96,12 @@ class ExcipientDetail extends Component{
                                     <p className='item'>4.文字描述文字描述文字描述文字描述文字描述</p>
                                     <p className='item'>5.文字描述文字描述文字描述</p>
                                 </div>
-                                <img className='standardPic' src={Img} alt=''> 
-                                </img>
+                                <div className='standList'>
+                                <img src={Img} alt=""></img>
+                                <img src={Img} alt="" style={{marginLeft:30,marginRight:30}}></img>
+                                <img src={Img} alt=""  style={{marginRight:30}}></img>
+                                <img src={Img} alt=""></img>
+                            </div>
                             </div>
                         </div>
                     </div>

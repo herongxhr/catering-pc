@@ -4,26 +4,18 @@ import TwoBread from '../../components/TwoBread'
 import BreadcrumbComponent from '../../components/BreadcrumbComponent'
 import { Card, Radio, Table, Alert,Tooltip,Modal } from 'antd'
 import { connect } from 'dva';
+import { Link } from 'react-router-dom';
 import './index.less'
 
 class PurCatalog extends React.Component {
   state = {
-    DataSource: [],
-    tableSource: [],
     disabled: true,
-    visible: false
-  }
-  notPass = () => {
-    var dataSource = this.state.DataSource.filter(item => item.status == 1)
-    this.setState({
-      tableSource: dataSource
-    })
-  }
-  pass = () => {
-    var dataSource = this.state.DataSource.filter(item => item.status == 0)
-    this.setState({
-      tableSource: dataSource
-    })
+    visible: false,
+    query:{
+      ingreType:'',
+      orderTime:['',''],
+      status:''
+    }
   }
   queryPurCatalog = (params = {}) =>{
     const { dispatch } = this.props;
@@ -35,11 +27,28 @@ class PurCatalog extends React.Component {
       }
     })
   }
-  
   componentDidMount (){
     this.queryPurCatalog()
     }
-    showModal = () => {
+  handlePurCatalog = (obj) =>{
+    let data={};
+    if(obj.ingreType){
+      data={ ingreType:obj.ingreType}
+    }
+    if(obj.status){
+      data={status:obj.status}
+    }
+    if(obj.orderTime){
+      data={orderTime:obj.orderTime}
+    }
+    this.setState(
+      Object.assign(this.state.query, data),
+      this.queryPurCatalog(this.state.query)
+    )
+  }
+  showModal = (event) => {
+    var e = event || window.event;
+    console.log(e.clientX,e.clientY,'11111')
       this.setState({
         visible: true
       });
@@ -65,7 +74,9 @@ class PurCatalog extends React.Component {
       title: '食材名称',
       dataIndex: 'ingredientName',
       key: 'ingredientName',
-      render: text => <a href="/ingredetail">{text}</a>,
+      render: (text,record) => {
+      return(<Link to={{pathname:"/ingredetail",query:{id:record.id}}}>{text}</Link>)
+    },
       width:'260'
     }, {
       title: '计量单位',
@@ -97,15 +108,15 @@ class PurCatalog extends React.Component {
       <BreadcrumbComponent {...location} />
         <Card>
           <div className='cataTable'>
-            <WrappedPurForm />
+            <WrappedPurForm handlePurCatalog={this.handlePurCatalog}/>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 30 }}>
               <div  style={{ display: 'flex', }}>
-                <Radio.Group defaultValue="all" onChange={this.handleFormLayoutChange}>
-                  <Radio.Button value="all" onClick={this.all}>全部</Radio.Button>
-                  <Radio.Button value="ingredients" onClick={this.notPass}>食材</Radio.Button>
+                <Radio.Group defaultValue="all" onChange={(e)=>{this.handlePurCatalog({status:e.target.value})}}>
+                  <Radio.Button value="all">全部</Radio.Button>
+                  <Radio.Button value="ingredients">食材</Radio.Button>
                   <Radio.Button value="excipient">辅料</Radio.Button>
                 </Radio.Group>
-                <Alert message="共9993条" type="warning" showIcon className='alert' />
+                <Alert message={catalogData.length} type="warning" showIcon className='alert' />
               </div>
             </div>
             <div style={{ marginTop: 20 }}>
@@ -115,17 +126,18 @@ class PurCatalog extends React.Component {
         </Card>
         <div className='modalList'>
           <Modal
+            className='modal'
             visible={this.state.visible}
             onOk={this.handleOk}
             onCancel={this.handleCancel}
             mask={false}
             closable={false}
             footer={null}
-            style={{ top: 300 ,right:-30}}
+            ref={(modal)=>{this.myRef=modal}}
           >
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
+            <li>28元<span>2018-11-12</span></li>
+            <li>28元<span>2018-11-12</span></li>
+            <li>28元<span>2018-11-12</span></li>
           </Modal>
         </div>
       </div>

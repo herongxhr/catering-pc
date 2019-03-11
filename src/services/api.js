@@ -219,10 +219,20 @@ export function queryGoodsByOrderId(id) {
     })
 }
 
-export function queryPurCatalog() {
+export function queryPurCatalog(params) {
     return request({
         method: 'get',
         url: '/catering/workbench/purchasingcatalog',
+        data: {
+            showLoading: true,
+            params
+        }
+    })
+}
+export function queryDelivery() {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/delivery',
         data: {
             showLoading: true,
         }

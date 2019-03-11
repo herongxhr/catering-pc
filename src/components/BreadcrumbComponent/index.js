@@ -23,7 +23,7 @@ const BreadcrumbComponent = ({ pathname, className }) => {
             className={className}
             style={{
                 background: "#fff",
-                boxShadow: "0 2px 4px 0 rgba(0,0,0,0.1)"
+                boxShadow: "0 2px 4px 0 rgba(0,0,0,0.1)",
             }}>
             <Breadcrumb
             style={{

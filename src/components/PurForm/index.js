@@ -30,6 +30,7 @@ class PurForm extends React.Component {
             })(
               <Select     
                 style={{ width: 170 }}
+                onChange={(value)=>{this.props.handlePurCatalog({ingreType:value})}}
               > 
                 <Option value="all">全部</Option>
                 <Option value="ingredients">食材</Option>
@@ -44,7 +45,7 @@ class PurForm extends React.Component {
             getFieldDecorator('orderTime',{
                 initialValue:'',
             })(
-              <RangePicker onChange={this.handleChange} style={{width:240}}/>
+              <RangePicker onChange={(value)=>{this.props.handlePurCatalog({orderTime:value})}} style={{width:240}}/>
             )
           }
         </FormItem>

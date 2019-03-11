@@ -44,15 +44,37 @@ const data=[{
 ]
 class Report extends React.Component {
   state = {
-    DataSource: [],
-    tableSource: [],
     disabled: false,
     visible: false,
-    reportKey:'all'
+    query:{
+      type:'',
+      status:''
+    }
   }
-  handleReport = (e) =>{
-    const { queryReportmissing } = this.props;
-    queryReportmissing({status:e.target.value})
+  queryReportmissing = (params = {}) => {
+		const { dispatch } = this.props;
+		dispatch({
+		  type: 'report/queryReportmissing',
+		  payload:{
+			...params,
+		  }
+		})
+	}
+	componentDidMount() {
+		 this.queryReportmissing()
+   }
+  handleReport = (argm) =>{
+    let dataFilter={};
+    if(argm.type){
+      dataFilter={type:argm.type}
+    }
+    if(argm.status){
+      dataFilter={status:argm.status}
+    }
+    this.setState(
+      Object.assign(this.state.query, dataFilter),
+      this.queryReportmissing(this.state.query)
+    )
   } 
   //催促
   handleUrg = (id)=>{
@@ -63,6 +85,7 @@ class Report extends React.Component {
   confirm = (id) =>{
     console.log(id,"222")
   }
+
   render() {
     const tabColumns = [{
       title: '申请日期',
@@ -111,15 +134,16 @@ class Report extends React.Component {
           </div> : <span className='check'>查看详情</span>)
       }
     }];
-    const { reportList } = this.props
+    const { report } = this.props
+    const reportList = report.reportList
     const _this = this
     return (
       <div className='reportTable'>
-        <WrappedReportForm />
+        <WrappedReportForm  handleReport={this.handleReport} queryReportmissing={this.queryReportmissing}/>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <WrappedReportButton />
           <div>
-            <Radio.Group defaultValue="all" onChange={this.handleReport}>
+            <Radio.Group defaultValue="all" onChange={(e)=>{this.handleReport({status:e.target.value})}}>
               <Radio.Button value="all" >全部</Radio.Button>
               <Radio.Button value="unreviewed">未审核</Radio.Button>
               <Radio.Button value="receipt">已回执</Radio.Button>
