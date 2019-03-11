@@ -30,9 +30,16 @@ class BasicCon extends React.Component {
     var btn = classNames({foo:this.state.show},{bar:!this.state.show})
     return(
       <div className='basicConfig'>
-        <p>基本配置 - 单位基本配置设置</p>
+        <div className='setting-title'>
+          <div className='setting-main-title'>
+            基本配置
+          </div>
+          <div className='setting-sub-title'>
+          -  单位基本配置设置
+          </div>
+        </div>
         <Form layout='vertical'>
-          <FormItem label='就餐人数(学生)'>
+          <FormItem label={<span>就餐人数<span style={{color:'#D9D9D9',marginLeft:10}}>(学生)</span></span>}>
             {getFieldDecorator('student', {
                   rules: [
                     {
@@ -42,11 +49,11 @@ class BasicCon extends React.Component {
                   ],
                 })(
                 <div style={{width:200}}>
-                  <Input placeholder='2000' style={{width:150}} />
+                  <Input placeholder='2000' style={{width:100,height:32,marginRight:10}} />
                   <span>人</span>
                 </div>)}
           </FormItem>
-          <FormItem label='就餐人数(教职工)'>
+          <FormItem label={<span>就餐人数<span style={{color:'#D9D9D9',marginLeft:10}}>(教职工)</span></span>}>
             {getFieldDecorator('worker', {
                   rules: [
                     {
@@ -56,17 +63,19 @@ class BasicCon extends React.Component {
                   ],
                 })(
                 <div style={{width:200}}>
-                  <Input placeholder='300' style={{width:150}} />
+                  <Input placeholder='300' style={{width:100,height:32,marginRight:10}} />
                   <span>人</span>
                 </div>)}
           </FormItem>
           <FormItem>
             {getFieldDecorator('checked', {
               initialValue:true
-                })(<Switch onChange={this.switchChange} />)}
+                })(<div>
+                    <span style={{marginRight:8}}>自动下单</span><Switch onChange={this.switchChange} />
+                  </div>)}
           </FormItem>
           <div className={btn}>
-            <FormItem label='菜单(选择时间后,系统将自动为你执行菜单)'>
+                <FormItem label={<span>菜单<span style={{color:'#D9D9D9',marginLeft:10}}>(选择时间后,系统将自动为你执行菜单)</span></span>}>
               {
                   getFieldDecorator('state', {
                       initialValue: '1'
@@ -81,7 +90,7 @@ class BasicCon extends React.Component {
                   )
               }
             </FormItem>
-            <FormItem label='采购订单(选择时间后,系统将自动为你下达采购订单)'>
+            <FormItem label={<span>采购订单<span style={{color:'#D9D9D9',marginLeft:10}}>(选择时间后,系统将自动为你下达采购订单)</span></span>}>
               {
                     getFieldDecorator('value', {
                         initialValue: '请选择'
@@ -98,7 +107,7 @@ class BasicCon extends React.Component {
             </FormItem>
           </div>
           <Button type="primary" onClick={this.handleSubmit}>
-              更新信息
+              更新基本配置
           </Button>
         </Form>
       </div>

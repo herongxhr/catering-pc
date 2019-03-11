@@ -16,7 +16,7 @@ class Setting extends React.Component {
   render() {
     return(
       <Layout className='setLayout'>
-        <Content style={{ padding: '20px 20px', width:'1160px' , margin:'0px auto' }}>
+        <Content style={{ width:'1160px' , height:'854px', margin:'0px auto' , background: '#fff', marginTop:'20px' }}>
           <Layout style={{ padding: '24px 0', background: '#fff' }}>
             <Sider width={200} style={{ background: '#fff' }}>
               <SettingMenu />

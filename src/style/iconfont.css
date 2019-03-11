@@ -16,11 +16,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-bell:before {
-  content: "\e62b";
+.icon-caret-down:before {
+  content: "\e8ec";
 }
 
-.icon-people:before {
-  content: "\e620";
+.icon-caret-right:before {
+  content: "\e8ed";
 }
+
 

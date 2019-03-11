@@ -1,6 +1,8 @@
-import React, { Component, Fragment } from 'react';
-import { Form, Input, Upload, Select, Button } from 'antd';
+import React, { Component } from 'react';
+import { Form, Input, Upload, Select, Button , Card } from 'antd';
 import PhoneView from './PhoneView';
+import CitySelect from './citySelect';
+import PhoneNumber from './PhoneNumber';
 
 import './BaseView.less';
 
@@ -10,6 +12,7 @@ const { Option } = Select;
 
 const validatorPhone = (rule, value, callback) => {
   const values = value.split('-');
+  console.log(values)
   if (!values[0]) {
     callback('Please input your area code!');
   }
@@ -34,7 +37,15 @@ class Imformation extends Component {
     });
   };
 
-
+  handleSubmit = ()=>{
+    let userInfo = this.props.form.getFieldsValue();
+    // this.props.form.validateFields((err,values)=>{
+    //     if(!err){
+    //         message.success(`${userInfo.userName} 恭喜你，您通过本次表单组件学习，当前密码为：${userInfo.userPwd}`)
+    //     }
+    // })
+    console.log(userInfo)
+  }
 
   getViewDom = ref => {
     this.view = ref;
@@ -45,8 +56,16 @@ class Imformation extends Component {
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <div className='baseView' ref={this.getViewDom}>
+      <div className='baseView' ref={this.getViewDom} >
         <div className='left'>
+          <div className='setting-title'>
+            <div className='setting-main-title'>
+              基本资料
+            </div>
+            <div className='setting-sub-title'>
+            -  单位基本资料设置
+            </div>
+          </div>
           <Form layout='vertical' onSubmit={this.handleSubmit} hideRequiredMark>
             <FormItem label='单位全称'>
               {getFieldDecorator('company', {
@@ -68,56 +87,35 @@ class Imformation extends Component {
                 ],
               })(<Input placeholder='横店中心小学' />)}
             </FormItem>
-            <FormItem label='个人简介'>
-              {getFieldDecorator('profile', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'a',
-                  },
-                ],
-              })(
-                <Input.TextArea
-                  placeholder='a'
-                  rows={4}
-                />
-              )}
+            <FormItem label='单位地址'>
+              {getFieldDecorator('city')
+                (<CitySelect />)
+              }
             </FormItem>
-            <FormItem label='国家/地区'>
-              {getFieldDecorator('country', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'a',
-                  },
-                ],
-              })(
-                <Select style={{ maxWidth: 220 }}>
-                  <Option value="China">中国</Option>
-                </Select>
-              )}
-            </FormItem>
-            <FormItem label='所在省市'>
-              {getFieldDecorator('geographic', {
+            <FormItem label={<span>平台管理员/手机号<span style={{color:'#D9D9D9',marginLeft:10}}>(用于接收平台相关信息)</span></span>}>
+              {getFieldDecorator('Telephone', {
                 rules: [
                   {
                     required: true,
                     message: 'a',
                   }
                 ],
-              })(<Input />)}
+              })(<PhoneNumber />)}
             </FormItem>
-            <FormItem label='街道地址'>
-              {getFieldDecorator('address', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'a',
-                  },
-                ],
-              })(<Input />)}
+            <FormItem
+              label={<span>常用邮箱<span style={{color:'#D9D9D9',marginLeft:10}}>(用于接收平台相关信息与各类报表)</span></span>}
+            >
+              {getFieldDecorator('email', {
+                rules: [{
+                  type: 'email', message: '邮箱格式不正确',
+                }, {
+                  required: true, message: '请输入你的邮箱',
+                }],
+              })(
+                <Input placeholder='968874937@163.com' />
+              )}
             </FormItem>
-            <FormItem label='联系电话'>
+            <FormItem label={<span>固定电话<span style={{color:'#D9D9D9',marginLeft:10}}>(用于接收日常咨询)</span></span>}>
               {getFieldDecorator('phone', {
                 rules: [
                   {
@@ -128,7 +126,7 @@ class Imformation extends Component {
                 ],
               })(<PhoneView />)}
             </FormItem>
-            <Button type="primary">
+            <Button type="primary" onClick={this.handleSubmit}>
               更新信息
             </Button>
           </Form>
