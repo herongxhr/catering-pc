@@ -6,13 +6,13 @@ const { Search } = Input;
 const { Option } = Select;
 
 class SelectDishes extends React.Component {
-
     render() {
         const {
             title,
             tableColumns,
             visible,
-            handleModalVisble,
+            handleHideModal,
+            handlFetchDishes,
             changeItemList,
             tableData: {
                 records,
@@ -22,10 +22,14 @@ class SelectDishes extends React.Component {
                 total,
             },
             dishesInMenu,
+            rowIndex,
+            columnIndex
         } = this.props;
 
-        const tagList = (
-            dishesInMenu.map(item => (<Tag
+        // columnIndex默认为''，此时无法读取其值
+        const tagList = columnIndex ? dishesInMenu[rowIndex][columnIndex] : []
+        const tagListDom = tagList.length ? tagList.map(item => (
+            <Tag
                 color="green"
                 style={{
                     height: 32,
@@ -38,8 +42,7 @@ class SelectDishes extends React.Component {
                 onClose={() => { changeItemList(item, -1) }}
             >
                 {item.foodName}{item.properties}
-            </Tag>))
-        )
+            </Tag>)) : '';
 
         return (
             <Modal
@@ -56,18 +59,18 @@ class SelectDishes extends React.Component {
                 title={title}
                 visible={visible}
                 okText="保存"
-                onOk={handleModalVisble}
-                onCancel={handleModalVisble}
+                onOk={handleHideModal}
+                onCancel={handleHideModal}
             >
                 <div className={"leftContent"}>
                     <div className={"filterWrap"}>
                         <label style={{ width: 42 }}>类别：
                                 <Select
                                 style={{ width: 170 }}
-                                defaultValue=""
-                            // onChange={(value) => handleFilter({ dateRange: value })}
+                                defaultValue="all"
+                                onChange={value => handlFetchDishes(value)}
                             >
-                                <Option value="">全部</Option>
+                                <Option value="all">全部</Option>
                                 <Option value="meatDish">荤菜</Option>
                                 <Option value="vegetable">素菜</Option>
                                 <Option value="halfAMeat">半荤</Option>
@@ -77,7 +80,7 @@ class SelectDishes extends React.Component {
                         </label>
                         <Search
                             placeholder="请输入关键字进行搜索"
-                            onSearch={() => { }}
+                            onSearch={value => handlFetchDishes(value)}
                             style={{ width: 190, marginLeft: 10 }}
                         />
                     </div>
@@ -95,7 +98,7 @@ class SelectDishes extends React.Component {
                 </div>
                 <div className={"rightResult"}>
                     <ul className={"tagList"}>
-                        {tagList}
+                        {tagListDom}
                     </ul>
                 </div>
             </Modal>

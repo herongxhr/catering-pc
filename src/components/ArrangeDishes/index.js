@@ -3,45 +3,62 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import SelectDishes from '../SelectIDishes';
 import classNames from 'classnames'
-import { Table, Button } from 'antd';
+import { Table, Button, Tag } from 'antd';
 import styles from './index.module.less';
 
 class ArrangeDishes extends Component {
-
     state = {
         showModal: false,
-        currRrecord: '',
-        currRowIndex: ''
+        columnIndex: '',
+        rowIndex: ''
     }
+
     // 控制选菜或选食材modal的显示
-    handleShowModal = (record, rowIndex) => {
+    handleShowModal = (columnIndex, rowIndex) => {
         this.setState({
             showModal: true,
-            currRecord: record,
-            currRowIndex: rowIndex
+            columnIndex,
+            rowIndex
         })
     }
+
     // 在选菜或选食材modal中点击确定或取消隐藏modal
-    handleModalVisble = () => {
+    handleHideModal = () => {
         this.setState({
             showModal: false
         })
     }
+
     // 在选菜或选食材modal中点击添加或点击标签关闭时回调
     // flag===1为添加，flag===-1时为删除
     // 使用state中的currRecord和currRowIndex定位单元格
     changeItemList = (record, flag) => {
+        if (!flag) {
+            this.setState({
+                showModal: true
+            })
+        }
         const { dispatch } = this.props;
-        const { currRecord, currRowIndex } = this.state;
+        const { columnIndex, rowIndex } = this.state;
         dispatch({
-            type: 'menuCenter/changeItemList',
+            type: 'menuCenter/handleChangeList',
             payload: {
                 record,
-                currRecord,
-                currRowIndex,
+                columnIndex,
+                rowIndex,
                 flag
             }
         })
+    }
+
+    // 选菜或选食材中筛选区域
+    handlFetchDishes = (value) => {
+        const { dispatch } = this.props;
+        dispatch({
+            type: 'menuCenter/fetchDishes',
+            payload: value
+        })
+
     }
 
     // 表格中点击查看的回调,要添加到表头定义中
@@ -53,12 +70,11 @@ class ArrangeDishes extends Component {
         }))
     }
 
+
     componentDidMount() {
-        const { dispatch } = this.props;
-        dispatch({
-            type: 'menuCenter/fetchDishes'
-        })
+        this.handlFetchDishes('all');
     }
+
     render() {
         const {
             className,
@@ -67,96 +83,91 @@ class ArrangeDishes extends Component {
             // 排餐表
             dishesInMenu,
         } = this.props;
+        const { columnIndex, rowIndex } = this.state;
+        const clsTd = styles.weekdayTd;
+        const clsBtn = styles.clsBtn
 
-        // 初始化表头数据
+        // 定义表头数据
         const tableColumns = [
             {
                 title: '周',
                 key: 'weekday',
                 dataIndex: 'weekday',
-                align: 'center',
-                width: 80
+                width: 80,
+                align: 'center'
             },
             {
                 title: '早餐',
                 key: 'breakfast',
-                width: 260,
+                dataIndex: 'breakfast',
+                className: clsTd,
                 render: (text, record) => (
                     <ul>
-                        {text.length ? text.map(item => <li key={item.id}>{item.foodName}</li>) : null}
-                        <Button type="dashed" block>+添加</Button>
+                        {text.length ? text.map(item =>
+                            <li
+                                onClick={() => {
+                                    this.handleShowModal('breakfast', record.id)
+                                }}
+                                className={styles.dishItem}
+                                key={item.id}
+                            >{item.foodName}</li>) : ''}
+                        <Button
+                            className={clsBtn}
+                            onClick={() => { this.handleShowModal('breakfast', record.id) }}
+                            type="dashed" block
+                        >+添加</Button>
                     </ul>
                 ),
-                onCell: (record, rowIndex) => {
-                    return {
-                        onClick: () => this.handleShowModal(record, rowIndex),
-                    }
-                }
             },
             {
                 title: '午餐',
                 key: 'lunch',
                 dataIndex: 'lunch',
-                width: 260,
+                className: clsTd,
                 render: (text, record) => (
                     <ul>
-                        {text.length ? text.map(item => <li key={item.id}>{item.foodName}</li>) : null}
-                        <Button type="dashed" block>+添加</Button>
+                        {text.length ? text.map(item => <li className={styles.dishItem} key={item.id}>{item.foodName}</li>) : ''}
+                        <Button
+                            className={clsBtn}
+                            onClick={() => { this.handleShowModal('lunch', record.id) }}
+                            type="dashed" block
+                        >+添加</Button>
                     </ul>
                 ),
-                onCell: (record, rowIndex) => {
-                    return {
-                        onClick: this.handleShowModal,
-                    }
-                }
             },
             {
                 title: '点心',
                 key: 'dessert',
                 dataIndex: 'dessert',
-                width: 260,
+                className: clsTd,
                 render: (text, record) => (
                     <ul>
-                        {text.length ? text.map(item => <li key={item.id}>{item.foodName}</li>) : null}
-                        <Button type="dashed" block>+添加</Button>
+                        {text.length ? text.map(item => <li className={styles.dishItem} key={item.id}>{item.foodName}</li>) : ''}
+                        <Button
+                            className={clsBtn}
+                            onClick={() => { this.handleShowModal('dessert', record.id) }}
+                            type="dashed" block
+                        >+添加</Button>
                     </ul>
                 ),
-                onCell: (record, rowIndex) => {
-                    return {
-                        onClick: this.handleShowModal,
-                    }
-                }
             },
             {
                 title: '晚餐',
                 key: 'supper',
                 dataIndex: 'supper',
-                width: 260,
+                className: clsTd,
                 render: (text, record) => (
                     <ul>
-                        {text.length ? text.map(item => <li key={item.id}>{item.foodName}</li>) : null}
-                        <Button type="dashed" block>+添加</Button>
+                        {text.length ? text.map(item => <li className={styles.dishItem} key={item.id}>{item.foodName}</li>) : ''}
+                        <Button
+                            className={clsBtn}
+                            onClick={() => { this.handleShowModal('supper', record.id) }}
+                            type="dashed" block
+                        >+添加</Button>
                     </ul>
                 ),
-                onCell: (record, rowIndex) => {
-                    return {
-                        onClick: this.handleShowModal,
-                    }
-                }
             },
         ]
-        //表格数据,通过循环加上一个weekday属性
-        const dishesArranged = dishesInMenu.concat(Array.from({ length: 7 })).map((weekdayRow = {}, index) => {
-            const weekday = ['一', '二', '三', '四', '五', '六', '日'];
-            weekdayRow.id = index;
-            weekdayRow.weekday = weekday[index];
-            weekdayRow.breakfast = [];
-            weekdayRow.lunch = [];
-            weekdayRow.dessert = [];
-            weekdayRow.supper = [];
-            console.log(weekdayRow);
-            return weekdayRow;
-        })
 
         // 弹出框modal表头数据
         const modalTableColumns = [
@@ -179,29 +190,34 @@ class ArrangeDishes extends Component {
                 title: '图片',
                 key: 'img',
                 dataIndex: 'img',
-                render: (_, record) => <span onClick={() => {
+                render: (_, record) => <a onClick={() => {
                     this.handlePreviewItem(record);
-                }}>查看</span>
+                }}>查看</a>
             },
             {
                 title: '操作',
                 key: 'add',
-                dataIndex: 'add',
-                render: (_, record) => <a onClick={() => {
-                    this.changeItemList(record, 1)
+                width: 100,
+                render: (_, record) => {
+                    console.log('filter', dishesInMenu, rowIndex, columnIndex);
+                    // modal表格在点击单元格后才会渲染
+                    return dishesInMenu[rowIndex][columnIndex].length
+                        ? (dishesInMenu[rowIndex][columnIndex]
+                            .some(item => item.id === record.id)
+                            ? <span>已添加</span>
+                            : <a onClick={() => { this.changeItemList(record, 1) }}>添加</a>)
+                        : <a onClick={() => { this.changeItemList(record, 1) }}>添加</a>;
                 }
-                }>添加</a>
             },
         ];
 
-        console.log(1, dishesInMenu);
         const clsString = classNames(styles.arrangeDishes, className);
         return (
             <div className={clsString}>
                 <Table
                     bordered
                     columns={tableColumns}
-                    dataSource={dishesArranged}
+                    dataSource={dishesInMenu}
                     rowKey="id"
                     pagination={false}
                 />
@@ -214,13 +230,17 @@ class ArrangeDishes extends Component {
                     // modal的显示属性
                     visible={this.state.showModal}
                     // 隐藏modal的方法
-                    handleModalVisble={this.handleModalVisble}
+                    handleHideModal={this.handleHideModal}
                     // modal中表格数据
                     tableData={dishesData}
                     // 选菜或选食材modal中已选菜品或食材数据
                     dishesInMenu={dishesInMenu}
+                    // 选择类别下拉框时的回调
+                    handlFetchDishes={this.handlFetchDishes}
                     // 关闭标签时的回调
                     changeItemList={this.changeItemList}
+                    columnIndex={this.state.columnIndex}
+                    rowIndex={this.state.rowIndex}
                 />
             </div>
         )

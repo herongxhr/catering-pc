@@ -2,19 +2,6 @@
 //qs.stringify(object, [options]);
 //import { stringify } from 'qs';
 import request from '../utils/request';
-// 菜单中心
-export function queryDishes(params) {
-    return request({
-        method: 'get',
-        url: '/catering/camenu/selectDishes',
-        data: {
-            showLoading: true,
-            params: {
-                ...params
-            }
-        }
-    })
-}
 
 // 辅料商城
 export function queryGoodsF({ params }) {
@@ -186,6 +173,19 @@ export function myCopy(params) {
         url: '/catering/camenuTemplate/my/item/copy',
         data: {
             params,
+        }
+    })
+}
+
+export function queryDishes(params) {
+    return request({
+        method: 'get',
+        url: '/catering/camenu/selectDishes',
+        data: {
+            showLoading: true,
+            params: {
+                type: params
+            }
         }
     })
 }
