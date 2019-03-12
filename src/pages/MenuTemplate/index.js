@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Select, Input, Button, Badge, Tag, Icon, Radio, Card } from 'antd';
+import { Form, Select, Input, Button, Badge, Tag, Icon, Radio, Card, Checkbox } from 'antd';
 import { Link, routerRedux } from 'dva/router';
 import classNames from 'classnames';
 import Cartoon from '../../components/Cartoon';
@@ -39,7 +39,6 @@ class MenuTemplate extends React.Component {
   }
   // 改变排序
   handleSorter = () => {
-    console.log(this.props.getFieldsValue)
     this.setState({
       desc: !this.state.desc
     })
@@ -126,7 +125,6 @@ class MenuTemplate extends React.Component {
       myMenuTemplateData = {},
       form: {
         getFieldDecorator,
-        getFieldsValue,
       }
     } = this.props
 
@@ -164,13 +162,15 @@ class MenuTemplate extends React.Component {
               </FormItem>
               {/* 排序按钮 */}
               <FormItem>
-                {getFieldDecorator('sorter', { valuePropName: 'type' })(
+                {getFieldDecorator('sorter', { valuePropName: 'checked' })(
                   <div className='top-down' onClick={this.handleSorter}>
-                    <Icon id='up' type="caret-up"
+                    <Icon type="caret-up"
                       className={classNames({ 'blue-color': desc })} />
-                    <Icon id='down' type="caret-down"
+                    <Icon type="caret-down"
                       className={classNames({ 'blue-color': !desc })} />
-                  </div>)}
+                    <Checkbox style={{ display: "none" }} />
+                  </div>
+                )}
               </FormItem>
               <FormItem>
                 {getFieldDecorator('search')
