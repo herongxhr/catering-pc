@@ -7,6 +7,7 @@ import MenuTemplateCard from '../../components/MenuTemplateCard';
 import BreadcrumbWithTabs from '../../components/BreadcrumbWithTabs';
 // import { template } from '../../DataConfig';
 import { connect } from 'dva';
+import Arrow from '../../components/Arrow'
 import './index.less'
 
 const FormItem = Form.Item;
@@ -120,6 +121,10 @@ class MenuTemplate extends React.Component {
   //   }
   // }
 
+  handleChange = (value) => {
+    console.log(JSON.stringify(this.props.form.getFieldsValue()))  
+  }
+
   render() {
     const {
       location,
@@ -139,6 +144,8 @@ class MenuTemplate extends React.Component {
       total
     } = myMenuTemplateData;
 
+    const status = true
+
     const { desc } = this.state;
     return (
       <div>
@@ -156,7 +163,7 @@ class MenuTemplate extends React.Component {
             <Form layout="inline">
               <FormItem label='排序' colon>
                 {getFieldDecorator('state', { initialValue: 'create_date' })
-                  (<Select style={{ width: 160 }}>
+                  (<Select style={{ width: 160 }} onChange={this.handleChange}>
                     <Option value="create_date">创建时间</Option>
                     <Option value="modify_date">修改时间</Option>
                     <Option value="used">使用次数</Option>
@@ -164,13 +171,20 @@ class MenuTemplate extends React.Component {
               </FormItem>
               {/* 排序按钮 */}
               <FormItem>
-                {getFieldDecorator('sorter', { valuePropName: 'type' })(
+                {/* {getFieldDecorator('sorter', { valuePropName: 'type' })(
                   <div className='top-down' onClick={this.handleSorter}>
                     <Icon id='up' type="caret-up"
                       className={classNames({ 'blue-color': desc })} />
                     <Icon id='down' type="caret-down"
                       className={classNames({ 'blue-color': !desc })} />
-                  </div>)}
+                  </div>)} */}
+                  {
+                    getFieldDecorator('status',{
+                      initialValue:status
+                    })(
+                      <Arrow />
+                    )
+                  }
               </FormItem>
               <FormItem>
                 {getFieldDecorator('search')
@@ -180,6 +194,9 @@ class MenuTemplate extends React.Component {
                     style={{ width: 300 }}
                   />)}
               </FormItem>
+              {/* <FormItem>
+                  <Button onClick={() => {    console.log(JSON.stringify(this.props.form.getFieldsValue()))}}>submit</Button>
+              </FormItem> */}
             </Form>
           </div>
 
