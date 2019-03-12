@@ -8,7 +8,6 @@ export default class FilterByDateAndStatus extends React.Component {
     render() {
         const { 
             handleFilterChange, 
-            className,
             status,
          } = this.props;
         return (

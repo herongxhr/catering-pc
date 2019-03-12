@@ -1,9 +1,14 @@
-import { queryDishes, queryUnifiedMenu } from '../services/api';
+import {
+    queryMyMenuTemplate,
+    queryDishes,
+    queryUnifiedMenu
+} from '../services/api';
 
 export default {
     namespace: 'menuCenter',
     state: {
         unifiedMenu: {},
+        myMenuTemplate: {},
         menuData: [],
         templates: [],
         dishesData: {},
@@ -22,6 +27,13 @@ export default {
     },
 
     effects: {
+        *fetchMyMenuTemplate({ payload }, { call, put }) {
+            const data = yield call(queryMyMenuTemplate, payload);
+            yield put({
+                type: 'saveMyMenuTemplate',
+                payload: data,
+            })
+        },
         *fetchUnifiedMenu({ payload }, { call, put }) {
             const data = yield call(queryUnifiedMenu, payload);
             yield put({
@@ -39,6 +51,12 @@ export default {
     },
 
     reducers: {
+        saveMyMenuTemplate(state, { payload }) {
+            return {
+                ...state,
+                myMenuTemplate: { ...payload }
+            }
+        },
         saveDishes(state, { payload }) {
             return {
                 ...state,

@@ -125,6 +125,16 @@ export function queryUnifiedMenu(params) {//获取统一菜单数据
         }
     })
 }
+export function queryMyMenuTemplate(params) {//获取我的模板数据
+    return request({
+        method: 'get',
+        url: '/catering/camenuTemplate/my',
+        data: {
+            showLoading: true,
+            params: { ...params }
+        }
+    })
+}
 
 export function myMenu() {
     return request({

@@ -1,16 +1,30 @@
 import React from 'react'
-import { Tabs } from 'antd'
+import { Card } from 'antd'
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Table, Badge, Pagination } from 'antd';
-import MyMenu from '../../components/MyMenu'
-import MenuTemplate from '../../components/MenuTemplate'
 import './index.less'
-import BreadcrumbComponent from '../../components/BreadcrumbComponent';
+import BreadcrumbWithTabs from '../../components/BreadcrumbWithTabs';
 import FilterByDateAndStatus from '../../components/FilterByDateAndStatus';
 
-const TabPane = Tabs.TabPane;
+const tabList = [
+	{
+		key: 'unified-menu',
+		tab: '统一菜单',
+	},
+	{
+		key: 'my-menu',
+		tab: '我的菜单',
+	},
+	{
+		key: 'menu-template',
+		tab: '菜单模板',
+	},
+];
 class MenuCenter extends React.Component {
+	state = {
+		activeTabKey: ''
+	}
 	handleFetchUnifiedMenu = (params) => {
 		console.log('params', params);
 		const { dispatch } = this.props;
@@ -30,10 +44,17 @@ class MenuCenter extends React.Component {
 		})
 	}
 
-	handleTabsChange = key => {
+	handleLinkChange = (key, params) => {
 		const { dispatch } = this.props;
+		// 不是所有key都setState
+		if (tabList.find(item => item.key === key)) {
+			this.setState({
+				activeTabKey: key
+			})
+		}
 		dispatch(routerRedux.push({
-			pathname: `/menubar/${key}`
+			pathname: `/menubar/${key}`,
+			state: { ...params }
 		}))
 	}
 
@@ -100,26 +121,35 @@ class MenuCenter extends React.Component {
 			total
 		} = unifiedMenuData;
 		return (
-			<div className='card-wrapper'>
-				<BreadcrumbComponent {...location} />
-				<Tabs
-					className="unifiedMenu"
-					defaultActiveKey=""
-					onChange={this.handleTabsChange}>
-					<TabPane tab="统一菜单" key="unified-menu">
+			<div>
+				<BreadcrumbWithTabs
+					{...location}
+					tabList={tabList}
+					onChange={this.handleLinkChange}
+					activeTabKey={this.state.activeTabKey}
+				/>
+				<Card className="tableList" bordered={false}>
+					<div >
 						<FilterByDateAndStatus
+							// 状态按钮栏标题
 							status={['全部', '未执行', '已执行']}
+							// 点击下拉框或单选按钮组后的回调函数
 							handleFilterChange={this.handleFetchUnifiedMenu}
 						/>
 						<Table
 							columns={tableColumns}
 							dataSource={records}
 							rowKey="id"
-							style={{ padding: '0px 25px' }}
 							onRow={(record) => {
 								return {
-									onClick: (event) => {
-										this.props.history.push('/menubar/public/details')
+									onClick: () => {
+										this.handleLinkChange(
+											'unified-menu/details',
+											{
+												id: record.id,
+												status: record.status
+											}
+										)
 									}
 								}
 							}}
@@ -132,19 +162,14 @@ class MenuCenter extends React.Component {
 										})}
 								/>}
 						/>
-					</TabPane>
-					<TabPane tab="我的菜单" key="my-menu">
-						<MyMenu />
-					</TabPane>
-					<TabPane tab="菜单模板" key="menu-template">
-						<MenuTemplate />
-					</TabPane>
-				</Tabs>
+					</div>
+				</Card>
 			</div>
 		);
 	}
 }
 
 export default connect(({ menuCenter }) => ({
-	unifiedMenuData: menuCenter.unifiedMenu
+	unifiedMenuData: menuCenter.unifiedMenu,
+
 }))(MenuCenter); 
