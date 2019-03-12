@@ -39,6 +39,7 @@ class MenuTemplate extends React.Component {
   }
   // 改变排序
   handleSorter = () => {
+    console.log(this.props.getFieldsValue)
     this.setState({
       desc: !this.state.desc
     })
@@ -139,8 +140,6 @@ class MenuTemplate extends React.Component {
     } = myMenuTemplateData;
 
     const { desc } = this.state;
-
-    //const template = unifiedMenus.myTemplate.records
     return (
       <div>
         <BreadcrumbWithTabs
@@ -149,8 +148,11 @@ class MenuTemplate extends React.Component {
           onChange={this.handleLinkChange}
           activeTabKey={this.state.activeTabKey}
         />
-        <div className='Template'>
-          <Card style={{ margin: '20px auto' }}>
+        <Card style={{
+          width: 1160,
+          margin: '20px auto',
+        }}>
+          <div>
             <Form layout="inline">
               <FormItem label='排序' colon>
                 {getFieldDecorator('state', { initialValue: 'create_date' })
@@ -179,73 +181,68 @@ class MenuTemplate extends React.Component {
                   />)}
               </FormItem>
             </Form>
+          </div>
+
+          <div className='filterWrapper'>
+            <Button type="primary" >
+              <Link to='/menubar/template/new'>创建模板</Link>
+            </Button>
             {/* <div className='cartoon-wraper'>
-              {unifiedMenus.myRecommend ? <Cartoon /> : null}
-            </div> */}
-            <div style={{ display: 'flex', justifyContent: 'space-between' }} className='TemplateSubheader'>
-              <Button type="primary" >
-                <Link to='/menubar/template/new'>创建模板</Link>
-              </Button>
-              {/* <ButtonGroup>
-            <Button >我的</Button>
-            <Button >
-              <span onClick={this.handleRecommend}>推荐</span>
-              <Badge count={8} offset={[10,-6]} />
-            </Button> */}
-              <RadioGroup onChange={this.onChange} defaultValue="1">
-                <RadioButton style={{ width: 70, height: 32 }} value="1">我的</RadioButton>
-                <RadioButton style={{ width: 80, height: 32 }} value="2">
-
-                  <Badge count={records.length ? records.length : null} offset={[8, 8]}>
-                    <span>推荐</span>
-                  </Badge >
-                </RadioButton>
-              </RadioGroup>
-            </div>
-            <div className='card-group'>
-              {records.length ? records
-                .map(item =>
-                  (<MenuTemplateCard key={item.id} id={item.id} actionsText={'2019-02-27'} className='my-card'>
-                    <div className='card-body'>
-                      <p className='card-content'>
-                        <span className='card-content-title'>
-                          {item.templateName}
-                        </span>
-                        <span className='right' style={{ fontSize: 14 }}>
-                          {item.used}
-                        </span>
-                      </p>
-                      <p className='card-content'>
-                        <span>
-                          {item.echoMealTimeses}
-                        </span>
-                        <span className='right'>
-                          上次使用
+                {true ? <Cartoon /> : null}
+              </div> */}
+            <RadioGroup onChange={this.onChange} defaultValue="1">
+              <RadioButton style={{ width: 70, height: 32 }} value="1">我的</RadioButton>
+              <RadioButton style={{ width: 80, height: 32 }} value="2">
+                <Badge count={records.length ? records.length : null} offset={[10, -6]}>
+                  <span>推荐</span>
+                </Badge >
+              </RadioButton>
+            </RadioGroup>
+          </div>
+          <div className='cardsWrapper'>
+            {records.length ? records
+              .map(item =>
+                (<MenuTemplateCard key={item.id} id={item.id}
+                  actionsText={'2019-02-27'}
+                  className='menuTemplateCard'>
+                  <div className='card-body'>
+                    <p className='card-content'>
+                      <span className='card-content-title'>
+                        {item.templateName}
+                      </span>
+                      <span className='right' style={{ fontSize: 14 }}>
+                        {item.used}
+                      </span>
+                    </p>
+                    <p className='card-content'>
+                      <span>
+                        {item.echoMealTimeses}
+                      </span>
+                      <span className='right'>
+                        上次使用
                     </span>
-                      </p>
-                      <p className='card-content'>
-                        <span>
-                          {item.echoZjs}
-                        </span>
-                        <span className='right'>
-                          {/* {item.lastTime} */}
-                          2019-02-27
+                    </p>
+                    <p className='card-content'>
+                      <span>
+                        {item.echoZjs}
+                      </span>
+                      <span className='right'>
+                        {/* {item.lastTime} */}
+                        2019-02-27
                     </span>
-                      </p>
-                    </div>
-                    <div className='card-footer'>
-                      <Tag color="magenta">{item.tags.split(',')[0]}</Tag>
-                      <Tag color="red">{item.tags.split(',')[1]}</Tag>
-                      <Tag color="volcano">{item.tags.split(',')[2]}</Tag>
-                      <Tag color="orange">{item.tags.split(',')[3]}</Tag>
-                    </div>
-                  </MenuTemplateCard>)) : null
-              }
-            </div>
-          </Card>
-        </div>
+                    </p>
+                  </div>
+                  <div className='card-footer'>
+                    <Tag color="magenta">{item.tags.split(',')[0]}</Tag>
+                    <Tag color="red">{item.tags.split(',')[1]}</Tag>
+                    <Tag color="volcano">{item.tags.split(',')[2]}</Tag>
+                    <Tag color="orange">{item.tags.split(',')[3]}</Tag>
+                  </div>
+                </MenuTemplateCard>)) : null
+            }
+          </div>
+        </Card>
       </div>
-
     )
   }
 }

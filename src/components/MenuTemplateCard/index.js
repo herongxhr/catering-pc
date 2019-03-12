@@ -5,18 +5,18 @@ import './index.less';
 
 export default class MenuTemplateCard extends React.Component {
   state = {
-    cardHover: true
+    cardHover: false
   }
 
   handleMouseOver = () => {
     this.setState({
-      cardHover: false
+      cardHover: true
     })
   }
 
   handleMouseOut = () => {
     this.setState({
-      cardHover: true
+      cardHover: false
     })
   }
 
@@ -62,7 +62,7 @@ export default class MenuTemplateCard extends React.Component {
     return (
       <Card
         className='menuTemplateCard'
-        actions={cardFooter}
+        actions={[cardFooter]}
         // hoverable={true}
         onMouseOver={this.handleMouseOver}
         onMouseLeave={this.handleMouseOut}
