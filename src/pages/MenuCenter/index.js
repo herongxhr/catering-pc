@@ -25,13 +25,12 @@ class MenuCenter extends React.Component {
 	state = {
 		activeTabKey: ''
 	}
-	handleFetchUnifiedMenu = (params) => {
-		console.log('params', params);
+	getUnifiedMenu = (params) => {
 		const { dispatch } = this.props;
 		const defultOptions = {
-			startDate: null,
-			endDate: null,
-			status: null,
+			startDate: '',
+			endDate: '',
+			status: '',
 			current: 1,
 			pageSize: 10
 		}
@@ -59,7 +58,7 @@ class MenuCenter extends React.Component {
 	}
 
 	componentDidMount() {
-		this.handleFetchUnifiedMenu();
+		this.getUnifiedMenu();
 	}
 
 	render() {
@@ -111,15 +110,11 @@ class MenuCenter extends React.Component {
 				}
 			}
 		];
-		const { location, unifiedMenuData } = this.props;
+		const { location, menuList } = this.props;
 		const {
 			current,
-			pages,
 			records,
-			searchCount,
-			size,
-			total
-		} = unifiedMenuData;
+		} = menuList;
 		return (
 			<div>
 				<BreadcrumbWithTabs
@@ -134,7 +129,7 @@ class MenuCenter extends React.Component {
 							// 状态按钮栏标题
 							status={['全部', '未执行', '已执行']}
 							// 点击下拉框或单选按钮组后的回调函数
-							handleFilterChange={this.handleFetchUnifiedMenu}
+							handleFilterChange={this.getUnifiedMenu}
 						/>
 						<Table
 							columns={tableColumns}
@@ -147,7 +142,7 @@ class MenuCenter extends React.Component {
 											'unified-menu/details',
 											{
 												id: record.id,
-												status: record.status
+												type: 'unified'
 											}
 										)
 									}
@@ -170,6 +165,5 @@ class MenuCenter extends React.Component {
 }
 
 export default connect(({ menuCenter }) => ({
-	unifiedMenuData: menuCenter.unifiedMenu,
-
+	menuList: menuCenter.menuList,
 }))(MenuCenter); 

@@ -1,18 +1,16 @@
 import React from 'react';
 import { Form, Select, Input, Button, Badge, Tag, Icon, Radio, Card, Checkbox } from 'antd';
 import { Link, routerRedux } from 'dva/router';
-import classNames from 'classnames';
 import Cartoon from '../../components/Cartoon';
 import MenuTemplateCard from '../../components/MenuTemplateCard';
 import BreadcrumbWithTabs from '../../components/BreadcrumbWithTabs';
-// import { template } from '../../DataConfig';
 import { connect } from 'dva';
 import './index.less'
+import SorterArrow from '../../components/SorterArrow';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const Search = Input.Search;
-const ButtonGroup = Button.Group;
 const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
 
@@ -35,7 +33,7 @@ const tabList = [
 class MenuTemplate extends React.Component {
   state = {
     desc: true,
-    activeTabKey: 'menu-template'
+    activeTabKey: 'menu-template',
   }
   // 改变排序
   handleSorter = () => {
@@ -54,90 +52,61 @@ class MenuTemplate extends React.Component {
       pathname: `/menubar/${key}`,
     }))
   }
-  // fetchMyMenuTemplate = params => {
-  //   console.log('params', params);
-  //   const { dispatch } = this.props;
-  //   const defultOptions = {
-  //     orderByAttr: 'create_date',
-  //     desc: true,
-  //     searchContent: null,
-  //     current: 1,
-  //     pageSize: 10
-  //   }
-  //   dispatch({
-  //     type: 'menuCenter/fetchMyMenuTemplateu',
-  //     payload: {
-  //       ...defultOptions,
-  //       ...params
-  //     }
-  //   })
-  // }
-
-  // static getDerivedStateFromProps(props) {
-  //   return {
-  //     template: props.unifiedMenus.myTemplate.records
-  //   }
-  // }
-
-  // queryRecommend = () => {
-  //   const { dispatch } = this.props;
-  //   dispatch({
-  //     type: 'unifiedMenus/queryRecommend'
-  //   })
-  // }
-
-  // queryRecommendTemplate = () => {
-  //   const { dispatch } = this.props;
-  //   dispatch({
-  //     type: 'unifiedMenus/queryRecommendTemplate'
-  //   })
-  // }
-
-  // handleRecommend = () => {
-  //   this.queryRecommendTemplate()
-  // }
-
-  componentDidMount() {
-    console.log('didmout')
-    const { dispatch } = this.props;
+  // 改变模板类型
+  changeTemplateType = e => {
+    const { dispatch, form } = this.props;
     dispatch({
-      type: 'menuCenter/fetchMyMenuTemplate',
-      playload: {
-        //...allValues
-      }
+      type: 'menuCenter/changeTemplateType',
+      payload: e.target.value
     })
-    //this.queryMytemplate()
-    //this.queryRecommend()
+    form.resetFields();
+    dispatch({
+      type: 'menuCenter/fetchMenuTemplate',
+    })
+  }
+  // 复制模板
+  handleCopy = id => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'menuCenter/copyTemplate',
+      payload: id
+    })
+    window.location.reload()
+  }
+  // 删除模板
+  handleDelte = id => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'menuCenter/delteTemplate',
+      payload: id
+    })
+    window.location.reload()
   }
 
-  // onChange = (e) => {
-  //   if (e.target.value == '1') {
-  //     this.queryMytemplate()
-  //   }
-  //   if (e.target.value == '2') {
-  //     this.queryRecommendTemplate()
-  //   }
-  // }
+  handleShowDetails = id => {
+    const { dispatch } = this.props;
+    dispatch(routerRedux.push({
+      pathname: '/menubar/menu-template/details',
+      state: { id }
+    }))
+  }
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'menuCenter/fetchMenuTemplate',
+    })
+  }
 
   render() {
     const {
       location,
-      myMenuTemplateData = {},
+      menuTemplateData = {},
       form: {
         getFieldDecorator,
       }
     } = this.props
-
-    const {
-      current,
-      pages,
-      records = [],
-      searchCount,
-      pageSize,
-      total
-    } = myMenuTemplateData;
-
-    const { desc } = this.state;
+    const { records = [] } = menuTemplateData;
     return (
       <div>
         <BreadcrumbWithTabs
@@ -146,15 +115,12 @@ class MenuTemplate extends React.Component {
           onChange={this.handleLinkChange}
           activeTabKey={this.state.activeTabKey}
         />
-        <Card style={{
-          width: 1160,
-          margin: '20px auto',
-        }}>
+        <Card style={{ width: 1160, margin: '20px auto', }}>
           <div>
             <Form layout="inline">
               <FormItem label='排序' colon>
-                {getFieldDecorator('state', { initialValue: 'create_date' })
-                  (<Select style={{ width: 160 }}>
+                {getFieldDecorator('orderByAttr', { initialValue: 'create_date' })
+                  (<Select style={{ width: 160 }} onChange={this.handleChange}>
                     <Option value="create_date">创建时间</Option>
                     <Option value="modify_date">修改时间</Option>
                     <Option value="used">使用次数</Option>
@@ -162,18 +128,12 @@ class MenuTemplate extends React.Component {
               </FormItem>
               {/* 排序按钮 */}
               <FormItem>
-                {getFieldDecorator('sorter', { valuePropName: 'checked' })(
-                  <div className='top-down' onClick={this.handleSorter}>
-                    <Icon type="caret-up"
-                      className={classNames({ 'blue-color': desc })} />
-                    <Icon type="caret-down"
-                      className={classNames({ 'blue-color': !desc })} />
-                    <Checkbox style={{ display: "none" }} />
-                  </div>
+                {getFieldDecorator('desc', { initialValue: true })(
+                  <SorterArrow />
                 )}
               </FormItem>
               <FormItem>
-                {getFieldDecorator('search')
+                {getFieldDecorator('searchContent', { initialValue: null })
                   (<Search
                     placeholder="模板名称/标签"
                     onSearch={value => console.log(value)}
@@ -190,9 +150,9 @@ class MenuTemplate extends React.Component {
             {/* <div className='cartoon-wraper'>
                 {true ? <Cartoon /> : null}
               </div> */}
-            <RadioGroup onChange={this.onChange} defaultValue="1">
-              <RadioButton style={{ width: 70, height: 32 }} value="1">我的</RadioButton>
-              <RadioButton style={{ width: 80, height: 32 }} value="2">
+            <RadioGroup onChange={this.changeTemplateType} defaultValue="my">
+              <RadioButton style={{ width: 70, height: 32 }} value="my">我的</RadioButton>
+              <RadioButton style={{ width: 80, height: 32 }} value="new">
                 <Badge count={records.length ? records.length : null} offset={[10, -6]}>
                   <span>推荐</span>
                 </Badge >
@@ -203,6 +163,9 @@ class MenuTemplate extends React.Component {
             {records.length ? records
               .map(item =>
                 (<MenuTemplateCard key={item.id} id={item.id}
+                  handleCopy={this.handleCopy}
+                  handleDelte={this.handleDelte}
+                  handleShowDetails={this.handleShowDetails}
                   actionsText={'2019-02-27'}
                   className='menuTemplateCard'>
                   <div className='card-body'>
@@ -227,9 +190,8 @@ class MenuTemplate extends React.Component {
                         {item.echoZjs}
                       </span>
                       <span className='right'>
-                        {/* {item.lastTime} */}
-                        2019-02-27
-                    </span>
+                        {item.lastTime}
+                      </span>
                     </p>
                   </div>
                   <div className='card-footer'>
@@ -247,21 +209,21 @@ class MenuTemplate extends React.Component {
   }
 }
 
+// 当表单元素值发生改变时发送请求
 const WrappedMenuTemplate = Form.create({
   onValuesChange: (props, _, allValues) => {
-    console.log(allValues);
     const { dispatch } = props;
     dispatch({
-      type: 'menuCenter/handleFetchUnifiedMenu',
-      playload: {
+      type: 'menuCenter/fetchMenuTemplate',
+      payload: {
         ...allValues
       }
     })
   }
 })(MenuTemplate);
 
-
 export default connect(({ menuCenter }) => ({
-  myMenuTemplateData: menuCenter.myMenuTemplate
+  menuTemplateData: menuCenter.menuTemplate,
+  templateType: menuCenter.activeTemplateType,
 }))(WrappedMenuTemplate);
 

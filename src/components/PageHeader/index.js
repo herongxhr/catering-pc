@@ -26,7 +26,7 @@ export default class PageHeader extends PureComponent {
             extraContent,
             className,
             loading = false,
-            wide = false,
+            wide = true,
             // tabList,
             // tabActiveKey,
             // tabDefaultActiveKey,
@@ -46,7 +46,7 @@ export default class PageHeader extends PureComponent {
         // }
         return (
             <div className={clsString}>
-                <div className={wide ? "wide" : ''}>
+                <div className={wide ? styles.wide : ''}>
                     <Skeleton
                         // 显示占位图
                         loading={loading}
@@ -66,8 +66,8 @@ export default class PageHeader extends PureComponent {
                                     {action && <div className={styles.action}>{action}</div>}
                                 </div>
                                 <div className={styles.row}>
-                                    {content && <div className={"content"}>{content}</div>}
-                                    {extraContent && <div className={"extraContent"}>{extraContent}</div>}
+                                    {content && <div className={styles.content}>{content}</div>}
+                                    {extraContent && <div className={styles.extraContent}>{extraContent}</div>}
                                 </div>
                             </div>
                         </div>

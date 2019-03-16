@@ -13,37 +13,35 @@ class SelectDishes extends React.Component {
             visible,
             handleHideModal,
             handlFetchDishes,
-            changeItemList,
-            tableData: {
+            changeArrangedDishes,
+            modalTableData: {
                 records,
                 pages,
                 page,
                 current,
                 total,
             },
-            dishesInMenu,
-            rowIndex,
-            columnIndex
+            currMeals,
         } = this.props;
 
-        // columnIndex默认为''，此时无法读取其值
-        const tagList = columnIndex ? dishesInMenu[rowIndex][columnIndex] : []
-        const tagListDom = tagList.length ? tagList.map(item => (
-            <Tag
-                color="green"
+        // currMeals初始为空数组
+        const tagListDom = currMeals.map(item => (
+            // 自己新增的绿色显示
+            <Tag color={ item.isAdd ? 'green' : ''}
                 style={{
                     height: 32,
                     lineHeight: "32px",
                     fontSize: "14px",
                     marginBottom: 10
                 }}
-                key={item.id}
-                closable
-                onClose={() => { changeItemList(item, -1) }}
-            >
+                key={item.foodId}
+                // 判断是不是自己加的菜
+                closable={item.isAdd}
+                onClose={() => {
+                    changeArrangedDishes(item, -1)
+                }} >
                 {item.foodName}{item.properties}
-            </Tag>)) : '';
-
+            </Tag>));
         return (
             <Modal
                 wrapClassName="selectIngredients"
@@ -88,7 +86,7 @@ class SelectDishes extends React.Component {
                         style={{ height: 594 }}
                         columns={tableColumns}
                         dataSource={records}
-                        rowKey="id"
+                        rowKey="foodId"
                         onRow={(record) => {
                             return {
                                 onClick: (event) => { },
