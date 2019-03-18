@@ -37,7 +37,7 @@ class TableForm extends PureComponent {
 
   toggleEditable = (e, key) => {
     e.preventDefault();
-    const { data } = this.state; 
+    const { data } = this.state;
     const newData = data.map(item => ({ ...item })); //赋值editable
     const target = this.getRowByKey(key, newData);
     if (target) {
@@ -82,6 +82,7 @@ class TableForm extends PureComponent {
 
   handleFieldChange(e, fieldName, key) {
     const { data } = this.state;
+    console.log(data)
     const newData = data.map(item => ({ ...item }));
     const target = this.getRowByKey(key, newData);
     if (target) {

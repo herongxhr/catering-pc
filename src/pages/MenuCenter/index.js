@@ -21,6 +21,7 @@ const tabList = [
 		tab: '菜单模板',
 	},
 ];
+
 class MenuCenter extends React.Component {
 	state = {
 		activeTabKey: ''
