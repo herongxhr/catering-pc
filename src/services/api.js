@@ -45,7 +45,7 @@ export function queryTodoList() {
 export function queryList(params) {
     return request({
         method: 'get',
-        url: '/catering/workbench/distributionList',
+        url: '/catering/workbench/distributionReview',
         data: {
             showLoading: true,
             params: {
@@ -155,6 +155,16 @@ export function queryMyMenuDetails(params) {//获取我的菜单详情
         }
     })
 }
+export function queryDishes(params) {
+    return request({
+        method: 'get',
+        url: '/catering/camenu/selectDishes',
+        data: {
+            showLoading: true,
+            params: { ...params }
+        }
+    })
+}
 export function queryMyMenuTemplate(params) {//获取我的模板数据
     return request({
         method: 'get',
@@ -248,18 +258,7 @@ export function myCopy(params) {
     })
 }
 
-export function queryDishes(params) {
-    return request({
-        method: 'get',
-        url: '/catering/camenu/selectDishes',
-        data: {
-            showLoading: true,
-            params: {
-                type: params
-            }
-        }
-    })
-}
+
 export function queryTemplateDetail(params) {
     return request({
         method: 'get',
@@ -319,12 +318,33 @@ export function queryGoodsByOrderId(id) {
 }
 
 export function queryPurCatalog(params) {
+    //console.log(params);
     return request({
         method: 'get',
-        url: '/catering/workbench/purchasingcatalog',
+        url: '/catering/workbench/purchaseList/pageList',
         data: {
             showLoading: true,
-            params
+            params,
+        }
+    })
+}
+export function queryIngreType(params) {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/purchaseList/catalog',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+export function queryPriceHistory(params) {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/purchaseList/item/priceHistory',
+        data: {
+            showLoading: true,
+            params,
         }
     })
 }

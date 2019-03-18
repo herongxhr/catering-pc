@@ -1,27 +1,4 @@
 .arrangeDishes{
-    // background: #fff;
-    // max-width: 1120px;
-    // margin: 20px auto;
-    // .weekdayTd {
-    //     width: 260px;
-    //     height: 60px;
-    //     line-height: 60px;
-    //     vertical-align: top;
-    //     padding: 0 20px;
-    // }
-
-    // .dishItem {
-    //     width: 260px;
-    //     margin:0 -20px;
-    //     padding:0 20px;
-    //     border-bottom: 1px solid #E8E8E8;
-    //     &:hover {
-    //         background-color: rgba(254, 246, 233, 1);
-    //         color: rgba(0, 0, 0, 0.65);
-    //         box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.15);
-    //         border: 1px solid rgba(232, 232, 232, 1);
-    //     }
-    // }
     .arrangeDisthTable{
         width: 1140px;
         th {
@@ -46,6 +23,7 @@
                 text-align: center;
                 vertical-align: top;
                 height: 60px;
+                padding: 0;
             }
         }
         tr:nth-child(even){
@@ -54,16 +32,44 @@
         td {  
             li {
                 overflow: hidden;
-                width: 100%;
+                position: relative;
+                width: 262px;
                 height: 60px;
                 line-height: 60px;
                 text-align: left;
                 vertical-align: middle;
                 border-bottom: 1px solid #e8e8e8;
-                padding:0 18px;
+                padding-left: 20px;
+                white-space: nowrap;
                 .tag {
-                    float: right;
+                    position: absolute;
+                    right: 10px;
                     margin-top: 20px;
+                }
+            }
+            .actionsWrap {
+                position: absolute;
+                top: 0;
+                left:20px;
+                border-left: 242px solid transparent;
+                transition: all 0.2s linear;
+                &:hover{
+                    border-left: 82px solid transparent;
+                }
+                .changeBtn,.deleteBtn {
+                    display: inline-block;
+                    cursor: pointer;
+                    color: #fff;
+                    text-align: center;
+                    width: 80px;
+                    padding: 0;
+                    background:rgb(224, 127, 132, 1) ;
+                }
+                .changeBtn {
+                    background: green;
+                }
+                .onlyChange {
+                    margin-left: 80px;
                 }
             }
         }
@@ -80,10 +86,6 @@
             img {
                 width: 90px;
             }
-        }
-        .dishName{
-            height: 40px;
-            line-height: 40px;
         }
         .isAdd {
             background: rgba(254, 246, 233, 1) ;

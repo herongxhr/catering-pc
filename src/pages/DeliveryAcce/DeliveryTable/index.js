@@ -9,12 +9,17 @@ class DeliveryTable extends React.Component {
     DataSource: []
   }
   handleonClick = (id) =>{
-    this.props.history.push({ pathname:"/delivery/deliveryAcceDetail", query:{id:id} })
+    const {tabkey} = this.props;
+    if(tabkey == 'pendingDelivery'){
+    this.props.history.push({ pathname:"/pendingDeliveryDetail", query:{id:id} })
+    }
+    if(tabkey == 'pendingAccept'){
+      this.props.history.push({ pathname:"/pendingAcceDetail", query:{id:id} })
+    }
+    if(tabkey == 'accepted'){
+      this.props.history.push({ pathname:"/acceptedDetail", query:{id:id} })
+    }
   }
-  componentDidMount() {
-    
-  }
-
   render() {
     const tab1Columns = [{
       title: '配送单号',
@@ -40,6 +45,7 @@ class DeliveryTable extends React.Component {
         title: '操作',
         dataIndex: 'Operation',
         key: 'Operation',
+        render:(text)=>{return <span style={{color:'#FF9500'}}>{text}</span>}
       })
     }
     return(
@@ -52,11 +58,11 @@ class DeliveryTable extends React.Component {
         rowKey='id'
         onRow={
           (record) => {
-            return {
-              onClick: () => {
-                this.handleonClick(record.id)
-              },
-            };
+              return {
+                onClick: () => {
+                  this.handleonClick(record.id)
+                },
+              };
           }
         }
         />

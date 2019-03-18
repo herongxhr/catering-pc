@@ -20,9 +20,15 @@ import ExcipientDetail from './pages/ExcipientDetail';
 import ReportDetail from './pages/ReportDetail';
 import IngreDetail from './pages/IngreDetail';
 import PurOrderDetails from './pages/PurOrderDetails';
+<<<<<<< HEAD
+import PendingDeliveryDetail from './pages/PendingDeliveryDetail';
+import PendingAcceDetail from './pages/PendingAcceDetail';
+import AcceptedDetail from './pages/AcceptedDetail';
+=======
 import ArrangeDishes from '../src/components/ArrangeDishes';
 import SelectIngredients from '../src/components/SelectIngredients';
 import DeliveryAcceDetail from './pages/DeliveryAcceDetail';
+>>>>>>> b84bba579f22039bce861a1645e02f6baf15daab
 // import CreateTemplate from './components/CreateTemplate'
 // 国际化配置
 import { LocaleProvider } from 'antd';
@@ -64,7 +70,7 @@ export default function RouterConfig({ history }) {
               <Route path="/purOrder/new" component={PurOrder}></Route>
               <Route path="/purOrder/details" component={PurOrderDetails}></Route>
               <Route path="/delivery" component={DeliveryAcce}></Route>
-              <Route path="/delivery/deliveryAcceDetail" component={DeliveryAcce}></Route>
+              <Route path="/delivery/acceptedDetail" component={DeliveryAcce}></Route>
               <Route path="/outStock" component={OutStock}></Route>
               <Route path="/parameter" exact component={Parameter}></Route>
               <Route path="/parameter/detail" component={ParameterDetail} exact></Route>
@@ -84,9 +90,15 @@ export default function RouterConfig({ history }) {
               <Route path="/reportdetail" component={ReportDetail}></Route>
               <Route path="/excipientdetail" component={ExcipientDetail}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
+<<<<<<< HEAD
+              <Route path="/pendingAcceDetail" component={PendingAcceDetail}></Route>
+              <Route path="/pendingDeliveryDetail" component={PendingDeliveryDetail}></Route>
+              <Route path="/acceptedDetail" component={AcceptedDetail}></Route>
+=======
               <Route path="/arrangeDishes" component={ArrangeDishes}></Route>
               <Route path="/selectIngredients" component={SelectIngredients}></Route>
               <Route path="/deliveryAcceDetail" component={DeliveryAcceDetail}></Route>
+>>>>>>> b84bba579f22039bce861a1645e02f6baf15daab
               <Redirect to="/home" />
             </Switch>
           </App>

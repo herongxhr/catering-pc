@@ -3,9 +3,8 @@ import './index.less';
 import TodayMenuCard from '../../components/TodayMenuCard/TodayMenuCard'
 import TodoListCard from '../../components/TodoListCard/TodoListCard'
 import Accepting from '../../components/Accepting/Accepting'
+import StatisticChart from '../../components/StatisticChart'
 import { Card, Button, Tabs, Radio, Divider } from 'antd';
-import { Link } from 'react-router-dom';
-import { Pie, yuan } from 'ant-design-pro/lib/Charts';
 import moment from 'moment'
 import { connect } from 'dva';
 import { withRouter } from "react-router";
@@ -17,6 +16,10 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
 class A extends Component {
+  state={
+    timeType:'today',
+    query:{}
+  }
   queryTodoList = () => {
     const { dispatch } = this.props;
     //请求待办事项
@@ -26,7 +29,6 @@ class A extends Component {
   }
   querytodayMenu = () => {
     const { dispatch } = this.props;
-    //请求待办事项
     dispatch({
       type: 'home/querytodayMenu',
     })
@@ -39,7 +41,6 @@ class A extends Component {
   }
   queryStatistics = (params = {}) => {
     const { dispatch } = this.props;
-    //请求待办事项
     dispatch({
       type: 'home/queryStatistics',
       payload:{
@@ -47,18 +48,25 @@ class A extends Component {
        }
     })
   }
-  queryList = (params = {}) =>{
-    const { dispatch, } = this.props;
-    //请求待办事项
-    dispatch({
-      type: 'accept/queryList',
-      payload:{
-       ...params
-      }
+  queryList = (params) =>{
+    this.setState({
+      query:params
+    },()=>{
+      const { dispatch, } = this.props;
+      //请求待办事项
+      dispatch({
+        type: 'accept/queryList',
+        payload:{
+         ...this.state.query,
+         timeType:this.state.timeType
+        }
+      })
     })
   }
   handleAccet = (value) =>{
-    this.queryList({timeType:value})
+    this.setState({timeType:value},()=>{
+      this.queryList()
+    })
   }
   handleStatistics = (e) =>{
     this.queryStatistics({timeType:e.target.value})
@@ -70,11 +78,11 @@ class A extends Component {
     this.queryStatistics()
   }
   render() {
-    const { home,accept } = this.props
+    const { home} = this.props
     const todoList = home.todoList || [];
     const todayMenu = home.todayMenu || {};
     const deviceInfo = home.deviceInfo || [];
-    const distributionList = accept.distributionList.records || [];
+    const statistics = home.statistics || [];
     var timestamp = Date.parse(new Date());
     const date = moment(timestamp).format("YYYY-MM-DD dddd")
     const weeks = moment(timestamp).format("WW")
@@ -112,14 +120,14 @@ class A extends Component {
           </div>
           <div className="App-content-accepting">
             <Tabs tabBarExtraContent={operations} onChange={this.handleAccet}>
-              <TabPane tab="今日验收" key="today"><Accepting queryList={this.queryList} distributionList = {distributionList}/></TabPane>
-              <TabPane tab="明日验收" key="tomorrow"><Accepting queryList={this.queryList} distributionList = {distributionList}/></TabPane>
+              <TabPane tab="今日验收" key="today"><Accepting queryList={this.queryList}  /></TabPane>
+              <TabPane tab="明日验收" key="tomorrow"><Accepting queryList={this.queryList} /></TabPane>
             </Tabs>
           </div>
           <div className='App-content-paying-wrapper'>
             <div className='App-content-paying'>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <p style={{ width: 226, height: 65, fontSize: 16, lineHeight: 4, rgba: (0, 0,     0, 0.85) }}>应付款统计分析</p>
+                <p style={{ width: 226, height: 65, fontSize: 16, lineHeight: 4, rgba: (0, 0,0, 0.85) }}>应付款统计分析</p>
                 <div>
                   <RadioGroup defaultValue="month" onChange={this.handleStatistics}>
                     <RadioButton value="month">本月</RadioButton>
@@ -128,14 +136,7 @@ class A extends Component {
                   </RadioGroup>
                 </div>
               </div>
-              <div>
-                <Pie
-                  hasLegend
-                  data={home.statistics}
-                  valueFormat={val => <span dangerouslySetInnerHTML={{ __html: yuan(val) }} />}
-                  height={206}
-                />
-              </div>
+             <StatisticChart statistics={statistics} />
             </div>
             <div className='App-content-opening'>
               <div className='timeTitle'>设备最后开机时间</div>

@@ -20,7 +20,7 @@ export default {
         },
         *querytodayMenu(_, { call, put }) {
             //call方法首参数为要调用的异步方法
-            const  data  = yield call(querytodayMenu);
+            const    data  = yield call(querytodayMenu);
             //console.log(data);
             yield put({
                 type: 'saveTodayMenu',
@@ -37,9 +37,8 @@ export default {
             });
         },
         *queryStatistics({payload}, { call, put }) {
-            //call方法首参数为要调用的异步方法
             const  data  = yield call(queryStatistics,payload);
-            //console.log(data);
+           //console.log(data)
             yield put({
                 type: 'savestatistics',
                 payload: data || {},

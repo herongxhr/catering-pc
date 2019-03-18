@@ -24,18 +24,9 @@ class InForm extends React.Component {
         <FormItem label='日期选择' style={{ margin:20 }}>
           {
             getFieldDecorator('date',{
-                initialValue:'1',
+                initialValue:'',
             })(
-              <Select     
-                style={{ width: 250 }}              
-              > 
-                <Option value="1">全部</Option>
-                <Option value="2">本年</Option>
-                <Option value="3">去年</Option>
-                <Option value="4">本月</Option>
-                <Option value="5">近3个月</Option>
-                <Option value="6"> <RangePicker /> </Option>
-              </Select>            
+              <RangePicker  style={{ width: 250 }} /> 
             )
           }
         </FormItem>
@@ -52,7 +43,6 @@ class InForm extends React.Component {
                 <Option value="3">去年</Option>
                 <Option value="4">本月</Option>
                 <Option value="5">近3个月</Option>
-                <Option value="6"> <RangePicker /> </Option>
               </Select>   
             )
           }
