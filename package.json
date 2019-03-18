@@ -5,7 +5,7 @@
   "homepage": "http://catering.jgzh.com",
   "dependencies": {
     "ant-design-pro": "^2.2.1",
-    "antd": "^3.14.1",
+    "antd": "^3.15.0",
     "axios": "^0.18.0",
     "bizcharts": "^3.4.3",
     "classnames": "^2.2.6",

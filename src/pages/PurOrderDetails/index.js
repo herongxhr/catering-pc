@@ -62,7 +62,6 @@ class PurOrderDetails extends React.Component {
                 goodsDetail,
             },
         } = this.props;
-
         let orderChannel;
         if (orderInfo.channel === 'M') {
             orderChannel = '菜单生成';
@@ -121,6 +120,7 @@ class PurOrderDetails extends React.Component {
                         <Table
                             pagination
                             loading={false}
+                            rowKey='id'
                             columns={tabColumns}
                             dataSource={goodsDetail}
                         />

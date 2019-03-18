@@ -3,6 +3,7 @@
 //import { stringify } from 'qs';
 import request from '../utils/request';
 
+// 辅料商城
 export function queryGoodsF({ params }) {
     return request({
         method: 'get',
@@ -114,53 +115,124 @@ export function queryRule(params) {
 }
 
 //菜单中心专区
-export function unifiedMenusAlready(params) {
-    console.log(params)
+export function queryUnifiedMenu(params) {//获取统一菜单数据
     return request({
         method: 'get',
-        url: '/catering/unifiedMenus',
+        url: '/catering/unifiedMenu/pageList',
         data: {
-            params,
+            showLoading: true,
+            params: { ...params }
+        }
+    })
+}
+export function queryUnifiedMenuDetails(params) {//获取统一菜单详情
+    return request({
+        method: 'get',
+        url: '/catering/unifiedMenu/item/detail',
+        data: {
+            showLoading: true,
+            params: { ...params }
+        }
+    })
+}
+export function queryMyMenu(params) {//获取我的菜单数据
+    return request({
+        method: 'get',
+        url: '/catering/myMenu/pageList',
+        data: {
+            showLoading: true,
+            params: { ...params }
+        }
+    })
+}
+export function queryMyMenuDetails(params) {//获取我的菜单详情
+    return request({
+        method: 'get',
+        url: '/catering/myMenu/item/detail',
+        data: {
+            showLoading: true,
+            params: { ...params }
+        }
+    })
+}
+export function queryMyMenuTemplate(params) {//获取我的模板数据
+    return request({
+        method: 'get',
+        url: '/catering/camenuTemplate/my',
+        data: {
+            showLoading: true,
+            params: { ...params }
+        }
+    })
+}
+export function queryNewMenuTemplate(params) {//获取推荐模板数据
+    return request({
+        method: 'get',
+        url: '/catering/camenuTemplate/new',
+        data: {
+            showLoading: true,
+            params: { ...params }
+        }
+    })
+}
+export function toCopyTemplate(id) {//获取推荐模板数据
+    return request({
+        method: 'get',
+        url: 'catering/camenuTemplate/my/item/copy',
+        data: {
+            showLoading: true,
+            params: { id }
+        }
+    })
+}
+export function toDeleteTemplate(id) {//获取推荐模板数据
+    return request({
+        method: 'get',
+        url: 'catering/camenuTemplate/my/item/delete',
+        data: {
+            showLoading: true,
+            params: { id }
         }
     })
 }
 
+
 export function myMenu() {
     return request({
-        method:'get',
-        url:'/catering/myMenus',
+        method: 'get',
+        url: '/catering/myMenus',
         data: {
-            showLoading:true
+            showLoading: true
         }
     })
 }
 
 export function myTemplate() {
     return request({
-        method:'get',
-        url:'/catering/camenuTemplate/my',
+        method: 'get',
+        url: '/catering/camenuTemplate/my',
         data: {
-            showLoading:true
+            showLoading: true
         }
     })
 }
 
 export function isRecommend() {
     return request({
-        method:'get',
-        url:'/catering/camenuTemplate/hasRecommend',
+        method: 'get',
+        url: '/catering/camenuTemplate/hasRecommend',
         data: {
-            showLoading:true
+            showLoading: true
         }
     })
 }
 
 export function recommendTemplate() {
     return request({
-        method:'get',
-        url:'/catering/camenuTemplate/my_1551273630829',
+        method: 'get',
+        url: '/catering/camenuTemplate/my_1551273630829',
         data: {
-            showLoading:true
+            showLoading: true
         }
     })
 }
@@ -168,13 +240,40 @@ export function recommendTemplate() {
 export function myCopy(params) {
     console.log(params)
     return request({
-        method:'get',
-        url:'/catering/camenuTemplate/my/item/copy',
+        method: 'get',
+        url: '/catering/camenuTemplate/my/item/copy',
         data: {
             params,
         }
     })
 }
+
+export function queryDishes(params) {
+    return request({
+        method: 'get',
+        url: '/catering/camenu/selectDishes',
+        data: {
+            showLoading: true,
+            params: {
+                type: params
+            }
+        }
+    })
+}
+export function queryTemplateDetail(params) {
+    return request({
+        method: 'get',
+        url: '/catering/camenuTemplate/my/item/detail',
+        data: {
+            showLoading: true,
+            params: {
+                type: params
+            }
+        }
+    })
+}
+
+
 // export async function queryBrandList(catalog) {
 //     return axios('/goods/brand/page/');
 // }
@@ -184,7 +283,7 @@ export function myCopy(params) {
 // }
 
 // 采购订单专区
-export function queryPurOrder(params) {
+export function queryOrderData(params) {
     return request({
         method: 'get',
         url: '/catering/purOrder',
@@ -204,7 +303,7 @@ export function queryOrderDetails() {
             showLoading: true,
         }
     })
-} 
+}
 
 export function queryGoodsByOrderId(id) {
     return request({

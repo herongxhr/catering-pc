@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon } from 'antd';
-import { routerRedux } from 'dva/router';
 import WrappedOrderFilter from '../../components/OrderFilter';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
 
@@ -67,60 +66,38 @@ const tabColumns = [
 ];
 
 class PurOrder extends React.Component {
+	state = {
+		dateRange: ['', ''],
+		channel: 'all',
+		status: 'all'
+	}
+
 	// 请求订单数据
-	getOrderData = ({
-		dateRange = Date.parse(new Date()),
-		channel = "",
-	} = {}) => {
+	getOrderData = (params) => {
 		const { dispatch } = this.props;
 		dispatch({
-			type: 'purOrder/fetchData',
-			payload: {
-				dateRange,
-				channel,
-			},
+			type: 'purOrder/fetchOrderData',
+			payload: { ...params },
 		})
 	}
 
-	previewOrder = id => {
-		this.props.dispatch(routerRedux.push({
-			pathname: `/purOrder/details`,
-			state: {id}
-		}))
-	}
-
-	// 点击表格行跳转到相应详情页
-	// handleGotoDetails = (e, { orderId, status }) => {
-	// 	const { dispatch } = this.props;
-	// 	if (status === '0') {
-	// 		this.previewOrder(orderId);
-	// 		// dispatch(routerRedux.push({
-	// 		// 	pathname: '/purOrder/details',
-	// 		// 	query: { id: orderId },
-	// 		// }))
-	// 	} else {
-	// 		// dispatch(routerRedux.push({
-	// 		// 	pathname: '/purOrder/details',
-	// 		// 	query: { id: records.id }
-	// 		// }))
-	// 	}
-	// }
-
-	handleFilterByStatus = (e) => {
-		const { dispatch, rawData } = this.props;
-		let status = e.target.value;
-		const filteredData = rawData.filter(order => order.status === status);
-		dispatch({
-			type: 'purOrder/filterOrder',
-			payload: {
-				rawData,
-				filteredData,
-			},
-		})
+	handleFilter = (args) => {
+		let newArgs = {};
+		if (args.dateRange) {
+			newArgs = { dateRange: args.dateRange }
+		} else if (args.channel) {
+			newArgs = { channel: args.channel }
+		} else {
+			newArgs = { status: args.status }
+		}
+		this.setState(
+			Object.assign(this.state, newArgs),
+			this.getOrderData(this.state)
+		);
 	}
 
 	componentDidMount() {
-		this.getOrderData();
+		this.getOrderData(this.state);
 	}
 
 	render() {
@@ -150,7 +127,7 @@ class PurOrder extends React.Component {
 			)
 		}
 		// 表格数据
-		const tableData = `${orderedData}` ? orderedData : rawData;
+		const tableData = orderedData.length ? orderedData : rawData;
 		return (
 			<div className={className}>
 				{/* 面包屑 */}
@@ -158,14 +135,18 @@ class PurOrder extends React.Component {
 				<div className={styles.orderWrapper}>
 					{/* 排序筛选部分 */}
 					<WrappedOrderFilter
-						handleFilter={this.getOrderData}
+						handleFilter={this.handleFilter}
 						className="wrappedOrderForm" />
 					<div className="buttonsWrapper">
 						{/* 新建及按钮组部分 */}
 						{dropdownBtn()}
 						<span>
-							<Radio.Group defaultValue="" onChange={this.handleFilterByStatus} >
-								<Radio.Button value="">全部</Radio.Button>
+							<Radio.Group defaultValue="all" onChange={e => {
+								this.handleFilter({
+									status: e.target.value
+								})
+							}} >
+								<Radio.Button value="all">全部</Radio.Button>
 								<Radio.Button value="0">未下单</Radio.Button>
 								<Radio.Button value="1">已下单</Radio.Button>
 							</Radio.Group>
@@ -175,6 +156,7 @@ class PurOrder extends React.Component {
 						<Table
 							columns={tabColumns}
 							dataSource={tableData}
+							rowKey="key"
 							onRow={(record) => {
 								return {
 									onClick: () => {

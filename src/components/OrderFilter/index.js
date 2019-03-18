@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Select, DatePicker, Input } from "antd";
+import { Form, Select, DatePicker } from "antd";
 import './index.less'
 
 const Option = Select.Option;
@@ -7,6 +7,7 @@ const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
 class OrderFilter extends React.Component {
+
   render() {
     const {
       className,
@@ -20,13 +21,13 @@ class OrderFilter extends React.Component {
           <FormItem label='日期选择' >
             {
               getFieldDecorator('date', {
-                initialValue: "",
+                initialValue: "all",
               })(
                 <Select
                   style={{ width: 240 }}
                   onChange={(value) => handleFilter({ dateRange: value })}
                 >
-                  <Option value="">全部</Option>
+                  <Option value="all">全部</Option>
                   <Option value="thisYear">本年</Option>
                   <Option value="lastYear">去年</Option>
                   <Option value="thisMonth">本月</Option>
@@ -36,17 +37,16 @@ class OrderFilter extends React.Component {
               )
             }
           </FormItem>
-
           <FormItem label='订单来源' >
             {
               getFieldDecorator('source', {
-                initialValue: "",
+                initialValue: "all",
               })(
                 <Select
                   style={{ width: 200 }}
                   onChange={(value) => handleFilter({ channel: value })}
                 >
-                  <Option value="">全部</Option>
+                  <Option value="all">全部</Option>
                   <Option value="M">菜单生成</Option>
                   <Option value="S">辅料超市</Option>
                   <Option value="N">自建订单</Option>

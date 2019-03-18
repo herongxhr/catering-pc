@@ -31,7 +31,7 @@ const tabColumns = [{
   key: 'date'
 }];
 
-class Details extends React.Component {
+class MenuDetails extends React.Component {
   state = {
     tab1Source:[],
     tab2Source:[]
@@ -103,4 +103,4 @@ class Details extends React.Component {
   }
 }
 
-export default Details
+export default MenuDetails

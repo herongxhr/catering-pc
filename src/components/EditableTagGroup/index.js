@@ -7,7 +7,7 @@ import './index.less'
 
 class EditableTagGroup extends React.Component {
   state = {
-    tags: ['幼儿园', '高蛋白', '高营养','三餐五日'],
+    tags: ['幼儿园', '高蛋白', '高营养', '三餐五日'],
     inputVisible: false,
     inputValue: '',
   };
@@ -79,4 +79,4 @@ class EditableTagGroup extends React.Component {
   }
 }
 
-export default  EditableTagGroup
+export default EditableTagGroup

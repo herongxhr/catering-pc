@@ -1,94 +1,169 @@
 import React from 'react'
-import { Tabs } from 'antd'
+import { Card } from 'antd'
 import { connect } from 'dva';
-import TableOne from '../../components/TableOne'
-import TableTwo from '../../components/TableTwo'
-import MenuTemplate from '../../components/MenuTemplate'
-
+import { routerRedux } from 'dva/router';
+import { Table, Badge, Pagination } from 'antd';
 import './index.less'
-import BreadcrumbComponent from '../../components/BreadcrumbComponent';
+import BreadcrumbWithTabs from '../../components/BreadcrumbWithTabs';
+import FilterByDateAndStatus from '../../components/FilterByDateAndStatus';
 
-const TabPane = Tabs.TabPane;
-
-const tab2Columns = [{
-	title: '菜单编号',
-	dataIndex: 'menuID',
-	key: 'menuID',
-}, {
-	title: '周次',
-	dataIndex: 'weekly',
-	key: 'weekly',
-}, {
-	title: '日期',
-	dataIndex: 'date',
-	key: 'date',
-}, {
-	title: '执行状态',
-	dataIndex: 'status',
-	key: 'status',
-	render(status) {
-		let config = {
-			'0': '已执行',
-			'1': '未执行',
-		}
-		return config[status]
-	}
-}, {
-	title: '操作',
-	dataIndex: 'operation',
-	key: 'operation',
-	render(operation) {
-		return operation == 1 ? <span style={{ color: 'blue' }}>删除</span> : ''
-	}
-}]
-
-
-const requests = [{
-	url: `/mymenu`
-}, {
-	url: `/menuItem`
-}]
-
+const tabList = [
+	{
+		key: 'unified-menu',
+		tab: '统一菜单',
+	},
+	{
+		key: 'my-menu',
+		tab: '我的菜单',
+	},
+	{
+		key: 'menu-template',
+		tab: '菜单模板',
+	},
+];
 class MenuCenter extends React.Component {
 	state = {
-		key: 'tab1',
-		tab: 0,
-		tab1Source: [],
-		Data1Source: [],
-		tab2Source: [],
+		activeTabKey: ''
 	}
-
-	componentDidMount() {
-		const { dispatch } = this.props
+	getUnifiedMenu = (params) => {
+		const { dispatch } = this.props;
+		const defultOptions = {
+			startDate: '',
+			endDate: '',
+			status: '',
+			current: 1,
+			pageSize: 10
+		}
 		dispatch({
-			type:'unifiedMenus/queryList',
-			payload:{a:1}
+			type: 'menuCenter/fetchUnifiedMenu',
+			payload: {
+				...defultOptions,
+				...params
+			}
 		})
 	}
 
+	handleLinkChange = (key, params) => {
+		const { dispatch } = this.props;
+		// 不是所有key都setState
+		if (tabList.find(item => item.key === key)) {
+			this.setState({
+				activeTabKey: key
+			})
+		}
+		dispatch(routerRedux.push({
+			pathname: `/menubar/${key}`,
+			state: { ...params }
+		}))
+	}
+
+	componentDidMount() {
+		this.getUnifiedMenu();
+	}
 
 	render() {
-		const { location ,  unifiedMenus} = this.props;
-		console.log(unifiedMenus)
+		const tableColumns = [
+			{
+				title: '菜单编号',
+				dataIndex: 'menuCode',
+				key: 'menuCode',
+			},
+			{
+				title: '周次',
+				dataIndex: 'week',
+				key: 'week',
+			},
+			{
+				title: '日期',
+				dataIndex: 'date',
+				key: 'date',
+			},
+			{
+				title: '下达单位',
+				dataIndex: 'superiorName',
+				key: 'superiorName',
+			},
+			{
+				title: '下达时间',
+				dataIndex: 'issuedTime',
+				key: 'issuedTime',
+			},
+			{
+				title: '执行状态',
+				dataIndex: 'status',
+				key: 'status',
+				render: (text) => {
+					if (text == '已执行') {
+						return (
+							<span>
+								<Badge status="success" />
+								<span>已执行</span>
+							</span>
+						)
+					} else {
+						return (
+							<span>
+								<Badge status="warning" />
+								<span>未执行</span>
+							</span>)
+					}
+				}
+			}
+		];
+		const { location, menuList } = this.props;
+		const {
+			current,
+			records,
+		} = menuList;
 		return (
-			<div className='card-wrapper'>
-				<BreadcrumbComponent {...location} />
-				<Tabs defaultActiveKey="1" onChange={this.callback}>
-					<TabPane tab="统一菜单" key="1">
-						<TableOne  />
-					</TabPane>
-					<TabPane tab="我的菜单" key="2">
-						<TableTwo />
-					</TabPane>
-					<TabPane tab="菜单模板" key="3">
-					 <MenuTemplate />
-					</TabPane>
-				</Tabs>
+			<div>
+				<BreadcrumbWithTabs
+					{...location}
+					tabList={tabList}
+					onChange={this.handleLinkChange}
+					activeTabKey={this.state.activeTabKey}
+				/>
+				<Card className="tableList" bordered={false}>
+					<div >
+						<FilterByDateAndStatus
+							// 状态按钮栏标题
+							status={['全部', '未执行', '已执行']}
+							// 点击下拉框或单选按钮组后的回调函数
+							handleFilterChange={this.getUnifiedMenu}
+						/>
+						<Table
+							columns={tableColumns}
+							dataSource={records}
+							rowKey="id"
+							onRow={(record) => {
+								return {
+									onClick: () => {
+										this.handleLinkChange(
+											'unified-menu/details',
+											{
+												id: record.id,
+												type: 'unified'
+											}
+										)
+									}
+								}
+							}}
+							pagination={
+								<Pagination
+									current={current}
+									onChange={(page, pageSize) =>
+										this.handleFetchUnifiedMenu({
+											page, pageSize
+										})}
+								/>}
+						/>
+					</div>
+				</Card>
 			</div>
 		);
 	}
 }
 
-export default connect(({ unifiedMenus }) => ({ unifiedMenus
-
+export default connect(({ menuCenter }) => ({
+	menuList: menuCenter.menuList,
 }))(MenuCenter); 

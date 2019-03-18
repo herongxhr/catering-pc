@@ -19,14 +19,14 @@ export default class PageHeader extends PureComponent {
 
     render() {
         const {
-            title = '',
+            title,
             logo,
             action,
             content,
             extraContent,
             className,
             loading = false,
-            wide = false,
+            wide = true,
             // tabList,
             // tabActiveKey,
             // tabDefaultActiveKey,
@@ -73,7 +73,7 @@ export default class PageHeader extends PureComponent {
                         </div>
                         {/* {tabList && tabList.length ? (
                             <Tabs
-                                className={styles.tabs}
+                                className={"tabs"}
                                 {...activeKeyProps}
                                 onChange={this.onChange}
                                 tabBarExtraContent={tabBarExtraContent}
