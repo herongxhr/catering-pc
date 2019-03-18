@@ -20,7 +20,9 @@ import ExcipientDetail from './pages/ExcipientDetail'
 import ReportDetail from './pages/ReportDetail'
 import IngreDetail from './pages/IngreDetail'
 import PurOrderDetails from './pages/PurOrderDetails';
-import DeliveryAcceDetail from './pages/DeliveryAcceDetail';
+import PendingDeliveryDetail from './pages/PendingDeliveryDetail';
+import PendingAcceDetail from './pages/PendingAcceDetail';
+import AcceptedDetail from './pages/AcceptedDetail';
 // import CreateTemplate from './components/CreateTemplate'
 // 国际化配置
 import { LocaleProvider } from 'antd';
@@ -54,7 +56,7 @@ export default function RouterConfig({ history }) {
               <Route path="/purOrder/new" component={PurOrder}></Route>
               <Route path="/purOrder/details" component={PurOrderDetails}></Route>
               <Route path="/delivery" component={DeliveryAcce}></Route>
-              <Route path="/delivery/deliveryAcceDetail" component={DeliveryAcce}></Route>
+              <Route path="/delivery/acceptedDetail" component={DeliveryAcce}></Route>
               <Route path="/outStock" component={OutStock}></Route>
               <Route path="/parameter" component={Parameter}></Route>
               <Route path="/Setting" render={() =>
@@ -73,7 +75,9 @@ export default function RouterConfig({ history }) {
               <Route path="/reportdetail" component={ReportDetail}></Route>
               <Route path="/excipientdetail" component={ExcipientDetail}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
-              <Route path="/deliveryAcceDetail" component={DeliveryAcceDetail}></Route>
+              <Route path="/pendingAcceDetail" component={PendingAcceDetail}></Route>
+              <Route path="/pendingDeliveryDetail" component={PendingDeliveryDetail}></Route>
+              <Route path="/acceptedDetail" component={AcceptedDetail}></Route>
               <Redirect to="/home" />
             </Switch>
           </App>

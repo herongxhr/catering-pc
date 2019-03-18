@@ -44,7 +44,7 @@ export function queryTodoList() {
 export function queryList(params) {
     return request({
         method: 'get',
-        url: '/catering/workbench/distributionList',
+        url: '/catering/workbench/distributionReview',
         data: {
             showLoading: true,
             params: {
@@ -220,12 +220,33 @@ export function queryGoodsByOrderId(id) {
 }
 
 export function queryPurCatalog(params) {
+    //console.log(params);
     return request({
         method: 'get',
-        url: '/catering/workbench/purchasingcatalog',
+        url: '/catering/workbench/purchaseList/pageList',
         data: {
             showLoading: true,
-            params
+            params,
+        }
+    })
+}
+export function queryIngreType(params) {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/purchaseList/catalog',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+export function queryPriceHistory(params) {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/purchaseList/item/priceHistory',
+        data: {
+            showLoading: true,
+            params,
         }
     })
 }

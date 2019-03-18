@@ -1,9 +1,11 @@
-import { queryPurCatalog } from '../services/api';
+import { queryPurCatalog,queryIngreType,queryPriceHistory } from '../services/api';
 
 export default {
     namespace:'purCatalog',
     state: {
         catalogData: [],
+        ingreTypeList:[],
+        historyList:[]
     },
     effects: {
         *queryPurCatalog({payload}, { call, put }) {
@@ -13,6 +15,22 @@ export default {
                 type:'savePurCatalog',
                 payload: data,
             })
+        },
+        *queryIngreType({payload}, { call, put }) {
+            const data = yield call(queryIngreType,payload);
+            //console.log(data)
+            yield put({
+                type:'saveIngreType',
+                payload: data,
+            })
+        },
+        *queryPriceHistory({payload}, { call, put }) {
+            const data = yield call(queryPriceHistory,payload);
+            console.log(data)
+            yield put({
+                type:'savePriceHistory',
+                payload: data,
+            })
         }
     },
     reducers: {
@@ -20,6 +38,18 @@ export default {
             return {
                 ...state,
                 catalogData: payload,
+            }
+        },
+        saveIngreType(state, { payload }) {
+            return {
+                ...state,
+                ingreTypeList: payload,
+            }
+        },
+        savePriceHistory(state, { payload }) {
+            return {
+                ...state,
+                historyList: payload,
             }
         }
     }
