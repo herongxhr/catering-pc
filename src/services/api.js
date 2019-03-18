@@ -155,6 +155,16 @@ export function queryMyMenuDetails(params) {//获取我的菜单详情
         }
     })
 }
+export function queryDishes(params) {
+    return request({
+        method: 'get',
+        url: '/catering/camenu/selectDishes',
+        data: {
+            showLoading: true,
+            params: { ...params }
+        }
+    })
+}
 export function queryMyMenuTemplate(params) {//获取我的模板数据
     return request({
         method: 'get',
@@ -248,18 +258,7 @@ export function myCopy(params) {
     })
 }
 
-export function queryDishes(params) {
-    return request({
-        method: 'get',
-        url: '/catering/camenu/selectDishes',
-        data: {
-            showLoading: true,
-            params: {
-                type: params
-            }
-        }
-    })
-}
+
 export function queryTemplateDetail(params) {
     return request({
         method: 'get',

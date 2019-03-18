@@ -50,8 +50,8 @@ class MenuDetails extends React.Component {
       priceDataMap = {}
     } = menuDetails;
     const { type } = location.state;
-    // 是否统一菜单
-    const isUnified = type === 'unified' ? true : false;
+    // 是否我的菜单
+    const isMy = type === 'my' ? true : false;
     // 记录订单是否已经执行，在下面内容中根据条件显示
     const isExecuted = status === '已执行' ? true : false;
     const { isArrangeDish } = this.state;
@@ -60,7 +60,7 @@ class MenuDetails extends React.Component {
       <Fragment>
         {isArrangeDish
           ? (<ButtonGroup>
-            <Button>取消</Button>
+            <Button onClick={this.getMenuDetail}>取消</Button>
             {!isExecuted && <Button>保存</Button>}
           </ButtonGroup>)
           : (<ButtonGroup>
@@ -77,7 +77,7 @@ class MenuDetails extends React.Component {
     const description = (
       <DescriptionList className={styles.headerList} size="small" col="2">
         <Description term="周次">{week}</Description>
-        {isUnified && <Description term="下达单位">{superiorName}</Description>}
+        {!isMy && <Description term="下达单位">{superiorName}</Description>}
         <Description term="日期">{date}</Description>
         <Description term="下达时间">{orderCreateTime}</Description>
       </DescriptionList>
@@ -117,7 +117,7 @@ class MenuDetails extends React.Component {
               marginTop: 20,
             }}>
             {isArrangeDish
-              ? <ArrangeDishes weekData={camenuDetailVOMap} {...this.props} />
+              ? <ArrangeDishes isMy={isMy} weekData={camenuDetailVOMap} {...this.props} />
               : <ShowArrangedDishes
                 camenuDetailVOMap={camenuDetailVOMap}
                 priceDataMap={priceDataMap}

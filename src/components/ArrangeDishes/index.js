@@ -5,13 +5,23 @@ import classNames from 'classnames';
 import { Button, Tag, Dropdown, Menu } from 'antd';
 import styles from './index.module.less';
 
+// 选菜/选食材弹出框中筛选下拉框的数据
+const selectData = [
+    ['all', '全部'],
+    ['meatDish', '荤菜'],
+    ['vegetable', '素菜'],
+    ['halfAMeat', '半荤'],
+    ['dessert', '点心'],
+    ['others', '其它'],
+]
+
 export default class ArrangeDishes extends Component {
     state = {
-        // 显示选菜或食材modal
+        // 显示选菜/选食材弹出框
         showModal: false,
-        // 当前操作列
+        // 当前操作列也就是餐次
         colIndex: '',
-        // 当前操作行
+        // 当前操作行也就是周次
         rowIndex: '',
         // 是不是教职工菜
         forStaff: false,
@@ -21,36 +31,34 @@ export default class ArrangeDishes extends Component {
         currFoodId: ''
     }
 
-    // 在选菜或食材modal中点击确定或取消隐藏modal
-    handleHideModal = () => {
+    // 选菜/选食材弹出框中点击确定或取消的回调
+    hideModal = () => {
         this.setState({
             showModal: false
         })
     }
+    // 点击(添加/更换按钮)时弹出(选菜/选食材弹出框)
+    showModal = () => {
+        this.setState({
+            showModal: true
+        })
+    }
 
-    // 在选菜或选食材modal中点击添加或点击标签关闭时回调
-    // flag===1为添加，flag===-1时为删除
+    // 在选菜/选食材弹出框中点击添加或点击标签关闭时回调
+    // flag为1为添加，-1时为删除，0为替换
     // 使用state中的rowIndex和colIndex定位单元格
     changeArrangedDishes = (record, flag) => {
-        // if (!flag) {
-        //     this.setState({
-        //         showModal: true
-        //     })
-        // }
         const { dispatch } = this.props;
-        const { colIndex, rowIndex, forStaff, isAdd, currFoodId } = this.state;
+        const { isAdd } = this.state;
         dispatch({
             type: 'menuCenter/changeArrangedDishes',
             payload: {
                 record,
-                colIndex,
-                rowIndex,
-                forStaff,
-                isAdd,
-                currFoodId,
+                ...this.state,
                 flag
             }
-        })
+        });
+        // 当换过一次菜后，将之前所换菜的id设为currFoodId
         if (!isAdd) {
             this.setState({
                 currFoodId: record.foodId
@@ -59,11 +67,11 @@ export default class ArrangeDishes extends Component {
     }
 
     // 选菜或选食材中筛选区域
-    handlFetchDishes = (value) => {
+    handlFetchDishes = params => {
         const { dispatch } = this.props;
         dispatch({
             type: 'menuCenter/fetchDishes',
-            payload: value
+            payload: params
         })
     }
 
@@ -77,23 +85,36 @@ export default class ArrangeDishes extends Component {
         }))
     }
 
-    // 控制选菜或选食材modal的显示
-    // 同时设置点击单元格的所代表的是周几及餐次
+    /**
+     * 所有事件冒泡到td单元格上，好采集周次rowIndew餐次colIndex信息
+     * 同时利用state保存当前点击信息；同时控制选菜或选食材modal的显示
+     * 利用forStaff,isAdd,currFoodId保存是否职工餐，是否新加餐，当前操作菜名
+     */
     handleShowModal = (e, rowIndex, colIndex) => {
-        // 不是有效点击退出
+        // 只有添加按钮和两个更换和删除按钮是LI标签
         if (e.target.nodeName !== 'LI') return;
-        // 根据e.target.id来判断是不是职工餐，是不是自己加的菜
-        let forStaff = e.target.id === 'forStaff' ? true : false;
-        let isAdd = e.target.id === 'everyone' || e.target.id === 'forStaff';
-        let currFoodId = (!isAdd && e.target.id) || '';
-        // console.log('isAdd', isAdd, 'e', e.target, 'staff', forStaff, 'currId', currFoodId);
+        // 添加按钮本身有id, 更换和删除的id在parentNode上
+        const foodId = e.target.id || e.target.parentNode.id;
+        // 根据e.target.id来判断是职工餐还是自己加的菜
+        let forStaff = foodId === 'forStaff' ? true : false;
+        let isAdd = foodId === 'everyone' || foodId === 'forStaff';
+        // 记录当前点击菜名的id，要考虑点了按钮的情况
+        let currFoodId = (!isAdd && foodId) || '';
+        const flag = e.target.getAttribute('flag') || null;
+        console.log('isAdd:', isAdd, 'row:', rowIndex, 'col:', colIndex, 'staff:', forStaff, 'currId:', currFoodId, 'flag:', e.target);
         this.setState({
-            showModal: true,
             colIndex,
             rowIndex,
             forStaff,
             isAdd,
             currFoodId
+        }, () => {
+            // 点击了删除按钮,则执行删除操作
+            if (flag === '-1') {
+                this.changeArrangedDishes({ foodId: this.state.currFoodId }, -1);
+                return;
+            }
+            this.showModal();
         })
     }
 
@@ -145,6 +166,7 @@ export default class ArrangeDishes extends Component {
     * @param{boolean} showDetail 是否显示配料详情
     */
     getMealsTD = (dishes = []) => {
+        const { isMy } = this.props;
         const menu = (
             <Menu >
                 <Menu.Item id='everyone' key='all'>所有人</Menu.Item>
@@ -154,11 +176,18 @@ export default class ArrangeDishes extends Component {
         return (<Fragment>
             <ul>
                 {dishes.map((item, index) => (
-                    <li className={classNames({ [styles.isAdd]: item.isAdd })}
-                        id={item.foodId} key={index}>
-                        {item.foodName}
+                    // li负责展示每一个菜品，自己加的菜背景色不一样
+                    <li key={index} className={classNames({ [styles.isAdd]: item.isAdd })}>
+                        <span className={styles.dishName}>{item.foodName}</span>
                         {!!item.forStaff &&
                             <Tag color='orange' className={styles.tag}>教职工</Tag>}
+                        {/* 自己加的悬浮时会显示删除按钮 */}
+                        <ul id={item.foodId} className={styles.actionsWrap}>
+                            <li className={
+                                classNames(styles.changeBtn, { [styles.onlyChange]: (!item.isAdd && !isMy) })
+                            }>更换</li>
+                            {(item.isAdd || isMy) && <li flag='-1' className={styles.deleteBtn}>删除</li>}
+                        </ul>
                     </li>)
                 )}
             </ul>
@@ -194,7 +223,7 @@ export default class ArrangeDishes extends Component {
             }}>选择</a>)
     }
     componentDidMount() {
-        this.handlFetchDishes('all');
+        this.handlFetchDishes();
     }
 
     render() {
@@ -270,17 +299,18 @@ export default class ArrangeDishes extends Component {
                     // modal的显示属性
                     visible={this.state.showModal}
                     // 隐藏modal的方法
-                    handleHideModal={this.handleHideModal}
+                    handleHideModal={this.hideModal}
                     // modal中表格数据
                     modalTableData={dishesData}
                     // 选择类别下拉框时的回调
-                    handlFetchDishes={this.handlFetchDishes}
+                    doFilter={this.handlFetchDishes}
                     // 关闭标签时的回调
                     changeArrangedDishes={this.changeArrangedDishes}
                     colIndex={colIndex}
                     rowIndex={rowIndex}
                     // 当前周次和餐次中菜品数据
                     currMeals={this.getCurrMeals()}
+                    selectData={selectData}
                 />
             </div>
         )
