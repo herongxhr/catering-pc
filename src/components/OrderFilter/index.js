@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Select, DatePicker, Input } from "antd";
+import { Form, Select, DatePicker } from "antd";
 import './index.less'
 
 const Option = Select.Option;
@@ -37,7 +37,6 @@ class OrderFilter extends React.Component {
               )
             }
           </FormItem>
-
           <FormItem label='订单来源' >
             {
               getFieldDecorator('source', {

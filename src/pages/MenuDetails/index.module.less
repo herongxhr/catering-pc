@@ -1,83 +1,57 @@
+@import '~antd/lib/style/themes/default.less';
+
 .menuDetails {
-  .DetailsOperation {
-    width: 1200px;
-    margin: 0px auto;
-    margin-top: -9px;
-      .card-body {
-      .card-header {
-        .card-header-title {
-          font-size: 20px;
-          .iconfont {
-            margin-right: 10px;
-            background-color: orange;
-            color: white;
-            font-size: 20px;
-          }
-        }
-        .right{
-          text-align: right;
-          button {
-            margin-right: 13px;
-          }
-        }
-      }
-      .card-content {
-        font-size: 14px;
-        .card-content-top {
-          padding-top: 20px!important;
-        }
-        div {
-          p {
-            padding: 10px 10px 10px 40px;
-          }
-        }
-        div:nth-child(3) {
-          div{
-            text-align: right;
-            p:nth-child(2) {
-              font-size: 18px;
-              color: #000000;
-            }
-          }
-        }
+  .headerList {
+    margin-bottom: 4px;
+  }
+
+  .tabsCard {
+    :global {
+      .ant-card-head {
+        padding: 0 16px;
       }
     }
   }
-  .PaContent {
-    line-height: 32px;
-    .ant-checkbox-wrapper {
-      width: 120px;
-      height: 32px;
-      border: 1px solid black;
-      line-height: 32px;
-      text-align: center;
-      border-color: #d9d9d9;
+
+  .noData {
+    color: @disabled-color;
+    font-size: 16px;
+    line-height: 64px;
+    text-align: center;
+    i {
+      position: relative;
+      top: 3px;
+      margin-right: 16px;
+      font-size: 24px;
     }
   }
-  .ant-steps {
-    width: 1160px;
-    background: white;
-    margin: 20px auto;
-    height: 108px;
-    display: flex;
-    align-items: center;
-    .ant-steps-item-title {
-      font-size: 5px;
-    }
-    .ant-steps-item-description {
-      font-size: 5px;
+
+  .heading {
+    color: @heading-color;
+    font-size: 20px;
+  }
+
+  .stepDescription {
+    position: relative;
+    left: 38px;
+    padding-top: 8px;
+    font-size: 14px;
+    text-align: left;
+
+    > div {
+      margin-top: 8px;
+      margin-bottom: 4px;
     }
   }
-  .ant-card {
-    width: 1160px;
-    margin: 0px auto;
-    background: white;
-    border: 0px;
+
+  .textSecondary {
+    color: @text-color-secondary;
   }
-  .ant-table-wrapper {
-    width: 1160px;
-    margin: 0px auto;
-    background: white;
-    padding: 20px;
-  } 
+
+  @media screen and (max-width: @screen-sm) {
+    .stepDescription {
+      left: 8px;
+    }
+  }
+
 }

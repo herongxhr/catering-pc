@@ -3,23 +3,23 @@ import { DatePicker, Radio } from 'antd';
 import './index.less';
 
 const { RangePicker } = DatePicker;
-
 export default class FilterByDateAndStatus extends React.Component {
     render() {
-        const { 
-            handleFilterChange, 
+        const {
+            handleFilterChange,
             status,
-         } = this.props;
+        } = this.props;
         return (
             <div className="filter">
                 <div style={{ float: "left", height: 32, }}>
                     <label>日期选择：
                     <RangePicker
+                            style={{ width: 240 }}
                             onChange={(_, dateStrings) => {
                                 let [startDate, endDate] = dateStrings;
                                 handleFilterChange({
-                                    startDate: `${startDate} 00:00:00`,
-                                    endDate: `${endDate} 23:59:59`
+                                    startDate: `${startDate}00:00:00`,
+                                    endDate: `${endDate}23:59:59`
                                 })
                             }}
                         />

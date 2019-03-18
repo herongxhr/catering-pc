@@ -31,11 +31,11 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 import './style/common.less';
 import MenuDetails from './pages/MenuDetails';
+import TemplateDetails from '../src/pages/TemplateDetails';
 import EditTemplate from './pages/EditTemplate';
 import Edit from './pages/Edit';
 import MenuTemplate from '../src/pages/MenuTemplate';
-import MyMenu from './components/MyMenu';
-
+import MyMenu from '../src/pages/MyMenu';
 moment.locale('zh-cn');
 
 export default function RouterConfig({ history }) {
@@ -50,10 +50,11 @@ export default function RouterConfig({ history }) {
               <Route path="/home/outStock" component={OutStock} />
               <Route path="/menubar" exact component={MenuCenter} />
               <Route path="/menubar/unified-menu" exact component={MenuCenter} />
-              <Route path="/menubar/unified-menu/details" exact component={MenuCenter} />
-              <Route path="/menubar/my-menu" component={MyMenu} />
-              <Route path="/menubar/menu-template" component={MenuTemplate} />
-              <Route path="/menubar/unified-menu/details" component={MenuDetails} />
+              <Route path="/menubar/unified-menu/details" exact component={MenuDetails} />
+              <Route path="/menubar/my-menu" exact component={MyMenu} />
+              <Route path="/menubar/my-menu/details" component={MenuDetails} />
+              <Route path="/menubar/menu-template" exact component={MenuTemplate} />
+              <Route path="/menubar/menu-template/details" component={TemplateDetails} />
               <Route path="/menubar/template/newtemplate" exact component={EditTemplate} />
               <Route path="/menubar/template/new" component={Edit} />
               <Route path="/accSupermarket" component={AccSupermarket}></Route>
