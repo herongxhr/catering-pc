@@ -328,12 +328,36 @@ export function queryPurCatalog(params) {
         }
     })
 }
+
 export function queryDelivery() {
     return request({
         method: 'get',
         url: '/catering/workbench/delivery',
         data: {
             showLoading: true,
+        }
+    })
+}
+
+//台账专区
+export function queryParameterTable(params) {
+    return request({
+        method: 'get',
+        url: '/catering/ledger/distribution/month',
+        data: {
+            showLoading: true,
+            params
+        }
+    })
+}
+
+export function queryParameterDetail(params) {
+    return request({
+        method: 'get',
+        url: '/catering/ledger/distribution/day',
+        data: {
+            showLoading: true,
+            params
         }
     })
 }

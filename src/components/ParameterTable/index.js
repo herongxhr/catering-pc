@@ -1,55 +1,80 @@
 import React from 'react'
-import { Table,Tag,Tabs } from 'antd'
+import { Table } from 'antd'
 import ParameterForm from './ParameterForm'
-
-import { parameter } from '../../DataConfig'
+import { withRouter } from 'react-router'
+import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 
 import './index.less'
 
-const TabPane = Tabs.TabPane;
-
 const Columns = [{
   title: '供应商',
-  dataIndex: 'Supplier',
-  key: 'Supplier',
-  render(Supplier) {
-    let config = {
-        '0': '金华市大鑫公司',
-        '1': '烟台青田果蔬有限公司',
-        '2': '浙江坚果智慧'
-    }
-    return config[Supplier];
-  }
+  dataIndex: 'supplierName',
+  key: 'supplierName',
 }, {
   title: '结算月份',
-  dataIndex: 'Month',
-  key: 'Month',
+  dataIndex: 'distributionDate',
+  key: 'distributionDate',
 }, {
 	title: '配送单数量(张)',
-  dataIndex: 'Number',
-	key: 'Number',
-  render(Number) {
-    let config = {
-        '1': '',
-        '2': '8',
-    }
-    return config[Number];
-  }
+  dataIndex: 'distributionNum',
+	key: 'distributionNum',
 }, {
 	title: '总金额',
-  dataIndex: 'Acount',
-  key: 'Acount',
+  dataIndex: 'total',
+  key: 'total',
 }];
 
+
+
 class ParameterTable extends React.Component {
+  queryParameterTable() {
+    const { dispatch } = this.props
+    dispatch({
+      type:'parameter/queryParameterTable'
+    })
+  }
+
+  componentDidMount() {
+    this.queryParameterTable()
+  }
+
+  handleLinkChange(record,id,startDate) {   
+    const { props } = this
+    props.dispatch(routerRedux.push({ 
+      pathname: '/parameter/detail',
+      id,
+      startDate,
+    }))
+  }
+
   render() {
+    const { ParameterTable } = this.props   
+    const {
+			current,
+			records,
+		} = ParameterTable;
+
     return(
       <div className='ParameterTable'>
         <ParameterForm />
-        <Table columns={Columns} dataSource={parameter} />
+        <Table columns={Columns} dataSource={records} rowKey='supplierId' onRow={(record) => {
+          return {
+            onClick:() => {
+              this.props.history.push('/parameter/detail')
+              this.handleLinkChange(
+                record,
+                record.id,
+                record.distributionDate
+              )
+            }
+          }
+        }} />
       </div>
     )
   }
 }
 
-export default ParameterTable
+
+export default connect(({parameter})=>({ParameterTable:parameter.ParameterTable}))
+(withRouter(ParameterTable));

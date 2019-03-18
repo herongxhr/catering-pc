@@ -36,6 +36,8 @@ import EditTemplate from './pages/EditTemplate';
 import Edit from './pages/Edit';
 import MenuTemplate from '../src/pages/MenuTemplate';
 import MyMenu from '../src/pages/MyMenu';
+import ParameterTable from '../src/components/ParameterTable'
+import ParameterDetail from '../src/pages/Parameter/ParameterDetail'
 moment.locale('zh-cn');
 
 export default function RouterConfig({ history }) {
@@ -64,7 +66,8 @@ export default function RouterConfig({ history }) {
               <Route path="/delivery" component={DeliveryAcce}></Route>
               <Route path="/delivery/deliveryAcceDetail" component={DeliveryAcce}></Route>
               <Route path="/outStock" component={OutStock}></Route>
-              <Route path="/parameter" component={Parameter}></Route>
+              <Route path="/parameter" exact component={Parameter}></Route>
+              <Route path="/parameter/detail" component={ParameterDetail} exact></Route>
               <Route path="/Setting" render={() =>
                 <Setting>
                   <Switch>
