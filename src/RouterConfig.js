@@ -20,15 +20,9 @@ import ExcipientDetail from './pages/ExcipientDetail';
 import ReportDetail from './pages/ReportDetail';
 import IngreDetail from './pages/IngreDetail';
 import PurOrderDetails from './pages/PurOrderDetails';
-<<<<<<< HEAD
-import PendingDeliveryDetail from './pages/PendingDeliveryDetail';
-import PendingAcceDetail from './pages/PendingAcceDetail';
-import AcceptedDetail from './pages/AcceptedDetail';
-=======
 import ArrangeDishes from '../src/components/ArrangeDishes';
 import SelectIngredients from '../src/components/SelectIngredients';
-import DeliveryAcceDetail from './pages/DeliveryAcceDetail';
->>>>>>> b84bba579f22039bce861a1645e02f6baf15daab
+// import DeliveryAcceDetail from './pages/DeliveryAcceDetail';
 // import CreateTemplate from './components/CreateTemplate'
 // 国际化配置
 import { LocaleProvider } from 'antd';
@@ -42,11 +36,15 @@ import EditTemplate from './pages/EditTemplate';
 import Edit from './pages/Edit';
 import MenuTemplate from '../src/pages/MenuTemplate';
 import MyMenu from '../src/pages/MyMenu';
-import ParameterTable from '../src/components/ParameterTable'
 import ParameterDetail from '../src/pages/Parameter/ParameterDetail'
+import PendingAcceDetail from './pages/PendingAcceDetail';
+import PendingDeliveryDetail from './pages/PendingDeliveryDetail';
+import AcceptedDetail from './pages/AcceptedDetail';
+import PurOrderDetailAdjust from './pages/PurOrder/PurOrderDetailAdjust'
+import Test from './pages/Test'
 moment.locale('zh-cn');
 
-export default function RouterConfig({ history }) {
+export default function RouterConfig({ history }) { 
   return (
     <Router history={history}>
       <Route path='/' render={() =>
@@ -67,7 +65,7 @@ export default function RouterConfig({ history }) {
               <Route path="/menubar/template/new" component={Edit} />
               <Route path="/accSupermarket" component={AccSupermarket}></Route>
               <Route path="/purOrder" exact component={PurOrder}></Route>
-              <Route path="/purOrder/new" component={PurOrder}></Route>
+              <Route path="/purOrder/detail/adjust" exact component={PurOrderDetailAdjust}></Route>
               <Route path="/purOrder/details" component={PurOrderDetails}></Route>
               <Route path="/delivery" component={DeliveryAcce}></Route>
               <Route path="/delivery/acceptedDetail" component={DeliveryAcce}></Route>
@@ -90,15 +88,13 @@ export default function RouterConfig({ history }) {
               <Route path="/reportdetail" component={ReportDetail}></Route>
               <Route path="/excipientdetail" component={ExcipientDetail}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
-<<<<<<< HEAD
               <Route path="/pendingAcceDetail" component={PendingAcceDetail}></Route>
               <Route path="/pendingDeliveryDetail" component={PendingDeliveryDetail}></Route>
               <Route path="/acceptedDetail" component={AcceptedDetail}></Route>
-=======
               <Route path="/arrangeDishes" component={ArrangeDishes}></Route>
               <Route path="/selectIngredients" component={SelectIngredients}></Route>
-              <Route path="/deliveryAcceDetail" component={DeliveryAcceDetail}></Route>
->>>>>>> b84bba579f22039bce861a1645e02f6baf15daab
+              <Route path="/test" component={Test}></Route>
+              {/* <Route path="/deliveryAcceDetail" component={DeliveryAcceDetail}></Route> */}
               <Redirect to="/home" />
             </Switch>
           </App>

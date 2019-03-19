@@ -23,7 +23,8 @@ class ParameterDetail extends React.Component {
       type:'parameter/queryParameterTable',
       payload: {
         id:location.id,
-        startDate:location.startDate
+        startDate:location.startDate,
+        endDate:location.endDate
       }
     })
   }

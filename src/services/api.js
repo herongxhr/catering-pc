@@ -282,10 +282,10 @@ export function queryTemplateDetail(params) {
 // }
 
 // 采购订单专区
-export function queryOrderData(params) {
+export function queryOrderTable(params) {
     return request({
         method: 'get',
-        url: '/catering/purOrder',
+        url: '/catering/order/orders',
         data: {
             showLoading: true,
             params: {

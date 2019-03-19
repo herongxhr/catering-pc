@@ -45,6 +45,7 @@ class ParameterTable extends React.Component {
       pathname: '/parameter/detail',
       id,
       startDate,
+      endDate:record.endDate
     }))
   }
 

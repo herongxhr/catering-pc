@@ -1,37 +1,25 @@
-import { queryOrderData } from '../services/api';
+import { queryOrderTable } from '../services/api';
 
 export default {
     namespace: 'purOrder',
     state: {
-        orderedData: [
-            // {
-            //     "key": 2,
-            //     "date": "1975-07-05",
-            //     "abstract": "胡萝卜丶山药丶番茄丶香蕉",
-            //     "distribution_date": "1975-07-05",
-            //     "status": "1",
-            //     "channel": "N",
-            //     "comment":"快点送到啊",
-            //     "totalAmount": 133134,
-            //     "orderId": 12334456,
-            // }
-        ],
+        orderTable:[],
         rawData: [],
     },
     effects: {
-        *fetchOrderData({ payload }, { call, put }) {
-            const data = yield call(queryOrderData, payload);
+        *queryOrderTable({ payload }, { call, put }) {
+            const data = yield call(queryOrderTable, payload);
             yield put({
-                type: 'savePurOrderData',
-                payload: data.purOrder,
+                type: 'savePurOrderTable',
+                payload: data,
             })
         }
     },
     reducers: {
-        savePurOrderData(state, { payload }) {
+        savePurOrderTable(state, { payload }) {
             return {
                 ...state,
-                rawData: payload,
+                orderTable: payload,
             }
         },
         filterOrder(state, { payload }) {

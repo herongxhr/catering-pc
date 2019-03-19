@@ -1,24 +1,89 @@
 import React from 'react'
-import Bread from '../../components/Bread'
+import { Table } from 'antd';
+import axios from 'axios';
+
+const columns = [{
+  title: 'Name',
+  dataIndex: 'name',
+  sorter: true,
+  render: name => `${name.first} ${name.last}`,
+  width: '20%',
+}, {
+  title: 'Gender',
+  dataIndex: 'gender',
+  filters: [
+    { text: 'Male', value: 'male' },
+    { text: 'Female', value: 'female' },
+  ],
+  width: '20%',
+}, {
+  title: 'Email',
+  dataIndex: 'email',
+}];
 
 class Test extends React.Component {
-	render() {
-		const bread = [{
-			href:'/home',
-			breadContent:'主页'
-		},{
-			href:'/menubar',
-			breadContent:'菜单中心'
-		},{
-			href:'/order',
-			breadContent:'订餐'
-		}]
-		return(
-			<div>
-				<Bread bread={bread} />
-			</div>
-		)
-	}
+  state = {
+    data: [],
+    pagination: {},
+    loading: false,
+  };
+
+  componentDidMount() {
+    this.fetch();
+  }
+
+  handleTableChange = (pagination, filters, sorter) => {
+    const pager = { ...this.state.pagination };
+    pager.current = pagination.current;
+    this.setState({
+      pagination: pager,
+    });
+    this.fetch({
+      results: pagination.pageSize,
+      page: pagination.current,
+      sortField: sorter.field,
+      sortOrder: sorter.order,
+      ...filters,
+    });
+  }
+
+  fetch = (params = {}) => {
+		console.log('params:', params);
+    this.setState({ loading: true });
+    axios({
+      url: 'https://randomuser.me/api',
+      method: 'get',
+      data: {
+        results: 10,
+        ...params,
+      },
+      type: 'json',
+    }).then((data) => {
+      console.log(data)
+      const pagination = { ...this.state.pagination };
+      // Read total count from server
+      // pagination.total = data.totalCount;
+      pagination.total = 200;
+      this.setState({
+        loading: false,
+        data: data.results,
+        pagination,
+      });
+    });
+  }
+
+  render() {
+    return (
+      <Table
+        columns={columns}
+        rowKey={record => record.login.uuid}
+        dataSource={this.state.data}
+        pagination={this.state.pagination}
+        loading={this.state.loading}
+        onChange={this.handleTableChange}
+      />
+    );
+  }
 }
 
 export default Test

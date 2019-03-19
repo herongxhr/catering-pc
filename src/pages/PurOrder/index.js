@@ -3,14 +3,15 @@ import { connect } from 'dva';
 import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon } from 'antd';
 import WrappedOrderFilter from '../../components/OrderFilter';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
-
+import { withRouter } from 'react-router'
+import { routerRedux } from 'dva/router';
 import styles from './index.module.less';
 // 定义表格列
 const tabColumns = [
 	{
 		title: '采购单号',
-		key: 'orderId',
-		dataIndex: 'orderId',
+		key: 'orderNo',
+		dataIndex: 'orderNo',
 		filterMultiple: true,
 	},
 	{
@@ -32,13 +33,13 @@ const tabColumns = [
 	},
 	{
 		title: '创建日期',
-		key: 'date',
-		dataIndex: 'date',
+		key: 'orderTime',
+		dataIndex: 'orderTime',
 	},
 	{
 		title: '摘要',
-		key: 'abstract',
-		dataIndex: 'abstract',
+		key: 'summary',
+		dataIndex: 'summary',
 
 	},
 	{
@@ -66,18 +67,16 @@ const tabColumns = [
 ];
 
 class PurOrder extends React.Component {
-	state = {
-		dateRange: ['', ''],
-		channel: 'all',
-		status: 'all'
-	}
 
-	// 请求订单数据
-	getOrderData = (params) => {
+	// 请求采购订单表格数据
+	getOrderTable = () => {
 		const { dispatch } = this.props;
 		dispatch({
-			type: 'purOrder/fetchOrderData',
-			payload: { ...params },
+			type: 'purOrder/queryOrderTable',
+			payload: { 
+				current:1,
+				pageSize:10
+			},
 		})
 	}
 
@@ -96,24 +95,51 @@ class PurOrder extends React.Component {
 		);
 	}
 
+
+	//新建按钮跳转
+	handleLinkChange = () => {
+		this.props.history.push('/purOrder/detail/adjust')
+	}
+
+	TableLinkChange = (pathname,record,rest) => {
+		const { props } = this
+		props.dispatch(routerRedux.push({ 
+			pathname,
+			id:record.id,
+			...rest
+		}))
+	}
+	
+
 	componentDidMount() {
-		this.getOrderData(this.state);
+		this.getOrderTable();
+	}
+
+	//table current 套装
+	handleTableChange = (page) => {   
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'purOrder/queryOrderTable',
+			payload: { 
+				current:page,
+				pageSize:10
+			},
+		})
 	}
 
 	render() {
 		const {
 			className,
 			location,
-			rawData,
-			orderedData,
+			orderTable,
 		} = this.props;
 
 		// 点击新建时会下拉的按钮
 		const dropdownBtn = () => {
 			const menu = (
 				<Menu>
-					<Menu.Item key="FOrder">食材订单</Menu.Item>
-					<Menu.Item key="SOrder">辅料订单</Menu.Item>
+					<Menu.Item key="FOrder" onClick={this.handleLinkChange}>食材订单</Menu.Item>
+					<Menu.Item key="SOrder" onClick={this.handleLinkChange}>辅料订单</Menu.Item>
 				</Menu>
 			)
 			return (
@@ -127,7 +153,13 @@ class PurOrder extends React.Component {
 			)
 		}
 		// 表格数据
-		const tableData = orderedData.length ? orderedData : rawData;
+		console.log(orderTable)
+		const {
+			current,
+			total,
+			records
+		} = orderTable
+		// const tableData = orderTable.records
 		return (
 			<div className={className}>
 				{/* 面包屑 */}
@@ -155,12 +187,20 @@ class PurOrder extends React.Component {
 					<div style={{ marginTop: 30 }}>
 						<Table
 							columns={tabColumns}
-							dataSource={tableData}
-							rowKey="key"
+							dataSource={records}
+							pagination={{
+								total:total,
+								current:current
+							}}
+							onChange={this.handleTableChange}
+							rowKey="id"
 							onRow={(record) => {
+								const rest = {
+									status:record.status
+								}
 								return {
 									onClick: () => {
-										this.previewOrder(record.orderId)
+										this.TableLinkChange('/purOrder/details',record,rest)
 									}
 								}
 							}}
@@ -173,5 +213,5 @@ class PurOrder extends React.Component {
 }
 
 export default connect(({ purOrder }) => ({
-	...purOrder
-}))(PurOrder)
+	orderTable:purOrder.orderTable
+}))(withRouter(PurOrder))

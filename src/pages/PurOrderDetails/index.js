@@ -2,12 +2,14 @@ import React, { Fragment } from 'react';
 import { connect } from 'dva';
 import { Button, Card, Row, Col, Table, Tag } from 'antd';
 import DescriptionList from '../../components/DescriptionList';
-import BreadcrumbComponents from '../../components/BreadcrumbComponent';
+import Bread from '../../components/Bread'
 import PageHeadWrapper from '../../components/PageHeaderWrapper';
+import Cartoon from '../../components/Cartoon'
 import styles from './index.module.less';
+import { routerRedux } from 'dva/router';
+
 
 const { Description } = DescriptionList;
-const ButtonGroup = Button.Group;
 
 // 定义表格列
 const tabColumns = [
@@ -42,18 +44,23 @@ const tabColumns = [
         dataIndex: "requiredDate"
     },
 ]
-const action = (
-    <Fragment>
-        <ButtonGroup>
-            <Button>打印</Button>
-            <Button>删除</Button>
-            <Button>调整</Button>
-        </ButtonGroup>
-        <Button type="primary">下单</Button>
-    </Fragment>
-);
+const bread = [{
+  href:'/purOrder',
+  breadContent:'采购订单'
+},{
+  breadContent:'详情'
+}]
+
 
 class PurOrderDetails extends React.Component {
+		purOrderAdjust = (pathname,rest) => {
+			const { props } = this
+			props.dispatch(routerRedux.push({ 
+				pathname,
+				...rest
+			}))
+		}
+
     render() {
         const {
             location,
@@ -79,7 +86,7 @@ class PurOrderDetails extends React.Component {
                 </Col>
                 <Col xs={24} sm={12}>
                     <div className={styles.textSecondary}>总金额</div>
-                    <div className={styles.heading}>{`¥ ${orderInfo.totalAmount}元`}</div>
+                    <div className={styles.heading}>10元</div>
                 </Col>
             </Row>
         );
@@ -93,19 +100,47 @@ class PurOrderDetails extends React.Component {
             </DescriptionList>
         );
 
+        
         const cardTitle = (
             <span className={styles.cardTitle}>商品明细：<Tag color="cyan">共{goodsDetail.length}条</Tag></span>
-        );
+				);
+
+				const { id , status } = location
+
+				const chooseButtonGroup = () => {
+					if(status == 0) return otherAction
+						else return action
+				}
+
+				const action = (
+					<Fragment>
+							<Button>打印</Button>
+							<Button style={{marign:'0px 20px'}}>删除</Button>
+							<Button onClick={() => this.purOrderAdjust('/purOrder/detail/adjust')}>调整</Button>
+							<Button type="primary">下单</Button>
+					</Fragment>
+			);
+			
+			const otherAction = (
+					<Fragment>
+							{/* <Cartoon bell={false} value={'点击这里可以查看配送验收情况哦'} /> */}
+							<Button>打印</Button>
+							<Button style={{marign:'0px 20px'}}>再来一单</Button>
+							<Button type="primary">查看配送验收情况</Button>
+							{/* <Button type="primary">查看配送验收情况</Button> */}
+					</Fragment>
+			)
+
         return (
-            <div>
-                <BreadcrumbComponents {...location} />
+            <div className={styles.PurOrderDetails}>
+      				  <Bread bread={bread} value='/purOrder'></Bread>
                 {/* 页头容器 */}
                 <PageHeadWrapper
-                    title={`采购单号：${location.state.id}`}
+                    title={`采购单号：${id}`}
                     logo={
                         <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png" />
                     }
-                    action={action}
+                    action={chooseButtonGroup()}
                     content={description}
                     extraContent={extra}
                     {...this.props}
@@ -126,7 +161,6 @@ class PurOrderDetails extends React.Component {
                         />
                     </Card>
                 </PageHeadWrapper>
-
             </div>
         )
     }
