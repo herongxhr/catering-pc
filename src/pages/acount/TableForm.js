@@ -1,3 +1,9 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-20 15:20:39 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-20 15:27:45
+ */
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, message, Popconfirm, Divider } from 'antd';
 import isEqual from 'lodash/isEqual';
@@ -82,7 +88,6 @@ class TableForm extends PureComponent {
 
   handleFieldChange(e, fieldName, key) {
     const { data } = this.state;
-    console.log(data)
     const newData = data.map(item => ({ ...item }));
     const target = this.getRowByKey(key, newData);
     if (target) {

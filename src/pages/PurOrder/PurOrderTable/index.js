@@ -1,6 +1,14 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-20 15:07:45 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-20 15:26:47
+ */
 import React, { PureComponent, Fragment } from 'react';
-import { Table, Button, Input, message, Popconfirm, Divider } from 'antd';
+import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag  } from 'antd';
 import isEqual from 'lodash/isEqual';
+
+const Option = Select.Option;
 
 
 class PurOrderTable extends PureComponent {
@@ -61,8 +69,9 @@ class PurOrderTable extends PureComponent {
       supply:'',
       date:'',
       editable: true,
-      isNew: true,
     });
+    const { onChange } = this.props;
+    onChange(newData);
     this.index += 1;
     this.setState({ data: newData });
   };
@@ -94,6 +103,22 @@ class PurOrderTable extends PureComponent {
     }
   }
 
+  handleDateChange(fieldName,key,date,dateString) {
+    const { data } = this.state;
+    const { onChange } = this.props
+    const newData = data.map(item => ({ ...item }));
+    const target = this.getRowByKey(key, newData);
+    if (target) {
+      target[fieldName] = dateString;
+      onChange(newData);
+      this.setState({ data: newData });
+    }
+  }
+
+  handleSelectChange(value) {
+    console.log(value)
+  }
+
   // saveRow = (e, key) => {
   //   // e.persist();
   //   // this.setState({
@@ -123,6 +148,7 @@ class PurOrderTable extends PureComponent {
           if (record.editable) {
             return (
               <Input
+                style={{width:'190px'}}
                 autoFocus
                 onChange={e => this.handleFieldChange(e, 'commodity', record.id)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
@@ -141,10 +167,12 @@ class PurOrderTable extends PureComponent {
           if (record.editable) {
             return (
               <Input
+                style={{width:'60px'}}
                 autoFocus
                 onChange={e => this.handleFieldChange(e, 'unit', record.id)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
                 placeholder="单位"
+                disabled
               />
             );
           }
@@ -159,6 +187,7 @@ class PurOrderTable extends PureComponent {
           if (record.editable) {
             return (
               <Input
+                style={{width:'70px'}}
                 autoFocus
                 onChange={e => this.handleFieldChange(e, 'price', record.id)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
@@ -191,12 +220,12 @@ class PurOrderTable extends PureComponent {
         render: (text, record) => {
           if (record.editable) {
             return (
-              <Input
-                autoFocus
-                onChange={e => this.handleFieldChange(e, 'supply', record.id)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="供应商"
-              />
+              <Select onChange={this.handleSelectChange} style={{width:'190px'}} placeholder='请选择'>
+                <Option value="1">Jack</Option>
+                <Option value="2">Lucy</Option>
+                <Option value="3">Disabled</Option>
+                <Option value="4">yiminghe</Option>
+              </Select>
             );
           }
           return text;
@@ -209,12 +238,7 @@ class PurOrderTable extends PureComponent {
         render: (text, record) => {
           if (record.editable) {
             return (
-              <Input
-                autoFocus
-                onChange={e => this.handleFieldChange(e, 'date', record.id)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="配送日期"
-              />
+              <DatePicker onChange={this.handleDateChange.bind(this,'date',record.id)} style={{width:'130px'}} />
             );
           }
           return text;
@@ -236,8 +260,21 @@ class PurOrderTable extends PureComponent {
     ];
 
     const { loading, data } = this.state;
+    let totalLength = null
+    if(data) {
+      totalLength = data.length
+    }
+    const CardTitle = () => {
+      return (
+        <div style={{marginBottom:'20px'}}>
+          <span style={{marginRight:'10px'}}>商品明细</span>
+          <Tag color="cyan">共{totalLength}条</Tag>        
+        </div>
+      )
+    }
     return (
       <Fragment>
+        {CardTitle()}
         <Table
           loading={loading}  //通过loading这个变量的值判断页面是否在加载中
           columns={tabColumns}

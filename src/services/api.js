@@ -294,12 +294,23 @@ export function queryOrderTable(params) {
         }
     })
 }
-export function queryOrderDetails() {
+export function queryOrderDetails(params) {
     return request({
         method: 'get',
-        url: '/catering/orderDetails',
+        url: `/catering/order/item/${params.id}`,
         data: {
             showLoading: true,
+            ...params
+        }
+    })
+}
+
+export function queryOrderItemGoods(params) {
+    return request({
+        method:'get',
+        url:'/catering/order/item/goods',
+        data:{
+            ...params
         }
     })
 }
