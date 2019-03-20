@@ -1,11 +1,10 @@
 import React from 'react'
-import { Card } from 'antd'
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Table, Badge, Pagination } from 'antd';
-import './index.less'
+import { Card, Table, Badge } from 'antd';
+import styles from './index.module.less';
 import BreadcrumbWithTabs from '../../components/BreadcrumbWithTabs';
-import FilterByDateAndStatus from '../../components/FilterByDateAndStatus';
+import CommonFilter from '../../components/CommonFilter';
 
 const tabList = [
 	{
@@ -21,28 +20,28 @@ const tabList = [
 		tab: '菜单模板',
 	},
 ];
+
+// 表格上面筛选过滤功能组件的数据
+const filterData = {
+	datePicker1: true,
+	statusGroup: [
+		['', '全部'],
+		['0', '未执行'],
+		['1', '已执行']
+	]
+};
 class MenuCenter extends React.Component {
 	state = {
-		activeTabKey: ''
-	}
-	getUnifiedMenu = (params) => {
-		const { dispatch } = this.props;
-		const defultOptions = {
+		activeTabKey: '',
+		queryParams: {
+			current: 1,
+			pageSize: 10,
 			startDate: '',
 			endDate: '',
 			status: '',
-			current: 1,
-			pageSize: 10
 		}
-		dispatch({
-			type: 'menuCenter/fetchUnifiedMenu',
-			payload: {
-				...defultOptions,
-				...params
-			}
-		})
 	}
-
+	// 点击tabs标签切换页面
 	handleLinkChange = (key, params) => {
 		const { dispatch } = this.props;
 		// 不是所有key都setState
@@ -56,8 +55,49 @@ class MenuCenter extends React.Component {
 			state: { ...params }
 		}))
 	}
+	// 获取统一菜单列表数据通用方法
+	getUnifiedMenu = (params = {}) => {
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'menuCenter/fetchUnifiedMenu',
+			payload: {
+				...this.state.queryParams,
+				...params
+			}
+		})
+	}
+	// 筛选区域下拉框或状态按钮组变化时的回调
+	handleFilterChange = (params = {}) => {
+		// 改变state中相应参数的值
+		const newQueryParams = {
+			...this.state.queryParams,
+			// 直接展开参数进行覆盖
+			...params,
+		}
+		this.setState({
+			queryParams: newQueryParams
+		});
+		// 请求接口
+		this.getUnifiedMenu(newQueryParams);
+	}
 
+	// 表格的onChange方法
+	handleTableChange = pagination => {
+		const { current, pageSize } = pagination;
+		const newQueryParams = {
+			...this.state.queryParams,
+			current,
+			pageSize
+		}
+		// 改变state中current,pageSize
+		this.setState({
+			queryParams: newQueryParams
+		})
+		// 向后端发送请求
+		this.getUnifiedMenu(newQueryParams);
+	}
 	componentDidMount() {
+		// 使用默认的state值发请求
 		this.getUnifiedMenu();
 	}
 
@@ -111,25 +151,31 @@ class MenuCenter extends React.Component {
 			}
 		];
 		const { location, menuList } = this.props;
+		// menuList可能为空对象，报以设置默认值
 		const {
-			current,
-			records,
+			current = 1,
+			records = [],
+			size = 10,
+			total = '',
 		} = menuList;
+		const { activeTabKey } = this.state;
 		return (
 			<div>
 				<BreadcrumbWithTabs
 					{...location}
 					tabList={tabList}
 					onChange={this.handleLinkChange}
-					activeTabKey={this.state.activeTabKey}
+					activeTabKey={activeTabKey}
 				/>
-				<Card className="tableList" bordered={false}>
+				<Card className={styles.tableList} bordered={false}>
 					<div >
-						<FilterByDateAndStatus
-							// 状态按钮栏标题
-							status={['全部', '未执行', '已执行']}
-							// 点击下拉框或单选按钮组后的回调函数
-							handleFilterChange={this.getUnifiedMenu}
+						<CommonFilter
+							// 过滤器所用控件数据
+							filterData={filterData}
+							// 控制改变时的回调
+							handleFilterChange={this.handleFilterChange}
+							// 点击按钮时的回调
+							handleBtnClick={() => { }}
 						/>
 						<Table
 							columns={tableColumns}
@@ -148,14 +194,12 @@ class MenuCenter extends React.Component {
 									}
 								}
 							}}
-							pagination={
-								<Pagination
-									current={current}
-									onChange={(page, pageSize) =>
-										this.handleFetchUnifiedMenu({
-											page, pageSize
-										})}
-								/>}
+							pagination={{
+								current,
+								pageSize: size,
+								total
+							}}
+							onChange={this.handleTableChange}
 						/>
 					</div>
 				</Card>

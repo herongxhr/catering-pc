@@ -115,10 +115,10 @@ export function queryRule(params) {
 }
 
 //菜单中心专区
-export function queryUnifiedMenu(params) {//获取统一菜单数据
+export function queryUnifiedMenu(params) {//获取统一菜单列表
     return request({
         method: 'get',
-        url: '/catering/unifiedMenu/pageList',
+        url: '/catering/menuCenter/camenu/pageQuery',
         data: {
             showLoading: true,
             params: { ...params }
@@ -155,7 +155,7 @@ export function queryMyMenuDetails(params) {//获取我的菜单详情
         }
     })
 }
-export function queryDishes(params) {
+export function queryDishes(params) {//获取菜品数据
     return request({
         method: 'get',
         url: '/catering/camenu/selectDishes',
@@ -185,44 +185,43 @@ export function queryNewMenuTemplate(params) {//获取推荐模板数据
         }
     })
 }
-export function toCopyTemplate(id) {//获取推荐模板数据
+export function toCopyTemplate(templateId) {//复制模板
     return request({
         method: 'get',
-        url: 'catering/camenuTemplate/my/item/copy',
+        url: '/catering/camenuTemplate/my/item/copy',
         data: {
             showLoading: true,
-            params: { id }
+            params: { templateId }
         }
     })
 }
-export function toDeleteTemplate(id) {//获取推荐模板数据
+export function toDeleteTemplate(templateId) {//删除模板
     return request({
         method: 'get',
         url: 'catering/camenuTemplate/my/item/delete',
         data: {
             showLoading: true,
-            params: { id }
+            params: { templateId }
         }
     })
 }
-
-
-export function myMenu() {
+export function queryMyTemplateDetails(templateId) {//查看模板
     return request({
         method: 'get',
-        url: '/catering/myMenus',
+        url: '/catering/camenuTemplate/my/item/detail',
         data: {
-            showLoading: true
+            showLoading: true,
+            params: { templateId }
         }
     })
 }
-
-export function myTemplate() {
+export function queryNewTemplateDetails(templateId) {//查看模板
     return request({
         method: 'get',
-        url: '/catering/camenuTemplate/my',
+        url: '/catering/camenuTemplate/new/item/detail',
         data: {
-            showLoading: true
+            showLoading: true,
+            params: { templateId }
         }
     })
 }
@@ -257,21 +256,6 @@ export function myCopy(params) {
         }
     })
 }
-
-
-export function queryTemplateDetail(params) {
-    return request({
-        method: 'get',
-        url: '/catering/camenuTemplate/my/item/detail',
-        data: {
-            showLoading: true,
-            params: {
-                type: params
-            }
-        }
-    })
-}
-
 
 // export async function queryBrandList(catalog) {
 //     return axios('/goods/brand/page/');

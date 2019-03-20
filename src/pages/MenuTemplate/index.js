@@ -1,7 +1,7 @@
 import React from 'react';
-import { Form, Select, Input, Button, Badge, Tag, Icon, Radio, Card, Checkbox } from 'antd';
+import { Form, Select, Input, Button, Badge, Tag, Row, Col, Radio, Card } from 'antd';
 import { Link, routerRedux } from 'dva/router';
-import Cartoon from '../../components/Cartoon';
+//import Cartoon from '../../components/Cartoon';
 import MenuTemplateCard from '../../components/MenuTemplateCard';
 import BreadcrumbWithTabs from '../../components/BreadcrumbWithTabs';
 import { connect } from 'dva';
@@ -29,11 +29,12 @@ const tabList = [
     tab: '菜单模板',
   },
 ];
-
 class MenuTemplate extends React.Component {
   state = {
     desc: true,
     activeTabKey: 'menu-template',
+    // 当前操作的模板
+    currTemplateId: ''
   }
   // 改变排序
   handleSorter = () => {
@@ -64,23 +65,35 @@ class MenuTemplate extends React.Component {
       type: 'menuCenter/fetchMenuTemplate',
     })
   }
-  // 复制模板
-  handleCopy = id => {
-    const { dispatch } = this.props
+  // 对模板进行复制，删除等操作
+  handleTemplateActions = (e, id) => {
+    const { dispatch } = this.props;
+    // 通过e.target.id来获取当前操作类型copy,delete,edit
+    const action = e.delAction || e.target.id;
+    // 查看模板
+    if (action === 'view') {
+      dispatch(routerRedux.push({
+        pathname: '/menubar/menu-template/details',
+        state: { id }
+      }))
+      return;
+    }
+    if (action === 'copy' || action === 'delete') {
+      // 记录当前操作的模板id
+      this.setState({
+        currTemplateId: id,
+      });
+    }
+    // 先显示加载
     dispatch({
-      type: 'menuCenter/copyTemplate',
-      payload: id
+      type: 'menuCenter/saveTemplateActionResult',
+      payload: false
     })
-    window.location.reload()
-  }
-  // 删除模板
-  handleDelte = id => {
-    const { dispatch } = this.props
+    // 调用相应的effect方法
     dispatch({
-      type: 'menuCenter/delteTemplate',
-      payload: id
+      type: `menuCenter/templateActions`,
+      payload: { id, action }
     })
-    window.location.reload()
   }
 
   handleShowDetails = id => {
@@ -104,8 +117,10 @@ class MenuTemplate extends React.Component {
       menuTemplateData = {},
       form: {
         getFieldDecorator,
-      }
+      },
+      templateActionResult
     } = this.props
+    const { currTemplateId } = this.state;
     const { records = [] } = menuTemplateData;
     return (
       <div>
@@ -160,48 +175,41 @@ class MenuTemplate extends React.Component {
             </RadioGroup>
           </div>
           <div className='cardsWrapper'>
-            {records.length ? records
+            {!!records.length && records
               .map(item =>
                 (<MenuTemplateCard key={item.id} id={item.id}
-                  handleCopy={this.handleCopy}
-                  handleDelte={this.handleDelte}
-                  handleShowDetails={this.handleShowDetails}
-                  actionsText={'2019-02-27'}
-                  className='menuTemplateCard'>
-                  <div className='card-body'>
-                    <p className='card-content'>
-                      <span className='card-content-title'>
-                        {item.templateName}
-                      </span>
-                      <span className='right' style={{ fontSize: 14 }}>
-                        {item.used}
-                      </span>
-                    </p>
-                    <p className='card-content'>
-                      <span>
-                        {item.echoMealTimeses}
-                      </span>
-                      <span className='right'>
-                        上次使用
-                    </span>
-                    </p>
-                    <p className='card-content'>
-                      <span>
-                        {item.echoZjs}
-                      </span>
-                      <span className='right'>
-                        {item.lastTime}
-                      </span>
-                    </p>
+                  handleTemplateActions={this.handleTemplateActions}
+                  // 当操作不成功并且卡片id和当前操作的卡片id相同时，不再显示加载
+                  spinning={!templateActionResult && item.id === currTemplateId}
+                  actionsText={item.createDate}>
+                  <div className='templateCardContent'>
+                    <Row style={{ marginBottom: 16 }} span={24} >
+                      <Col span={16}>{item.templateName}</Col>
+                      <Col style={{ textAlign: 'right' }} span={8}>{item.used || 0}次</Col>
+                    </Row>
+                    <Row style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)', marginBottom: 16 }} span={24}>
+                      <Col>
+                        <Row>
+                          <Col span={18}>{item.echoMealTimeses}</Col>
+                          <Col span={6} style={{ textAlign: 'right' }}>上次使用</Col>
+                        </Row>
+                        <Row>
+                          <Col span={18}>{item.echoZjs}</Col>
+                          <Col span={6} style={{ textAlign: 'right' }}>
+                            {item.lastTime && item.lastTime.substring(0, 10)}
+                          </Col>
+                        </Row>
+                      </Col>
+                    </Row>
+                    <Row style={{ marginBottom: 16 }} span={24}>
+                      <Col>
+                        <Tag color="cyan">{item.tags.split(',')[0]}</Tag>
+                        <Tag color="red">{item.tags.split(',')[1]}</Tag>
+                        <Tag color="green">{item.tags.split(',')[2]}</Tag>
+                        <Tag color="orange">{item.tags.split(',')[3]}</Tag></Col>
+                    </Row>
                   </div>
-                  <div className='card-footer'>
-                    <Tag color="magenta">{item.tags.split(',')[0]}</Tag>
-                    <Tag color="red">{item.tags.split(',')[1]}</Tag>
-                    <Tag color="volcano">{item.tags.split(',')[2]}</Tag>
-                    <Tag color="orange">{item.tags.split(',')[3]}</Tag>
-                  </div>
-                </MenuTemplateCard>)) : null
-            }
+                </MenuTemplateCard>))}
           </div>
         </Card>
       </div>
@@ -225,5 +233,6 @@ const WrappedMenuTemplate = Form.create({
 export default connect(({ menuCenter }) => ({
   menuTemplateData: menuCenter.menuTemplate,
   templateType: menuCenter.activeTemplateType,
+  templateActionResult: menuCenter.templateActionResult
 }))(WrappedMenuTemplate);
 

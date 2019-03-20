@@ -12,7 +12,7 @@ module.exports = override(
             //头部背景色
             '@layout-header-background': '#1F253E',
             //字体
-            '@font-family': `'PingFang SC', 'Microsoft YaHei',  Arial, 'Helvetica Neue'`,
+            '@font-family': ` 'Microsoft YaHei', 'PingFang SC',  Arial, 'Helvetica Neue'`,
             //代码
             '@code-family': `Consolas, SF UI Text`,
             //主色

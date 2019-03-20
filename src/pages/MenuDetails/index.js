@@ -14,7 +14,7 @@ const { Description } = DescriptionList;
 const ButtonGroup = Button.Group;
 class MenuDetails extends React.Component {
   state = {
-    canArrangeDish: false
+    isArrangeDish: false
   }
 
   // 从location.state中获取页面传过来的参数
@@ -104,7 +104,7 @@ class MenuDetails extends React.Component {
           {...this.props}
         >
           {/* 进度条 */}
-          <Card bordered={false}>
+          <Card style={{ width: 1160, marginTop: 20 }}>
             <Steps current={isExecuted ? 2 : 1} progressDot>
               <Step title="菜单下达" description={issuedTime} />
               <Step title="采购订单" description={executeTime} />
@@ -112,14 +112,14 @@ class MenuDetails extends React.Component {
             </Steps>
           </Card>
           {/* 排餐区 */}
-          <Card bordered={false}
-            style={{
-              marginTop: 20,
-            }}>
+          <Card
+            style={{ width: 1160, marginTop: 20 }}
+            bodyStyle={{ padding: 20 }}
+          >
             {isArrangeDish
-              ? <ArrangeDishes isMy={isMy} weekData={camenuDetailVOMap} {...this.props} />
+              ? <ArrangeDishes isMy={isMy} arrangedMeals={camenuDetailVOMap} {...this.props} />
               : <ShowArrangedDishes
-                camenuDetailVOMap={camenuDetailVOMap}
+                arrangedDishes={camenuDetailVOMap}
                 priceDataMap={priceDataMap}
               />}
           </Card>
