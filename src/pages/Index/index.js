@@ -18,7 +18,10 @@ const RadioGroup = Radio.Group;
 class A extends Component {
   state={
     timeType:'today',
-    query:{}
+    pager:{
+      current:'',
+      pageSize:''
+    }
   }
   queryTodoList = () => {
     const { dispatch } = this.props;
@@ -48,24 +51,24 @@ class A extends Component {
        }
     })
   }
-  queryList = (params) =>{
-    this.setState({
-      query:params
-    },()=>{
+  queryList = (params={}) =>{
       const { dispatch, } = this.props;
-      //请求待办事项
       dispatch({
         type: 'accept/queryList',
         payload:{
-         ...this.state.query,
-         timeType:this.state.timeType
+         ...params
         }
       })
-    })
+  }
+  handleQuery = (data) =>{
+   this.setState( Object.assign(this.state.pager, data))
   }
   handleAccet = (value) =>{
     this.setState({timeType:value},()=>{
-      this.queryList()
+      this.queryList({
+        ...this.state.pager,
+        timeType:this.state.timeType
+      })
     })
   }
   handleStatistics = (e) =>{
@@ -120,8 +123,8 @@ class A extends Component {
           </div>
           <div className="App-content-accepting">
             <Tabs tabBarExtraContent={operations} onChange={this.handleAccet}>
-              <TabPane tab="今日验收" key="today"><Accepting queryList={this.queryList}  /></TabPane>
-              <TabPane tab="明日验收" key="tomorrow"><Accepting queryList={this.queryList} /></TabPane>
+              <TabPane tab="今日验收" key="today"><Accepting queryList={this.queryList} timeType={this.state.timeType} handleQuery={this.handleQuery} /></TabPane>
+              <TabPane tab="明日验收" key="tomorrow"><Accepting queryList={this.queryList} timeType={this.state.timeType} handleQuery={this.handleQuery}/></TabPane>
             </Tabs>
           </div>
           <div className='App-content-paying-wrapper'>

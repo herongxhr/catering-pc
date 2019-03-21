@@ -1,7 +1,10 @@
 import React from 'react';
-import { Breadcrumb } from "antd";
+import { Breadcrumb,Button } from "antd";
 import { Link } from "dva/router";
 import BreadcrumbMap from '../../breadcrumbConfig';
+import creatHistory from 'history/createBrowserHistory' 
+
+const history = creatHistory();
 
 /**
  * 从location对象的pathname中直接映射出面包屑
@@ -25,18 +28,18 @@ const BreadcrumbComponent = ({ pathname, className }) => {
                 background: "#fff",
                 boxShadow: "0 2px 4px 0 rgba(0,0,0,0.1)",
             }}>
-            <Breadcrumb
-            style={{
+            <div style={{
                 width: 1160,
                 height: 60,
-                lineHeight: "60px",
                 margin: "0 auto",
                 paddingLeft: 24,
                 background: "#fff",
-            }}
-            >
-                {extraBreadcrumbItems}
-            </Breadcrumb>
+            }}>
+                <Breadcrumb style={{float:'left', height: 60,lineHeight: "60px",}}>
+                    {extraBreadcrumbItems}  
+                </Breadcrumb>
+                <Button style={{float:'right', marginTop:15}} onClick={()=>{history.goBack();}}>返回</Button>
+            </div>
         </div>
     )
 }
