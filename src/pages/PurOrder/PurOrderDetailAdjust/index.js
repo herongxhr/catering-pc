@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:41:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-20 19:36:40
+ * @Last Modified time: 2019-03-21 10:32:38
  */
 import React, { Fragment } from 'react'
 import Bread from '../../../components/Bread'
@@ -66,7 +66,7 @@ class PurOrderAdjust extends React.Component {
         return
       }  
     }
-    // this.purOrderSave('/purOrder/details',newID)
+    this.purOrderSave('/purOrder/details',newID)
   }
 
   purOrderSave = (pathname,rest) => {
