@@ -29,17 +29,5 @@ export default {
                 orderDetail: payload.data,
             };
         }
-    },
-    subscriptions: {
-        setup({ dispatch, history }) {
-            history.listen(location => {
-                if (location.pathname === '/purOrder/details') {
-                    dispatch({
-                        type: 'fetchGoodsByOrderId',
-                        payload: location.state.id,
-                    })
-                }
-            })
-        }
     }
 }

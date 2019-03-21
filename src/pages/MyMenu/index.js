@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Card, Pagination, Button, Badge } from 'antd';
+import { Table, Card, Pagination, Badge } from 'antd';
 //import WrappedInlineForm from '../InlineForm';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';

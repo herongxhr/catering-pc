@@ -6,12 +6,22 @@ const { Search } = Input;
 const { Option } = Select;
 
 class SelectDishes extends React.Component {
+    state = {
+        catalog: '',
+        keyword: ''
+    }
+
+    handleFilter = params => {
+        const { doFilter } = this.props;
+        this.setState({ ...params }, () => { doFilter(this.state) });
+    }
     render() {
         const {
             title,
             tableColumns,
             visible,
             handleHideModal,
+            doFilter,
             handlFetchDishes,
             changeArrangedDishes,
             modalTableData: {
@@ -22,12 +32,13 @@ class SelectDishes extends React.Component {
                 total,
             },
             currMeals,
+            selectData,
         } = this.props;
 
         // currMeals初始为空数组
         const tagListDom = currMeals.map(item => (
             // 自己新增的绿色显示
-            <Tag color={ item.isAdd ? 'green' : ''}
+            <Tag color={item.isAdd ? 'green' : ''}
                 style={{
                     height: 32,
                     lineHeight: "32px",
@@ -63,22 +74,18 @@ class SelectDishes extends React.Component {
                 <div className={"leftContent"}>
                     <div className={"filterWrap"}>
                         <label style={{ width: 42 }}>类别：
-                                <Select
+                            <Select
                                 style={{ width: 170 }}
-                                defaultValue="all"
-                                onChange={value => handlFetchDishes(value)}
-                            >
-                                <Option value="all">全部</Option>
-                                <Option value="meatDish">荤菜</Option>
-                                <Option value="vegetable">素菜</Option>
-                                <Option value="halfAMeat">半荤</Option>
-                                <Option value="dessert">点心</Option>
-                                <Option value="others">其它</Option>
+                                defaultValue={selectData[0][0]}
+                                onChange={value => this.handleFilter({ catalog: value })}>
+                                {selectData.map(([value, text]) =>
+                                    <Option key={value} value={value}>{text}</Option>
+                                )}
                             </Select>
                         </label>
                         <Search
                             placeholder="请输入关键字进行搜索"
-                            onSearch={value => handlFetchDishes(value)}
+                            onSearch={value => this.handleFilter({ keyword: value })}
                             style={{ width: 190, marginLeft: 10 }}
                         />
                     </div>

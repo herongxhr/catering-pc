@@ -1,16 +1,17 @@
 /*
  * @Author: suwei 
- * @Date: 2019-03-20 15:20:39 
+ * @Date: 2019-03-20 15:07:45 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-20 15:27:45
+ * @Last Modified time: 2019-03-20 15:26:47
  */
 import React, { PureComponent, Fragment } from 'react';
-import { Table, Button, Input, message, Popconfirm, Divider } from 'antd';
+import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag  } from 'antd';
 import isEqual from 'lodash/isEqual';
 
-import './style.less';
+const Option = Select.Option;
 
-class TableForm extends PureComponent {
+
+class PurOrderTable extends PureComponent {
   index = 0;
 
   cacheOriginData = {};
@@ -38,12 +39,12 @@ class TableForm extends PureComponent {
 
   getRowByKey(key, newData) {
     const { data } = this.state;
-    return (newData || data).filter(item => item.key === key)[0];
+    return (newData || data).filter(item => item.id === key)[0];
   }
 
   toggleEditable = (e, key) => {
     e.preventDefault();
-    const { data } = this.state;
+    const { data } = this.state; 
     const newData = data.map(item => ({ ...item })); //赋值editable
     const target = this.getRowByKey(key, newData);
     if (target) {
@@ -60,22 +61,26 @@ class TableForm extends PureComponent {
     const { data } = this.state;
     const newData = data.map(item => ({ ...item }));
     newData.push({
-      key: `NEW_TEMP_ID_${this.index}`,
-      supply: '',
-      legalPerson: '',
-      address: '',
-      phone:'',
+      id: `NEW_TEMP_ID_${this.index}`,
+      commodity: '',
+      unit: '',
+      price: '',
+      number:'',
+      supply:'',
+      date:'',
       editable: true,
-      isNew: true,
     });
+    const { onChange } = this.props;
+    onChange(newData);
     this.index += 1;
     this.setState({ data: newData });
   };
                                                                                                                                                                                                                                                                                                                                                                                                                     
-  remove(key) {
+  remove(id) {
     const { data } = this.state;
     const { onChange } = this.props;
-    const newData = data.filter(item => item.key !== key);
+    // debugger;
+    const newData = data.filter(item => item.id !== id);
     this.setState({ data: newData });
     onChange(newData);
   }
@@ -88,134 +93,152 @@ class TableForm extends PureComponent {
 
   handleFieldChange(e, fieldName, key) {
     const { data } = this.state;
+    const { onChange } = this.props;
     const newData = data.map(item => ({ ...item }));
     const target = this.getRowByKey(key, newData);
     if (target) {
       target[fieldName] = e.target.value;
+      onChange(newData);
       this.setState({ data: newData });
     }
   }
 
-  saveRow(e, key) {
-    e.persist();
-    this.setState({
-      loading: true,
-    });
-    setTimeout(() => {
-      if (this.clickedCancel) {
-        this.clickedCancel = false;
-        return;
-      }
-      const target = this.getRowByKey(key) || {};
-      console.log(target)
-      if (!target.supply || !target.legalPerson || !target.address || !target.phone) {
-        message.error('请填写完整成员信息。');
-        e.target.focus();
-        this.setState({
-          loading: false,
-        });
-        return;
-      }
-      delete target.isNew;
-      this.toggleEditable(e, key);
-      const { data } = this.state;
-      const { onChange } = this.props;
-      onChange(data);
-      this.setState({
-        loading: false,
-      });
-    }, 500);
-  }
-
-  cancel(e, key) {
-    this.clickedCancel = true;
-    e.preventDefault();
+  handleDateChange(fieldName,key,date,dateString) {
     const { data } = this.state;
+    const { onChange } = this.props
     const newData = data.map(item => ({ ...item }));
     const target = this.getRowByKey(key, newData);
-    if (this.cacheOriginData[key]) {
-      Object.assign(target, this.cacheOriginData[key]);
-      delete this.cacheOriginData[key];
+    if (target) {
+      target[fieldName] = dateString;
+      onChange(newData);
+      this.setState({ data: newData });
     }
-    target.editable = false;
-    this.setState({ data: newData });
-    this.clickedCancel = false;
   }
 
+  handleSelectChange(value) {
+    console.log(value)
+  }
+
+  // saveRow = (e, key) => {
+  //   // e.persist();
+  //   // this.setState({
+  //   //   loading: true,
+  //   // });
+  //   // setTimeout(() => {
+  //   //   const { data } = this.state;
+  //   //   const { onChange } = this.props;
+  //   //   onChange(data);
+  //   //   this.setState({
+  //   //     loading: false,
+  //   //   });
+  //   // }, 500);
+  //   const { data } = this.state;
+  //   const { onChange } = this.props;
+  //   onChange(data);
+  // }
+
+
   render() {
-    const columns = [
+     const tabColumns = [
+      {
+        title: '商品',
+        key: 'commodity',
+        dataIndex: 'commodity',
+        render: (text, record) => {
+          if (record.editable) {
+            return (
+              <Input
+                style={{width:'190px'}}
+                autoFocus
+                onChange={e => this.handleFieldChange(e, 'commodity', record.id)}
+                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                placeholder="商品"
+              />
+            );
+          }
+          return text;
+        },
+      },
+      {
+        title: '单位',
+        key: 'unit',
+        dataIndex: 'unit',
+        render: (text, record) => {
+          if (record.editable) {
+            return (
+              <Input
+                style={{width:'60px'}}
+                autoFocus
+                onChange={e => this.handleFieldChange(e, 'unit', record.id)}
+                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                placeholder="单位"
+                disabled
+              />
+            );
+          }
+          return text;
+        },
+      },
+      {
+        title: '单价',
+        key: 'price',
+        dataIndex: 'price',
+        render: (text, record) => {
+          if (record.editable) {
+            return (
+              <Input
+                style={{width:'70px'}}
+                autoFocus
+                onChange={e => this.handleFieldChange(e, 'price', record.id)}
+                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                placeholder="单价"
+              />
+            );
+          }
+          return text;
+        },
+      },
+      {
+        title: '数量',
+        key: 'number',
+        dataIndex: 'number',
+        render: (text, record) => {  //render里面三个参数的意思 text , record ,index  当前行的值，当前行数据，行索引
+          return (
+            <Input
+              onChange={e => this.handleFieldChange(e, 'number', record.id)}
+              onKeyPress={e => this.handleKeyPress(e, record.id)}
+              placeholder="0"
+              style={{width:'70px'}}
+            />
+          );
+        },
+      },
       {
         title: '供应商',
-        dataIndex: 'supply',
         key: 'supply',
-        width: '20%',
+        dataIndex: 'supply',
         render: (text, record) => {
           if (record.editable) {
             return (
-              <Input
-                value={text}
-                autoFocus
-                onChange={e => this.handleFieldChange(e, 'supply', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="供应商"
-              />
+              <Select onChange={this.handleSelectChange} style={{width:'190px'}} placeholder='请选择'>
+                <Option value="1">Jack</Option>
+                <Option value="2">Lucy</Option>
+                <Option value="3">Disabled</Option>
+                <Option value="4">yiminghe</Option>
+              </Select>
             );
           }
           return text;
         },
       },
       {
-        title: '地区',
-        dataIndex: 'address',
-        key: 'address',
-        width: '20%',
+        title: '配送日期',
+        key: 'date',
+        dataIndex: 'date',
         render: (text, record) => {
           if (record.editable) {
             return (
-              <Input
-                value={text}
-                onChange={e => this.handleFieldChange(e, 'address', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="地区"
-              />
-            );
-          }
-          return text;
-        },
-      },
-      {
-        title: '联系电话',
-        dataIndex: 'phone',
-        key: 'phone',
-        width: '20%',
-        render: (text, record) => {
-          if (record.editable) {
-            return (
-              <Input
-                value={text}
-                onChange={e => this.handleFieldChange(e, 'phone', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="联系电话"
-              />
-            );
-          }
-          return text;
-        },
-      },
-      {
-        title: '法人',
-        dataIndex: 'legalPerson',
-        key: 'legalPerson',
-        width: '20%',
-        render: (text, record) => {  //render里面三个参数的意思 text , record ,index  当前行的值，当前行数据，行索引
-          if (record.editable) {
-            return (
-              <Input
-                value={text}
-                onChange={e => this.handleFieldChange(e, 'legalPerson', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="法人"
-              />
+              <DatePicker onChange={this.handleDateChange.bind(this,'date',record.id)} style={{width:'130px'}} />
             );
           }
           return text;
@@ -223,55 +246,42 @@ class TableForm extends PureComponent {
       },
       {
         title: '操作',
-        key: 'action',
-        render: (text, record) => {
-          const { loading } = this.state;
-          if (!!record.editable && loading) {
-            return null;
-          }
-          if (record.editable) {
-            if (record.isNew) {
-              return (
-                <span>
-                  <a onClick={e => this.saveRow(e, record.key)}>添加</a>
-                  <Divider type="vertical" />
-                  <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
-                    <a>删除</a>
-                  </Popconfirm>
-                </span>
-              );
-            }
-            return (
-              <span>
-                <a onClick={e => this.saveRow(e, record.key)}>保存</a>  
-                <Divider type="vertical" />
-                <a onClick={e => this.cancel(e, record.key)}>取消</a>
-              </span>
-            );
-          }
+        key:'operation',
+        render: (text,record) => {
           return (
             <span>
-              <a onClick={e => this.toggleEditable(e, record.key)}>编辑</a>
-              <Divider type="vertical" />
-              <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
+              <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.id)}>
                 <a>删除</a>
               </Popconfirm>
             </span>
-          );
-        },
-      },
+          )
+        }
+      }
     ];
 
     const { loading, data } = this.state;
-
+    let totalLength = null
+    if(data) {
+      totalLength = data.length
+    }
+    const CardTitle = () => {
+      return (
+        <div style={{marginBottom:'20px'}}>
+          <span style={{marginRight:'10px'}}>商品明细</span>
+          <Tag color="cyan">共{totalLength}条</Tag>        
+        </div>
+      )
+    }
     return (
       <Fragment>
+        {CardTitle()}
         <Table
           loading={loading}  //通过loading这个变量的值判断页面是否在加载中
-          columns={columns}
+          columns={tabColumns}
           dataSource={data}
           pagination={false}
-          rowClassName={record => (record.editable ? 'editable' : '')} //点击编辑的话样式变化
+          rowKey='id'
+          // rowClassName={record => (record.editable ? 'editable' : '')} //点击编辑的话样式变化
         />
         <Button
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
@@ -281,9 +291,12 @@ class TableForm extends PureComponent {
         >
           新增成员
         </Button>
+        {/* <Button onClick={this.saveRow}>
+          保存
+        </Button> */}
       </Fragment>
     );
   }
 }
 
-export default TableForm;
+export default PurOrderTable;

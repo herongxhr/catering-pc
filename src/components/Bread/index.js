@@ -1,16 +1,14 @@
 import React from 'react';
 import { Breadcrumb } from 'antd';
-import { withRouter } from 'dva/router';
 import { connect } from 'dva';
 import './index.less';
-
+import GoBack from '../GoBack'
 
 class Bread extends React.Component {
   render() {
-    console.log(this.props);
-    const { className, bread } = this.props;
+    const { value , bread } = this.props;
     return (
-      <div className={className} style={{
+      <div className='bread-wrapper' style={{
         background: "#fff",
         boxShadow: "0 2px 4px 0 rgba(0,0,0,0.1)"
       }}>
@@ -24,6 +22,7 @@ class Bread extends React.Component {
               return <Breadcrumb.Item key={index}><a href={item.href}>{item.breadContent}</a></Breadcrumb.Item>
             })
           }
+          {value ? <GoBack value={value} /> : null}
         </Breadcrumb>
       </div>
     )

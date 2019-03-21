@@ -138,6 +138,7 @@ export default {
                 payload: false
             })
         },
+        // 获取菜品数据 
         *fetchDishes({ payload }, { call, put }) {
             const data = yield call(queryDishes, payload);
             yield put({
@@ -207,6 +208,7 @@ export default {
             const {
                 record, colIndex, rowIndex, forStaff, isAdd, currFoodId, flag
             } = payload;
+            console.log('payload:', payload);
             // 进行数组操作时，没有排餐的餐次取默认空数组
             const rawDishes = state[rowIndex][colIndex] || [];
             // 增加
@@ -241,7 +243,7 @@ export default {
                 // 点击列表时对菜品进行替换
                 // 如果是统一菜品，isAdd和forStaff属性值为undefined
                 // 如果是自己加的菜品，这些属性可以在属性展开的时候保留
-                default:
+                case 0:
                     return {
                         ...state,
                         [rowIndex]: {
@@ -262,6 +264,8 @@ export default {
                             })
                         }
                     };
+                default:
+                    return;
             }
         }
     }

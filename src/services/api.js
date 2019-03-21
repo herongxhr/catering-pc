@@ -155,6 +155,16 @@ export function queryMyMenuDetails(params) {//获取我的菜单详情
         })
     })
 }
+export function queryDishes(params) {
+    return request({
+        method: 'get',
+        url: '/catering/camenu/selectDishes',
+        data: {
+            showLoading: true,
+            params: { ...params }
+        }
+    })
+}
 export function queryMyMenuTemplate(params) {//获取我的模板数据
     return request({
         method: 'get',
@@ -248,18 +258,7 @@ export function myCopy(params) {
     })
 }
 
-export function queryDishes(params) {
-    return request({
-        method: 'get',
-        url: '/catering/camenu/selectDishes',
-        data: {
-            showLoading: true,
-            params: {
-                type: params
-            }
-        }
-    })
-}
+
 export function queryTemplateDetail(params) {
     return request({
         method: 'get',
@@ -283,10 +282,10 @@ export function queryTemplateDetail(params) {
 // }
 
 // 采购订单专区
-export function queryOrderData(params) {
+export function queryOrderTable(params) {
     return request({
         method: 'get',
-        url: '/catering/purOrder',
+        url: '/catering/order/orders',
         data: {
             showLoading: true,
             params: {
@@ -295,12 +294,23 @@ export function queryOrderData(params) {
         }
     })
 }
-export function queryOrderDetails() {
+export function queryOrderDetails(params) {
     return request({
         method: 'get',
-        url: '/catering/orderDetails',
+        url: `/catering/order/item/${params.id}`,
         data: {
             showLoading: true,
+            ...params
+        }
+    })
+}
+
+export function queryOrderItemGoods(params) {
+    return request({
+        method:'get',
+        url:'/catering/order/item/goods',
+        data:{
+            ...params
         }
     })
 }
@@ -349,6 +359,7 @@ export function queryPriceHistory(params) {
         }
     })
 }
+
 export function queryDelivery() {
     return request({
         method: 'get',
@@ -359,6 +370,7 @@ export function queryDelivery() {
     })
 }
 
+<<<<<<< HEAD
 export function queryEager(params) {
     return request({
         method: 'get',
@@ -409,6 +421,27 @@ export function queryIngreDetail(params) {
         url: `/pub/sku/${params.id}`,
         data: {
             showLoading: true,
+=======
+//台账专区
+export function queryParameterTable(params) {
+    return request({
+        method: 'get',
+        url: '/catering/ledger/distribution/month',
+        data: {
+            showLoading: true,
+            params
+        }
+    })
+}
+
+export function queryParameterDetail(params) {
+    return request({
+        method: 'get',
+        url: '/catering/ledger/distribution/day',
+        data: {
+            showLoading: true,
+            params
+>>>>>>> 7e493e4756917ece5a594358512a088b66d25177
         }
     })
 }
