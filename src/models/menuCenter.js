@@ -229,7 +229,7 @@ export default {
             })
         },
         // 获取我的模板详情数据
-        * fetchMyTemplateDetails({ payload }, { call, put }) {
+        * fetchPTemplateDetails({ payload }, { call, put }) {
             const data = yield call(queryMyTemplateDetails, payload);
             yield put({
                 type: 'saveTemplateDetails',
@@ -242,7 +242,7 @@ export default {
             });
         },
         // 获取我的模板详情数据
-        * fetchNewTemplateDetails({ payload }, { call, put }) {
+        * fetchCTemplateDetails({ payload }, { call, put }) {
             const data = yield call(queryNewTemplateDetails, payload);
             yield put({
                 type: 'saveTemplateDetails',

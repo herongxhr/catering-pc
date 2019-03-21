@@ -5,6 +5,7 @@ import { routerRedux } from 'dva/router';
 import ArrangeDishes from '../../components/ArrangeDishes';
 import styles from './index.module.less';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
+import EditableTagGroup from '../../components/EditableTagGroup';
 
 const { WeekPicker, } = DatePicker;
 class CustomMenu extends Component {
@@ -32,6 +33,14 @@ class CustomMenu extends Component {
     const [, nd = '', week = ''] = dateString && dateString.match(/^(\d{4})-(\d{2})/);
     this.setState({ nd, week });
   }
+  // 编辑标签的回调
+  editTag = (tag, flag) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'menuCenter/editTag',
+      payload: { tag, flag }
+    })
+  }
 
   handleClickCancel = () => {
     this.state.dispatch(routerRedux.push({
@@ -40,7 +49,7 @@ class CustomMenu extends Component {
   }
 
   handleClickOk = () => {
-    const { dispatch } = this.state;
+    const { dispatch } = this.props;
     const { menuTemplateId, templateFrom, nd, week } = this.state;
     dispatch({
       type: 'menuCenter/newMenuSummary',
@@ -63,20 +72,33 @@ class CustomMenu extends Component {
     }
   }
   render() {
-    const { location } = this.props;
+    const { location, templateDetails } = this.props;
+    const { tags = '' } = templateDetails;
     // 是否从模板新建
+    const { menuTemplateId } = this.state;
     return (
       <div>
         <BreadcrumbComponent {...location} />
         {/* 如果是自定义菜单时显示 */}
         <Card className={styles.wrap}>
           <Row>
-            <Col span={8}>适用周次：<WeekPicker
-              style={{ width: 260 }}
-              onChange={this.handleSelectWeek}
-              placeholder="选择周次"
-            />
+            <Col span={8}>
+              <Row>
+                <Col style={{ marginBottom: 10 }}>适用周次：</Col>
+                <Col><WeekPicker
+                  style={{ width: 260 }}
+                  onChange={this.handleSelectWeek}
+                  placeholder="选择周次"
+                /></Col>
+              </Row>
             </Col>
+            {!!menuTemplateId && <Col span={16}>
+              <Row>
+                <Col style={{ marginBottom: 10 }}>标签：</Col>
+                <Col>{/* 从模板新建才显示标签 */}
+                  <EditableTagGroup editTag={this.editTag} tags={tags} /></Col>
+              </Row>
+            </Col>}
           </Row>
         </Card>
         <Card

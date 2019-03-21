@@ -22,7 +22,7 @@ export default class TemplateCard extends PureComponent {
 
   render() {
     const {
-      isNew = false,
+      templateFrom = '',
       itemData,
       isSelect,
       handleTemplateActions,
@@ -54,27 +54,27 @@ export default class TemplateCard extends PureComponent {
         actions={cardFooter}
         onMouseOver={this.handleMouseOver}
         onMouseLeave={this.handleMouseOut}
-        onClick={e => handleTemplateActions(e, id, isNew)}
+        onClick={e => handleTemplateActions(e, id, templateFrom)}
       >
         <div className='templateCardContent'>
-          {isNew && <span className={'newPng'}><img src={isNewPng} /></span>}
+          {templateFrom && <span className={'newPng'}><img src={isNewPng} /></span>}
           <Row style={{ marginBottom: 10 }} >
             <Col span={16}>{templateName}</Col>
-            {!isNew && <Col style={{ textAlign: 'right' }} span={8}>{used}次</Col>}
+            {!templateFrom && <Col style={{ textAlign: 'right' }} span={8}>{used}次</Col>}
           </Row>
           <Row style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)', marginBottom: 16 }} span={24}>
             <Col>
               <Row>
                 <Col span={18}>{echoMealTimeses}</Col>
-                {isNew && <Col span={6} style={{ textAlign: 'right' }}>使用次数</Col>}
-                {!isNew && <Col span={6} style={{ textAlign: 'right' }}>上次使用</Col>}
+                {templateFrom && <Col span={6} style={{ textAlign: 'right' }}>使用次数</Col>}
+                {!templateFrom && <Col span={6} style={{ textAlign: 'right' }}>上次使用</Col>}
               </Row>
               <Row>
                 <Col span={18}>{echoZjs}</Col>
-                {isNew && <Col span={6} style={{ textAlign: 'right' }}>
+                {templateFrom && <Col span={6} style={{ textAlign: 'right' }}>
                   {used}次
                 </Col>}
-                {!isNew && <Col span={6} style={{ textAlign: 'right' }}>
+                {!templateFrom && <Col span={6} style={{ textAlign: 'right' }}>
                   {lastTime.substring(0, 10)}
                 </Col>}
               </Row>

@@ -107,11 +107,9 @@ class MyMenu extends React.Component {
 		dispatch({
 			type: 'menuCenter/clearMenuDetails'
 		})
-		// 跳转页面
+		// 跳转页面,从模板新建要先选择模板
 		dispatch(routerRedux.push({
 			pathname: `/menubar/my-menu/${e.key}`,
-			// 把新建类型也传过去
-			state: { type: e.key }
 		}))
 	}
 
