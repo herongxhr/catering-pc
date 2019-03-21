@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Card, Table, Badge } from 'antd';
@@ -6,6 +6,7 @@ import styles from './index.module.less';
 import BreadcrumbWithTabs from '../../components/BreadcrumbWithTabs';
 import CommonFilter from '../../components/CommonFilter';
 
+// breadcrumbWithTabs中tabs数据
 const tabList = [
 	{
 		key: 'unified-menu',
@@ -21,7 +22,7 @@ const tabList = [
 	},
 ];
 
-// 表格上面筛选过滤功能组件的数据
+// 列表表格上面筛选过滤功能组件所需数据
 const filterData = {
 	datePicker1: true,
 	statusGroup: [
@@ -32,34 +33,39 @@ const filterData = {
 };
 class MenuCenter extends React.Component {
 	state = {
-		activeTabKey: '',
+		activeTabKey: 'unified-menu',
 		queryParams: {
 			current: 1,
 			pageSize: 10,
 			startDate: '',
 			endDate: '',
 			status: '',
+			onlyIssued: true
 		}
 	}
-	// 点击tabs标签切换页面
-	handleLinkChange = (key, params) => {
-		const { dispatch } = this.props;
-		// 不是所有key都setState
-		if (tabList.find(item => item.key === key)) {
-			this.setState({
-				activeTabKey: key
-			})
-		}
-		dispatch(routerRedux.push({
+
+	// 点击tabs标签跳转到指定页面
+	// 页面state中的activeTabKey会传给面包屑
+	handleTabChange = key => {
+		this.props.dispatch(routerRedux.push({
 			pathname: `/menubar/${key}`,
-			state: params
-		}))
+		}));
 	}
-	// 获取统一菜单列表数据通用方法
-	getUnifiedMenu = (params = {}) => {
-		const { dispatch } = this.props;
-		dispatch({
-			type: 'menuCenter/fetchUnifiedMenu',
+
+	// 查看订单详情
+	handleShowDetail = record => {
+		this.props.dispatch(routerRedux.push({
+			pathname: `/menubar/unified-menu/details`,
+			state: {
+				id: record.id,
+				type: 'unified'
+			}
+		}));
+	}
+	// 获取统一菜单列表
+	getMenuData = (params = {}) => {
+		this.props.dispatch({
+			type: 'menuCenter/fetchMenuData',
 			payload: {
 				...this.state.queryParams,
 				...params
@@ -78,7 +84,7 @@ class MenuCenter extends React.Component {
 			queryParams: newQueryParams
 		});
 		// 请求接口
-		this.getUnifiedMenu(newQueryParams);
+		this.getMenuData(newQueryParams);
 	}
 
 	// 表格的onChange方法
@@ -94,11 +100,11 @@ class MenuCenter extends React.Component {
 			queryParams: newQueryParams
 		})
 		// 向后端发送请求
-		this.getUnifiedMenu(newQueryParams);
+		this.getMenuData(newQueryParams);
 	}
 	componentDidMount() {
 		// 使用默认的state值发请求
-		this.getUnifiedMenu();
+		this.getMenuData();
 	}
 
 	render() {
@@ -164,7 +170,7 @@ class MenuCenter extends React.Component {
 				<BreadcrumbWithTabs
 					{...location}
 					tabList={tabList}
-					onChange={this.handleLinkChange}
+					onChange={this.handleTabChange}
 					activeTabKey={activeTabKey}
 				/>
 				<Card className={styles.tableList} bordered={false}>
@@ -183,17 +189,10 @@ class MenuCenter extends React.Component {
 							rowKey="id"
 							onRow={(record) => {
 								return {
-									onClick: () => {
-										this.handleLinkChange(
-											'unified-menu/details',
-											{
-												id: record.id,
-												type: 'unified'
-											}
-										)
-									}
+									onClick: () => this.handleShowDetail(record)
 								}
-							}}
+							}
+							}
 							pagination={{
 								current,
 								pageSize: size,

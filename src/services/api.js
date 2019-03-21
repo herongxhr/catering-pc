@@ -1,6 +1,6 @@
 //https://github.com/ljharb/qs
 //qs.stringify(object, [options]);
-//import { stringify } from 'qs';
+import { stringify } from 'qs';
 import request from '../utils/request';
 import requestpub from '../utils/common';
 // 辅料商城
@@ -115,44 +115,45 @@ export function queryRule(params) {
 }
 
 //菜单中心专区
-export function queryUnifiedMenu(params) {//获取统一菜单列表
+//菜单中心专区
+export function queryMenuData(params) {//获取菜单列表
     return request({
         method: 'get',
-        url: '/catering/menuCenter/camenu/pageQuery',
+        url: '/catering/camenu/pageQuery',
         data: {
             showLoading: true,
             params: { ...params }
         }
     })
 }
-export function queryUnifiedMenuDetails(params) {//获取统一菜单详情
+export function queryMenuDetails(id) {//获取菜单详情
     return request({
         method: 'get',
-        url: '/catering/unifiedMenu/item/detail',
+        url: `/catering/camenu/${id}`,
         data: {
             showLoading: true,
-            params: { ...params }
         }
     })
 }
-export function queryMyMenu(params) {//获取我的菜单数据
+export function toUpdateMenu(params) {//修改菜单数据
+    const id = params.camenu.id || '';
     return request({
-        method: 'get',
-        url: '/catering/myMenu/pageList',
+        method: 'post',
+        url: `/catering/camenu/${id}`,
+        headers: { 'Content-Type': 'application/json' },
         data: {
-            showLoading: true,
-            params: { ...params }
+            axiosData: JSON.stringify(params)
         }
     })
 }
-export function queryMyMenuDetails(params) {//获取我的菜单详情
+export function toNewMenu(params) {//新建菜单数据
     return request({
-        method: 'get',
-        url: '/catering/myMenu/item/detail',
-        data: JSON.stringify({
-            showLoading: true,
-            params: { ...params }
-        })
+        method: 'post',
+        url: `/catering/camenu/`,
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+            axiosData: JSON.stringify(params)
+        }
     })
 }
 export function queryDishes(params) {//获取菜品数据

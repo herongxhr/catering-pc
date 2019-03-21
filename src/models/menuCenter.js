@@ -6,10 +6,10 @@ import {
     queryMyTemplateDetails,
     queryNewTemplateDetails,
     queryDishes,
-    queryUnifiedMenu,
-    queryUnifiedMenuDetails,
-    queryMyMenu,
-    queryMyMenuDetails,
+    queryMenuData,
+    queryMenuDetails,
+    toUpdateMenu,
+    toNewMenu
 } from '../services/api';
 
 export default {
@@ -26,6 +26,8 @@ export default {
         menuList: {},
         // 统一或我的菜单详情
         menuDetails: {},
+        // 菜单概要数据
+        camenu: {},
         // 菜单模板数据
         menuTemplate: {},
         // 我的菜单模板数据
@@ -46,6 +48,7 @@ export default {
         templateActionResult: true,
     },
     effects: {
+        // 获取我的模板
         *fetchMyMenuTemplate({ payload }, { call, put }) {
             const defultOptions = {
                 orderByAttr: 'create_date',
@@ -64,6 +67,7 @@ export default {
                 payload: data,
             })
         },
+        // 获取推荐模板
         *fetchNewMenuTemplate({ payload }, { call, put }) {
             const defultOptions = {
                 orderByAttr: 'create_date',
@@ -138,55 +142,83 @@ export default {
                 payload: data,
             })
         },
-        // 获取统一菜单列表
-        * fetchUnifiedMenu({ payload }, { call, put }) {
-            const data = yield call(queryUnifiedMenu, payload);
+        // 获取菜单列表
+        * fetchMenuData({ payload }, { call, put }) {
+            const data = yield call(queryMenuData, payload);
             yield put({
                 type: 'saveMenuList',
                 payload: data,
             })
         },
-        // 获取我的菜单列表
-        * fetchMyMenu({ payload }, { call, put }) {
-            const data = yield call(queryMyMenu, payload);
-            yield put({
-                type: 'saveMenuList',
-                payload: data,
-            })
-        },
-        // 获取统一菜单详情
-        * fetchUnifiedMenuDetails({ payload }, { call, put }) {
-            const data = yield call(queryUnifiedMenuDetails, payload);
+        // 获取菜单详情
+        * fetchMenuDetails({ payload }, { call, put }) {
+            const data = yield call(queryMenuDetails, payload);
             yield put({
                 type: 'saveMenuDetails',
                 payload: data
             });
             yield put({
                 type: 'saveEverydayData',
-                payload: data.camenuDetailVOMap
-            })
-            // 改为统一菜单模式
-            yield put({
-                type: 'changeMenuMode',
-                payload: true
+                payload: data.camenuDetailVOMap || {}
             })
         },
-        // 获取我的菜单详情
-        * fetchMyMenuDetails({ payload }, { call, put }) {
-            const data = yield call(queryMyMenuDetails, payload);
-            yield put({
-                type: 'saveMenuDetails',
-                payload: data,
+        // 更新菜单数据
+        *updateMenu(_, { call, put, select }) {
+            const params = yield select(({ menuCenter }) => {
+                const {
+                    camenu,
+                    monday,
+                    tuesday,
+                    wednesday,
+                    thursday,
+                    friday,
+                    saturday,
+                    sunday,
+                } = menuCenter;
+                return {
+                    camenu,
+                    camenuDetailsMap: {
+                        monday,
+                        tuesday,
+                        wednesday,
+                        thursday,
+                        friday,
+                        saturday,
+                        sunday,
+                    }
+                }
             });
-            yield put({
-                type: 'saveEverydayData',
-                payload: data.camenuDetailVOMap
+            const res = yield call(toUpdateMenu, params);
+        },
+        // 新建菜单数据
+        *newMenuData(_, { call, select }) {
+            const params = yield select(({ menuCenter }) => {
+                const {
+                    camenu,
+                    monday,
+                    tuesday,
+                    wednesday,
+                    thursday,
+                    friday,
+                    saturday,
+                    sunday,
+                } = menuCenter;
+                return {
+                    camenu,
+                    camenuDetailsMap: {
+                        monday,
+                        tuesday,
+                        wednesday,
+                        thursday,
+                        friday,
+                        saturday,
+                        sunday,
+                    }
+                }
             });
-            // 改为我的菜单模式
-            yield put({
-                type: 'changeMenuMode',
-                payload: false
-            })
+            console.log('newMenuData:', params);
+            const res = yield call(toNewMenu, params);
+            console.log('上传', res);
         },
         // 获取菜品数据 
         * fetchDishes({ payload }, { call, put }) {
@@ -206,7 +238,7 @@ export default {
             // 将模板数据扁平化
             yield put({
                 type: 'saveEverydayData',
-                payload: data.camenuTemplateDetailVOMap
+                payload: data && data.camenuTemplateDetailVOMap
             });
         },
         // 获取我的模板详情数据
@@ -219,7 +251,7 @@ export default {
             // 将模板数据扁平化
             yield put({
                 type: 'saveEverydayData',
-                payload: data.camenuTemplateDetailVOMap
+                payload: data && data.camenuTemplateDetailVOMap
             });
         }
     },
@@ -249,14 +281,14 @@ export default {
                 dishesData: { ...payload }
             }
         },
-        // 保存菜单统一或我的菜单列表数据
+        // 保存菜单列表数据
         saveMenuList(state, { payload }) {
             return {
                 ...state,
                 menuList: { ...payload }
             }
         },
-        // 保存菜单统一或我的菜单详情
+        // 保存菜单详情
         saveMenuDetails(state, { payload }) {
             return {
                 ...state,
@@ -264,12 +296,42 @@ export default {
                 menuDetails: payload
             }
         },
-        // 保存菜单统一或我的菜单详情中每天的排餐数据
+        // 保存菜单详情中每天的排餐数据
         saveEverydayData(state, { payload }) {
             return {
                 ...state,
                 // 直接扁平化每天排餐数据
                 ...payload,
+            }
+        },
+        // 调整菜单概要信息
+        editMenuSummary(state, { payload }) {
+            return {
+                ...state,
+                camenu: payload
+            }
+        },
+        // 新建菜单概要信息
+        newMenuSummary(state, { payload }) {
+            console.log('newMenu',payload);
+            return {
+                ...state,
+                camenu: payload
+            }
+        },
+        clearMenuDetails(state, _) {
+            return {
+                ...state,
+                monday: {},
+                tuesday: {},
+                wednesday: {},
+                thursday: {},
+                friday: {},
+                saturday: {},
+                sunday: {},
+                menuDetails: {},
+                camenu: {},
+                templateDetails: {},
             }
         },
         // 保存我的或推荐模板详情

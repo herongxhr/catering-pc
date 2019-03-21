@@ -4,17 +4,47 @@ import { connect } from 'dva';
 import ArrangeDishes from '../../components/ArrangeDishes';
 import styles from './index.module.less';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
+import EditableTagGroup from '../../components/EditableTagGroup';
 
-const { WeekPicker,  } = DatePicker;
-class NewMenu extends Component {
-  editTag = (tag, flag) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'menuCenter/editTag',
-      payload: { tag, flag }
-    })
-
+const { WeekPicker, } = DatePicker;
+class CustomMenu extends Component {
+  state = {
+    menuTemplateId: '',
+    templateFrom: '',
+    type: '',
+    nd: '',
+    week: ''
   }
+
+  // editTag = (tag, flag) => {
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'menuCenter/editTag',
+  //     payload: { tag, flag }
+  //   })
+  // }
+
+  handleSelectWeek = (_, dateString) => {
+    const [, nd = '', week = ''] = dateString && dateString.match(/^(\d{4})-(\d{2})/);
+    this.setState({ nd, week });
+  }
+
+  handleClickCancel = () => {
+    this.props.history.back();
+  }
+
+  handleClickOk = () => {
+    const { dispatch } = this.props;
+    const { menuTemplateId, templateFrom, nd, week } = this.state;
+    dispatch({
+      type: 'menuCenter/newMenuSummary',
+      payload: { menuTemplateId, templateFrom, nd, week, }
+    });
+    dispatch({
+      type: 'menuCenter/newMenuData'
+    });
+  }
+
   componentDidMount() {
     const { location, dispatch } = this.props;
     // 从location中获取传递过来的模板id和是否推荐模板
@@ -31,12 +61,10 @@ class NewMenu extends Component {
     })
   }
   render() {
-    const {
-      location,
-      templateDetails,
-    } = this.props;
-    // 从location中获取传递过来的新建菜单的类型type
+    const { location, templateDetails } = this.props;
+    // 是否从模板新建
     const { type } = location.state;
+    const isFromTemplate = type === 'fromTemplate';
     return (
       <div>
         <BreadcrumbComponent {...location} />
@@ -45,7 +73,7 @@ class NewMenu extends Component {
           <span>适用周次：
             <WeekPicker
               style={{ width: 260 }}
-              onChange={() => { }}
+              onChange={this.handleSelectWeek}
               placeholder="选择周次"
             /></span>
         </Card>
@@ -54,12 +82,13 @@ class NewMenu extends Component {
           style={{ marginBottom: 76 }}
           bodyStyle={{ padding: 20 }}>
           {/* 排餐控件 */}
-          <ArrangeDishes weekData={{}} {...this.props} />
+          <ArrangeDishes isMy={true} {...this.props} />
         </Card>
+        {/* 底部按钮 */}
         <div className={styles.footerWrap}>
           <div className={styles.footerBtn}>
-            <Button>取消</Button>
-            <Button type='primary'>保存</Button>
+            <Button onClick={this.handleClickCancel}>取消</Button>
+            <Button onClick={this.handleClickOk} type='primary'>保存</Button>
           </div>
         </div>
       </div>
@@ -69,4 +98,4 @@ class NewMenu extends Component {
 
 export default connect(({ menuCenter }) => ({
   ...menuCenter
-}))(NewMenu);
+}))(CustomMenu);

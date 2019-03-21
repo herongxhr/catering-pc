@@ -19,12 +19,13 @@ export default async function request(options) {
     if (isShowLoading) {
         ReactDOM.render(<Spin />, document.getElementById('ajaxLoading'));
     }
-    let baseApi = 'http://yapi.jgzh.com/mock/17';
+    let baseApi = 'http://192.168.122.10/';
     try {
         const response = await axios({
             method: options.method,
             url: options.url,
             baseURL: baseApi,
+            headers: options.headers,
             params: (options.data && options.data.params) || '',
             data: (options.data && options.data.axiosData) || {},
         });
