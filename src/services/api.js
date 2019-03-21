@@ -363,7 +363,7 @@ export function queryPriceHistory(params) {
 export function queryDelivery() {
     return request({
         method: 'get',
-        url: '/catering/workbench/delivery',
+        url: '/catering/distribution/distributions',
         data: {
             showLoading: true,
         }
