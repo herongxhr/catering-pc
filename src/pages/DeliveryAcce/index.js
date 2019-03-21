@@ -1,3 +1,9 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-21 09:53:01 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-21 10:00:49
+ */
 import React from 'react';
 import { connect } from 'dva';
 import { Tabs } from 'antd'
@@ -24,15 +30,36 @@ class E extends React.Component {
     })
   }
   componentDidMount() {
-    this.queryDelivery()
+    this.queryDelivery({
+      status:0,
+      current:1,
+      pageSize:10
+    })
   }
+
   callback = (value) =>{
    this.setState({tabkey:value})
+   if(value='pendingDelivery') {
+      this.queryDelivery({
+        status:0
+      })  
+   }
+   if(value='pendingAccept') {
+    this.queryDelivery({
+      status:1
+    })
+   }
+   if(value='accepted') {
+    this.queryDelivery({
+      status:2
+    })
+   }
   }
 
   render() {
     const { location,deliveryAcce } = this.props;
-    const delivery = deliveryAcce.delivery || [];
+    console.log(deliveryAcce);
+    const delivery = deliveryAcce.delivery.records || [];
     return (
       <div className='DeliveryAcce'>
         <BreadcrumbComponent {...location} /> 

@@ -26,6 +26,8 @@ import AcceptedDetail from './pages/AcceptedDetail';
 import ArrangeDishes from '../src/components/ArrangeDishes';
 import SelectIngredients from '../src/components/SelectIngredients';
 import DishDetails from './pages/DishDetails';
+// import DeliveryAcceDetail from './pages/DeliveryAcceDetail';
+// import CreateTemplate from './components/CreateTemplate'
 // 国际化配置
 import { LocaleProvider } from 'antd';
 import zh_cn from 'antd/lib/locale-provider/zh_CN';
@@ -93,13 +95,13 @@ export default function RouterConfig({ history }) {
               <Route path="/reportdetail" component={ReportDetail}></Route>
               <Route path="/excipientdetail" component={ExcipientDetail}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
-              <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/pendingAcceDetail" component={PendingAcceDetail}></Route>
               <Route path="/pendingDeliveryDetail" component={PendingDeliveryDetail}></Route>
               <Route path="/acceptedDetail" component={AcceptedDetail}></Route>
               <Route path="/arrangeDishes" component={ArrangeDishes}></Route>
               <Route path="/selectIngredients" component={SelectIngredients}></Route>
               <Route path="/dishDetails" component={DishDetails}></Route>
+              {/* <Route path="/deliveryAcceDetail" component={DeliveryAcceDetail}></Route> */}
               <Redirect to="/home" />
             </Switch>
           </App>

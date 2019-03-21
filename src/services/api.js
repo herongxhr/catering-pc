@@ -347,7 +347,7 @@ export function queryPriceHistory(params) {
 export function queryDelivery() {
     return request({
         method: 'get',
-        url: '/catering/workbench/delivery',
+        url: '/catering/distribution/distributions',
         data: {
             showLoading: true,
         }
@@ -399,7 +399,7 @@ export function querySave(params) {
 }
 //采购目录详情---食材详情
 export function queryIngreDetail(params) {
-    return requestpub({
+    return request({
         method: 'get',
         url: `/pub/sku/${params.id}`,
         data: {

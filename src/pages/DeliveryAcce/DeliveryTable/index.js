@@ -1,3 +1,9 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-21 10:10:55 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-21 10:11:38
+ */
 import React from 'react'
 import DeliveryForm from '../DeliveryForm'
 import { Tag , Table} from 'antd'
@@ -23,20 +29,20 @@ class DeliveryTable extends React.Component {
   render() {
     const tab1Columns = [{
       title: '配送单号',
-      dataIndex: 'order',
-      key: 'order',
+      dataIndex: 'distributionNo',
+      key: 'distributionNo',
     }, {
       title: '供应商',
-      dataIndex: 'Supplier',
-      key: 'Supplier',
+      dataIndex: 'supplierName',
+      key: 'supplierName',
     }, {
       title: '配送日期',
-      dataIndex: 'Delivery',
-      key: 'Delivery',
+      dataIndex: 'distributionDate',
+      key: 'distributionDate',
     }, {
       title: '摘要',
-      dataIndex: 'abstract',
-      key: 'abstract',
+      dataIndex: 'summary',
+      key: 'summary',
     },
      ];
     const {delivery,tabkey} = this.props;
