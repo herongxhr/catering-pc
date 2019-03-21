@@ -20,18 +20,12 @@ import ExcipientDetail from './pages/ExcipientDetail';
 import ReportDetail from './pages/ReportDetail';
 import IngreDetail from './pages/IngreDetail';
 import PurOrderDetails from './pages/PurOrderDetails';
-<<<<<<< HEAD
 import PendingDeliveryDetail from './pages/PendingDeliveryDetail';
 import PendingAcceDetail from './pages/PendingAcceDetail';
 import AcceptedDetail from './pages/AcceptedDetail';
 import ArrangeDishes from '../src/components/ArrangeDishes';
 import SelectIngredients from '../src/components/SelectIngredients';
 import DishDetails from './pages/DishDetails';
-=======
-import ArrangeDishes from '../src/components/ArrangeDishes';
-import SelectIngredients from '../src/components/SelectIngredients';
-// import DeliveryAcceDetail from './pages/DeliveryAcceDetail';
->>>>>>> 7e493e4756917ece5a594358512a088b66d25177
 // import CreateTemplate from './components/CreateTemplate'
 // 国际化配置
 import { LocaleProvider } from 'antd';
@@ -45,10 +39,7 @@ import EditTemplate from './pages/EditTemplate';
 import Edit from './pages/Edit';
 import MenuTemplate from '../src/pages/MenuTemplate';
 import MyMenu from '../src/pages/MyMenu';
-import ParameterDetail from '../src/pages/Parameter/ParameterDetail'
-import PendingAcceDetail from './pages/PendingAcceDetail';
-import PendingDeliveryDetail from './pages/PendingDeliveryDetail';
-import AcceptedDetail from './pages/AcceptedDetail';
+import ParameterDetail from '../src/pages/Parameter/ParameterDetail';
 import PurOrderDetailAdjust from './pages/PurOrder/PurOrderDetailAdjust'
 import Test from './pages/Test'
 moment.locale('zh-cn');
@@ -94,25 +85,19 @@ export default function RouterConfig({ history }) {
                   </Switch>
                 </Setting>
               }></Route>
-              <Route path="/purCatalog" exact component={PurCatalog}></Route>
-              <Route path="/purCatalog/ingredetail" component={IngreDetail}></Route>
+              <Route path="/purCatalog" component={PurCatalog}></Route>
+              <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/reportdetail" component={ReportDetail}></Route>
               <Route path="/excipientdetail" component={ExcipientDetail}></Route>
-<<<<<<< HEAD
-=======
               <Route path="/ingredetail" component={IngreDetail}></Route>
->>>>>>> 7e493e4756917ece5a594358512a088b66d25177
               <Route path="/pendingAcceDetail" component={PendingAcceDetail}></Route>
               <Route path="/pendingDeliveryDetail" component={PendingDeliveryDetail}></Route>
               <Route path="/acceptedDetail" component={AcceptedDetail}></Route>
               <Route path="/arrangeDishes" component={ArrangeDishes}></Route>
               <Route path="/selectIngredients" component={SelectIngredients}></Route>
-<<<<<<< HEAD
               <Route path="/dishDetails" component={DishDetails}></Route>
-=======
               <Route path="/test" component={Test}></Route>
               {/* <Route path="/deliveryAcceDetail" component={DeliveryAcceDetail}></Route> */}
->>>>>>> 7e493e4756917ece5a594358512a088b66d25177
               <Redirect to="/home" />
             </Switch>
           </App>

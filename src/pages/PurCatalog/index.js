@@ -104,10 +104,10 @@ class PurCatalog extends React.Component {
         var timestamp = Date.parse(new Date());
         var isNew = (timestamp - record.createDate) < 15 * 24 * 3600 * 1000;
         {
-         return  isNew ? <Link to={{pathname: '/purCatalog/ingredetail',state:{id:record.id}}}
+         return  isNew ? <Link to={{pathname: '/ingredetail',state:{id:record.id}}}
           >{text}<Tag color="red" style={{ marginLeft: 8 }}>NEW</Tag></Link> 
           : 
-          <Link to={{pathname: '/purCatalog/ingredetail',state:{id:record.id}}}>{text}</Link>
+          <Link to={{pathname: '/ingredetail',state:{id:record.id}}}>{text}</Link>
         }
 
       },

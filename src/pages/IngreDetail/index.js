@@ -81,6 +81,9 @@ class IngreDetail extends Component {
                                     <ul>
                                         <li>蛋白质(g)：<span>{detailData.dbz}</span></li>
                                         <li>脂肪(g)：<span>{detailData.zf}</span></li>
+                                        <li>胆固醇(g)：<span>{detailData.dgc}</span></li>
+                                    </ul>
+                                    <ul>
                                         <li>碳水化合物(g)：<span>{detailData.tshhw}</span></li>
                                     </ul>
                                 </div>
@@ -88,15 +91,26 @@ class IngreDetail extends Component {
                                 <div className='element'>
                                     <div>微量元素</div>
                                     <ul>
-                                        <li>钙(mg)：<span>{detailData.gai}</span></li>
-                                        <li>铁(Fe)：<span>{detailData.tie}</span></li>
                                         <li>
                                             膳食纤维(g)：
                                             <span>{detailData.ssxw}</span>
                                         </li>
+                                        <li>维生素A(ugRAE)：<span>{detailData.wssa}</span></li>
+                                        <li>维生素C(ugRAE)：<span>{detailData.wssc}</span></li>
                                     </ul>
                                     <ul>
-                                        <li>维生素A(ugRAE)：<span>{detailData.wssa}</span></li>
+                                        <li>维生素e(ugRAE)：<span>{detailData.wsse}</span></li>
+                                        <li>胡萝卜素(mg)：<span>{detailData.hlbs}</span></li>
+                                        <li>烟酸(mg)：<span>{detailData.ys}</span></li>
+                                    </ul>
+                                    <ul>
+                                        <li>核黄素(mg)：<span>{detailData.hhs}</span></li>
+                                        <li>硫胺素(mg)：<span>{detailData.las}</span></li>
+                                        <li>视黄醇当量(ug)：<span>{detailData.shcdl}</span></li>
+                                    </ul>
+                                    <ul>
+                                        <li>钙(mg)：<span>{detailData.gai}</span></li>
+                                        <li>铁(Fe)：<span>{detailData.tie}</span></li>
                                         <li >锌(mg)：<span>{detailData.xin}</span></li>
                                     </ul>
                                 </div>

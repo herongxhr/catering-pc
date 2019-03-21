@@ -30,6 +30,6 @@ export default {
     '/setting/security/': '设置',
     '/setting/cuisine/': '设置',
     '/setting/': '设置',
-    '/purCatalog/':'采购目录',
-    '/purCatalog/ingredetail/':'详情'
+    '/ingredetail/':'食材详情',
+    '/excipientdetail/':'辅料详情'
 }

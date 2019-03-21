@@ -248,7 +248,7 @@ export function recommendTemplate() {
 }
 
 export function myCopy(params) {
-    console.log(params)
+    //console.log(params)
     return request({
         method: 'get',
         url: '/catering/camenuTemplate/my/item/copy',
@@ -370,7 +370,6 @@ export function queryDelivery() {
     })
 }
 
-<<<<<<< HEAD
 export function queryEager(params) {
     return request({
         method: 'get',
@@ -421,7 +420,9 @@ export function queryIngreDetail(params) {
         url: `/pub/sku/${params.id}`,
         data: {
             showLoading: true,
-=======
+        }
+    })
+}
 //台账专区
 export function queryParameterTable(params) {
     return request({
@@ -441,7 +442,6 @@ export function queryParameterDetail(params) {
         data: {
             showLoading: true,
             params
->>>>>>> 7e493e4756917ece5a594358512a088b66d25177
         }
     })
 }

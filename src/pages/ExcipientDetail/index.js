@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './index.less';
-import TwoBread from '../../components/TwoBread';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
 import { Divider, } from 'antd';
 import { connect } from 'dva';
@@ -27,7 +26,7 @@ class ExcipientDetail extends Component{
         return(
             <div className='excipientDetail'>
                 <div className='wrapper'>
-                    <TwoBread title='一级目录' subTitle='详情'/>
+                <BreadcrumbComponent {...location}/>
                 </div>
                 <div className='excidetailwrapper'>
                     <div className='excidetailcontent'>
@@ -36,9 +35,9 @@ class ExcipientDetail extends Component{
                                 商品信息
                             </div>
                             <ul className='exciMess'>
-                                <li>名称：<span>豆瓣酱</span></li>
-                                <li style={{marginLeft:100,marginRight:100}}>分类：<span>厨房调味</span></li>
-                                <li>储存方法：<span>常温保存</span></li>
+                                <li>名称：<span>{detailData.goodsName}</span></li>
+                                <li style={{marginLeft:100,marginRight:100}}>分类：<span>{detailData.catalogName}</span></li>
+                                <li>储存方法：<span>{detailData.storage}</span></li>
                             </ul>
                         </div>
                         <Divider />
@@ -47,9 +46,9 @@ class ExcipientDetail extends Component{
                                 规格信息
                             </div>
                             <ul className='exciBrand'>
-                                <li>品牌：<span>海天</span></li>
-                                <li style={{marginLeft:100,marginRight:100}}>规格描述：<span>1.6升/瓶</span></li>
-                                <li>备注：<span>备注信息信息</span></li>
+                                <li>品牌：<span>{detailData.brand}</span></li>
+                                <li style={{marginLeft:100,marginRight:100}}>规格描述：<span>{detailData.spec}</span></li>
+                                <li>备注：<span>{detailData.description}</span></li>
                             </ul>
                         </div>
                         <Divider />
@@ -58,10 +57,10 @@ class ExcipientDetail extends Component{
                                 图片
                             </div>
                             <div className='piclist'>
-                                <img src={Img} alt=""></img>
-                                <img src={Img} alt="" style={{marginLeft:30,marginRight:30}}></img>
-                                <img src={Img} alt=""  style={{marginRight:30}}></img>
-                                <img src={Img} alt=""></img>
+                                <img src={detailData.img0} alt=""></img>
+                                <img src={detailData.img1} alt="" style={{marginLeft:30,marginRight:30}}></img>
+                                <img src={detailData.img2} alt=""  style={{marginRight:30}}></img>
+                                <img src={detailData.img3} alt=""></img>
                             </div>
                         </div>
                         <Divider />
