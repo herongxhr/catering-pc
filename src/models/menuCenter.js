@@ -300,6 +300,30 @@ export default {
                 templateActionResult: payload
             }
         },
+        editTag(state, { payload }) {
+            const { tag, flag } = payload;
+            // tags有可能undefined或为''
+            const rawTags = state.templateDetails.tags || '';
+            const tagReg = new RegExp(tag + ",")
+            if (flag === 1) {
+                return {
+                    ...state,
+                    templateDetails: {
+                        ...state.templateDetails,
+                        tags: `${rawTags},${tag}`
+                    }
+                }
+            };
+            if (flag === -1) {
+                return {
+                    ...state,
+                    templateDetails: {
+                        ...state.templateDetails,
+                        tags: rawTags.replace(tagReg, '')
+                    }
+                }
+            };
+        },
         // 根据flag确定是增加还是删除
         changeArrangedMeals(state, { payload }) {
             const {

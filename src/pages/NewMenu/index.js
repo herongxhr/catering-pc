@@ -8,6 +8,14 @@ import EditableTagGroup from '../../components/EditableTagGroup';
 
 const { WeekPicker } = DatePicker;
 class NewMenu extends Component {
+  editTag = (tag, flag) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'menuCenter/editTag',
+      payload: { tag, flag }
+    })
+
+  }
   componentDidMount() {
     const { location, dispatch } = this.props;
     // 从location中获取传递过来的模板id和是否推荐模板
@@ -58,7 +66,7 @@ class NewMenu extends Component {
             <Col span={16}>
               <Row style={{ marginBottom: 10 }}><Col>标签</Col></Row>
               <Row><Col>
-                <EditableTagGroup tags={tags} />
+                <EditableTagGroup editTag={this.editTag} tags={tags} />
               </Col></Row>
             </Col>
           </Row>

@@ -2,14 +2,13 @@ import React from 'react'
 import { Tag, Input, Tooltip, Button } from 'antd';
 class EditableTagGroup extends React.Component {
   state = {
-    tags: ['幼儿园', '高蛋白', '高营养', '三餐五日'],
     inputVisible: false,
     inputValue: '',
   };
 
   handleClose = (removedTag) => {
-    const tags = this.state.tags.filter(tag => tag !== removedTag);
-    this.setState({ tags });
+    const { editTag } = this.props;
+    editTag(removedTag, -1);
   }
 
   showInput = () => {
@@ -21,17 +20,15 @@ class EditableTagGroup extends React.Component {
   }
 
   handleInputConfirm = () => {
-    const state = this.state;
-    const inputValue = state.inputValue;
-    let tags = state.tags;
-    if (inputValue && tags.indexOf(inputValue) === -1) {
-      tags = [...tags, inputValue];
-    }
+    const { inputValue } = this.state;
+    const { tags, editTag } = this.props;
+    // 不是空值并且不和原标签相同
+    let newTag = inputValue && tags.indexOf(inputValue) === -1 ? inputValue : null;
     this.setState({
-      tags,
       inputVisible: false,
       inputValue: '',
     });
+    editTag(newTag, 1);
   }
 
   render() {
@@ -40,7 +37,7 @@ class EditableTagGroup extends React.Component {
     return (
       <div>
         {tags.split(',').map((tag, index) => {
-          const colors = ['cyan', 'orange', 'green', 'magenta', 'lime', 'pruple', 'red', 'blue'];
+          const colors = ['cyan', 'orange', 'green', 'magenta', 'lime', 'red', 'blue'];
           const isLongTag = tag.length > 10;
           const tagElem = (<Tag
             style={{ height: 30, lineHeight: '30px' }}
