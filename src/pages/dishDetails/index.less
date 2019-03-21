@@ -1,36 +1,39 @@
 .wrapper{
     background:#fff;
 }
-.ingredetailwrapper{
+.dishdetailwrapper{
     margin:20px;
 }
-.ingredetailcontent{
+.dishdetailcontent{
     min-height: 240px;
     background:#fff;
     padding:30px 30px 20px;
     width:1160px;
     margin:0 auto;
 }
-.goodmessTitle,.regmessTitle,.pictureTitle,.standardTitle{
+.baseMessTitle,.ingreTableTitle,.pictureTitle,.fireMethodTitle{
     font-size:16px;
     color:#000;
 }
-.regmessTitle,.pictureTitle{
+.ingreTableTitle,.pictureTitle{
     margin-top: 30px;
 }
-.ingreMess,.ingreBrand{
+.baseMess{
     >li{
         width:300px;
         height:20px;
         float: left;
         margin-top:20px;
+        margin-bottom: 30px;
         color:rgba(0,0,0,0.85)
-    }
-    >li:nth-of-type(4){
-        margin-bottom: 30px
     }
     li>span{
         color:rgba(0, 0, 0, 0.65)
+    }
+}
+.ingreTable{
+    .ant-table{
+        margin-top:20px;
     }
 }
 .piclist{
@@ -42,46 +45,12 @@
         border-radius: 4px;
     }
 }
-.nutrition{
-    border:1px solid #e8e8e8;
-    margin:30px 0;
-    min-height:100px;
-}
-.nutTitle{
-    padding:19px 0 18px 30px;
-    color:rgba(0,0,0,0.85);
-    font-weight: 600;
-    border-bottom: 1px solid #e8e8e8;
-}
-.nutcontent{
-    padding:20px 30px 30px 30px;
-}
-.yycf{
-    >div{
-        margin:30px 0 20px;
-    }
-    >ul{
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 30px;
-    }
-}
-.element{
-    >div{
-        margin:30px 0 0 ;
-    }
-    >ul{
-        width:1050px;
-        display: flex;
-        margin-top:20px;
-    }
-}
-.standardcontent{
+.fireMethodContent{
     min-height:200px;
     border:1px solid #E8E8E8;
     padding:20px 30px;
 }
-.standardTitle{
+.fireMethodTitle{
     margin:30px 0 20px; 
 }
 .describ{
@@ -89,7 +58,7 @@
         margin-top:10px;
     }
 }
-.standlist{
+.fireMethodPic{
     display: flex;
     margin:20px 0 25px 0;
     >img{

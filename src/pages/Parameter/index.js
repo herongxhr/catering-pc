@@ -15,7 +15,7 @@ class Parameter extends React.Component {
     return(
       <div className='Parameter'>
         <Bread bread={bread} />
-        <ParameterTable />
+        <ParameterTable  />
       </div>
     )
   }

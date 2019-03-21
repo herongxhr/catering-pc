@@ -39,13 +39,18 @@ class MenuDetails extends React.Component {
   componentDidMount() {
     this.getMenuDetail();
   }
-
   render() {
-    const { location, menuDetails } = this.props;
+    // 设置state中一级属性的默认值
+    const { location, menuDetails = {} } = this.props;
     const {
-      date, menuCode, issuedTime,
-      executeTime, orderCreateTime,
-      status, superiorName, week,
+      date = '',
+      menuCode = '',
+      issuedTime = '',
+      executeTime = '',
+      orderCreateTime = '',
+      status = '',
+      superiorName = '',
+      week = '',
       camenuDetailVOMap = {},
       priceDataMap = {}
     } = menuDetails;
@@ -61,11 +66,11 @@ class MenuDetails extends React.Component {
         {isArrangeDish
           ? (<ButtonGroup>
             <Button onClick={this.getMenuDetail}>取消</Button>
-            {!isExecuted && <Button>保存</Button>}
+            {!isExecuted && <Button onClick={() => { }}>保存</Button>}
           </ButtonGroup>)
           : (<ButtonGroup>
             <Button>打印</Button>
-            {!isExecuted && <Button>恢复</Button>}
+            {!isExecuted && <Button onClick={this.getMenuDetail}>恢复</Button>}
             {!isExecuted && <Button onClick={this.handleArrangeDishes}>调整菜单</Button>}
           </ButtonGroup>)}
         {isExecuted

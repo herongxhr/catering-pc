@@ -25,8 +25,7 @@ import PendingAcceDetail from './pages/PendingAcceDetail';
 import AcceptedDetail from './pages/AcceptedDetail';
 import ArrangeDishes from '../src/components/ArrangeDishes';
 import SelectIngredients from '../src/components/SelectIngredients';
-//import DeliveryAcceDetail from './pages/DeliveryAcceDetail';
-// import CreateTemplate from './components/CreateTemplate'
+import DishDetails from './pages/DishDetails';
 // 国际化配置
 import { LocaleProvider } from 'antd';
 import zh_cn from 'antd/lib/locale-provider/zh_CN';
@@ -41,6 +40,8 @@ import MenuTemplate from '../src/pages/MenuTemplate';
 import MyMenu from '../src/pages/MyMenu';
 import NewMenu from './pages/NewMenu';
 import ChoiceTemplate from './pages/ChoiceTemplate';
+import ParameterDetail from '../src/pages/Parameter/ParameterDetail'
+import PurOrderDetailAdjust from './pages/PurOrder/PurOrderDetailAdjust'
 moment.locale('zh-cn');
 
 export default function RouterConfig({ history }) {
@@ -52,7 +53,8 @@ export default function RouterConfig({ history }) {
             <Switch>
               <Route path="/home" exact component={Index} />
               <Route path="/home/purCatalog" component={PurCatalog} />
-              <Route path="/home/outStock" component={OutStock} />
+              <Route path="/home/outStock" exact component={OutStock} />
+              <Route path="/home/outStock/reportdetail" component={ReportDetail} />
               <Route path="/menubar" exact component={MenuCenter} />
               <Route path="/menubar/unified-menu" exact component={MenuCenter} />
               <Route path="/menubar/unified-menu/details" exact component={MenuDetails} />
@@ -67,12 +69,13 @@ export default function RouterConfig({ history }) {
               <Route path="/menubar/template/new" component={Edit} />
               <Route path="/accSupermarket" component={AccSupermarket}></Route>
               <Route path="/purOrder" exact component={PurOrder}></Route>
-              <Route path="/purOrder/new" component={PurOrder}></Route>
+              <Route path="/purOrder/detail/adjust" exact component={PurOrderDetailAdjust}></Route>
               <Route path="/purOrder/details" component={PurOrderDetails}></Route>
               <Route path="/delivery" component={DeliveryAcce}></Route>
               <Route path="/delivery/acceptedDetail" component={DeliveryAcce}></Route>
               <Route path="/outStock" component={OutStock}></Route>
-              <Route path="/parameter" component={Parameter}></Route>
+              <Route path="/parameter" exact component={Parameter}></Route>
+              <Route path="/parameter/detail" component={ParameterDetail} exact></Route>
               <Route path="/Setting" render={() =>
                 <Setting>
                   <Switch>
@@ -85,16 +88,18 @@ export default function RouterConfig({ history }) {
                   </Switch>
                 </Setting>
               }></Route>
-              <Route path="/purCatalog" component={PurCatalog}></Route>
+              <Route path="/purCatalog" exact component={PurCatalog}></Route>
+              <Route path="/purCatalog/ingredetail" component={IngreDetail}></Route>
               <Route path="/reportdetail" component={ReportDetail}></Route>
               <Route path="/excipientdetail" component={ExcipientDetail}></Route>
+              <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/pendingAcceDetail" component={PendingAcceDetail}></Route>
               <Route path="/pendingDeliveryDetail" component={PendingDeliveryDetail}></Route>
               <Route path="/acceptedDetail" component={AcceptedDetail}></Route>
               <Route path="/arrangeDishes" component={ArrangeDishes}></Route>
               <Route path="/selectIngredients" component={SelectIngredients}></Route>
-              {/* <Route path="/deliveryAcceDetail" component={DeliveryAcceDetail}></Route> */}
+              <Route path="/dishDetails" component={DishDetails}></Route>
               <Redirect to="/home" />
             </Switch>
           </App>

@@ -52,7 +52,7 @@ class MenuCenter extends React.Component {
 		}
 		dispatch(routerRedux.push({
 			pathname: `/menubar/${key}`,
-			state: { ...params }
+			state: params
 		}))
 	}
 	// 获取统一菜单列表数据通用方法
@@ -150,7 +150,7 @@ class MenuCenter extends React.Component {
 				}
 			}
 		];
-		const { location, menuList } = this.props;
+		const { location, menuList = {} } = this.props;
 		// menuList可能为空对象，报以设置默认值
 		const {
 			current = 1,
@@ -174,7 +174,7 @@ class MenuCenter extends React.Component {
 							filterData={filterData}
 							// 控制改变时的回调
 							handleFilterChange={this.handleFilterChange}
-							// 点击按钮时的回调
+							// 点击按钮时的回调,此页面没有按钮，空函数
 							handleBtnClick={() => { }}
 						/>
 						<Table

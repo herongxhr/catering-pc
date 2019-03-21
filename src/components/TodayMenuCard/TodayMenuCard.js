@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './TodayMenuCard.less';
 import { Scrollbars } from 'react-custom-scrollbars';
-
+import homeToday from './today.png';
 import { Empty } from 'antd';
 
 class TodayMenuCard extends Component {
@@ -21,7 +21,7 @@ class TodayMenuCard extends Component {
               {
                 (breakfast.length >0) ?
                   breakfast.map((data, index) => <li key={index}>{data}</li>) : <Empty
-                    image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+                    image={homeToday}
                     description={
                       <span>
                         暂未排餐哦~
@@ -37,7 +37,7 @@ class TodayMenuCard extends Component {
               {
                 (lunch.length >0) ?
                   lunch.map((data, index) => <li key={index}>{data}</li>) : <Empty
-                    image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+                    image={homeToday}
                     description={
                       <span>
                         暂未排餐哦~
@@ -53,7 +53,7 @@ class TodayMenuCard extends Component {
               {
                 (dessert.length >0) ?
                   (dessert.map((data, index) => <li key={index}>{data}</li>)) : (<Empty
-                    image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+                    image={homeToday}
                     description={
                       <span >
                         暂未排餐哦~
@@ -69,7 +69,7 @@ class TodayMenuCard extends Component {
               {
                 (dinner.length>0) ?
                   dinner.map((data, index) => <li key={index}>{data}</li>) : <Empty
-                    image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+                    image={homeToday}
                     description={
                       <span >
                         暂未排餐哦~

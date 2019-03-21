@@ -11,13 +11,13 @@ const Columns = [{
     key: 'distributionNo',
     render:(text,record) =>{
       if(record.status == '待启动'){
-        return(<Link to={{ pathname:"/pendingDeliveryDetail",query:{id:record.id} }}>{text}</Link>) 
+        return(<Link to={{ pathname:"/pendingDeliveryDetail",state:{id:record.id} }}>{text}</Link>) 
       }
       if(record.status == '待验收'){
-        return(<Link to={{ pathname:"/pendingAcceDetail",query:{id:record.id} }}>{text}</Link>) 
+        return(<Link to={{ pathname:"/pendingAcceDetail",state:{id:record.id} }}>{text}</Link>) 
       }
       if(record.status == '已验收'){
-        return(<Link to={{ pathname:"/acceptedDetail/",query:{id:record.id} }}>{text}</Link>) 
+        return(<Link to={{ pathname:"/acceptedDetail/",state:{id:record.id} }}>{text}</Link>) 
       }
     } 
   }, {
@@ -34,17 +34,17 @@ const Columns = [{
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      // render(status){
-      //   if(status == '0'){
-      //     return (<span> <Badge status="success" />待验收</span>)
-      //   }
-      //   if(status == '1'){
-      //     return (<span> <Badge status="warning" />待配送</span>)
-      //   }
-      //   if(status == '2'){
-      //     return (<span> <Badge status="default" />已验收</span>)
-      //   }
-      // },
+      render(status){
+        if(status == '待验收'){
+          return (<span> <Badge status="success" />待验收</span>)
+        }
+        if(status == '待启动'){
+          return (<span> <Badge status="warning" />待配送</span>)
+        }
+        if(status == '已验收'){
+          return (<span> <Badge status="default" />已验收</span>)
+        }
+      },
       width:160
   },{
     title: '配送日期',
@@ -71,18 +71,24 @@ class Accepting extends Component {
         this.props.queryList({
           current:pagination.current,
           pageSize:pagination.pageSize,
+          timeType:this.props.timeType
+        })
+        this.props.handleQuery({
+          current:pagination.current,
+          pageSize:pagination.pageSize,
         })
       }
     render() {
       const { accept }= this.props
       const distributionList = accept.distributionList.records || [];
+      const {current,total} = accept.distributionList
         return ( 
         <div className="accepting">
            <Table 
            columns={Columns} 
            dataSource={distributionList} 
            onChange={this.handleTableChange} 
-           pagination={this.state.pagination}
+           pagination={{current,total}}
            rowKey="id"
            /> 
         </div>

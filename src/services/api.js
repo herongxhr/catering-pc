@@ -2,7 +2,7 @@
 //qs.stringify(object, [options]);
 //import { stringify } from 'qs';
 import request from '../utils/request';
-
+import requestpub from '../utils/common';
 // 辅料商城
 export function queryGoodsF({ params }) {
     return request({
@@ -86,7 +86,7 @@ export function querytodayMenu() {
 export function queryReportmissing(params) {
     return request({
         method: 'get',
-        url: '/catering/workbench/reportmissing',
+        url: '/catering/workbench/shortage/pageList',
         data: {
             showLoading: true,
             params,
@@ -149,10 +149,10 @@ export function queryMyMenuDetails(params) {//获取我的菜单详情
     return request({
         method: 'get',
         url: '/catering/myMenu/item/detail',
-        data: {
+        data: JSON.stringify({
             showLoading: true,
             params: { ...params }
-        }
+        })
     })
 }
 export function queryDishes(params) {//获取菜品数据
@@ -266,10 +266,10 @@ export function myCopy(params) {
 // }
 
 // 采购订单专区
-export function queryOrderData(params) {
+export function queryOrderTable(params) {
     return request({
         method: 'get',
-        url: '/catering/purOrder',
+        url: '/catering/order/orders',
         data: {
             showLoading: true,
             params: {
@@ -278,12 +278,23 @@ export function queryOrderData(params) {
         }
     })
 }
-export function queryOrderDetails() {
+export function queryOrderDetails(params) {
     return request({
         method: 'get',
-        url: '/catering/orderDetails',
+        url: `/catering/order/item/${params.id}`,
         data: {
             showLoading: true,
+            ...params
+        }
+    })
+}
+
+export function queryOrderItemGoods(params) {
+    return request({
+        method: 'get',
+        url: '/catering/order/item/goods',
+        data: {
+            ...params
         }
     })
 }
@@ -332,12 +343,89 @@ export function queryPriceHistory(params) {
         }
     })
 }
+
 export function queryDelivery() {
     return request({
         method: 'get',
         url: '/catering/workbench/delivery',
         data: {
             showLoading: true,
+        }
+    })
+}
+
+export function queryEager(params) {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/shortage/item/eager',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+export function queryWithdrawal(params) {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/shortage/item/withdrawal',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+//缺样上报详情页
+export function queryDetail(params) {
+    return request({
+        method: 'get',
+        url: '/catering/workbench/shortage/item/detail',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+//上报商品
+
+export function querySave(params) {
+    return request({
+        method: 'put',
+        url: '/catering/workbench/shortage/item/save',
+        data: JSON.stringify({
+            showLoading: true,
+            params,
+        })
+    })
+}
+//采购目录详情---食材详情
+export function queryIngreDetail(params) {
+    return requestpub({
+        method: 'get',
+        url: `/pub/sku/${params.id}`,
+        data: {
+            showLoading: true,
+        }
+    })
+}
+//台账专区
+export function queryParameterTable(params) {
+    return request({
+        method: 'get',
+        url: '/catering/ledger/distribution/month',
+        data: {
+            showLoading: true,
+            params
+        }
+    })
+}
+
+export function queryParameterDetail(params) {
+    return request({
+        method: 'get',
+        url: '/catering/ledger/distribution/day',
+        data: {
+            showLoading: true,
+            params
         }
     })
 }
