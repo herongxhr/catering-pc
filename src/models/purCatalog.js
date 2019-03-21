@@ -1,11 +1,12 @@
-import { queryPurCatalog,queryIngreType,queryPriceHistory } from '../services/api';
+import { queryPurCatalog,queryIngreType,queryPriceHistory,queryIngreDetail    } from '../services/api';
 
 export default {
     namespace:'purCatalog',
     state: {
         catalogData: [],
         ingreTypeList:[],
-        historyList:[]
+        historyList:[],
+        detailData:{}
     },
     effects: {
         *queryPurCatalog({payload}, { call, put }) {
@@ -26,9 +27,17 @@ export default {
         },
         *queryPriceHistory({payload}, { call, put }) {
             const data = yield call(queryPriceHistory,payload);
-            console.log(data)
+            //console.log(data)
             yield put({
                 type:'savePriceHistory',
+                payload: data,
+            })
+        },
+        *queryIngreDetail({payload}, { call, put }) {
+            const data = yield call(queryIngreDetail,payload);
+            console.log(data)
+            yield put({
+                type:'saveIngreDetail',
                 payload: data,
             })
         }
@@ -50,6 +59,12 @@ export default {
             return {
                 ...state,
                 historyList: payload,
+            }
+        },
+        saveIngreDetail(state, { payload }) {
+            return {
+                ...state,
+                detailData: payload,
             }
         }
     }

@@ -1,11 +1,29 @@
 import React, { Component } from 'react';
 import './index.less';
 import TwoBread from '../../components/TwoBread';
-import { Divider,Row, Col } from 'antd';
+import BreadcrumbComponent from '../../components/BreadcrumbComponent';
+import { Divider, } from 'antd';
+import { connect } from 'dva';
 import Img from "./pic.jpg"
 
 class ExcipientDetail extends Component{
+    queryIngreDetail = (params = {}) => {
+        const { dispatch, location } = this.props;
+        // const id=location.state.id;
+        dispatch({
+            type: 'purCatalog/queryIngreDetail',
+            payload: {
+                //    ...params,
+                id: 2
+            }
+        })
+    }
+    componentDidMount() {
+        this.queryIngreDetail()
+    }
     render(){
+        const { location, purCatalog } = this.props;
+        const detailData = purCatalog.detailData;
         return(
             <div className='excipientDetail'>
                 <div className='wrapper'>
@@ -110,4 +128,6 @@ class ExcipientDetail extends Component{
         )
     }
 }
-export default ExcipientDetail;
+export default connect(({ purCatalog }) => ({
+    purCatalog,
+}))(ExcipientDetail)

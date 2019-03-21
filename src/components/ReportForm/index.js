@@ -16,17 +16,17 @@ class ReportForm extends React.Component {
         <FormItem label='类型' style={{ marginBottom: 30 }}>
           {
             getFieldDecorator('type', {
-              initialValue: 'all',
+              initialValue: '',
             })(
               <Select
                 style={{ width: 240 }}
                 onChange={(value) => { this.props.handleReport({
-                  type:value
+                  ingredientType:value
                 }) }}
               >
-                <Option value="all">全部</Option>
-                <Option value="excipient">辅料</Option>
-                <Option value="ingredients">食材</Option>
+                <Option value="">全部</Option>
+                <Option value="F">辅料</Option>
+                <Option value="S">食材</Option>
               </Select>
             )
           }
@@ -39,7 +39,7 @@ class ReportForm extends React.Component {
             })(
               <Search
                 placeholder="名称/备注"
-                onSearch={(value) => {this.props.queryReportmissing({name:value})}}
+                onSearch={(value) => {this.props.handleReport({searchKey:value})}}
                 style={{ width: 300, height: 32 }}
               />
             )

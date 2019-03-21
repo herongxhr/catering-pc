@@ -1,12 +1,11 @@
 import React from 'react'
-import { Table, Tabs, Button, Radio, Badge, Divider,Popconfirm, message } from 'antd'
+import { Table,  Radio, Badge, Divider,Popconfirm, Menu, Dropdown, } from 'antd'
 import { connect } from 'dva';
 import WrappedReportForm from '../ReportForm'
 import WrappedReportButton from '../ReportButton';
 import './index.less'
 import { withRouter } from "react-router";
-
-const TabPane = Tabs.TabPane;
+import moment from 'moment'
 
 
 const data=[{
@@ -47,9 +46,12 @@ class Report extends React.Component {
     disabled: false,
     visible: false,
     query:{
-      type:'',
-      status:''
-    }
+      ingredientType:'',
+      status:'',
+      searchKey:'',
+    },
+    pagination: {},
+    currId:'',
   }
   queryReportmissing = (params = {}) => {
 		const { dispatch } = this.props;
@@ -65,47 +67,90 @@ class Report extends React.Component {
    }
   handleReport = (argm) =>{
     let dataFilter={};
-    if(argm.type){
-      dataFilter={type:argm.type}
+    const {pagination} = this.state
+    if(argm.ingredientType){
+      dataFilter={ingredientType:argm.ingredientType}
     }
     if(argm.status){
       dataFilter={status:argm.status}
     }
+    if(argm.searchKey){
+      dataFilter={searchKey:argm.searchKey}
+    }
     this.setState(
       Object.assign(this.state.query, dataFilter),
-      this.queryReportmissing(this.state.query)
+      this.queryReportmissing({
+        ...this.state.query,
+        pageSize: pagination.pageSize,
+        current: pagination.current,
+      })
     )
   } 
+  handleTableChange = (pagination) => {
+    const pager = { ...this.state.pagination };
+    pager.current = pagination.current;
+    pager.pageSize = pagination.pageSize;
+    this.setState({
+      pagination: pager,
+    });
+    this.queryReportmissing({
+      pageSize: pagination.pageSize,
+      current: pagination.current,
+      ...this.state.query
+    });
+  }
   //催促
   handleUrg = (id)=>{
-    console.log(id,"111")
-    this.setState({disabled:true})
+      this.setState({
+        currId:id
+      }) 
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'report/queryEager',
+        payload:{
+          id:id
+        }
+      })
   }
   //删除申请
   confirm = (id) =>{
-    console.log(id,"222")
+    const { dispatch } = this.props;
+      dispatch({
+        type: 'report/queryWithdrawal',
+        payload:{
+          id:id
+        }
+      })
   }
-
+  //状态
+  onClick = ({ key }) => {
+    this.handleReport({status:key})
+  };
   render() {
     const tabColumns = [{
       title: '申请日期',
-      dataIndex: 'date',
-      key: 'date',
+      dataIndex: 'submitTime',
+      key: 'submitTime',
+      render:(text)=>{
+        return(
+          moment(text).format("YYYY-MM-DD")
+        )
+      }
     }, {
       title: '类型',
       dataIndex: 'type',
       key: 'type',
       render(type){
-        return type == 0 ? <span>食材</span> : <span>辅料</span>
+        return type == 'S' ? <span>食材</span> : <span>辅料</span>
       }
     }, {
       title: '名称',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'goodsName',
+      key: 'goodsName',
     }, {
       title: '备注',
-      dataIndex: 'remark',
-      key: 'remark',
+      dataIndex: 'description',
+      key: 'description',
       width:'270'
     }, {
       title: '状态',
@@ -115,8 +160,11 @@ class Report extends React.Component {
         if(status == 1){
           return <span><Badge status="warning" />未审核</span>
         }
-        if(status == 0){
-          return <span>已回执</span>
+        if(status == 2){
+          return <span>通过</span>
+        } 
+        if(status == 3){
+          return <span>未通过</span>
         }      
       }
     }, {
@@ -126,43 +174,55 @@ class Report extends React.Component {
       render(action,record) {
         return (
           action == 1 ? <div className='opertion'>
-          <a className='orders' disabled={_this.state.disabled} onClick={_this.handleUrg.bind(this,record.id)}>催促</a> 
+         <a className='orders' disabled={record.id === _this.state.currId} onClick={_this.handleUrg.bind(this,record.id)}>催促</a> 
           <Divider type="vertical" />
           <Popconfirm title="确定继续操作?" onConfirm={_this.confirm.bind(this,record.id)}>
             <a className='delete'>删除申请</a>
           </Popconfirm> 
-          </div> : <span className='check'>查看详情</span>)
+          </div>: <span className='check'>查看详情</span>)
       }
     }];
     const { report } = this.props
-    const reportList = report.reportList
+    const reportList = report.reportList.records
     const _this = this
+    const {current,total} = report.reportList
+    const menu = (
+      <Menu onClick={this.onClick}>
+        <Menu.Item key='2'>通过</Menu.Item>
+        <Menu.Item key='3'>未通过</Menu.Item>
+      </Menu>
+    );
     return (
       <div className='reportTable'>
-        <WrappedReportForm  handleReport={this.handleReport} queryReportmissing={this.queryReportmissing}/>
+        <WrappedReportForm  handleReport={this.handleReport} 
+        queryReportmissing={this.queryReportmissing}/>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <WrappedReportButton />
           <div>
-            <Radio.Group defaultValue="all" onChange={(e)=>{this.handleReport({status:e.target.value})}}>
-              <Radio.Button value="all" >全部</Radio.Button>
-              <Radio.Button value="unreviewed">未审核</Radio.Button>
-              <Radio.Button value="receipt">已回执</Radio.Button>
+            <Radio.Group defaultValue="" onChange={(e)=>{this.handleReport({status:e.target.value})}}>
+              <Radio.Button value="" >全部</Radio.Button>
+              <Radio.Button value="1">未审核</Radio.Button>
+              <Dropdown overlay={menu}><Radio.Button value="hz">更多</Radio.Button></Dropdown>
             </Radio.Group>
           </div>
-        </div>
+        </div>                                                                            
         <div style={{ marginTop: 20 }}>
           <Table columns={tabColumns} 
             dataSource={reportList}
             rowKey="id"
+            pagination={{current,total}}
             onRow={(record)=>{
               if(record.status != 1){
                  return{
                   onClick : (e) =>{
-                    this.props.history.push({ pathname:"/reportdetail", query:{id:record.id} })
+                    this.props.history.push({ 
+                      pathname:"/home/outStock/reportdetail",
+                      state:{id:record.id,status:record.status} 
+                    })
                    }    
                 }
               }   
-               }}
+            }}
           />
         </div>
       </div>

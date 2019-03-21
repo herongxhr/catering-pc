@@ -25,31 +25,36 @@ class PurForm extends React.Component {
     })
   }
   handleIngreType = (value)=>{
-    const { ingreType } = this.props;
+    const { ingreType,queryParams } = this.props;
     this.queryIngreType({
       ingredientType:ingreType,
       catalogId:value
     })
+    queryParams({catalogId:value})
   }
+  //查询按钮
   handleSubmit = (e) => {
-    const { queryParams } = this.props;
+    const { queryPurCatalog,ingreType,current,pageSize } = this.props;
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const startDate = moment(values.orderTime[0]).format('YYYY-MM-DD')+'00:00:00';
-        const endDate = moment(values.orderTime[1]).format('YYYY-MM-DD')+'23:59:59';
-        queryParams({
+        const startDate = moment(values.orderTime[0]).format('YYYY-MM-DD');
+        const endDate = moment(values.orderTime[1]).format('YYYY-MM-DD');
+        queryPurCatalog({
             catalogId:values.catalogId,
             startDate:startDate,
             endDate:endDate,
             searchKey:values.searchKey,
+            ingredientType:ingreType,
+            current:current,
+            pageSize:pageSize
           })
       }
     });
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-    const {purCatalog} = this.props;
+    const {purCatalog,queryParams} = this.props;
     const ingreTypeList =purCatalog.ingreTypeList || [] ;
     const ingreOptions = ingreTypeList.map((item)=>{
       return(
@@ -81,7 +86,11 @@ class PurForm extends React.Component {
             getFieldDecorator('orderTime',{
                 initialValue:'',
             })(
-              <RangePicker style={{width:240}}/>
+              <RangePicker style={{width:240}}
+                onChange={(value)=>{
+                  queryParams({orderTime:value})
+                }}
+              />
             )
           }
         </FormItem>
@@ -91,9 +100,11 @@ class PurForm extends React.Component {
             getFieldDecorator('searchKey',{
                 initialValue:'',
             })(
-              <Search
+              <Input
                 placeholder="请输入关键字进行搜索"
-                onSearch={value => console.log(value)}
+                onChange={e => {
+                   queryParams({searchKey:e.target.value})
+                }}
                 style={{ width:300,}}
             />
             )
