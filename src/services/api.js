@@ -344,12 +344,13 @@ export function queryPriceHistory(params) {
     })
 }
 
-export function queryDelivery() {
+export function queryDelivery(params) {
     return request({
         method: 'get',
-        url: '/catering/distribution/distributions',
+        url: '/catering/distribution/pageQuery',
         data: {
             showLoading: true,
+            params,
         }
     })
 }

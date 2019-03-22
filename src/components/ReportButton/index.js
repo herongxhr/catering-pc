@@ -102,7 +102,6 @@ class ReportButton extends React.Component {
       )
     }
 	render() { 
-    const info = this.props.report.reportGood;
 		return(
 			<div>
             <Button type='primary' onClick={this.showModal}>上报商品</Button>
@@ -117,7 +116,7 @@ class ReportButton extends React.Component {
               width={780}
               closable={false}
               afterClose={() => {
-                this.props.form.resetFields()
+                this.props.form.resetFields();
               }}  
               >
                 {this.renderReportForm()}

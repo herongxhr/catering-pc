@@ -9,21 +9,28 @@ import DeliveryForm from '../DeliveryForm'
 import { Tag , Table} from 'antd'
 import { withRouter } from "react-router";
 import './index.less'
+import moment from 'moment'
 
 class DeliveryTable extends React.Component {
   state = {
     DataSource: []
   }
-  handleonClick = (id) =>{
-    const {tabkey} = this.props;
-    if(tabkey == 'pendingDelivery'){
-    this.props.history.push({ pathname:"/pendingDeliveryDetail", query:{id:id} })
+  handleonClick = (record) =>{
+    const {status} = this.props;
+    if(status == '1'){
+    this.props.history.push(
+      { pathname:"/pendingDeliveryDetail", state:{id:record.id,status:record.status} }
+    )
     }
-    if(tabkey == 'pendingAccept'){
-      this.props.history.push({ pathname:"/pendingAcceDetail", query:{id:id} })
+    if(status == '2'){
+      this.props.history.push(
+        { pathname:"/pendingAcceDetail", state:{id:record.id,status:record.status} }
+      )
     }
-    if(tabkey == 'accepted'){
-      this.props.history.push({ pathname:"/acceptedDetail", query:{id:id} })
+    if(status == '3'){
+      this.props.history.push(
+        { pathname:"/acceptedDetail", state:{id:record.id,status:record.status} }
+      )
     }
   }
   render() {
@@ -39,19 +46,29 @@ class DeliveryTable extends React.Component {
       title: '配送日期',
       dataIndex: 'distributionDate',
       key: 'distributionDate',
+      render:(text) =>{
+        return (
+          moment(text).format('YYYY-MM-DD dddd')
+        )
+      }
     }, {
       title: '摘要',
       dataIndex: 'summary',
       key: 'summary',
     },
      ];
-    const {delivery,tabkey} = this.props;
-    if(tabkey == 'pendingDelivery'){
+    const {delivery,status} = this.props;
+    if(status == '1'){
       tab1Columns.push({
         title: '操作',
         dataIndex: 'Operation',
         key: 'Operation',
-        render:(text)=>{return <span style={{color:'#FF9500'}}>{text}</span>}
+        render:(text,record)=>{
+         return ( record.status== 0 ? 
+              <span style={{color:'#FF9500'}}>有1个换货申请</span>
+              : <span style={{color:'#FF9500'}}>{text}</span>
+              )
+        }
       })
     }
     return(
@@ -66,7 +83,7 @@ class DeliveryTable extends React.Component {
           (record) => {
               return {
                 onClick: () => {
-                  this.handleonClick(record.id)
+                  this.handleonClick(record)
                 },
               };
           }

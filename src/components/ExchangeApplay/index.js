@@ -98,7 +98,6 @@ class ExchangeApplay extends React.Component {
           // }
         },
        ];
-
     return (
         // 换货申请的逻辑
         <div className='exchangeApplay'>
@@ -118,7 +117,7 @@ class ExchangeApplay extends React.Component {
             </div>}
             />
             </div> : ''
-           }  
+           } 
         </div>
     )
   }
