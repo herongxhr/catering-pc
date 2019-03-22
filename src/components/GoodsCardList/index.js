@@ -46,7 +46,6 @@ export default class GoodsCardList extends React.Component {
 
     render() {
         const {
-            className,
             goodsList,
         } = this.props;
 
@@ -78,7 +77,7 @@ export default class GoodsCardList extends React.Component {
                                         size="small"
                                         onChange={(value) => this.handleValueChange(value, item.id)}
                                     />,
-                                    <Button
+                                    <Button style={{width:100}}
                                         type="primary"
                                         onClick={() => this.HandleAddToCart(item.id)} >
                                         加入购物车 </Button>

@@ -1,11 +1,11 @@
 import React from 'react'
-import { Card, Divider } from 'antd'
+import { Card, Spin, Popconfirm } from 'antd'
 import { routerRedux } from 'dva/router';
 import './index.less';
 
 export default class MenuTemplateCard extends React.Component {
   state = {
-    cardHover: false
+    cardHover: false,
   }
   handleMouseOver = () => {
     this.setState({
@@ -18,48 +18,46 @@ export default class MenuTemplateCard extends React.Component {
       cardHover: false
     })
   }
+  // 删除模板多一个二次确认的过程
+  handleDelete = e => {
+
+    const { handleTemplateActions, id } = this.props;
+    handleTemplateActions({ delAction: 'delete' }, id);
+  }
 
   render() {
     const {
       id,
       actionsText,
-      handleCopy,
-      handleDelete,
+      spinning,
+      handleTemplateActions,
       handleShowDetails
     } = this.props;
     const { cardHover } = this.state;
 
     const cardFooter = !cardHover
-      ? (<span>创建：{actionsText}</span>)
-      : (
-        <div key={id} className='cardFooter' style={{ width: 340, margin: 0 }}>
-          <span className='cardFooterItem'
-            style={{ margin: 0, fontSize: 16 }}
-            onClick={handleCopy}>复制</span>
-          <Divider type="vertical" />
-          <span
-            className='cardFooterItem'
-            style={{ margin: 0, fontSize: 16 }}
-            onClick={handleDelete}>删除</span>
-          <Divider type="vertical" />
-          <span
-            className='cardFooterItem'
-            style={{ margin: 0, fontSize: 16 }}>修改</span>
-        </div>
-      )
-
+      ? [<span>创建：{actionsText}</span>]
+      : [<span id='copy'> 复制</span>,
+      <Popconfirm
+        title='确定删除此模板吗？'
+        onConfirm={this.handleDelete}>
+        <span id='delete'>删除</span>
+      </Popconfirm>,
+      <span id='view'>查看</span>]
     return (
-      <Card
-        className='menuTemplateCard'
-        id={id}
-        actions={[cardFooter]}
-        // hoverable={true}
-        onMouseOver={this.handleMouseOver}
-        onMouseLeave={this.handleMouseOut}
-        onClick={() => handleShowDetails(id)}
-      >
-        {this.props.children}
-      </Card>
+      <Spin spinning={spinning}>
+        <Card
+          className={"menuTemplateCard"}
+          bodyStyle={{ height: 147, padding: 20 }}
+          actions={cardFooter}
+          // hoverable={true}
+          onMouseOver={this.handleMouseOver}
+          onMouseLeave={this.handleMouseOut}
+          onClick={e => handleTemplateActions(e, id)}
+        >
+          {this.props.children}
+        </Card>
+      </Spin>
     )
   }
 }

@@ -1,15 +1,15 @@
 import React from 'react'
-import {Button,Modal, Radio, Form, Input,Checkbox} from 'antd'
+import { Button, Modal, Radio, Form, Input, Checkbox } from 'antd'
 import './index.less';
 import { connect } from 'dva';
 
 const { TextArea } = Input;
 
 class ReportButton extends React.Component {
-    state = { 
-        visible: false,
-        checked: false
-    }
+  state = {
+    visible: false,
+    checked: false
+  }
 
     showModal = (e) => {
       e.preventDefault();

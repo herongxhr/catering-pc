@@ -34,15 +34,15 @@ export default class ShowArrangedDishes extends Component {
             sunday: '日'
         };
         const {
-            camenuDetailVOMap,
+            arrangedDishes,
             priceDataMap
         } = this.props;
         const getDL = this.getDisheList;
         // 检查父组件传递的数据是否某一天的数据
-        if (camenuDetailVOMap[weekday]) {
+        if (arrangedDishes[weekday]) {
             const {
                 lunch = [], breakfast = [], dessert = [], dinner = []
-            } = camenuDetailVOMap[weekday];
+            } = arrangedDishes[weekday];
             if (priceDataMap[weekday]) {
                 var {
                     lunch: lunchVal, breakfast: breakfastVal, dessert: dessertVal, dinner: dinnerVal

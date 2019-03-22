@@ -1,20 +1,14 @@
 import React from 'react'
-import {
-  Tag, Input, Tooltip, Icon,
-} from 'antd';
-
-import './index.less'
-
+import { Tag, Input, Tooltip, Button } from 'antd';
 class EditableTagGroup extends React.Component {
   state = {
-    tags: ['幼儿园', '高蛋白', '高营养', '三餐五日'],
     inputVisible: false,
     inputValue: '',
   };
 
   handleClose = (removedTag) => {
-    const tags = this.state.tags.filter(tag => tag !== removedTag);
-    this.setState({ tags });
+    const { editTag } = this.props;
+    editTag(removedTag, -1);
   }
 
   showInput = () => {
@@ -26,38 +20,38 @@ class EditableTagGroup extends React.Component {
   }
 
   handleInputConfirm = () => {
-    const state = this.state;
-    const inputValue = state.inputValue;
-    let tags = state.tags;
-    if (inputValue && tags.indexOf(inputValue) === -1) {
-      tags = [...tags, inputValue];
-    }
+    const { inputValue } = this.state;
+    const { tags, editTag } = this.props;
+    // 不是空值并且不和原标签相同
+    let newTag = inputValue && tags.indexOf(inputValue) === -1 ? inputValue : null;
     this.setState({
-      tags,
       inputVisible: false,
       inputValue: '',
     });
+    editTag(newTag, 1);
   }
 
-  saveInputRef = input => this.input = input
-
   render() {
-    const { tags, inputVisible, inputValue } = this.state;
+    const { tags = [] } = this.props;
+    const { inputVisible, inputValue } = this.state;
     return (
-      <div class='editableTagGroup'>
-        {tags.map((tag, index) => {
-          const isLongTag = tag.length > 20;
-          const tagElem = (
-            <Tag key={tag} closable={index !== 0} afterClose={() => this.handleClose(tag)}>
-              {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-            </Tag>
-          );
+      <div>
+        {tags.split(',').map((tag, index) => {
+          const colors = ['cyan', 'orange', 'green', 'magenta', 'lime', 'red', 'blue'];
+          const isLongTag = tag.length > 10;
+          const tagElem = (<Tag
+            style={{ height: 30, lineHeight: '30px' }}
+            key={index}
+            color={colors[index]}
+            closable
+            afterClose={() => this.handleClose(tag)}>
+            {isLongTag ? `${tag.slice(0, 10)}...` : tag}
+          </Tag>);
           return isLongTag ? <Tooltip title={tag} key={tag}>{tagElem}</Tooltip> : tagElem;
         })}
         {inputVisible && (
           <Input
-            ref={this.saveInputRef}
-            type="text"
+            ref={input => this.input = input}
             size="small"
             style={{ width: 78 }}
             value={inputValue}
@@ -67,16 +61,12 @@ class EditableTagGroup extends React.Component {
           />
         )}
         {!inputVisible && (
-          <Tag
-            onClick={this.showInput}
-            style={{ background: '#fff', borderStyle: 'dashed' }}
-          >
-            <Icon type="plus" /> 添加
-          </Tag>
+          <Button onClick={this.showInput} type='dashed' >
+            +添加</Button>
         )}
       </div>
     );
   }
 }
 
-export default EditableTagGroup
+export default EditableTagGroup;

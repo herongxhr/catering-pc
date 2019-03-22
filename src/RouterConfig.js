@@ -40,12 +40,13 @@ import EditTemplate from './pages/EditTemplate';
 import Edit from './pages/Edit';
 import MenuTemplate from '../src/pages/MenuTemplate';
 import MyMenu from '../src/pages/MyMenu';
+import NewMenu from './pages/NewMenu';
+import ChoiceTemplate from './pages/ChoiceTemplate';
 import ParameterDetail from '../src/pages/Parameter/ParameterDetail'
 import PurOrderDetailAdjust from './pages/PurOrder/PurOrderDetailAdjust'
-import Test from './pages/Test'
 moment.locale('zh-cn');
 
-export default function RouterConfig({ history }) { 
+export default function RouterConfig({ history }) {
   return (
     <Router history={history}>
       <Route path='/' render={() =>
@@ -61,6 +62,9 @@ export default function RouterConfig({ history }) {
               <Route path="/menubar/unified-menu/details" exact component={MenuDetails} />
               <Route path="/menubar/my-menu" exact component={MyMenu} />
               <Route path="/menubar/my-menu/details" component={MenuDetails} />
+              <Route path="/menubar/my-menu/custom" component={NewMenu} />
+              <Route path="/menubar/my-menu/choice-template" component={ChoiceTemplate} />
+              <Route path="/menubar/my-menu/from-template" component={NewMenu} />
               <Route path="/menubar/menu-template" exact component={MenuTemplate} />
               <Route path="/menubar/menu-template/details" component={TemplateDetails} />
               <Route path="/menubar/template/newtemplate" exact component={EditTemplate} />
@@ -97,7 +101,6 @@ export default function RouterConfig({ history }) {
               <Route path="/arrangeDishes" component={ArrangeDishes}></Route>
               <Route path="/selectIngredients" component={SelectIngredients}></Route>
               <Route path="/dishDetails" component={DishDetails}></Route>
-              <Route path="/test" component={Test}></Route>
               {/* <Route path="/deliveryAcceDetail" component={DeliveryAcceDetail}></Route> */}
               <Redirect to="/home" />
             </Switch>

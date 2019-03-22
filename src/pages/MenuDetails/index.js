@@ -14,7 +14,7 @@ const { Description } = DescriptionList;
 const ButtonGroup = Button.Group;
 class MenuDetails extends React.Component {
   state = {
-    canArrangeDish: false
+    isArrangeDish: false
   }
 
   // 从location.state中获取页面传过来的参数
@@ -39,13 +39,18 @@ class MenuDetails extends React.Component {
   componentDidMount() {
     this.getMenuDetail();
   }
-
   render() {
-    const { location, menuDetails } = this.props;
+    // 设置state中一级属性的默认值
+    const { location, menuDetails = {} } = this.props;
     const {
-      date, menuCode, issuedTime,
-      executeTime, orderCreateTime,
-      status, superiorName, week,
+      date = '',
+      menuCode = '',
+      issuedTime = '',
+      executeTime = '',
+      orderCreateTime = '',
+      status = '',
+      superiorName = '',
+      week = '',
       camenuDetailVOMap = {},
       priceDataMap = {}
     } = menuDetails;
@@ -61,11 +66,11 @@ class MenuDetails extends React.Component {
         {isArrangeDish
           ? (<ButtonGroup>
             <Button onClick={this.getMenuDetail}>取消</Button>
-            {!isExecuted && <Button>保存</Button>}
+            {!isExecuted && <Button onClick={() => { }}>保存</Button>}
           </ButtonGroup>)
           : (<ButtonGroup>
             <Button>打印</Button>
-            {!isExecuted && <Button>恢复</Button>}
+            {!isExecuted && <Button onClick={this.getMenuDetail}>恢复</Button>}
             {!isExecuted && <Button onClick={this.handleArrangeDishes}>调整菜单</Button>}
           </ButtonGroup>)}
         {isExecuted
@@ -104,7 +109,7 @@ class MenuDetails extends React.Component {
           {...this.props}
         >
           {/* 进度条 */}
-          <Card bordered={false}>
+          <Card style={{ width: 1160, marginTop: 20 }}>
             <Steps current={isExecuted ? 2 : 1} progressDot>
               <Step title="菜单下达" description={issuedTime} />
               <Step title="采购订单" description={executeTime} />
@@ -112,14 +117,14 @@ class MenuDetails extends React.Component {
             </Steps>
           </Card>
           {/* 排餐区 */}
-          <Card bordered={false}
-            style={{
-              marginTop: 20,
-            }}>
+          <Card
+            style={{ width: 1160, marginTop: 20 }}
+            bodyStyle={{ padding: 20 }}
+          >
             {isArrangeDish
-              ? <ArrangeDishes isMy={isMy} weekData={camenuDetailVOMap} {...this.props} />
+              ? <ArrangeDishes isMy={isMy} arrangedMeals={camenuDetailVOMap} {...this.props} />
               : <ShowArrangedDishes
-                camenuDetailVOMap={camenuDetailVOMap}
+                arrangedDishes={camenuDetailVOMap}
                 priceDataMap={priceDataMap}
               />}
           </Card>
