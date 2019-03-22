@@ -2,18 +2,18 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:07:45 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-22 10:53:18
+ * @Last Modified time: 2019-03-22 21:43:31
  */
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag  } from 'antd';
 import isEqual from 'lodash/isEqual';
+
 
 const Option = Select.Option;
 
 
 class PurOrderTable extends PureComponent {
   index = 0;
-
   cacheOriginData = {};
 
   constructor(props) {
@@ -174,6 +174,7 @@ class PurOrderTable extends PureComponent {
               <Input
                 style={{width:'190px'}}
                 autoFocus
+  
                 onChange={e => this.handleFieldChange(e, 'commodity', record.id)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
                 placeholder="商品"
@@ -277,6 +278,7 @@ class PurOrderTable extends PureComponent {
       }
     ];
 
+
     const { loading, data } = this.state;
     let totalLength = null
     if(data) {
@@ -309,6 +311,7 @@ class PurOrderTable extends PureComponent {
         >
           新增成员
         </Button>
+
         {/* <Button onClick={this.saveRow}>
           保存
         </Button> */}
