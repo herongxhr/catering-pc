@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:07:45 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-21 09:39:32
+ * @Last Modified time: 2019-03-21 17:58:16
  */
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag  } from 'antd';
@@ -18,23 +18,36 @@ class PurOrderTable extends PureComponent {
 
   constructor(props) {
     super(props);
+    if(props.value.isNew) {
+        props.value.records.push({
+          id: `NEW_TEMP_ID_${this.index}`,
+          commodity: '',
+          unit: '',
+          price: '',
+          number:'',
+          supply:'',
+          date:'',
+          editable: true,
+        }
+      )
+    }
     this.state = {
-      data: props.value,
+      data: props.value.records,
       loading: false,
       /* eslint-disable-next-line react/no-unused-state */
-      value: props.value,
+      value: props.value.records,
     };
   }
 
-  static getDerivedStateFromProps(nextProps, preState) {
-    if (isEqual(nextProps.value, preState.value)) {
-      return null;
-    }
-    return {
-      data: nextProps.value,
-      value: nextProps.value,
-    };
-  }
+  // static getDerivedStateFromProps(nextProps, preState) {
+  //   if (isEqual(nextProps.value, preState.value)) {
+  //     return null;
+  //   }
+  //   return {
+  //     data: nextProps.value,
+  //     value: nextProps.value,
+  //   };
+  // }
 
   getRowByKey(key, newData) {
     const { data } = this.state;
@@ -143,6 +156,7 @@ class PurOrderTable extends PureComponent {
         title: '商品',
         key: 'commodity',
         dataIndex: 'commodity',
+        width: '25%',
         render: (text, record) => {
           if (record.editable) {
             return (
@@ -217,17 +231,14 @@ class PurOrderTable extends PureComponent {
         key: 'supply',
         dataIndex: 'supply',
         render: (text, record) => {
-          if (record.editable) {
-            return (
-              <Select onChange={this.handleSelectChange} style={{width:'190px'}} placeholder='请选择'>
-                <Option value="1">Jack</Option>
-                <Option value="2">Lucy</Option>
-                <Option value="3">Disabled</Option>
-                <Option value="4">yiminghe</Option>
-              </Select>
-            );
-          }
-          return text;
+          return (
+            <Select onChange={this.handleSelectChange} style={{width:'218px'}} placeholder='请选择'>
+              <Option value="1">Jack</Option>
+              <Option value="2">Lucy</Option>
+              <Option value="3">Disabled</Option>
+              <Option value="4">yiminghe</Option>
+            </Select>
+          );
         },
       },
       {
@@ -235,12 +246,9 @@ class PurOrderTable extends PureComponent {
         key: 'date',
         dataIndex: 'date',
         render: (text, record) => {
-          if (record.editable) {
-            return (
-              <DatePicker onChange={this.handleDateChange.bind(this,'date',record.id)} style={{width:'130px'}} />
-            );
-          }
-          return text;
+          return (
+            <DatePicker onChange={this.handleDateChange.bind(this,'date',record.id)} style={{width:'130px'}} />
+          );
         },
       },
       {

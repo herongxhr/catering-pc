@@ -28,6 +28,13 @@ export default {
                 type: 'saveItemGoods',
                 payload: data,
             })
+        },
+        *queryChangeOrderItemGoods({ payload },{ call, put}) {
+            const data = yield call(queryOrderItemGoods, payload);
+            yield put({
+                type: 'changeItemGoods',
+                payload: data,
+            })
         }
     },
     reducers: {
@@ -44,6 +51,12 @@ export default {
             }
         },
         saveItemGoods(state, { payload }) {
+            return {
+                ...state,
+                orderItemGoods: payload.records,
+            }
+        },
+        changeItemGoods(state, { payload }) {
             return {
                 ...state,
                 orderItemGoods: payload.records.concat(state.orderItemGoods),

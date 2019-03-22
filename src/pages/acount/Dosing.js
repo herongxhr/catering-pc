@@ -67,7 +67,7 @@ class Dose extends React.Component {
             initialValue:'1'
           }],
         })(
-          <Select style={{width:200}}>
+          <Select  style={{width:200}}>
             <Option value="1">葱</Option>
             <Option value="2">猪</Option>
             <Option value="3">鼠</Option>
@@ -115,9 +115,6 @@ class Dose extends React.Component {
             <Button type="dashed" onClick={this.add} style={{ width: '330px',height: '32px' }}>
               <Icon type="plus" /> Add field
             </Button>
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">Submit</Button>
           </Form.Item>
         </Form>
       </div>

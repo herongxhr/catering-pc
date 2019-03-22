@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'dva';
 import './index.less'
 import { PageHeader, Button, Statistic, Row, Col, Icon, Alert } from 'antd';
-import BreadcrumbComponent from '../../components/BreadcrumbComponent'
 import ExchangeApplay from '../../components/ExchangeApplay'
 import ProductBreakdown from '../../components/ProductBreakdown'
 import DeliveryLog from '../../components/DeliveryLog'
@@ -51,7 +50,7 @@ class PendingDeliveryDetail extends React.Component {
     return (
       <div className='deliveryDetail'>
         {/* <BreadcrumbComponent {...location} /> */}
-        <Bread bread={bread} value='/purOrder'></Bread>
+        <Bread bread={bread} value='/delivery'></Bread>
         <div className='headerWrapper' style={{width:'1200px',margin:'3px auto 0px auto'}}>
           <div className='pageHeader'>
             <PageHeader

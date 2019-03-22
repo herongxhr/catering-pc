@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:41:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-21 10:32:38
+ * @Last Modified time: 2019-03-21 18:00:47
  */
 import React, { Fragment } from 'react'
 import Bread from '../../../components/Bread'
@@ -22,35 +22,35 @@ const bread = [{
   breadContent:'调整'
 }]
 
-const dataSource = [
-  {
-    id:'1',
-    commodity:'名称',
-    unit:'斤',
-    price:'26',
-    supply:'东阳市食品有限公司',
-    date:'2018-12-01',
-    number:''
-  },
-  {
-    id:'2',
-    commodity:'名称',
-    unit:'斤',
-    price:'26',
-    supply:'东阳市食品有限公司',
-    date:'2018-12-01',
-    number:''
-  },
-  {
-    id:'3',
-    commodity:'名称',
-    unit:'斤',
-    price:'26',
-    supply:'东阳市食品有限公司',
-    date:'2018-12-01',
-    number:''
-  },
-]
+// const dataSource = [
+//   {
+//     id:'1',
+//     commodity:'名称',
+//     unit:'斤',
+//     price:'26',
+//     supply:'东阳市食品有限公司',
+//     date:'2018-12-01',
+//     number:''
+//   },
+//   {
+//     id:'2',
+//     commodity:'名称',
+//     unit:'斤',
+//     price:'26',
+//     supply:'东阳市食品有限公司',
+//     date:'2018-12-01',
+//     number:''
+//   },
+//   {
+//     id:'3',
+//     commodity:'名称',
+//     unit:'斤',
+//     price:'26',
+//     supply:'东阳市食品有限公司',
+//     date:'2018-12-01',
+//     number:''
+//   },
+// ]
 
 class PurOrderAdjust extends React.Component {
   handleSubmit = () => {
@@ -79,6 +79,21 @@ class PurOrderAdjust extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { isNew } = this.props.location
+    const dataSource = {
+      isNew,
+      records:[
+        {
+          id:'1',
+          commodity:'名称',
+          unit:'斤',
+          price:'26',
+          supply:'东阳市食品有限公司',
+          date:'2018-12-01',
+          number:''
+        },
+      ]
+    }
     return (
       <Fragment>
         <Bread bread={bread} value='/purOrder'></Bread>
