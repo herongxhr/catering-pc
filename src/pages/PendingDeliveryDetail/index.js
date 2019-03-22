@@ -6,12 +6,24 @@ import BreadcrumbComponent from '../../components/BreadcrumbComponent'
 import ExchangeApplay from '../../components/ExchangeApplay'
 import ProductBreakdown from '../../components/ProductBreakdown'
 import DeliveryLog from '../../components/DeliveryLog'
+import Bread from '../../components/Bread'
+
 const Description = ({ term, children, }) => (
   <div className="description">
     <div className="term">{term}</div>
     <div className="detail">{children}</div>
   </div>
 );
+const bread = [{
+  href:'/delivery',
+  breadContent:'配送验收'
+},{
+  href:'/delivery',
+  breadContent:'待配送'
+},{
+  href:'/delivery',
+  breadContent:'详情'
+}]
 const content = (
   <Row >
     <Col span={14}><Description term="来源订单："><a>201812027265</a></Description></Col>
@@ -39,7 +51,8 @@ class PendingDeliveryDetail extends React.Component {
     return (
       <div className='deliveryDetail'>
         {/* <BreadcrumbComponent {...location} /> */}
-        <div className='headerWrapper'>
+        <Bread bread={bread} value='/purOrder'></Bread>
+        <div className='headerWrapper' style={{width:'1200px',margin:'3px auto 0px auto'}}>
           <div className='pageHeader'>
             <PageHeader
               title={<span><Icon type="bell" />配送单号:</span>}

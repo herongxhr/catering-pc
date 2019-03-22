@@ -115,10 +115,10 @@ export function queryRule(params) {
 }
 
 //菜单中心专区
-export function queryUnifiedMenu(params) {//获取统一菜单数据
+export function queryUnifiedMenu(params) {//获取统一菜单列表
     return request({
         method: 'get',
-        url: '/catering/unifiedMenu/pageList',
+        url: '/catering/menuCenter/camenu/pageQuery',
         data: {
             showLoading: true,
             params: { ...params }
@@ -155,7 +155,7 @@ export function queryMyMenuDetails(params) {//获取我的菜单详情
         })
     })
 }
-export function queryDishes(params) {
+export function queryDishes(params) {//获取菜品数据
     return request({
         method: 'get',
         url: '/catering/camenu/selectDishes',
@@ -185,44 +185,43 @@ export function queryNewMenuTemplate(params) {//获取推荐模板数据
         }
     })
 }
-export function toCopyTemplate(id) {//获取推荐模板数据
+export function toCopyTemplate(templateId) {//复制模板
     return request({
         method: 'get',
-        url: 'catering/camenuTemplate/my/item/copy',
+        url: '/catering/camenuTemplate/my/item/copy',
         data: {
             showLoading: true,
-            params: { id }
+            params: { templateId }
         }
     })
 }
-export function toDeleteTemplate(id) {//获取推荐模板数据
+export function toDeleteTemplate(templateId) {//删除模板
     return request({
         method: 'get',
         url: 'catering/camenuTemplate/my/item/delete',
         data: {
             showLoading: true,
-            params: { id }
+            params: { templateId }
         }
     })
 }
-
-
-export function myMenu() {
+export function queryMyTemplateDetails(templateId) {//查看模板
     return request({
         method: 'get',
-        url: '/catering/myMenus',
+        url: '/catering/camenuTemplate/my/item/detail',
         data: {
-            showLoading: true
+            showLoading: true,
+            params: { templateId }
         }
     })
 }
-
-export function myTemplate() {
+export function queryNewTemplateDetails(templateId) {//查看模板
     return request({
         method: 'get',
-        url: '/catering/camenuTemplate/my',
+        url: '/catering/camenuTemplate/new/item/detail',
         data: {
-            showLoading: true
+            showLoading: true,
+            params: { templateId }
         }
     })
 }
@@ -258,21 +257,6 @@ export function myCopy(params) {
     })
 }
 
-
-export function queryTemplateDetail(params) {
-    return request({
-        method: 'get',
-        url: '/catering/camenuTemplate/my/item/detail',
-        data: {
-            showLoading: true,
-            params: {
-                type: params
-            }
-        }
-    })
-}
-
-
 // export async function queryBrandList(catalog) {
 //     return axios('/goods/brand/page/');
 // }
@@ -307,9 +291,9 @@ export function queryOrderDetails(params) {
 
 export function queryOrderItemGoods(params) {
     return request({
-        method:'get',
-        url:'/catering/order/item/goods',
-        data:{
+        method: 'get',
+        url: '/catering/order/item/goods',
+        data: {
             ...params
         }
     })
@@ -363,7 +347,7 @@ export function queryPriceHistory(params) {
 export function queryDelivery() {
     return request({
         method: 'get',
-        url: '/catering/workbench/delivery',
+        url: '/catering/distribution/distributions',
         data: {
             showLoading: true,
         }
@@ -401,16 +385,17 @@ export function queryDetail(params) {
         }
     })
 }
-//上报商品
+//上报商品 put方法 除了get请求其他都要添加headers    http://192.168.122.10
 
 export function querySave(params) {
+    const data = JSON.stringify(params)
     return request({
-        method: 'put',
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
         url: '/catering/workbench/shortage/item/save',
-        data: JSON.stringify({
-            showLoading: true,
-            params,
-        })
+        data: {
+            axiosData:data
+        }
     })
 }
 //采购目录详情---食材详情
@@ -441,7 +426,7 @@ export function queryParameterDetail(params) {
         url: '/catering/ledger/distribution/day',
         data: {
             showLoading: true,
-            params
+            params,
         }
     })
 }

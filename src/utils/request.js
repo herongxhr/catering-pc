@@ -25,6 +25,7 @@ export default async function request(options) {
             method: options.method,
             url: options.url,
             baseURL: baseApi,
+            headers: options.headers,
             params: (options.data && options.data.params) || '',
             data: (options.data && options.data.axiosData) || {},
         });

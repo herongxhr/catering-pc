@@ -143,6 +143,7 @@ class PurCatalog extends React.Component {
     }
     ];
     const { x, y } = this.state;
+    const count = catalogData ? catalogData.length : null
     return (
       <div className='purCata'>
         <BreadcrumbComponent {...location} />
@@ -161,7 +162,7 @@ class PurCatalog extends React.Component {
                   <Radio.Button value="S">食材</Radio.Button>
                   <Radio.Button value="F">辅料</Radio.Button>
                 </Radio.Group>
-                <Alert message={catalogData ? catalogData.length : null} type="warning" showIcon className='alert' />
+                <Alert message={'共'+count+'条'} type="warning" showIcon className='alert' />
               </div>
             </div>
             <div style={{ marginTop: 20 }}>

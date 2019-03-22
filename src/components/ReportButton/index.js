@@ -1,15 +1,15 @@
 import React from 'react'
-import {Button,Modal, Radio, Form, Input,Checkbox} from 'antd'
+import { Button, Modal, Radio, Form, Input, Checkbox,message } from 'antd'
 import './index.less';
 import { connect } from 'dva';
 
 const { TextArea } = Input;
 
 class ReportButton extends React.Component {
-    state = { 
-        visible: false,
-        checked: false
-    }
+  state = {
+    visible: false,
+    checked: false
+  }
 
     showModal = (e) => {
       e.preventDefault();
@@ -37,7 +37,7 @@ class ReportButton extends React.Component {
     }
   
     handleCancel = (e) => {
-      //e.preventDefault();
+      e.preventDefault();
       this.setState({
         visible: false,
       });
@@ -52,7 +52,7 @@ class ReportButton extends React.Component {
             <Form.Item
             label="请选择商品类型"
             >
-            {getFieldDecorator('ingredientType', {
+            {getFieldDecorator('type', {
                     initialValue:'S',
             })(
                 <Radio.Group buttonStyle="solid">
@@ -82,8 +82,8 @@ class ReportButton extends React.Component {
             )}
             </Form.Item>
             <Form.Item>
-            {getFieldDecorator('isEager', {
-                  initialValue:true,
+            {getFieldDecorator('eager', {
+                  initialValue:false,
             })(
               <Checkbox onChange={this.handleOnchange}>紧急<span style={{color:'rgba(0,0,0,0.45)',fontSize:12}}>（勾选此选项后，请务必填写您的联系电话，以便工作人员与您进行联系）</span></Checkbox>
             )}
@@ -101,7 +101,8 @@ class ReportButton extends React.Component {
         </Form>
       )
     }
-	render() {
+	render() { 
+    const info = this.props.report.reportGood;
 		return(
 			<div>
             <Button type='primary' onClick={this.showModal}>上报商品</Button>

@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:43:54 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-20 19:30:42
+ * @Last Modified time: 2019-03-20 19:45:33
  */
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
@@ -93,9 +93,6 @@ class PurOrderDetails extends React.Component {
 		}
 
 		queryOrderItemGoods() {
-			this.setState({
-				loading:false
-			})
 		  const { dispatch , location } = this.props
 			dispatch({
 				type:'purOrder/queryOrderItemGoods',
@@ -104,6 +101,9 @@ class PurOrderDetails extends React.Component {
 					current:this.state.current,
 					pageSize:10
 				}
+			})
+			this.setState({
+				loading:false
 			})
 		}
 

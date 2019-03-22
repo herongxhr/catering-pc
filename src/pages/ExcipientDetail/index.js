@@ -75,27 +75,52 @@ class ExcipientDetail extends Component{
                                 <div className='yycf'>
                                     <div>营养成分</div>
                                     <ul>
-                                        <li>蛋白质(g)：<span>6</span></li>
-                                        <li>脂肪(g)：<span>6</span></li>
-                                        <li>碳水化合物(g)：<span>6</span></li>
+                                        <li>蛋白质(g)：<span>{detailData.dbz}</span></li>
+                                        <li>脂肪(g)：<span>{detailData.zf}</span></li>
+                                        <li>胆固醇(g)：<span>{detailData.dgc}</span></li>
+                                    </ul>
+                                    <ul>
+                                        <li>碳水化合物(g)：<span>{detailData.tshhw}</span></li>
                                     </ul>
                                 </div>
                                 <Divider />
                                 <div className='element'>
                                     <div>微量元素</div>
                                     <ul>
-                                        <li>维生素B1(mg)：<span>6</span></li>
-                                        <li style={{marginLeft:350,marginRight:348}}>维生素B2(mg)：<span>6</span></li>
-                                        <li>钙(mg)：<span>6</span></li>
+                                        <li>
+                                            膳食纤维(g)：
+                                            <span>{detailData.ssxw}</span>
+                                        </li>
+                                        <li>维生素A(ugRAE)：<span>{detailData.wssa}</span></li>
+                                        <li>维生素C(ugRAE)：<span>{detailData.wssc}</span></li>
                                     </ul>
                                     <ul>
-                                        <li>铁(Fe)：<span>5</span></li>
-                                       <li style={{marginLeft:402,marginRight:360}}>膳食纤维(g)：<span>2</span></li>
-                                        <li>维生素A(ugRAE)：<span>6</span></li>
+                                        <li>维生素e(ugRAE)：<span>{detailData.wsse}</span></li>
+                                        <li>胡萝卜素(mg)：<span>{detailData.hlbs}</span></li>
+                                        <li>烟酸(mg)：<span>{detailData.ys}</span></li>
                                     </ul>
                                     <ul>
-                                       <li>维生素A(ugRAE)：<span>6</span></li>
-                                       <li style={{marginLeft:334}}>锌(mg)：<span>6</span></li>
+                                        <li>核黄素(mg)：<span>{detailData.hhs}</span></li>
+                                        <li>硫胺素(mg)：<span>{detailData.las}</span></li>
+                                        <li>视黄醇当量(ug)：<span>{detailData.shcdl}</span></li>
+                                    </ul>
+                                    <ul> 
+                                        <li>钾(mg)：<span>{detailData.jia}</span></li>
+                                        <li>钠(mg)：<span>{detailData.na}</span></li>
+                                        <li>钙(mg)：<span>{detailData.gai}</span></li>
+                                    </ul>
+                                    <ul>
+                                        <li>镁(mg)：<span>{detailData.mei}</span></li>
+                                        <li>铁(mg)：<span>{detailData.tie}</span></li>
+                                        <li>锰(mg)：<span>{detailData.meng}</span></li>
+                                    </ul>
+                                    <ul>
+                                        <li>锌(mg)：<span>{detailData.xin}</span></li>
+                                        <li>铜(mg)：<span>{detailData.tong}</span></li>
+                                        <li>磷(mg)：<span>{detailData.lin}</span></li>
+                                    </ul>
+                                    <ul>
+                                        <li>硒(mg)：<span>{detailData.xi}</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -107,11 +132,11 @@ class ExcipientDetail extends Component{
                             </div>
                             <div className='standardcontent'>
                                 <div className='describ'> 
-                                    <p>1.文字描述文字描述文字描述文字描述文字描述</p>
-                                    <p className='item'>2.文字描述文字描述文字描述文字描述文字描述</p>
-                                    <p className='item'>3.文字描述文字描述文字描述文字描述文字描述文字描述</p>
-                                    <p className='item'>4.文字描述文字描述文字描述文字描述文字描述</p>
-                                    <p className='item'>5.文字描述文字描述文字描述</p>
+                                    <p >1.文字描述文字描述文字描述文字描述文字描述</p>
+                                    <p >2.文字描述文字描述文字描述文字描述文字描述</p>
+                                    <p >3.文字描述文字描述文字描述文字描述文字描述文字描述</p>
+                                    <p >4.文字描述文字描述文字描述文字描述文字描述</p>
+                                    <p >5.文字描述文字描述文字描述</p>
                                 </div>
                                 <div className='standList'>
                                 <img src={Img} alt=""></img>

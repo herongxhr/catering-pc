@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:41:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-20 16:20:12
+ * @Last Modified time: 2019-03-21 10:32:38
  */
 import React, { Fragment } from 'react'
 import Bread from '../../../components/Bread'
@@ -56,6 +56,7 @@ class PurOrderAdjust extends React.Component {
   handleSubmit = () => {
     let userInfo = this.props.form.getFieldsValue();
     const { goodsInfo } = userInfo
+    console.log(goodsInfo);
     const newID = {
       id:'new'
     }

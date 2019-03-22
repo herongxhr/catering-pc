@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:07:45 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-20 15:26:47
+ * @Last Modified time: 2019-03-21 09:39:32
  */
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag  } from 'antd';
@@ -18,7 +18,6 @@ class PurOrderTable extends PureComponent {
 
   constructor(props) {
     super(props);
-
     this.state = {
       data: props.value,
       loading: false,
