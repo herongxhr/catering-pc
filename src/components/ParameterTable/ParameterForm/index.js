@@ -1,5 +1,11 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-22 14:15:46 
+ * @Last Modified by:   suwei 
+ * @Last Modified time: 2019-03-22 14:15:46 
+ */
 import React from 'react'
-import { Form , Select , DatePicker , Input , Button ,Radio } from "antd";
+import { Form , Select , DatePicker ,Radio } from "antd";
 
 import './index.less'
 
@@ -13,30 +19,16 @@ const RadioGroup = Radio.Group;
 class InForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
-      labelCol:{
-        xs:22,
-      }
-    }
     return(
       <Form layout="inline">
         <FormItem label='日期选择' style={{ margin:20 }}>
-          {
-            getFieldDecorator('date',{
-                initialValue:'1',
-            })(
-              <Select     
-                style={{ width: 250 }}              
-              > 
-                <Option value="1">全部</Option>
-                <Option value="2">本年</Option>
-                <Option value="3">去年</Option>
-                <Option value="4">本月</Option>
-                <Option value="5">近3个月</Option>
-                <Option value="6"> <RangePicker /> </Option>
-              </Select>            
-            )
-          }
+            {
+              getFieldDecorator('date', {
+                initialValue: "",
+              })( 
+                <RangePicker style={{ width: 250 }}/> 
+              )
+            }
         </FormItem>
         <FormItem label='供应商' style={{ marginTop:20 }}>
           {
@@ -56,7 +48,7 @@ class InForm extends React.Component {
             )
           }
         </FormItem>
-        <FormItem style={{marginLeft:220,marginTop:20}}>
+        <FormItem style={{marginLeft:270,marginTop:20}}>
         <RadioGroup onChange={this.onChange} defaultValue="all">
             <RadioButton value="all">全部</RadioButton>
             <RadioButton value="month">本月</RadioButton>
