@@ -6,6 +6,8 @@ import ExchangeApplay from '../../components/ExchangeApplay'
 import ProductBreakdown from '../../components/ProductBreakdown'
 import DeliveryLog from '../../components/DeliveryLog'
 import Bread from '../../components/Bread'
+import { withRouter } from "react-router";
+
 
 const Description = ({ term, children, }) => (
   <div className="description">
@@ -23,18 +25,6 @@ const bread = [{
   href:'/delivery',
   breadContent:'详情'
 }]
-const content = (
-  <Row >
-    <Col span={14}><Description term="来源订单："><a>201812027265</a></Description></Col>
-    <Col span={10}>
-      <Description term="供货商：">
-        金华市大鑫公司
-          </Description>
-    </Col>
-    <Col span={14}><Description term="配送日期：">2018-12-02  周二</Description></Col>
-    <Col span={10}><Description term="联系电话：">13987857348</Description></Col>
-  </Row>
-);
 
 const extraContent = (
   <Row>
@@ -47,11 +37,30 @@ const extraContent = (
 class PendingDeliveryDetail extends React.Component {
   render() {
     const { location } = this.props;
+    const status = location.state.status
+    const content = (
+      <Row >
+        <Col span={14}>
+          <Description term="来源订单：">
+            <a onClick={()=>{this.props.history.push(
+                { pathname:"/purOrder/details", state:{} }
+              )}}>201812027265</a>
+          </Description>
+      </Col>
+        <Col span={10}>
+          <Description term="供货商：">
+            金华市大鑫公司
+          </Description>
+        </Col>
+        <Col span={14}><Description term="配送日期：">2018-12-02  周二</Description></Col>
+        <Col span={10}><Description term="联系电话：">13987857348</Description></Col>
+      </Row>
+    );
     return (
       <div className='deliveryDetail'>
         {/* <BreadcrumbComponent {...location} /> */}
         <Bread bread={bread} value='/delivery'></Bread>
-        <div className='headerWrapper' style={{width:'1200px',margin:'3px auto 0px auto'}}>
+        <div className='headerWrapper' style={{margin:'3px auto 0px auto'}}>
           <div className='pageHeader'>
             <PageHeader
               title={<span><Icon type="bell" />配送单号:</span>}
@@ -67,12 +76,13 @@ class PendingDeliveryDetail extends React.Component {
             </PageHeader>
           </div>
         </div>
-        <ExchangeApplay/>
+        { status==0 ? <ExchangeApplay/> : null}
         <ProductBreakdown/>
         <DeliveryLog/>
       </div>
     )
   }
 }
+const ShowPendingDeliveryDetailRouter = withRouter(PendingDeliveryDetail);
 export default connect(({ }) => ({
-}))(PendingDeliveryDetail);
+}))(ShowPendingDeliveryDetailRouter);

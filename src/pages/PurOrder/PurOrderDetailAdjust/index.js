@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:41:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-22 18:10:18
+ * @Last Modified time: 2019-03-22 21:53:27
  */
 import React, { Fragment } from 'react'
 import Bread from '../../../components/Bread'
@@ -61,6 +61,7 @@ class PurOrderAdjust extends React.Component {
     // console.log(records);
     //newID 传给另外的页面表示新从新建页面跳转到详情页面.
     const { records } = goodsInfo
+    console.log(userInfo)
     const newID = {
       id:'new'
     }
@@ -70,7 +71,7 @@ class PurOrderAdjust extends React.Component {
         return
       }  
     }
-    this.purOrderSave('/purOrder/details',newID)
+    // this.purOrderSave('/purOrder/details',newID)
   }
 
   purOrderSave = (pathname,rest) => {

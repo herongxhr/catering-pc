@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Button, Divider } from 'antd';
+import { Row, Col, Card, Button, Divider, message } from 'antd';
 import { routerRedux } from 'dva/router';
 import TemplateCard from '../../components/TemplateCard';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
@@ -8,14 +8,14 @@ import './index.less'
 
 class ChoiceTemplate extends React.Component {
   state = {
-    currTemplateId: '',
-    isNew: ''
+    menuTemplateId: '',
+    templateFrom: ''
   }
 
-  // 对模板进行查看选择操作
-  handleTemplateActions = (e, id, isNew) => {
+  // 对模板进行[查看选择]操作
+  handleTemplateActions = (e, id, templateFrom) => {
     const { dispatch } = this.props;
-    // 通过e.target.id来获取当前操作类型copy,delete,edit
+    // 通过e.target.id来获取当前操作类型
     const action = e.target.id;
     // 查看模板
     if (action === 'preview') {
@@ -29,20 +29,25 @@ class ChoiceTemplate extends React.Component {
     if (action === 'choice') {
       // 记录当前操作的模板id
       this.setState({
-        currTemplateId: id,
-        isNew
+        menuTemplateId: id,
+        templateFrom
       });
     }
   }
+
   // 点击下一步回调
   handleClickOk = () => {
-    const { dispatch } = this.props;
-    const { currTemplateId, isNew } = this.state;
-    dispatch(routerRedux.push({
+    const { menuTemplateId, templateFrom } = this.state;
+    if (!menuTemplateId) {
+      message.error('请先选择模板！');
+      return;
+    }
+    this.props.dispatch(routerRedux.push({
       pathname: '/menubar/my-menu/from-template',
-      state: { currTemplateId, isNew }
+      state: { menuTemplateId, templateFrom }
     }))
   }
+
   // 点击取消回调
   handleClickCancel = () => {
     const { dispatch } = this.props;
@@ -55,21 +60,21 @@ class ChoiceTemplate extends React.Component {
     const { dispatch } = this.props;
     // 获取推荐模板数据
     dispatch({
-      type: 'menuCenter/fetchNewMenuTemplate',
+      type: 'menuCenter/fetchCMenuTemplate',
     });
     // 获取我的模板数据
     dispatch({
-      type: 'menuCenter/fetchMyMenuTemplate',
+      type: 'menuCenter/fetchPMenuTemplate',
     });
   }
 
   render() {
     const {
       location,
-      myMenuTemplate,
-      newMenuTemplate,
+      PMenuTemplate,
+      CMenuTemplate,
     } = this.props
-    const { currTemplateId, isNew } = this.state;
+    const { menuTemplateId, templateFrom } = this.state;
     return (
       <div>
         <BreadcrumbComponent {...location} />
@@ -79,14 +84,14 @@ class ChoiceTemplate extends React.Component {
           bodyStyle={{ padding: '30px 30px 0' }}
         >
           <div className='cardsWrapper'>
-            {newMenuTemplate.records
-              && newMenuTemplate.records.length > 0
-              && newMenuTemplate.records
+            {CMenuTemplate.records
+              && CMenuTemplate.records.length > 0
+              && CMenuTemplate.records
                 .slice(0, 3).map(item =>
                   <TemplateCard
                     // 当前卡片与点击的卡片是同一个，并且是推荐模板
-                    isSelect={item.id === currTemplateId && isNew === true}
-                    isNew={true}
+                    isSelect={item.id === menuTemplateId && templateFrom === 'C'}
+                    templateFrom='C'
                     key={item.id}
                     itemData={item}
                     handleTemplateActions={this.handleTemplateActions}>
@@ -97,13 +102,14 @@ class ChoiceTemplate extends React.Component {
             <Col><Divider orientation='left'>我的模板：</Divider></Col>
           </Row>
           <div className='cardsWrapper'>
-            {myMenuTemplate.records
-              && myMenuTemplate.records.length > 0
-              && myMenuTemplate.records
+            {PMenuTemplate.records
+              && PMenuTemplate.records.length > 0
+              && PMenuTemplate.records
                 .slice(0, 6).map(item =>
                   (<TemplateCard
                     // 当前卡片与点击的卡片是同一个，并且不是推荐模板
-                    isSelect={item.id === currTemplateId && isNew === false}
+                    isSelect={item.id === menuTemplateId && templateFrom === 'P'}
+                    templateFrom='P'
                     key={item.id}
                     itemData={item}
                     handleTemplateActions={this.handleTemplateActions}>
@@ -122,7 +128,7 @@ class ChoiceTemplate extends React.Component {
 }
 
 export default connect(({ menuCenter }) => ({
-  myMenuTemplate: menuCenter.myMenuTemplate,
-  newMenuTemplate: menuCenter.newMenuTemplate
+  PMenuTemplate: menuCenter.PMenuTemplate,
+  CMenuTemplate: menuCenter.CMenuTemplate
 }))(ChoiceTemplate);
 

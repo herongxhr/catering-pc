@@ -1,7 +1,6 @@
 import React from 'react';
-import { Form, Select, Input, Button, Badge, Tag, Row, Col, Radio, Card } from 'antd';
+import { Form, Select, Input, Button, Badge, Radio, Card } from 'antd';
 import { Link, routerRedux } from 'dva/router';
-//import Cartoon from '../../components/Cartoon';
 import MenuTemplateCard from '../../components/MenuTemplateCard';
 import BreadcrumbWithTabs from '../../components/BreadcrumbWithTabs';
 import { connect } from 'dva';
@@ -14,7 +13,7 @@ const Search = Input.Search;
 const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
 
-// 面包屑Tab数据
+// breadcrumbWithTabs中tabs数据
 const tabList = [
   {
     key: 'unified-menu',
@@ -31,38 +30,39 @@ const tabList = [
 ];
 class MenuTemplate extends React.Component {
   state = {
-    desc: true,
+    asc: false,
     activeTabKey: 'menu-template',
     // 当前操作的模板
-    currTemplateId: ''
+    currTemplateId: '',
+    currTemplateType: 'P'
   }
   // 改变排序
   handleSorter = () => {
     this.setState({
-      desc: !this.state.desc
+      asc: !this.state.asc
     })
   }
 
-  handleLinkChange = key => {
-    const { dispatch } = this.props;
-    // 不是所有key都setState
-    this.setState({
-      activeTabKey: key
-    })
-    dispatch(routerRedux.push({
+  // 点击tabs标签跳转到指定页面
+  // 页面state中的activeTabKey会传给面包屑
+  handleTabChange = key => {
+    this.props.dispatch(routerRedux.push({
       pathname: `/menubar/${key}`,
-    }))
+    }));
   }
+
   // 改变模板类型
   changeTemplateType = e => {
-    const { dispatch, form } = this.props;
-    dispatch({
-      type: 'menuCenter/changeTemplateType',
-      payload: e.target.value
+    this.setState({
+      currTemplateType: e.target.value
     })
+    const { dispatch, form } = this.props;
+    // 表单重置
     form.resetFields();
+    // 
+    form.setFields({ currTemplateType: { value: this.state.currTemplateType } });
     dispatch({
-      type: 'menuCenter/fetchMenuTemplate',
+      type: `menuCenter/fetch${e.target.value}MenuTemplate`,
     })
   }
   // 对模板进行复制，删除等操作
@@ -96,41 +96,33 @@ class MenuTemplate extends React.Component {
     })
   }
 
-  handleShowDetails = id => {
-    const { dispatch } = this.props;
-    dispatch(routerRedux.push({
-      pathname: '/menubar/menu-template/details',
-      state: { id }
-    }))
-  }
-
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'menuCenter/fetchMenuTemplate',
+    // 使用默认请求参数请求模板数据
+    this.props.dispatch({
+      type: `menuCenter/fetch${this.state.currTemplateType}MenuTemplate`,
     })
   }
 
   render() {
     const {
       location,
-      menuTemplateData = {},
-      form: {
-        getFieldDecorator,
-      },
+      form,
       templateActionResult
     } = this.props
-    const { currTemplateId } = this.state;
-    const { records = [] } = menuTemplateData;
+    const { currTemplateId, currTemplateType } = this.state;
+    const { getFieldDecorator } = form;
+    // 解构相应的（餐饮单位/管理单位）模板数据
+    const { records = [] } = this.props[`${currTemplateType}MenuTemplate`];
     return (
       <div>
         <BreadcrumbWithTabs
           {...location}
           tabList={tabList}
-          onChange={this.handleLinkChange}
+          onChange={this.handleTabChange}
           activeTabKey={this.state.activeTabKey}
         />
         <Card style={{ width: 1160, margin: '20px auto', }}>
+          {/* 筛选区域 */}
           <div>
             <Form layout="inline">
               <FormItem label='排序' colon>
@@ -151,64 +143,41 @@ class MenuTemplate extends React.Component {
                 {getFieldDecorator('searchContent', { initialValue: null })
                   (<Search
                     placeholder="模板名称/标签"
-                    onSearch={value => console.log(value)}
                     style={{ width: 300 }}
                   />)}
               </FormItem>
+              {/* 隐藏元素用来保存模板类型 */}
+              <FormItem>
+                {getFieldDecorator('currTemplateType', { value: this.state.currTemplateType })
+                  (<Input type={'hidden'} />)}
+              </FormItem>
             </Form>
           </div>
-
           <div className='filterWrapper'>
             <Button type="primary" >
               <Link to='/menubar/template/new'>创建模板</Link>
             </Button>
-            {/* <div className='cartoon-wraper'>
-                {true ? <Cartoon /> : null}
-              </div> */}
-            <RadioGroup onChange={this.changeTemplateType} defaultValue="my">
-              <RadioButton style={{ width: 70, height: 32 }} value="my">我的</RadioButton>
-              <RadioButton style={{ width: 80, height: 32 }} value="new">
-                <Badge count={records.length ? records.length : null} offset={[10, -6]}>
+            <RadioGroup onChange={this.changeTemplateType} defaultValue={this.state.currTemplateType}>
+              <RadioButton value="P">我的</RadioButton>
+              <Badge count={records.length ? records.length : 0} >
+                <RadioButton
+                  style={{ borderRadius: '0 4px 4px 0', borderLeft: 'none' }}
+                  value="C">
                   <span>推荐</span>
-                </Badge >
-              </RadioButton>
+                </RadioButton>
+              </Badge >
             </RadioGroup>
           </div>
+          {/* 模板卡片展示区 */}
           <div className='cardsWrapper'>
-            {!!records.length && records
+            {records.length > 0 && records
               .map(item =>
-                (<MenuTemplateCard key={item.id} id={item.id}
+                (<MenuTemplateCard
+                  key={item.id}
+                  itemData={item}
                   handleTemplateActions={this.handleTemplateActions}
-                  // 当操作不成功并且卡片id和当前操作的卡片id相同时，不再显示加载
-                  spinning={!templateActionResult && item.id === currTemplateId}
-                  actionsText={item.createDate}>
-                  <div className='templateCardContent'>
-                    <Row style={{ marginBottom: 16 }} span={24} >
-                      <Col span={16}>{item.templateName}</Col>
-                      <Col style={{ textAlign: 'right' }} span={8}>{item.used || 0}次</Col>
-                    </Row>
-                    <Row style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)', marginBottom: 16 }} span={24}>
-                      <Col>
-                        <Row>
-                          <Col span={18}>{item.echoMealTimeses}</Col>
-                          <Col span={6} style={{ textAlign: 'right' }}>上次使用</Col>
-                        </Row>
-                        <Row>
-                          <Col span={18}>{item.echoZjs}</Col>
-                          <Col span={6} style={{ textAlign: 'right' }}>
-                            {item.lastTime && item.lastTime.substring(0, 10)}
-                          </Col>
-                        </Row>
-                      </Col>
-                    </Row>
-                    <Row style={{ marginBottom: 16 }} span={24}>
-                      <Col>
-                        <Tag color="cyan">{item.tags.split(',')[0]}</Tag>
-                        <Tag color="red">{item.tags.split(',')[1]}</Tag>
-                        <Tag color="green">{item.tags.split(',')[2]}</Tag>
-                        <Tag color="orange">{item.tags.split(',')[3]}</Tag></Col>
-                    </Row>
-                  </div>
+                  // 当操作成功并且卡片id和当前操作的卡片id相同时，[不再]显示加载
+                  spinning={!templateActionResult && item.id === currTemplateId}>
                 </MenuTemplateCard>))}
           </div>
         </Card>
@@ -220,19 +189,20 @@ class MenuTemplate extends React.Component {
 // 当表单元素值发生改变时发送请求
 const WrappedMenuTemplate = Form.create({
   onValuesChange: (props, _, allValues) => {
-    const { dispatch } = props;
-    dispatch({
-      type: 'menuCenter/fetchMenuTemplate',
+    const { currTemplateType, ...restValues } = allValues;
+    props.dispatch({
+      // 获得相应类型的模板数据
+      type: `menuCenter/fetch${currTemplateType}MenuTemplate`,
       payload: {
-        ...allValues
+        ...restValues
       }
     })
   }
 })(MenuTemplate);
 
 export default connect(({ menuCenter }) => ({
-  menuTemplateData: menuCenter.menuTemplate,
-  templateType: menuCenter.activeTemplateType,
+  CMenuTemplate: menuCenter.CMenuTemplate,
+  PMenuTemplate: menuCenter.PMenuTemplate,
   templateActionResult: menuCenter.templateActionResult
 }))(WrappedMenuTemplate);
 

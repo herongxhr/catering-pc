@@ -1,6 +1,6 @@
 //https://github.com/ljharb/qs
 //qs.stringify(object, [options]);
-//import { stringify } from 'qs';
+import { stringify } from 'qs';
 import request from '../utils/request';
 import requestpub from '../utils/common';
 // 辅料商城
@@ -115,44 +115,86 @@ export function queryRule(params) {
 }
 
 //菜单中心专区
-export function queryUnifiedMenu(params) {//获取统一菜单列表
+//菜单中心专区
+export function queryMenuData(params) {//获取菜单列表
     return request({
         method: 'get',
-        url: '/catering/menuCenter/camenu/pageQuery',
+        url: '/catering/camenu/pageQuery',
         data: {
             showLoading: true,
             params: { ...params }
         }
     })
 }
-export function queryUnifiedMenuDetails(params) {//获取统一菜单详情
+export function queryMenuDetails(id) {//获取菜单详情
     return request({
         method: 'get',
-        url: '/catering/unifiedMenu/item/detail',
+        url: `/catering/camenu/${id}`,
+        data: {
+            showLoading: true,
+        }
+    })
+}
+export function queryPMenuTemplate(params) {//餐饮单位模板
+    return request({
+        method: 'get',
+        url: '/catering/camenuTemplate/pageQuery',
         data: {
             showLoading: true,
             params: { ...params }
         }
     })
 }
-export function queryMyMenu(params) {//获取我的菜单数据
+export function queryCMenuTemplate(params) {//餐饮管理单位模板
     return request({
         method: 'get',
-        url: '/catering/myMenu/pageList',
+        url: '/catering/menuTemplate/pageQuery',
         data: {
             showLoading: true,
             params: { ...params }
         }
     })
 }
-export function queryMyMenuDetails(params) {//获取我的菜单详情
+// 餐饮单位 模板详情
+export function queryPTemplateDetails(templateId) {
     return request({
         method: 'get',
-        url: '/catering/myMenu/item/detail',
-        data: JSON.stringify({
+        url: `/catering/camenuTemplate/${templateId}`,
+        data: {
             showLoading: true,
-            params: { ...params }
-        })
+        }
+    })
+}
+// 管理单位模板详情
+export function queryCTemplateDetails(templateId) {//查看模板
+    return request({
+        method: 'get',
+        url: `/catering/menuTemplate/${templateId}`,
+        data: {
+            showLoading: true,
+        }
+    })
+}
+
+export function toUpdateMenu(params) {//修改菜单数据
+    const id = params.camenu.id || '';
+    return request({
+        method: 'post',
+        url: `/catering/camenu/${id}`,
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+            axiosData: JSON.stringify(params)
+        }
+    })
+}
+export function toNewMenu(params) {//新建菜单数据
+    return request({
+        method: 'post',
+        url: `/catering/camenu/`,
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+            axiosData: JSON.stringify(params)
+        }
     })
 }
 export function queryDishes(params) {//获取菜品数据
@@ -165,26 +207,7 @@ export function queryDishes(params) {//获取菜品数据
         }
     })
 }
-export function queryMyMenuTemplate(params) {//获取我的模板数据
-    return request({
-        method: 'get',
-        url: '/catering/camenuTemplate/my',
-        data: {
-            showLoading: true,
-            params: { ...params }
-        }
-    })
-}
-export function queryNewMenuTemplate(params) {//获取推荐模板数据
-    return request({
-        method: 'get',
-        url: '/catering/camenuTemplate/new',
-        data: {
-            showLoading: true,
-            params: { ...params }
-        }
-    })
-}
+
 export function toCopyTemplate(templateId) {//复制模板
     return request({
         method: 'get',
@@ -205,27 +228,6 @@ export function toDeleteTemplate(templateId) {//删除模板
         }
     })
 }
-export function queryMyTemplateDetails(templateId) {//查看模板
-    return request({
-        method: 'get',
-        url: '/catering/camenuTemplate/my/item/detail',
-        data: {
-            showLoading: true,
-            params: { templateId }
-        }
-    })
-}
-export function queryNewTemplateDetails(templateId) {//查看模板
-    return request({
-        method: 'get',
-        url: '/catering/camenuTemplate/new/item/detail',
-        data: {
-            showLoading: true,
-            params: { templateId }
-        }
-    })
-}
-
 export function isRecommend() {
     return request({
         method: 'get',
@@ -247,7 +249,7 @@ export function recommendTemplate() {
 }
 
 export function myCopy(params) {
-    console.log(params)
+    //console.log(params)
     return request({
         method: 'get',
         url: '/catering/camenuTemplate/my/item/copy',
@@ -344,12 +346,13 @@ export function queryPriceHistory(params) {
     })
 }
 
-export function queryDelivery() {
+export function queryDelivery(params) {
     return request({
         method: 'get',
-        url: '/catering/distribution/distributions',
+        url: '/catering/distribution/pageQuery',
         data: {
             showLoading: true,
+            params,
         }
     })
 }
@@ -385,21 +388,22 @@ export function queryDetail(params) {
         }
     })
 }
-//上报商品
+//上报商品 put方法 除了get请求其他都要添加headers    http://192.168.122.10
 
 export function querySave(params) {
+    const data = JSON.stringify(params)
     return request({
-        method: 'put',
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
         url: '/catering/workbench/shortage/item/save',
-        data: JSON.stringify({
-            showLoading: true,
-            params,
-        })
+        data: {
+            axiosData:data
+        }
     })
 }
 //采购目录详情---食材详情
 export function queryIngreDetail(params) {
-    return request({
+    return requestpub({
         method: 'get',
         url: `/pub/sku/${params.id}`,
         data: {
@@ -425,7 +429,7 @@ export function queryParameterDetail(params) {
         url: '/catering/ledger/distribution/day',
         data: {
             showLoading: true,
-            params
+            params,
         }
     })
 }

@@ -24,7 +24,18 @@ class IngreDetail extends Component {
     render() {
         const { location, purCatalog } = this.props;
         const detailData = purCatalog.detailData;
-        const property = purCatalog.detailData.property;
+        //const property = purCatalog.detailData.property;
+        const property =  '产地:新西兰|品种:乳牛|类型:块状';
+        let regularObj = []
+        let regArr = property.split('|');
+        for(var i in regArr){
+            var regData = regArr[i].toString().split(':');
+            var obj = {
+                regKey:regData[0],
+                regName:regData[1]
+            }
+            regularObj.push(obj);
+        }
         return (
             <div className='ingreDetail'>
                 <BreadcrumbComponent {...location} />
@@ -47,13 +58,14 @@ class IngreDetail extends Component {
                             <div className='regmessTitle'>
                                 规格信息
                             </div>
-                            <ul className='ingreBrand'>
-                                <li>品牌：<span>{detailData.brand}</span></li>
-                                <li style={{ marginLeft: 100, marginRight: 100 }}>品种：<span>{detailData.unit}</span></li>
-                                <li>饲养方式：<span>{detailData.unit}</span></li>
-                                <li>分类：<span>{detailData.unit}</span></li>
-                                <li style={{ marginLeft: 100, }}>商品毛重：<span>{detailData.unit}</span></li>
-                            </ul>
+                            <div className='ingreBrand'>
+                                <div>品牌：<span>{detailData.brand}</span></div>
+                                {regularObj.map((item,index) =>{
+                                    return(
+                                        <div key={index}>{item.regKey}：<span>{item.regName}</span></div>
+                                    )
+                                })}
+                            </div>
                         </div>
                         <Divider />
                         <div className='picture'>
@@ -81,6 +93,9 @@ class IngreDetail extends Component {
                                     <ul>
                                         <li>蛋白质(g)：<span>{detailData.dbz}</span></li>
                                         <li>脂肪(g)：<span>{detailData.zf}</span></li>
+                                        <li>胆固醇(g)：<span>{detailData.dgc}</span></li>
+                                    </ul>
+                                    <ul>
                                         <li>碳水化合物(g)：<span>{detailData.tshhw}</span></li>
                                     </ul>
                                 </div>
@@ -88,16 +103,40 @@ class IngreDetail extends Component {
                                 <div className='element'>
                                     <div>微量元素</div>
                                     <ul>
-                                        <li>钙(mg)：<span>{detailData.gai}</span></li>
-                                        <li>铁(Fe)：<span>{detailData.tie}</span></li>
                                         <li>
                                             膳食纤维(g)：
                                             <span>{detailData.ssxw}</span>
                                         </li>
+                                        <li>维生素A(ugRAE)：<span>{detailData.wssa}</span></li>
+                                        <li>维生素C(ugRAE)：<span>{detailData.wssc}</span></li>
                                     </ul>
                                     <ul>
-                                        <li>维生素A(ugRAE)：<span>{detailData.wssa}</span></li>
-                                        <li >锌(mg)：<span>{detailData.xin}</span></li>
+                                        <li>维生素e(ugRAE)：<span>{detailData.wsse}</span></li>
+                                        <li>胡萝卜素(mg)：<span>{detailData.hlbs}</span></li>
+                                        <li>烟酸(mg)：<span>{detailData.ys}</span></li>
+                                    </ul>
+                                    <ul>
+                                        <li>核黄素(mg)：<span>{detailData.hhs}</span></li>
+                                        <li>硫胺素(mg)：<span>{detailData.las}</span></li>
+                                        <li>视黄醇当量(ug)：<span>{detailData.shcdl}</span></li>
+                                    </ul>
+                                    <ul> 
+                                        <li>钾(mg)：<span>{detailData.jia}</span></li>
+                                        <li>钠(mg)：<span>{detailData.na}</span></li>
+                                        <li>钙(mg)：<span>{detailData.gai}</span></li>
+                                    </ul>
+                                    <ul>
+                                        <li>镁(mg)：<span>{detailData.mei}</span></li>
+                                        <li>铁(mg)：<span>{detailData.tie}</span></li>
+                                        <li>锰(mg)：<span>{detailData.meng}</span></li>
+                                    </ul>
+                                    <ul>
+                                        <li>锌(mg)：<span>{detailData.xin}</span></li>
+                                        <li>铜(mg)：<span>{detailData.tong}</span></li>
+                                        <li>磷(mg)：<span>{detailData.lin}</span></li>
+                                    </ul>
+                                    <ul>
+                                        <li>硒(mg)：<span>{detailData.xi}</span></li>
                                     </ul>
                                 </div>
                             </div>

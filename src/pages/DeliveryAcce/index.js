@@ -18,13 +18,16 @@ const TabPane = Tabs.TabPane;
 class E extends React.Component {
   state = {
     DataSource: [],
-    tabkey:'pendingDelivery',
+    status:'1',
     bread:[{
       href:'/delivery',
       breadContent:'配送验收'
     },{
       breadContent:'待配送'
-    }]
+    }],
+    query:{
+
+    }
   }
 
   queryDelivery = (params = {}) =>{
@@ -45,12 +48,8 @@ class E extends React.Component {
   }
 
   callback = (value) =>{
-   this.setState({tabkey:value})
-   console.log(value);
-   if(value=='pendingDelivery') {
-      this.queryDelivery({
-        status:0
-      })
+   this.setState({status:value},()=>{
+    if(this.state.status=='1') {
       this.setState({
         bread:[{
           href:'/delivery',
@@ -60,10 +59,7 @@ class E extends React.Component {
         }]
       })  
    }
-   if(value=='pendingAccept') {
-    this.queryDelivery({
-      status:1
-    })
+   if(this.state.status=='2') {
     this.setState({
       bread:[{
         href:'/delivery',
@@ -73,10 +69,7 @@ class E extends React.Component {
       }]
     })
    }
-   if(value=='accepted') {
-    this.queryDelivery({
-      status:2
-    })
+   if(this.state.status=='3') {
     this.setState({
       bread:[{
         href:'/delivery',
@@ -86,24 +79,24 @@ class E extends React.Component {
       }]
     })
    }
+   })
   }
 
   render() {
-
-    const { location,deliveryAcce } = this.props;
+    const { deliveryAcce } = this.props;
     const delivery = deliveryAcce.delivery.records || [];
     return (
       <div className='DeliveryAcce'>
         <Bread bread={this.state.bread} />
-        <Tabs defaultActiveKey="pendingDelivery" onChange={this.callback}>
-					<TabPane tab={'待配送'+'('+delivery.length+')'} key="pendingDelivery">
-            <DeliveryTable delivery={delivery} tabkey={this.state.tabkey}/>
+        <Tabs defaultActiveKey="1" onChange={this.callback}>
+					<TabPane tab={'待配送'+'('+delivery.length+')'} key="1">
+            <DeliveryTable delivery={delivery} status={this.state.status}/>
 					</TabPane>
-					<TabPane tab={'待验收'+'('+delivery.length+')'} key="pendingAccept">
-            <DeliveryTable delivery={delivery} tabkey={this.state.tabkey}/>
+					<TabPane tab={'待验收'+'('+delivery.length+')'} key="2">
+            <DeliveryTable delivery={delivery} status={this.state.status}/>
 					</TabPane>
-          <TabPane tab={'已验收'+'('+delivery.length+')'} key="accepted">
-            <DeliveryTable delivery={delivery} tabkey={this.state.tabkey}/>
+          <TabPane tab={'已验收'+'('+delivery.length+')'} key="3">
+            <DeliveryTable delivery={delivery} status={this.state.status}/>
 					</TabPane>
 				</Tabs>
       </div>

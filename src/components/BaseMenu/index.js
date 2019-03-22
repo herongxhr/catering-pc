@@ -4,6 +4,7 @@ import { Menu, Icon, Badge,  Avatar  } from 'antd';
 import logo from './logo.png';
 import MenuDropDown from '../MenuDropDown'
 import './index.less'
+import home from './img/home.png'
 
 const menu = (
   <Menu>
@@ -39,13 +40,13 @@ class BaseMenu extends Component {
 							<img src={logo} alt="安品" />
 					</Menu.Item>
 					<Menu.Item key="home">
-						<Link to='/home/'>
+						<Link to='/home'>
 							<Icon type="home" />
 							<span>工作台</span>
 						</Link>
 					</Menu.Item>
 					<Menu.Item key="menubar">
-						<Link to='/menubar/'>
+						<Link to='/menubar'>
 							<span>
 								<Icon type="bars"></Icon>
 								菜单中心
@@ -53,25 +54,25 @@ class BaseMenu extends Component {
 						</Link>
 					</Menu.Item>
 					<Menu.Item key="accSupermarket">
-						<Link to='/accSupermarket/'>
+						<Link to='/accSupermarket'>
 							<Icon type="shopping"></Icon>
 							<span>辅料超市</span>
 						</Link>
 					</Menu.Item>
 					<Menu.Item key="purOrder">
-						<Link to='/purOrder/'>
+						<Link to='/purOrder'>
 							<Icon type="profile"></Icon>
 							<span>采购订单</span>
 						</Link>
 					</Menu.Item>
 					<Menu.Item key="delivery">
-						<Link to='/delivery/'>
+						<Link to='/delivery'>
 							<Icon type="bar-chart"></Icon>
 							<span>配送验收</span>
 						</Link>
 					</Menu.Item>
 					<Menu.Item key="parameter">
-						<Link to='/parameter/'>
+						<Link to='/parameter'>
 							<Icon type="read"></Icon>
 							<span>台账</span>
 						</Link>
@@ -98,7 +99,7 @@ class BaseMenu extends Component {
 					<Menu.Item
 						style={{ width: 60, float: 'right' }}
 						key="message" >
-						<Link to='/message/'>
+						<Link to='/message'>
 							<Badge count={5}>
 								<Icon
 									style={{ fontSize: 16 }}

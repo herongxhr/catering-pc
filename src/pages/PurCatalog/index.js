@@ -104,10 +104,10 @@ class PurCatalog extends React.Component {
         var timestamp = Date.parse(new Date());
         var isNew = (timestamp - record.createDate) < 15 * 24 * 3600 * 1000;
         {
-         return  isNew ? <Link to={{pathname: '/purCatalog/ingredetail',state:{id:record.id}}}
+         return  isNew ? <Link to={{pathname: '/ingredetail',state:{id:record.id}}}
           >{text}<Tag color="red" style={{ marginLeft: 8 }}>NEW</Tag></Link> 
           : 
-          <Link to={{pathname: '/purCatalog/ingredetail',state:{id:record.id}}}>{text}</Link>
+          <Link to={{pathname: '/ingredetail',state:{id:record.id}}}>{text}</Link>
         }
 
       },
@@ -143,6 +143,7 @@ class PurCatalog extends React.Component {
     }
     ];
     const { x, y } = this.state;
+    const count = catalogData ? catalogData.length : null
     return (
       <div className='purCata'>
         <BreadcrumbComponent {...location} />
@@ -161,7 +162,7 @@ class PurCatalog extends React.Component {
                   <Radio.Button value="S">食材</Radio.Button>
                   <Radio.Button value="F">辅料</Radio.Button>
                 </Radio.Group>
-                <Alert message={catalogData ? catalogData.length : null} type="warning" showIcon className='alert' />
+                <Alert message={'共'+count+'条'} type="warning" showIcon className='alert' />
               </div>
             </div>
             <div style={{ marginTop: 20 }}>

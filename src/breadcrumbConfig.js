@@ -3,10 +3,11 @@ export default {
     '/home/': '工作台',
     "/home/purCatalog/": "采购目录",
     "/home/outStock/": "缺样上报",
-    "/home/outStock/reportdetail/":'详情',
+    "/home/outStock/reportdetail/": '详情',
     '/menubar/': '菜单中心',
     '/menubar/unified-menu/': '统一菜单',
     '/menubar/unified-menu/details/': '详情',
+    '/menubar/unified-menu/adjust/': '调整菜单',
     '/menubar/my-menu/': '我的菜单',
     '/menubar/my-menu/details/': '详情',
     '/menubar/my-menu/custom/': '自建菜单',
@@ -14,6 +15,7 @@ export default {
     '/menubar/my-menu/from-template/': '从模板新建',
     '/menubar/menu-template/': '菜单模板',
     '/menubar/menu-template/details/': '模板详情',
+    '/menubar/menu-template/edit-template/': '编辑模板',
     '/menubar/public/details/': '详情',
     '/menubar/private/': '我的菜单',
     '/menubar/private/new/': '新增',
@@ -33,6 +35,8 @@ export default {
     '/setting/security/': '设置',
     '/setting/cuisine/': '设置',
     '/setting/': '设置',
-    '/purCatalog/':'采购目录',
-    '/purCatalog/ingredetail/':'详情'
+    '/ingredetail/':'食材详情',
+    '/excipientdetail/':'辅料详情',
+    '/purCatalog/': '采购目录',
+    '/purCatalog/ingredetail/': '详情'
 }
