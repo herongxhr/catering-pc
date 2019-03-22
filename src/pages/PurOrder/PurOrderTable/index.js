@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:07:45 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-21 17:58:16
+ * @Last Modified time: 2019-03-22 10:53:18
  */
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag  } from 'antd';
@@ -30,6 +30,7 @@ class PurOrderTable extends PureComponent {
           editable: true,
         }
       )
+      this.index += 1;
     }
     this.state = {
       data: props.value.records,
@@ -37,6 +38,8 @@ class PurOrderTable extends PureComponent {
       /* eslint-disable-next-line react/no-unused-state */
       value: props.value.records,
     };
+    // const { onChange } = this.props;
+    // onChange(this.state.data);
   }
 
   // static getDerivedStateFromProps(nextProps, preState) {
@@ -91,7 +94,6 @@ class PurOrderTable extends PureComponent {
   remove(id) {
     const { data } = this.state;
     const { onChange } = this.props;
-    // debugger;
     const newData = data.filter(item => item.id !== id);
     this.setState({ data: newData });
     onChange(newData);
@@ -127,8 +129,17 @@ class PurOrderTable extends PureComponent {
     }
   }
 
-  handleSelectChange(value) {
-    console.log(value)
+  handleSelectChange(fieldName,key,value) {
+    console.log(value);
+    const { data } = this.state;
+    const { onChange } = this.props
+    const newData = data.map(item => ({ ...item }));
+    const target = this.getRowByKey(key, newData);
+    if (target) {
+      target[fieldName] = value;
+      onChange(newData);
+      this.setState({ data: newData });
+    }
   }
 
   // saveRow = (e, key) => {
@@ -232,7 +243,7 @@ class PurOrderTable extends PureComponent {
         dataIndex: 'supply',
         render: (text, record) => {
           return (
-            <Select onChange={this.handleSelectChange} style={{width:'218px'}} placeholder='请选择'>
+            <Select onChange={this.handleSelectChange.bind(this,'supply',record.id)} style={{width:'218px'}} placeholder='请选择'>
               <Option value="1">Jack</Option>
               <Option value="2">Lucy</Option>
               <Option value="3">Disabled</Option>
