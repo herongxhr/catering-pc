@@ -1,15 +1,15 @@
 import {
     toCopyTemplate,
     toDeleteTemplate,
-    queryMyMenuTemplate,
-    queryNewMenuTemplate,
-    queryMyTemplateDetails,
-    queryNewTemplateDetails,
+    queryPMenuTemplate,
+    queryCMenuTemplate,
+    queryPTemplateDetails,
+    queryCTemplateDetails,
     queryDishes,
-    queryUnifiedMenu,
-    queryUnifiedMenuDetails,
-    queryMyMenu,
-    queryMyMenuDetails,
+    queryMenuData,
+    queryMenuDetails,
+    toUpdateMenu,
+    toNewMenu
 } from '../services/api';
 
 export default {
@@ -26,14 +26,14 @@ export default {
         menuList: {},
         // 统一或我的菜单详情
         menuDetails: {},
+        // 菜单概要数据
+        camenu: {},
         // 菜单模板数据
         menuTemplate: {},
-        // 我的菜单模板数据
-        myMenuTemplate: {},
-        // 推荐菜单模板数据
-        newMenuTemplate: {},
-        // 当前选中模板类型
-        activeTemplateType: 'my',
+        // 周菜单模板数据
+        PMenuTemplate: {},
+        // 餐饮单位模板数据
+        CMenuTemplate: {},
         // 所有可选菜品数据
         dishesData: {},
         // 模板详情页数据
@@ -46,29 +46,32 @@ export default {
         templateActionResult: true,
     },
     effects: {
-        *fetchMyMenuTemplate({ payload }, { call, put }) {
-            const defultOptions = {
-                orderByAttr: 'create_date',
-                desc: true,
-                searchContent: null,
-                current: 1,
-                pageSize: 10
-            };
-            const newPayload = {
-                ...defultOptions,
-                ...payload
-            };
-            const data = yield call(queryMyMenuTemplate, newPayload);
+        // 获取菜单详情,统一接口
+        *fetchMenuDetails({ payload }, { call, put }) {
+            const data = yield call(queryMenuDetails, payload);
             yield put({
-                type: 'saveMyMenuTemplate',
+                type: 'saveMenuDetails',
+                payload: data
+            });
+            yield put({
+                type: 'saveEverydayData',
+                payload: data.camenuDetailVOMap || {}
+            })
+        },
+        // 获取菜单列表,统一接口
+        *fetchMenuData({ payload }, { call, put }) {
+            const data = yield call(queryMenuData, payload);
+            yield put({
+                type: 'saveMenuList',
                 payload: data,
             })
         },
-        *fetchNewMenuTemplate({ payload }, { call, put }) {
+        // 餐饮单位模板列表
+        *fetchPMenuTemplate({ payload = {} }, { call, put }) {
             const defultOptions = {
                 orderByAttr: 'create_date',
-                desc: true,
-                searchContent: '',
+                isAsc: false,
+                keywords: '',
                 current: 1,
                 pageSize: 10
             };
@@ -76,35 +79,56 @@ export default {
                 ...defultOptions,
                 ...payload
             };
-            const data = yield call(queryNewMenuTemplate, newPayload);
+            const data = yield call(queryPMenuTemplate, newPayload);
             yield put({
-                type: 'saveNewMenuTemplate',
+                type: 'savePMenuTemplate',
                 payload: data,
             })
         },
-        *fetchMenuTemplate({ payload = {} }, { call, put, select }) {
+        // 餐饮管理单位模板列表
+        *fetchCMenuTemplate({ payload = {} }, { call, put }) {
             const defultOptions = {
                 orderByAttr: 'create_date',
-                desc: true,
-                searchContent: '',
+                isAsc: false,
+                keywords: '',
                 current: 1,
                 pageSize: 10
-            }
+            };
             const newPayload = {
                 ...defultOptions,
                 ...payload
-            }
-            const templateType = yield select(({ menuCenter }) => menuCenter.activeTemplateType);
-            let data = {};
-            if (templateType === 'new') {
-                data = yield call(queryNewMenuTemplate, newPayload);
-            } else {
-                data = yield call(queryMyMenuTemplate, newPayload);
-            }
+            };
+            const data = yield call(queryCMenuTemplate, newPayload);
             yield put({
-                type: 'saveMenuTemplate',
+                type: 'saveCMenuTemplate',
                 payload: data,
             })
+        },
+        // 获取我的模板详情数据
+        *fetchPTemplateDetails({ payload }, { call, put }) {
+            const data = yield call(queryPTemplateDetails, payload);
+            yield put({
+                type: 'saveTemplateDetails',
+                payload: data,
+            });
+            // 将模板数据扁平化
+            yield put({
+                type: 'saveEverydayData',
+                payload: data && data.camenuTemplateDetailVOMap
+            });
+        },
+        // 获取我的模板详情数据
+        *fetchCTemplateDetails({ payload }, { call, put }) {
+            const data = yield call(queryCTemplateDetails, payload);
+            yield put({
+                type: 'saveTemplateDetails',
+                payload: data,
+            });
+            // 将模板数据扁平化
+            yield put({
+                type: 'saveEverydayData',
+                payload: data && data.camenuTemplateDetailVOMap
+            });
         },
         // 对模板进行复制和删除
         *templateActions({ payload }, { call, put }) {
@@ -131,115 +155,91 @@ export default {
             })
         },
         // 编辑模板
-        * editTemplate({ payload }, { call, put }) {
+        *editTemplate({ payload }, { call, put }) {
             const data = yield call(toDeleteTemplate, payload);
             yield put({
                 type: 'saveTemplateActionResult',
                 payload: data,
             })
         },
-        // 获取统一菜单列表
-        * fetchUnifiedMenu({ payload }, { call, put }) {
-            const data = yield call(queryUnifiedMenu, payload);
-            yield put({
-                type: 'saveMenuList',
-                payload: data,
-            })
-        },
-        // 获取我的菜单列表
-        * fetchMyMenu({ payload }, { call, put }) {
-            const data = yield call(queryMyMenu, payload);
-            yield put({
-                type: 'saveMenuList',
-                payload: data,
-            })
-        },
-        // 获取统一菜单详情
-        * fetchUnifiedMenuDetails({ payload }, { call, put }) {
-            const data = yield call(queryUnifiedMenuDetails, payload);
-            yield put({
-                type: 'saveMenuDetails',
-                payload: data
+        // 更新菜单数据
+        *updateMenu(_, { call, put, select }) {
+            const params = yield select(({ menuCenter }) => {
+                const {
+                    camenu,
+                    monday,
+                    tuesday,
+                    wednesday,
+                    thursday,
+                    friday,
+                    saturday,
+                    sunday,
+                } = menuCenter;
+                return {
+                    camenu,
+                    camenuDetailsMap: {
+                        monday,
+                        tuesday,
+                        wednesday,
+                        thursday,
+                        friday,
+                        saturday,
+                        sunday,
+                    }
+                }
             });
-            yield put({
-                type: 'saveEverydayData',
-                payload: data.camenuDetailVOMap
-            })
-            // 改为统一菜单模式
-            yield put({
-                type: 'changeMenuMode',
-                payload: true
-            })
+            const res = yield call(toUpdateMenu, params);
         },
-        // 获取我的菜单详情
-        * fetchMyMenuDetails({ payload }, { call, put }) {
-            const data = yield call(queryMyMenuDetails, payload);
-            yield put({
-                type: 'saveMenuDetails',
-                payload: data,
+        // 新建菜单数据
+        *newMenuData(_, { call, select }) {
+            const params = yield select(({ menuCenter }) => {
+                const {
+                    camenu,
+                    monday,
+                    tuesday,
+                    wednesday,
+                    thursday,
+                    friday,
+                    saturday,
+                    sunday,
+                } = menuCenter;
+                return {
+                    camenu,
+                    camenuDetailsMap: {
+                        monday,
+                        tuesday,
+                        wednesday,
+                        thursday,
+                        friday,
+                        saturday,
+                        sunday,
+                    }
+                }
             });
-            yield put({
-                type: 'saveEverydayData',
-                payload: data.camenuDetailVOMap
-            });
-            // 改为我的菜单模式
-            yield put({
-                type: 'changeMenuMode',
-                payload: false
-            })
+            console.log('newMenuData:', params);
+            const res = yield call(toNewMenu, params);
+            console.log('上传', res);
         },
         // 获取菜品数据 
-        * fetchDishes({ payload }, { call, put }) {
+        *fetchDishes({ payload }, { call, put }) {
             const data = yield call(queryDishes, payload);
             yield put({
                 type: 'saveDishes',
                 payload: data,
             })
         },
-        // 获取我的模板详情数据
-        * fetchMyTemplateDetails({ payload }, { call, put }) {
-            const data = yield call(queryMyTemplateDetails, payload);
-            yield put({
-                type: 'saveTemplateDetails',
-                payload: data,
-            });
-            // 将模板数据扁平化
-            yield put({
-                type: 'saveEverydayData',
-                payload: data.camenuTemplateDetailVOMap
-            });
-        },
-        // 获取我的模板详情数据
-        * fetchNewTemplateDetails({ payload }, { call, put }) {
-            const data = yield call(queryNewTemplateDetails, payload);
-            yield put({
-                type: 'saveTemplateDetails',
-                payload: data,
-            });
-            // 将模板数据扁平化
-            yield put({
-                type: 'saveEverydayData',
-                payload: data.camenuTemplateDetailVOMap
-            });
-        }
     },
     reducers: {
-        saveMenuTemplate(state, { payload }) {
+        savePMenuTemplate(state, { payload }) {
             return {
                 ...state,
-                menuTemplate: { ...payload }
+                PMenuTemplate: { ...payload }
             }
         },
-        saveMyMenuTemplate(state, { payload }) {
+        saveCMenuTemplate(state, { payload }) {
             return {
                 ...state,
-                myMenuTemplate: { ...payload }
-            }
-        },
-        saveNewMenuTemplate(state, { payload }) {
-            return {
-                ...state,
-                newMenuTemplate: { ...payload }
+                CMenuTemplate: { ...payload }
             }
         },
         // 保存菜品库中的菜品数据
@@ -249,14 +249,14 @@ export default {
                 dishesData: { ...payload }
             }
         },
-        // 保存菜单统一或我的菜单列表数据
+        // 保存菜单列表数据
         saveMenuList(state, { payload }) {
             return {
                 ...state,
                 menuList: { ...payload }
             }
         },
-        // 保存菜单统一或我的菜单详情
+        // 保存菜单详情
         saveMenuDetails(state, { payload }) {
             return {
                 ...state,
@@ -264,12 +264,42 @@ export default {
                 menuDetails: payload
             }
         },
-        // 保存菜单统一或我的菜单详情中每天的排餐数据
+        // 保存菜单详情中每天的排餐数据
         saveEverydayData(state, { payload }) {
             return {
                 ...state,
                 // 直接扁平化每天排餐数据
                 ...payload,
+            }
+        },
+        // 调整菜单概要信息
+        editMenuSummary(state, { payload }) {
+            return {
+                ...state,
+                camenu: payload
+            }
+        },
+        // 新建菜单概要信息
+        newMenuSummary(state, { payload }) {
+            console.log('newMenu', payload);
+            return {
+                ...state,
+                camenu: payload
+            }
+        },
+        clearMenuDetails(state, _) {
+            return {
+                ...state,
+                monday: {},
+                tuesday: {},
+                wednesday: {},
+                thursday: {},
+                friday: {},
+                saturday: {},
+                sunday: {},
+                menuDetails: {},
+                camenu: {},
+                templateDetails: {},
             }
         },
         // 保存我的或推荐模板详情
@@ -290,7 +320,7 @@ export default {
         changeTemplateType(state, { payload }) {
             return {
                 ...state,
-                activeTemplateType: payload
+                templateFrom: payload
             }
         },
         // 对模板的操作复制、删除结果

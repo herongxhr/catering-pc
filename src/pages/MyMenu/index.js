@@ -7,6 +7,7 @@ import BreadcrumbWithTabs from '../../components/BreadcrumbWithTabs';
 import CommonFilter from '../../components/CommonFilter';
 import styles from './index.module.less';
 
+// breadcrumbWithTabs中tabs数据
 const tabList = [
 	{
 		key: 'unified-menu',
@@ -22,7 +23,7 @@ const tabList = [
 	},
 ];
 
-// 表格上面筛选过滤功能组件的数据
+// 列表表格上面筛选过滤功能组件所需数据
 const filterData = {
 	datePicker1: true,
 	dropDownBtn: [{
@@ -48,34 +49,37 @@ class MyMenu extends React.Component {
 			startDate: '',
 			endDate: '',
 			status: '',
+			onlyIssued: false
 		}
 	}
 
-	// 点击tabs标签切换页面
-	handleLinkChange = (key, params) => {
-		const { dispatch } = this.props;
-		// 不是所有key要setState
-		if (tabList.find(item => item.key === key)) {
-			this.setState({
-				activeTabKey: key
-			})
-		}
-		dispatch(routerRedux.push({
+	// 点击tabs标签跳转到指定页面
+	// 页面state中的activeTabKey会传给面包屑
+	handleTabChange = key => {
+		this.props.dispatch(routerRedux.push({
 			pathname: `/menubar/${key}`,
-			state: { ...params }
-		}))
+		}));
 	}
 
+	// 查看订单详情
+	handleShowDetail = record => {
+		this.props.dispatch(routerRedux.push({
+			pathname: `/menubar/my-menu/details`,
+			state: {
+				id: record.id,
+				type: 'my'
+			}
+		}));
+	}
 	// 获取我的菜单数据
-	getMyMenu = (params = {}) => {
-		const { dispatch } = this.props;
-		dispatch({
-			type: 'menuCenter/fetchMyMenu',
+	getMenuData = (params = {}) => {
+		this.props.dispatch({
+			type: 'menuCenter/fetchMenuData',
 			payload: {
 				...this.state.queryParams,
 				...params
 			}
-		})
+		});
 	}
 
 	// 筛选区域下拉框或状态按钮组变化时的回调
@@ -90,17 +94,21 @@ class MyMenu extends React.Component {
 			queryParams: newQueryParams
 		});
 		// 请求接口
-		this.getMyMenu(newQueryParams);
+		this.getMenuData(newQueryParams);
 	}
 
-	// commonFilter按钮点击回调
+	// commonFilter新建按钮点击回调
 	// 下拉式按钮返回e指向当前点击按钮本身
+	// 新建时，清空之前排餐数据
 	handleBtnClick = e => {
 		const { dispatch } = this.props;
+		// 清空之前菜单数据，菜单详情数据
+		dispatch({
+			type: 'menuCenter/clearMenuDetails'
+		})
+		// 跳转页面,从模板新建要先选择模板
 		dispatch(routerRedux.push({
 			pathname: `/menubar/my-menu/${e.key}`,
-			// 把新建类型也传过去
-			state: { type: e.key }
 		}))
 	}
 
@@ -117,51 +125,52 @@ class MyMenu extends React.Component {
 			queryParams: newQueryParams
 		})
 		// 向后端发送请求
-		this.getMyMenu(newQueryParams);
+		this.getMenuData(newQueryParams);
 	}
 	componentDidMount() {
 		// 使用默认的state值发请求
-		this.getMyMenu();
+		this.getMenuData();
 	}
 
 	render() {
-		const tableColumns = [{
-			title: '菜单编号',
-			dataIndex: 'menuCode',
-			key: 'menuCode',
-		}, {
-			title: '周次',
-			dataIndex: 'week',
-			key: 'week',
-		}, {
-			title: '日期',
-			dataIndex: 'date',
-			key: 'date',
-		}, {
-			title: '执行状态',
-			key: 'execute',
-			render: (_, { status }) => {
-				return (
-					status === '已执行'
-						? (<span>
-							<Badge status="success" />
-							<span>已执行</span>
-						</span>)
-						: (<span>
-							<Badge status="warning" />
-							<span>未执行</span>
-						</span>)
-				)
-			}
-		}, {
-			title: '操作',
-			dataIndex: 'status',
-			key: 'status',
-			render(text) {
-				return text === '未执行' ? <a>删除</a> : <span style={{ cursor: 'pointer' }}>查看</span>;
-			}
-		}];
-		const { location, menuList } = this.props;
+		const tableColumns = [
+			{
+				title: '菜单编号',
+				dataIndex: 'menuCode',
+				key: 'menuCode',
+			}, {
+				title: '周次',
+				dataIndex: 'week',
+				key: 'week',
+			}, {
+				title: '日期',
+				dataIndex: 'date',
+				key: 'date',
+			}, {
+				title: '执行状态',
+				key: 'execute',
+				render: (_, { status }) => {
+					return (
+						status === '已执行'
+							? (<span>
+								<Badge status="success" />
+								<span>已执行</span>
+							</span>)
+							: (<span>
+								<Badge status="warning" />
+								<span>未执行</span>
+							</span>)
+					)
+				}
+			}, {
+				title: '操作',
+				dataIndex: 'status',
+				key: 'status',
+				render(text) {
+					return text === '未执行' ? <a>删除</a> : <span style={{ cursor: 'pointer' }}>查看</span>;
+				}
+			}];
+		const { location, menuList = {} } = this.props;
 		// menuList可能为空对象，报以设置默认值
 		const {
 			current = 1,
@@ -175,7 +184,7 @@ class MyMenu extends React.Component {
 				<BreadcrumbWithTabs
 					{...location}
 					tabList={tabList}
-					onChange={this.handleLinkChange}
+					onChange={this.handleTabChange}
 					activeTabKey={activeTabKey}
 				/>
 				<Card className={styles.tableList} bordered={false}>
@@ -194,17 +203,10 @@ class MyMenu extends React.Component {
 							rowKey="id"
 							onRow={(record) => {
 								return {
-									onClick: () => {
-										this.handleLinkChange(
-											'my-menu/details',
-											{
-												id: record.id,
-												type: 'my'
-											}
-										)
-									}
+									onClick: () => this.handleShowDetail(record)
 								}
-							}}
+							}
+							}
 							pagination={{
 								current,
 								pageSize: size,

@@ -5,6 +5,7 @@ import ArrangeDishes from '../../components/ArrangeDishes';
 import styles from './index.module.less';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
 
+
 class NewMenu extends Component {
   render() {
     const { location } = this.props;

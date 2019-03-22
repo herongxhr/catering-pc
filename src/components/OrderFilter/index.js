@@ -1,10 +1,12 @@
 import React from 'react'
-import { Form, Select, DatePicker } from "antd";
+import { Form, Select, DatePicker, Input } from "antd";
 import './index.less'
 
 const Option = Select.Option;
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
+const Search = Input.Search;
+
 
 class OrderFilter extends React.Component {
 
@@ -21,19 +23,9 @@ class OrderFilter extends React.Component {
           <FormItem label='日期选择' >
             {
               getFieldDecorator('date', {
-                initialValue: "all",
-              })(
-                <Select
-                  style={{ width: 240 }}
-                  onChange={(value) => handleFilter({ dateRange: value })}
-                >
-                  <Option value="all">全部</Option>
-                  <Option value="thisYear">本年</Option>
-                  <Option value="lastYear">去年</Option>
-                  <Option value="thisMonth">本月</Option>
-                  <Option value="nearly3month">最近三个月</Option>
-                  <Option value="doSelect"> <RangePicker /> </Option>
-                </Select>
+                initialValue: "",
+              })( 
+                <RangePicker style={{ width: 250 }}/> 
               )
             }
           </FormItem>
@@ -51,6 +43,19 @@ class OrderFilter extends React.Component {
                   <Option value="S">辅料超市</Option>
                   <Option value="N">自建订单</Option>
                 </Select>
+              )
+            }
+          </FormItem>
+          <FormItem>
+            {
+              getFieldDecorator('source', {
+                initialValue: "",
+              })(
+                <Search
+                  placeholder="订单号"
+                  onSearch={value => console.log(value)}
+                  style={{ width: 300 }}
+              />
               )
             }
           </FormItem>

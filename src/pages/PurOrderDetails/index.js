@@ -2,17 +2,18 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:43:54 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-22 13:45:24
+ * @Last Modified time: 2019-03-22 14:07:40
  */
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { Button, Card, Row, Col, Table, Tag } from 'antd';
+import { Button, Card, Row, Col, Table, Tag, Modal, Alert, message } from 'antd';
 import DescriptionList from '../../components/DescriptionList';
 import Bread from '../../components/Bread'
 import PageHeadWrapper from '../../components/PageHeaderWrapper';
 import Cartoon from '../../components/Cartoon'
 import styles from './index.module.less';
 import { routerRedux , Redirect } from 'dva/router';
+import Item from 'antd/lib/list/Item';
 
 
 const { Description } = DescriptionList;
@@ -66,12 +67,31 @@ class PurOrderDetails extends React.Component {
 			loading: false,
 			data: [],
 			list: [],
-			current:1			 
+			current:1,
+			visible:false			 
 		}
 		this.onLoadMore = this.onLoadMore.bind(this)
 	}
-	
 
+	showModal = () => {
+    this.setState({
+      visible: true,
+    });
+	}
+	
+	handleOk = (e) => {
+    this.setState({
+      visible: false,
+		});
+		message.success('操作成功');
+  }
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  }
 		// static getDerivedStateFromProps(props, state) {
 		// 	return {
 		// 		data:props.orderDetails
@@ -156,6 +176,11 @@ class PurOrderDetails extends React.Component {
 		}
 
     render() {
+			const modalObject = {
+				width:'340px',
+				height:'140px',
+				display:'flex',
+			}
         const {
             location,
 						orderDetails,
@@ -212,7 +237,7 @@ class PurOrderDetails extends React.Component {
 							<Button>打印</Button>
 							<Button style={{marign:'0px 20px'}}>删除</Button>
 							<Button onClick={() => this.purOrderAdjust('/purOrder/detail/adjust')}>调整</Button>
-							<Button type="primary" >下单</Button>
+							<Button type="primary" onClick={this.showModal}>下单</Button>
 					</Fragment>
 			);
 			
@@ -263,16 +288,25 @@ class PurOrderDetails extends React.Component {
                         headStyle={{ padding: "14px 30px 6px" }}
                         bodyStyle={{ padding: "0 30px" }}
                     >
-                        <Table
-													pagination={false}
-													loading={loading}
-													rowKey='id'
-													columns={tabColumns}
-													dataSource={orderItemGoods}
-													footer={() => loadMore()}
-                        />
+											<Table
+												pagination={false}
+												loading={loading}
+												rowKey='id'
+												columns={tabColumns}
+												dataSource={orderItemGoods}
+												footer={() => loadMore()}
+											/>
                     </Card>
-										
+										<Modal 
+											visible={visible}
+											onOk={this.handleOk}
+											onCancel={this.handleCancel}
+											bodyStyle={modalObject}
+											width='340px'
+											closable={false}
+										>
+    									<Alert message="采购单将下发给各供货商，确认下单？" type="warning" showIcon style={{background:'white',border:'0px',marginTop:'40px'}} />			
+										</Modal>
                 </PageHeadWrapper>
             </div>
         )

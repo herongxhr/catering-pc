@@ -1,8 +1,7 @@
 import React from 'react'
 import { Icon } from 'antd';
 import classNames from 'classnames';
-import './index.less'
-
+import './index.less';
 class SorterArrow extends React.Component {
   constructor(props) {
     super(props)

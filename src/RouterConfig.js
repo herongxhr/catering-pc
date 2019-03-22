@@ -37,8 +37,16 @@ import TemplateDetails from '../src/pages/TemplateDetails';
 import EditTemplate from './pages/EditTemplate';
 import Edit from './pages/Edit';
 import MenuTemplate from '../src/pages/MenuTemplate';
+<<<<<<< HEAD
 import MyMenu from '../src/pages/MyMenu';
 import ParameterDetail from '../src/pages/Parameter/ParameterDetail';
+=======
+import AdjustMenu from '../src/pages/AdjustMenu';
+import CustomMenu from '../src/pages/CustomMenu';
+import MyMenu from './pages/MyMenu';
+import ChoiceTemplate from './pages/ChoiceTemplate';
+import ParameterDetail from '../src/pages/Parameter/ParameterDetail'
+>>>>>>> 56f155bc872635bc484cd7d55067f7d4157ae38d
 import PurOrderDetailAdjust from './pages/PurOrder/PurOrderDetailAdjust'
 import NewMenu from './pages/NewMenu'
 import ChoiceTemplate from './pages/ChoiceTemplate'
@@ -59,15 +67,16 @@ export default function RouterConfig({ history }) {
               <Route path="/menubar" exact component={MenuCenter} />
               <Route path="/menubar/unified-menu" exact component={MenuCenter} />
               <Route path="/menubar/unified-menu/details" exact component={MenuDetails} />
+              <Route path="/menubar/unified-menu/adjust" exact component={AdjustMenu} />
               <Route path="/menubar/my-menu" exact component={MyMenu} />
               <Route path="/menubar/my-menu/details" component={MenuDetails} />
-              <Route path="/menubar/my-menu/custom" component={NewMenu} />
+              <Route path="/menubar/my-menu/adjust" component={AdjustMenu} />
+              <Route path="/menubar/my-menu/custom" component={CustomMenu} />
               <Route path="/menubar/my-menu/choice-template" component={ChoiceTemplate} />
-              <Route path="/menubar/my-menu/from-template" component={NewMenu} />
+              <Route path="/menubar/my-menu/from-template" component={CustomMenu} />
               <Route path="/menubar/menu-template" exact component={MenuTemplate} />
               <Route path="/menubar/menu-template/details" component={TemplateDetails} />
-              <Route path="/menubar/template/newtemplate" exact component={EditTemplate} />
-              <Route path="/menubar/template/new" component={Edit} />
+              <Route path="/menubar/menu-template/edit-template" component={EditTemplate} />
               <Route path="/accSupermarket" component={AccSupermarket}></Route>
               <Route path="/purOrder" exact component={PurOrder}></Route>
               <Route path="/purOrder/detail/adjust" exact component={PurOrderDetailAdjust}></Route>
