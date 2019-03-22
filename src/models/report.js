@@ -1,5 +1,5 @@
 import {  queryReportmissing, queryEager,queryWithdrawal,queryDetail,querySave } from '../services/api';
-
+import { message } from 'antd';
 export default {
     namespace: 'report',
     state: {
@@ -60,6 +60,7 @@ export default {
                 yield put({
                     type: 'queryReportmissing'
                 });
+                message.success('提交成功');
             }
         },
     },

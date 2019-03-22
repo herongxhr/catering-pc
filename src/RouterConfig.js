@@ -26,8 +26,6 @@ import AcceptedDetail from './pages/AcceptedDetail';
 import ArrangeDishes from '../src/components/ArrangeDishes';
 import SelectIngredients from '../src/components/SelectIngredients';
 import DishDetails from './pages/DishDetails';
-// import DeliveryAcceDetail from './pages/DeliveryAcceDetail';
-// import CreateTemplate from './components/CreateTemplate'
 // 国际化配置
 import { LocaleProvider } from 'antd';
 import zh_cn from 'antd/lib/locale-provider/zh_CN';
@@ -39,12 +37,20 @@ import TemplateDetails from '../src/pages/TemplateDetails';
 import EditTemplate from './pages/EditTemplate';
 import Edit from './pages/Edit';
 import MenuTemplate from '../src/pages/MenuTemplate';
+<<<<<<< HEAD
+import MyMenu from '../src/pages/MyMenu';
+import ParameterDetail from '../src/pages/Parameter/ParameterDetail';
+=======
 import AdjustMenu from '../src/pages/AdjustMenu';
 import CustomMenu from '../src/pages/CustomMenu';
 import MyMenu from './pages/MyMenu';
 import ChoiceTemplate from './pages/ChoiceTemplate';
 import ParameterDetail from '../src/pages/Parameter/ParameterDetail'
+>>>>>>> 56f155bc872635bc484cd7d55067f7d4157ae38d
 import PurOrderDetailAdjust from './pages/PurOrder/PurOrderDetailAdjust'
+import NewMenu from './pages/NewMenu'
+import ChoiceTemplate from './pages/ChoiceTemplate'
+
 moment.locale('zh-cn');
 
 export default function RouterConfig({ history }) {
@@ -92,8 +98,8 @@ export default function RouterConfig({ history }) {
                   </Switch>
                 </Setting>
               }></Route>
-              <Route path="/purCatalog" exact component={PurCatalog}></Route>
-              <Route path="/purCatalog/ingredetail" component={IngreDetail}></Route>
+              <Route path="/purCatalog" component={PurCatalog}></Route>
+              <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/reportdetail" component={ReportDetail}></Route>
               <Route path="/excipientdetail" component={ExcipientDetail}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>

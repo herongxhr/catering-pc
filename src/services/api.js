@@ -249,7 +249,7 @@ export function recommendTemplate() {
 }
 
 export function myCopy(params) {
-    console.log(params)
+    //console.log(params)
     return request({
         method: 'get',
         url: '/catering/camenuTemplate/my/item/copy',
@@ -346,12 +346,13 @@ export function queryPriceHistory(params) {
     })
 }
 
-export function queryDelivery() {
+export function queryDelivery(params) {
     return request({
         method: 'get',
-        url: '/catering/distribution/distributions',
+        url: '/catering/distribution/pageQuery',
         data: {
             showLoading: true,
+            params,
         }
     })
 }
@@ -387,21 +388,22 @@ export function queryDetail(params) {
         }
     })
 }
-//上报商品
+//上报商品 put方法 除了get请求其他都要添加headers    http://192.168.122.10
 
 export function querySave(params) {
+    const data = JSON.stringify(params)
     return request({
-        method: 'put',
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
         url: '/catering/workbench/shortage/item/save',
-        data: JSON.stringify({
-            showLoading: true,
-            params,
-        })
+        data: {
+            axiosData:data
+        }
     })
 }
 //采购目录详情---食材详情
 export function queryIngreDetail(params) {
-    return request({
+    return requestpub({
         method: 'get',
         url: `/pub/sku/${params.id}`,
         data: {
@@ -427,7 +429,7 @@ export function queryParameterDetail(params) {
         url: '/catering/ledger/distribution/day',
         data: {
             showLoading: true,
-            params
+            params,
         }
     })
 }
