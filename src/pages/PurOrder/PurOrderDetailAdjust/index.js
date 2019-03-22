@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:41:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-21 10:32:38
+ * @Last Modified time: 2019-03-22 10:42:26
  */
 import React, { Fragment } from 'react'
 import Bread from '../../../components/Bread'
@@ -22,47 +22,51 @@ const bread = [{
   breadContent:'调整'
 }]
 
-const dataSource = [
-  {
-    id:'1',
-    commodity:'名称',
-    unit:'斤',
-    price:'26',
-    supply:'东阳市食品有限公司',
-    date:'2018-12-01',
-    number:''
-  },
-  {
-    id:'2',
-    commodity:'名称',
-    unit:'斤',
-    price:'26',
-    supply:'东阳市食品有限公司',
-    date:'2018-12-01',
-    number:''
-  },
-  {
-    id:'3',
-    commodity:'名称',
-    unit:'斤',
-    price:'26',
-    supply:'东阳市食品有限公司',
-    date:'2018-12-01',
-    number:''
-  },
-]
+// const dataSource = [
+//   {
+//     id:'1',
+//     commodity:'名称',
+//     unit:'斤',
+//     price:'26',
+//     supply:'东阳市食品有限公司',
+//     date:'2018-12-01',
+//     number:''
+//   },
+//   {
+//     id:'2',
+//     commodity:'名称',
+//     unit:'斤',
+//     price:'26',
+//     supply:'东阳市食品有限公司',
+//     date:'2018-12-01',
+//     number:''
+//   },
+//   {
+//     id:'3',
+//     commodity:'名称',
+//     unit:'斤',
+//     price:'26',
+//     supply:'东阳市食品有限公司',
+//     date:'2018-12-01',
+//     number:''
+//   },
+// ]
 
 class PurOrderAdjust extends React.Component {
   handleSubmit = () => {
     let userInfo = this.props.form.getFieldsValue();
     const { goodsInfo } = userInfo
-    console.log(goodsInfo);
+    // const { records } = goodsInfo
+    // debugger;
+    // console.log(records);
+    //newID 传给另外的页面表示新从新建页面跳转到详情页面.
+    console.log(userInfo);
     const newID = {
       id:'new'
     }
     for(let i = 0; i < goodsInfo.length; i++) {
-      if(!goodsInfo[i].commodity || !goodsInfo[i].unit || !goodsInfo[i].price || !goodsInfo[i].supply || !goodsInfo[i].date || !goodsInfo[i].number) {
-        message.error('请完善所有信息。');
+      if(!goodsInfo[i].commodity ||  !goodsInfo[i].price || !goodsInfo[i].supply || !goodsInfo[i].date || !goodsInfo[i].number) {
+        message.error('请完善所有信息.');
         return
       }  
     }
@@ -79,6 +83,13 @@ class PurOrderAdjust extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { isNew } = this.props.location //从purOrder表格页面传递到adjust的标识符
+    const dataSource = {
+      isNew,
+      records:[
+        
+      ]
+    }
     return (
       <Fragment>
         <Bread bread={bread} value='/purOrder'></Bread>

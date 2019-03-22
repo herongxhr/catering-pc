@@ -10,4 +10,6 @@ const TableLinkChange = (pathname,record,rest) => {
   }))
 }
 
-export { TableLinkChange }
+const isEven = num => num % 2 === 0
+
+export { TableLinkChange , isEven }

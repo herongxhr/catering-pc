@@ -1,3 +1,9 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-21 16:13:07 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-21 16:13:42
+ */
 import React from 'react'
 import Bread from '../../components/Bread'
 import ParameterTable from '../../components/ParameterTable'

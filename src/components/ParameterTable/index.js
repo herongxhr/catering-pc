@@ -49,17 +49,38 @@ class ParameterTable extends React.Component {
     }))
   }
 
+  handleTableChange = (page) => {   
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'purOrder/queryOrderTable',
+			payload: { 
+				current:page,
+				pageSize:10
+			},
+		})
+	}
+
   render() {
     const { ParameterTable } = this.props   
     const {
 			current,
-			records,
+      records,
+      total,
 		} = ParameterTable;
 
     return(
       <div className='ParameterTable'>
         <ParameterForm />
-        <Table columns={Columns} dataSource={records} rowKey='supplierId' onRow={(record) => {
+        <Table 
+          columns={Columns} 
+          dataSource={records} 
+          rowKey='supplierId'
+          pagination={{
+            total:total,
+            current:current
+          }}
+          onChange={this.handleTableChange} 
+          onRow={(record) => {
           return {
             onClick:() => {
               this.props.history.push('/parameter/detail')

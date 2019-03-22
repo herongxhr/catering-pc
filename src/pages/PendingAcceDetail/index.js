@@ -2,11 +2,12 @@ import React from 'react';
 import { connect } from 'dva';
 import '../PendingDeliveryDetail/index.less'
 import { PageHeader, Button, Statistic, Row, Col, Icon,} from 'antd';
-import BreadcrumbComponent from '../../components/BreadcrumbComponent'
 import ExchangeApplay from '../../components/ExchangeApplay'
 import ProductBreakdown from '../../components/ProductBreakdown'
 import DeliveryLog from '../../components/DeliveryLog'
 import Ticket from '../../components/Ticket'
+import Bread from '../../components/Bread'
+
 const Description = ({ term, children }) => (
   <div className="description">
     <div className="term">{term}</div>
@@ -33,14 +34,24 @@ const extraContent = (
   </Row>
 );
 
+const bread = [{
+  href:'/delivery',
+  breadContent:'配送验收'
+},{
+  href:'/delivery',
+  breadContent:'待验收'
+},{
+  href:'/delivery',
+  breadContent:'详情'
+}]
 
 class PendingDeliveryDetail extends React.Component {
   render() {
     const { location } = this.props;
     return (
       <div className='pendingAcceDetail'>
-        {/* <BreadcrumbComponent {...location} /> */}
-        <div className='headerWrapper'>
+        <Bread bread={bread} value='/delivery'></Bread>
+        <div className='headerWrapper' style={{width:'1200px',margin:'3px auto 0px auto'}}>
           <div className='pageHeader'>
             <PageHeader
               title={<span><Icon type="bell" />配送单号:</span>}

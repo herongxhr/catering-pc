@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:43:54 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-20 19:45:33
+ * @Last Modified time: 2019-03-22 13:45:24
  */
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
@@ -59,13 +59,18 @@ const bread = [{
 }]
 
 class PurOrderDetails extends React.Component {
-		state = {
+	constructor(props) {
+		super(props)	
+		this.state = {
 			initLoading: true,
 			loading: false,
 			data: [],
 			list: [],
-			current:1
+			current:1			 
 		}
+		this.onLoadMore = this.onLoadMore.bind(this)
+	}
+	
 
 		// static getDerivedStateFromProps(props, state) {
 		// 	return {
@@ -92,7 +97,26 @@ class PurOrderDetails extends React.Component {
 			})
 		}
 
-		queryOrderItemGoods() {
+		//点击loadMore的时候拼接数据
+	
+		async queryChangeOrderItemGoods() {
+			console.log(1);
+		  const { dispatch , location } = this.props
+			await dispatch({
+				type:'purOrder/queryChangeOrderItemGoods',
+				payload:{
+					id:location.id,
+					current:this.state.current,
+					pageSize:10
+				}
+			})
+			 this.setState({
+				loading:false
+			})
+		}
+
+		//当页面加载的时候请求数据
+		queryOrderItemGoods() { 
 		  const { dispatch , location } = this.props
 			dispatch({
 				type:'purOrder/queryOrderItemGoods',
@@ -102,16 +126,15 @@ class PurOrderDetails extends React.Component {
 					pageSize:10
 				}
 			})
-			this.setState({
-				loading:false
-			})
-		}
 
-		onLoadMore = () => {
+		}
+		
+		async onLoadMore() {
 			this.setState({
 				loading: true,
 			});
-			this.queryOrderItemGoods()
+			this.queryChangeOrderItemGoods()
+
 			// this.getData((res) => {
 			// 	const data = this.state.data.concat(res.results);
 			// 	this.setState({
@@ -137,11 +160,10 @@ class PurOrderDetails extends React.Component {
             location,
 						orderDetails,
 						orderItemGoods
-            } = this.props;
+						} = this.props;
             const {
-                orderDetailVOS,
                 ...rest
-            } = orderDetails
+            } = orderDetails //取值
             let orderChannel;
         if (rest.channel === 'M') {
             orderChannel = '菜单生成';
@@ -175,7 +197,7 @@ class PurOrderDetails extends React.Component {
 
         
         const cardTitle = (
-            <span className={styles.cardTitle}>商品明细：<Tag color="cyan">共{orderDetailVOS ? orderDetailVOS.length : null}条</Tag></span>
+            <span className={styles.cardTitle}>商品明细：<Tag color="cyan">共{orderItemGoods ? orderItemGoods.length : null}条</Tag></span>
 				);
 
 				const { id , status } = location
@@ -217,7 +239,7 @@ class PurOrderDetails extends React.Component {
 				)
 			}
 			
-				const { loading , data } = this.state
+				const { loading , data , visible } = this.state
 				console.log(loading);
         return (
             <div className={styles.PurOrderDetails}>
@@ -250,6 +272,7 @@ class PurOrderDetails extends React.Component {
 													footer={() => loadMore()}
                         />
                     </Card>
+										
                 </PageHeadWrapper>
             </div>
         )
