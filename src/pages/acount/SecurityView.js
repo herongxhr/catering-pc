@@ -1,3 +1,9 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-22 09:48:17 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-22 10:15:16
+ */
 import React, { Component } from 'react';
 import { List , Modal , Form , Input , message } from 'antd';
 
@@ -101,45 +107,45 @@ class Security extends Component {
           width='340px'
           // getContainer={() => document.getElementsByClassName('security-view')}
         > 
-                <Form layout='vertical'>
-                  <FormItem>重置密码</FormItem>
-                  <FormItem label={<span>原密码<span style={{color:'#D9D9D9',marginLeft:10}}>(请先验证原密码)</span></span>}>
-                    {getFieldDecorator('originalPassword', {
-                      rules: [
-                        {
-                          // required: true,
-                          message: '请输入',
-                        },
-                      ],
-                    })(
-                      <Input placeholder='请输入' style={{...inputObject}} />
-                    )}
-                  </FormItem>
-                  <FormItem label={<span>新密码<span style={{color:'#D9D9D9',marginLeft:10}}>(最小长度为6个字符)</span></span>}>
-                    {getFieldDecorator('newPassword', {
-                      rules: [
-                        {
-                          // required: true,
-                          message: '请输入',
-                        },
-                      ],
-                    })(
-                      <Input placeholder='请输入'  />
-                    )}
-                  </FormItem>
-                  <FormItem label={<span>新密码<span style={{color:'#D9D9D9',marginLeft:10}}>(最小长度为6个字符)</span></span>}>
-                    {getFieldDecorator('newPassword', {
-                      rules: [
-                        {
-                          // required: true,
-                          message: '请再次输入',
-                        },
-                      ],
-                    })(
-                      <Input placeholder='请输入'  />
-                      )}
-                  </FormItem>
-                </Form>
+          <Form layout='vertical'>
+            <FormItem>重置密码</FormItem>
+            <FormItem label={<span>原密码<span style={{color:'#D9D9D9',marginLeft:10}}>(请先验证原密码)</span></span>}>
+              {getFieldDecorator('originalPassword', {
+                rules: [
+                  {
+                    // required: true,
+                    message: '请输入',
+                  },
+                ],
+              })(
+                <Input placeholder='请输入' style={{...inputObject}} />
+              )}
+            </FormItem>
+            <FormItem label={<span>新密码<span style={{color:'#D9D9D9',marginLeft:10}}>(最小长度为6个字符)</span></span>}>
+              {getFieldDecorator('newPassword', {
+                rules: [
+                  {
+                    // required: true,
+                    message: '请输入',
+                  },
+                ],
+              })(
+                <Input placeholder='请输入'  />
+              )}
+            </FormItem>
+            <FormItem label={<span>新密码<span style={{color:'#D9D9D9',marginLeft:10}}>(最小长度为6个字符)</span></span>}>
+              {getFieldDecorator('newPassword', {
+                rules: [
+                  {
+                    // required: true,
+                    message: '请再次输入',
+                  },
+                ],
+              })(
+                <Input placeholder='请输入'  />
+                )}
+            </FormItem>
+          </Form>
         </Modal>
       </div>
     );

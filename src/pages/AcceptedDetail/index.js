@@ -2,19 +2,30 @@ import React from 'react';
 import { connect } from 'dva';
 import '../PendingDeliveryDetail/index.less'
 import { PageHeader, Button, Statistic, Row, Col, Icon,} from 'antd';
-import BreadcrumbComponent from '../../components/BreadcrumbComponent'
+import Bread from '../../components/Bread'
 import ExchangeApplay from '../../components/ExchangeApplay'
 import ProductBreakdown from '../../components/ProductBreakdown'
 import DeliveryLog from '../../components/DeliveryLog'
 import Ticket from '../../components/Ticket'
 import Img from "./pic.jpg"
 import './index.less'
+
 const Description = ({ term, children }) => (
   <div className="description">
     <div className="term">{term}</div>
     <div className="detail">{children}</div>
   </div>
 );
+const bread = [{
+  href:'/delivery',
+  breadContent:'配送验收'
+},{
+  href:'/delivery',
+  breadContent:'已验收'
+},{
+  href:'/delivery',
+  breadContent:'详情'
+}]
 const content = (
   <Row>
     <Col span={14}><Description term="来源订单："><a>201812027265</a></Description></Col>
@@ -41,8 +52,8 @@ class AcceptedDetail extends React.Component {
     const { location } = this.props;
     return (
       <div className='AcceptedDetail'>
-        {/* <BreadcrumbComponent {...location} /> */}
-        <div className='headerWrapper'>
+        <Bread bread={bread} value='/delivery'></Bread>
+        <div className='headerWrapper' style={{width:'1200px',margin:'3px auto 0px auto'}}>
           <div className='pageHeader'>
             <PageHeader
               title={<span><Icon type="bell" />配送单号:</span>}

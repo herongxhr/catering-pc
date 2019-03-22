@@ -283,7 +283,7 @@ export function queryOrderTable(params) {
 export function queryOrderDetails(params) {
     return request({
         method: 'get',
-        url: `/catering/order/item/${params.id}`,
+        url: `/catering/order/${params.id}`,
         data: {
             showLoading: true,
             ...params

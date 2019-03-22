@@ -10,7 +10,7 @@ class Go extends React.Component {
 
   render() {
     return(
-      <Button onClick={this.handleGoBack} style={{float:'right',marginTop:'15px'}}>返回</Button>
+      <Button onClick={this.handleGoBack}>返回</Button>
     )
   }
 }

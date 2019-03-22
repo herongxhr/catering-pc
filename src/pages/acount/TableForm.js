@@ -2,15 +2,18 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:20:39 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-20 15:27:45
+ * @Last Modified time: 2019-03-22 10:14:30
  */
 import React, { PureComponent, Fragment } from 'react';
-import { Table, Button, Input, message, Popconfirm, Divider } from 'antd';
+import { Table, Button, Input, message, Popconfirm, Divider, Select, Form, Modal, Card } from 'antd';
 import isEqual from 'lodash/isEqual';
 
 import './style.less';
 
-class TableForm extends PureComponent {
+const Option = Select.Option
+const FormItem = Form.item
+
+class SettingTableForm extends PureComponent {
   index = 0;
 
   cacheOriginData = {};
@@ -23,6 +26,7 @@ class TableForm extends PureComponent {
       loading: false,
       /* eslint-disable-next-line react/no-unused-state */
       value: props.value,
+      visible: false
     };
   }
 
@@ -96,6 +100,19 @@ class TableForm extends PureComponent {
     }
   }
 
+  handleOk = (e) => {
+    this.setState({
+      visible: false,
+    });
+  }
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  }
+
   saveRow(e, key) {
     e.persist();
     this.setState({
@@ -142,7 +159,17 @@ class TableForm extends PureComponent {
     this.clickedCancel = false;
   }
 
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  }
+
   render() {
+    const { getFieldDecorator } = this.props.form;
+    const modalObject = {
+      height:'380px'
+    }
     const columns = [
       {
         title: '供应商',
@@ -251,8 +278,8 @@ class TableForm extends PureComponent {
           }
           return (
             <span>
-              <a onClick={e => this.toggleEditable(e, record.key)}>编辑</a>
-              <Divider type="vertical" />
+              {/* <a onClick={e => this.toggleEditable(e, record.key)}>编辑</a> */}
+              {/* <Divider type="vertical" /> */}
               <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
                 <a>删除</a>
               </Popconfirm>
@@ -276,14 +303,37 @@ class TableForm extends PureComponent {
         <Button
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
           type="dashed"
-          onClick={this.newMember}
+          // onClick={this.newMember}
+          onClick={this.showModal}
           icon="plus"
         >
-          新增成员
+          添加
         </Button>
+        <Modal
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          style={{height:'380px'}}
+          bodyStyle={modalObject}
+          // centered={true}
+          closable={false}
+          width='370px'
+          // getContainer={() => document.getElementsByClassName('security-view')}
+        >   
+          <div style={{marginBottom:'20px'}}>添加供货商</div>
+          <Select defaultValue="1" style={{width:'330px'}}>
+              <Option value="1">东阳市康有食品有限公司</Option>
+              <Option value="2">浙江市康有食品有限公司</Option>
+              <Option value="3">无锡市康有食品有限公司</Option>
+              <Option value="4">武汉市康有食品有限公司</Option>
+          </Select>
+        </Modal>
       </Fragment>
     );
   }
 }
 
-export default TableForm;
+const TableForm = Form.create()(SettingTableForm)
+
+export default TableForm
+

@@ -4,6 +4,7 @@ import PhoneView from './PhoneView';
 import CitySelect from './citySelect';
 import PhoneNumber from './PhoneNumber';
 
+
 import './BaseView.less';
 
 const FormItem = Form.Item;
@@ -88,7 +89,9 @@ class Imformation extends Component {
               })(<Input placeholder='横店中心小学' />)}
             </FormItem>
             <FormItem label='单位地址'>
-              {getFieldDecorator('city')
+              {getFieldDecorator('city',{
+                initialValue:''
+              })
                 (<CitySelect />)
               }
             </FormItem>

@@ -1,3 +1,92 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-21 11:07:07 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-22 15:08:39
+ */
+
+const pendingDeliveryDetail = [
+  {
+    key: '1',
+    tags: '订单商品',
+    goods: '名称+规格参数',
+    unit: '斤',
+    univalent: '26',
+    count: '30',
+    totalPrice:'780',
+    status:'O',
+  },
+  {
+    key: '2',
+    tags: '置换商品',
+    goods: '名称+规格参数',
+    unit: '斤',
+    univalent: '26',
+    count: '30',
+    totalPrice:'780',
+    status:'Z',
+  },
+  {
+    key: '3',
+    tags: '订单商品',
+    goods: '名称+规格参数',
+    unit: '斤',
+    univalent: '26',
+    count: '30',
+    totalPrice:'780',
+    status:'O',
+  },
+  {
+    key: '4',
+    tags: '置换商品',
+    goods: '名称+规格参数',
+    unit: '斤',
+    univalent: '26',
+    count: '30',
+    totalPrice:'780',
+    status:'Z',
+  },
+  {
+    key: '5',
+    tags: '订单商品',
+    goods: '名称+规格参数',
+    unit: '斤',
+    univalent: '26',
+    count: '30',
+    totalPrice:'780',
+    status:'O',
+  },
+  {
+    key: '6',
+    tags: '置换商品',
+    goods: '名称+规格参数',
+    unit: '斤',
+    univalent: '26',
+    count: '30',
+    totalPrice:'780',
+    status:'Z',
+  },
+  {
+    key: '7',
+    tags: '订单商品',
+    goods: '名称+规格参数',
+    unit: '斤',
+    univalent: '26',
+    count: '30',
+    totalPrice:'780',
+    status:'O',
+  },
+  {
+    key: '8',
+    tags: '置换商品',
+    goods: '名称+规格参数',
+    unit: '斤',
+    univalent: '26',
+    count: '30',
+    totalPrice:'780',
+    status:'Z',
+  }
+ ]
 
 const delivery = {
   "code": 0,
@@ -512,4 +601,4 @@ const template =
     },
   ]
 
-export { delivery, parameter, template }
+export { delivery, parameter, template , pendingDeliveryDetail }

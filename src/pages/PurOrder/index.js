@@ -1,3 +1,9 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-21 17:55:51 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-22 09:16:09
+ */
 import React from 'react';
 import { connect } from 'dva';
 import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon } from 'antd';
@@ -97,8 +103,12 @@ class PurOrder extends React.Component {
 
 
 	//新建按钮跳转
-	handleLinkChange = () => {
-		this.props.history.push('/purOrder/detail/adjust')
+	handleLinkChange = (pathname,isNew) => {
+		const { props } = this
+		props.dispatch(routerRedux.push({ 
+			pathname,
+			isNew
+		}))
 	}
 
 	TableLinkChange = (pathname,record,rest) => {
@@ -115,7 +125,7 @@ class PurOrder extends React.Component {
 		this.getOrderTable();
 	}
 
-	//table current 套装
+	//table current 跳转
 	handleTableChange = (page) => {   
 		const { dispatch } = this.props;
 		dispatch({
@@ -136,10 +146,11 @@ class PurOrder extends React.Component {
 
 		// 点击新建时会下拉的按钮
 		const dropdownBtn = () => {
+			const pathname = '/purOrder/detail/adjust'
 			const menu = (
 				<Menu>
-					<Menu.Item key="FOrder" onClick={this.handleLinkChange}>食材订单</Menu.Item>
-					<Menu.Item key="SOrder" onClick={this.handleLinkChange}>辅料订单</Menu.Item>
+					<Menu.Item key="FOrder" onClick={() => this.handleLinkChange(pathname,true)}>食材订单</Menu.Item>
+					<Menu.Item key="SOrder" onClick={() => this.handleLinkChange(pathname,true)}>辅料订单</Menu.Item>
 				</Menu>
 			)
 			return (
@@ -153,7 +164,6 @@ class PurOrder extends React.Component {
 			)
 		}
 		// 表格数据
-		console.log(orderTable)
 		const {
 			current,
 			total,
