@@ -70,8 +70,9 @@ class MenuCenter extends React.Component {
 				...this.state.queryParams,
 				...params
 			}
-		})
+		});
 	}
+
 	// 筛选区域下拉框或状态按钮组变化时的回调
 	handleFilterChange = (params = {}) => {
 		// 改变state中相应参数的值
@@ -139,18 +140,24 @@ class MenuCenter extends React.Component {
 				dataIndex: 'status',
 				key: 'status',
 				render: (text) => {
-					if (text == '已执行') {
+					if (text === '1') {
 						return (
 							<span>
 								<Badge status="success" />
 								<span>已执行</span>
 							</span>
 						)
-					} else {
+					} else if (text === '0') {
 						return (
 							<span>
 								<Badge status="warning" />
 								<span>未执行</span>
+							</span>)
+					} else {
+						return (
+							<span>
+								<Badge status="default" />
+								<span>已过期</span>
 							</span>)
 					}
 				}

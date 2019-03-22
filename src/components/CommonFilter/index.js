@@ -45,7 +45,7 @@ export default class OrderFilter extends React.Component {
           {/* 左侧列 */}
           <Col span={16}>
             {/* 第一行 */}
-            <Row style={{ marginBottom: 20 }}>
+            <Row style={{ height: 32, marginBottom: 20 }}>
               {datePicker1 && <Col span={12}>
                 <span >日期选择：</span>
                 <RangePicker
@@ -85,15 +85,24 @@ export default class OrderFilter extends React.Component {
             </Row>}
           </Col>
           {/* 右侧列 */}
-          <Col style={{ textAlign: 'right' }} span={8}>
-            {/* 状态筛选按钮组 */}
-            {statusGroup &&
-              <Radio.Group
-                defaultValue={statusGroup[0][0]}
-                onChange={e => handleFilterChange({ status: e.target.value })}>
-                {statusGroup.map(([value, text], index) =>
-                  <Radio.Button key={index} value={value}>{text}</Radio.Button>)}
-              </Radio.Group>}
+          <Col span={8}>
+            {/* 右一行，有下拉按钮时才出现 */}
+            {dropDownBtn && <Row style={{ height: 32, marginBottom: 20 }}>
+              <Col span={24}></Col>
+            </Row>}
+            {/* 右二行 */}
+            <Row>
+              <Col style={{ textAlign: 'right' }} >
+                {/* 状态筛选按钮组 */}
+                {statusGroup &&
+                  <Radio.Group
+                    defaultValue={statusGroup[0][0]}
+                    onChange={e => handleFilterChange({ status: e.target.value })}>
+                    {statusGroup.map(([value, text], index) =>
+                      <Radio.Button key={index} value={value}>{text}</Radio.Button>)}
+                  </Radio.Group>}
+              </Col>
+            </Row>
           </Col>
         </Row>
       </div >

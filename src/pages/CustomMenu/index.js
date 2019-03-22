@@ -18,14 +18,18 @@ class CustomMenu extends Component {
 
   static getDerivedStateFromProps(props) {
     const { location, dispatch } = props;
-    // 只有从模板新建，选择了模板后才会有这两个属性
+    // 只有从模板新建，选择了模板后才
+    // location.state才存在
     // 直接自定义菜单是没有这两个属性的
-    const { menuTemplateId = '', templateFrom = '' } = location.state;
-    return {
-      menuTemplateId,
-      templateFrom,
-      dispatch
+    if (location.state) {
+      const { menuTemplateId = '', templateFrom = '' } = location.state;
+      return {
+        menuTemplateId,
+        templateFrom,
+        dispatch
+      }
     }
+    return null;
   }
   // 选择周次回调
   handleSelectWeek = (_, dateString) => {
@@ -53,7 +57,6 @@ class CustomMenu extends Component {
 
   componentDidMount() {
     const { menuTemplateId, templateFrom, dispatch } = this.state;
-    console.log('this.state:', this.state);
     // 如果是从模板新建，要获取相应模板的详情
     if (menuTemplateId) {
       dispatch({

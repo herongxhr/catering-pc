@@ -21,7 +21,7 @@ class MenuDetails extends React.Component {
       payload: id
     })
   }
-  // 点击调整菜单
+  // 点击调整菜单按钮
   handleArrangeDishes = () => {
     const { location, dispatch } = this.props;
     const { id, type } = location.state;
@@ -53,7 +53,7 @@ class MenuDetails extends React.Component {
      // 是否我的菜单
     const isMy = type === 'my' ? true : false;
     // 记录订单是否已经执行，在下面内容中根据条件显示
-    const isExecuted = status === '已执行' ? true : false;
+    const isExecuted = status === '1' ;
     // 操作区
     const action = (
       <Fragment>

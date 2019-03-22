@@ -56,8 +56,7 @@ class MyMenu extends React.Component {
 	// 点击tabs标签跳转到指定页面
 	// 页面state中的activeTabKey会传给面包屑
 	handleTabChange = key => {
-		const { dispatch } = this.props;
-		dispatch(routerRedux.push({
+		this.props.dispatch(routerRedux.push({
 			pathname: `/menubar/${key}`,
 		}));
 	}
@@ -75,12 +74,12 @@ class MyMenu extends React.Component {
 	// 获取我的菜单数据
 	getMenuData = (params = {}) => {
 		this.props.dispatch({
-			type: 'menuCenter/fetchMyMenu',
+			type: 'menuCenter/fetchMenuData',
 			payload: {
 				...this.state.queryParams,
 				...params
 			}
-		})
+		});
 	}
 
 	// 筛选区域下拉框或状态按钮组变化时的回调
@@ -98,12 +97,12 @@ class MyMenu extends React.Component {
 		this.getMenuData(newQueryParams);
 	}
 
-	// commonFilter按钮点击回调
+	// commonFilter新建按钮点击回调
 	// 下拉式按钮返回e指向当前点击按钮本身
 	// 新建时，清空之前排餐数据
 	handleBtnClick = e => {
 		const { dispatch } = this.props;
-		// 清空之前数据
+		// 清空之前菜单数据，菜单详情数据
 		dispatch({
 			type: 'menuCenter/clearMenuDetails'
 		})

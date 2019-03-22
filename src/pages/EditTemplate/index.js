@@ -1,174 +1,124 @@
-import React from 'react'
-import Bread from '../../components/Bread'
-import { Card , Button , Row, Col , Checkbox , Switch , Table} from 'antd'
-import { Steps , Tag  } from 'antd';
-import { connect } from 'dva'
+import React, { Component } from 'react';
+import { Card, DatePicker, Button, Row, Col } from 'antd';
+import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
+import ArrangeDishes from '../../components/ArrangeDishes';
+import styles from './index.module.less';
+import BreadcrumbComponent from '../../components/BreadcrumbComponent';
+import EditableTagGroup from '../../components/EditableTagGroup';
 
-
-import './index.less'
-
-const Step = Steps.Step;
-
-const renderContent = (value, row, index) => {
-  const obj = {
-    children: value,
-    props: {},
-  };
-  if (index === 4) {
-    obj.props.colSpan = 0;
+const { WeekPicker, } = DatePicker;
+class EditTemplate extends Component {
+  state = {
+    menuTemplateId: '',
+    templateFrom: '',
+    nd: '',
+    week: '',
+    dispatch: ''
   }
-  return obj;
-};
-const data = [{
-  key: '1',
-  name: 'John Brown',
-  age: 32,
-  tel: '0571-22098909',
-  phone: 18889898989,
-  address: 'New York No. 1 Lake Park',
-}, {
-  key: '2',
-  name: '',
-  tel: '0571-22098333',
-  phone: 18889898888,
-  age: 42,
-  address: 'London No. 1 Lake Park',
-}, {
-  key: '3',
-  name: 'Joe Black',
-  age: 32,
-  tel: '0575-22098909',
-  phone: 18900010002,
-  address: 'Sidney No. 1 Lake Park',
-}, {
-  key: '4',
-  name: 'Jim Red',
-  age: 18,
-  tel: '0575-22098909',
-  phone: 18900010002,
-  address: 'London No. 2 Lake Park',
-}, {
-  key: '5',
-  name: 'Jake White',
-  age: 18,
-  tel: '0575-22098909',
-  phone: 18900010002,
-  address: 'Dublin No. 2 Lake Park',
-}];
 
+  static getDerivedStateFromProps(props) {
+    const { location, dispatch } = props;
+    // 只有从模板新建，选择了模板后才会有这两个属性
+    // 直接自定义菜单是没有这两个属性的
+    const { menuTemplateId = '', templateFrom = '' } = location.state;
+    return {
+      menuTemplateId,
+      templateFrom,
+      dispatch
+    }
+  }
+  // 选择周次回调
+  handleSelectWeek = (_, dateString) => {
+    const [, nd = '', week = ''] = dateString && dateString.match(/^(\d{4})-(\d{2})/);
+    this.setState({ nd, week });
+  }
+  // 编辑标签的回调
+  editTag = (tag, flag) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'menuCenter/editTag',
+      payload: { tag, flag }
+    })
+  }
 
-const columns = [{
-  title: 'Name',
-  dataIndex: 'name',
-  render: (value,row,index) => {
-    const obj = {
-      children:value,
-      props:{}
-    }
-    if(index == 0) {
-      obj.props.rowSpan = 5
-    }
-    if(index == 1 || index == 2 || index == 3 || index == 4) {
-      obj.props.rowSpan = 0
-    }
-    return obj
-  },
-}, {
-  title: 'Age',
-  dataIndex: 'age',
-}, {
-  title: 'Home phone',
-  dataIndex: 'tel',
-}, {
-  title: 'Phone',
-  dataIndex: 'phone',
-}, {
-  title: 'Address',
-  dataIndex: 'address',
-}];
+  handleClickCancel = () => {
+    this.state.dispatch(routerRedux.push({
+      pathname: '/menubar/my-menu/choice-template'
+    }))
+  }
 
-class EditTemplate extends React.Component {
+  handleClickOk = () => {
+    const { dispatch } = this.props;
+    const { menuTemplateId, templateFrom, nd, week } = this.state;
+    dispatch({
+      type: 'menuCenter/newMenuSummary',
+      payload: { menuTemplateId, templateFrom, nd, week, }
+    });
+    dispatch({
+      type: 'menuCenter/newMenuData'
+    });
+  }
+
   componentDidMount() {
-    const { dispatch } = this.props
-		dispatch({
-			type:'unifiedMenus/queryList',
-			payload:{a:1}
-		})
+    const { menuTemplateId, templateFrom, dispatch } = this.state;
+    console.log('this.state:', this.state);
+    // 如果是从模板新建，要获取相应模板的详情
+    if (menuTemplateId) {
+      dispatch({
+        type: `menuCenter/fetch${templateFrom}TemplateDetails`,
+        payload: menuTemplateId
+      })
+    }
   }
-  
-  onChange = (e) => {
-    console.log(`checked = ${e.target.checked}`);
-  }
-
   render() {
-    const bread = [{
-      href:'/menubar',
-      breadContent:'菜单中心'
-    },{
-      href:'/menubar',
-      breadContent:'统一菜单'
-    },{
-      href:'/EditTemplate',
-      breadContent:'创建模板'
-    }]
-    return(
-      <div className='edit-template'>
-				<Bread bread={bread}  />
-        <Card className='DetailsOperation' style={{width:1200,marginTop:-7}}>
-          <div className='card-body'>
-            <Row className='card-header'>
-              <Col span={12} className='card-header-title'>
-                <span className="iconfont">&#xe62b;</span>
-                <span className='odd-number'>采购单号：5472563456765</span>
-              </Col>
-              <Col span={12}  className='right' style={{ fontSize: 14 }}>
-                <Button>打印</Button>
-                <Button>删除</Button>
-                <Button>调整</Button>
-                <Button type='primary'>下单</Button>
-              </Col>
-            </Row>
-            <Row className='card-content'>
-              <Col span={8} >
-                <p className='card-content-top'>使用次数:0次</p>
-                <Tag color="magenta">幼儿园</Tag>
-                <Tag color="red">春季</Tag>
-                <Tag color="volcano">高蛋白</Tag>
-                <Tag color="orange">3餐7日</Tag>
-              </Col>
-              <Col span={8}>
-                <p className='card-content-top'>上次使用：未使用</p>
-                {/* <p>下达时间：2018-11-25   11：09</p> */}
-              </Col>
-              {/* <Col span={8}>
-                <Col span={12}><p className='card-content-top'></p><p></p></Col >
-                <Col span={12}><p className='card-content-top'>状态</p><p>待执行</p></Col >            
-              </Col> */}
-            </Row>
-          </div> 
+    const { location, templateDetails } = this.props;
+    const { tags = '' } = templateDetails;
+    // 是否从模板新建
+    return (
+      <div>
+        <BreadcrumbComponent {...location} />
+        {/* 如果是自定义菜单时显示 */}
+        <Card className={styles.wrap}>
+          <Row>
+            <Col span={8}>
+              <Row>
+                <Col style={{ marginBottom: 10 }}>适用周次：</Col>
+                <Col><WeekPicker
+                  style={{ width: 260 }}
+                  onChange={this.handleSelectWeek}
+                  placeholder="选择周次"
+                /></Col>
+              </Row>
+            </Col>
+            <Col span={16}>
+              <Row>
+                <Col style={{ marginBottom: 10 }}>标签：</Col>
+                <Col>{/* 从模板新建才显示标签 */}
+                  <EditableTagGroup editTag={this.editTag} tags={tags} /></Col>
+              </Row>
+            </Col>
+          </Row>
         </Card>
-        {/* <Steps current={1} progressDot>
-          <Step title="菜单下达" description="2018-11-25 11:09" />
-          <Step title="采购订单" description="待采购" />
-          <Step title="下达订单" description="" />
-        </Steps> */}
-        <Card style={{marginTop:10,border:0}}>
-          <div style={{display:'flex',justifyContent:'space-between'}} className='PaContent'>
-            <div>
-              <Checkbox onChange={this.onChange}>配料详情</Checkbox>
-              <Checkbox onChange={this.onChange}>收起空餐饮</Checkbox>
-            </div>
-            <div>
-              图片模式<Switch  onChange={this.onChange} style={{marginLeft:7}} />
-            </div>            
+        <Card
+          className={styles.wrap}
+          style={{ marginBottom: 76 }}
+          bodyStyle={{ padding: 20 }}>
+          {/* 排餐控件 */}
+          <ArrangeDishes isMy={true} {...this.props} />
+        </Card>
+        {/* 底部按钮 */}
+        <div className={styles.footerWrap}>
+          <div className={styles.footerBtn}>
+            <Button onClick={this.handleClickCancel}>取消</Button>
+            <Button onClick={this.handleClickOk} type='primary'>保存</Button>
           </div>
-        </Card>
-        <Table columns={columns} dataSource={data} bordered></Table>
+        </div>
       </div>
     )
   }
 }
 
-export default connect(( {unifiedMenus} ) => ({
-  unifiedMenus,
-}))(EditTemplate)
+export default connect(({ menuCenter }) => ({
+  ...menuCenter
+}))(EditTemplate);

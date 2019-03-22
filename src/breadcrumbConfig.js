@@ -15,6 +15,7 @@ export default {
     '/menubar/my-menu/from-template/': '从模板新建',
     '/menubar/menu-template/': '菜单模板',
     '/menubar/menu-template/details/': '模板详情',
+    '/menubar/menu-template/edit-template/': '编辑模板',
     '/menubar/public/details/': '详情',
     '/menubar/private/': '我的菜单',
     '/menubar/private/new/': '新增',

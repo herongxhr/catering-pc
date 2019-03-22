@@ -12,7 +12,7 @@ class ChoiceTemplate extends React.Component {
     templateFrom: ''
   }
 
-  // 对模板进行查看选择操作
+  // 对模板进行[查看选择]操作
   handleTemplateActions = (e, id, templateFrom) => {
     const { dispatch } = this.props;
     // 通过e.target.id来获取当前操作类型
@@ -34,6 +34,7 @@ class ChoiceTemplate extends React.Component {
       });
     }
   }
+
   // 点击下一步回调
   handleClickOk = () => {
     const { menuTemplateId, templateFrom } = this.state;
@@ -46,6 +47,7 @@ class ChoiceTemplate extends React.Component {
       state: { menuTemplateId, templateFrom }
     }))
   }
+
   // 点击取消回调
   handleClickCancel = () => {
     const { dispatch } = this.props;
@@ -58,19 +60,19 @@ class ChoiceTemplate extends React.Component {
     const { dispatch } = this.props;
     // 获取推荐模板数据
     dispatch({
-      type: 'menuCenter/fetchNewMenuTemplate',
+      type: 'menuCenter/fetchCMenuTemplate',
     });
     // 获取我的模板数据
     dispatch({
-      type: 'menuCenter/fetchMyMenuTemplate',
+      type: 'menuCenter/fetchPMenuTemplate',
     });
   }
 
   render() {
     const {
       location,
-      myMenuTemplate,
-      newMenuTemplate,
+      PMenuTemplate,
+      CMenuTemplate,
     } = this.props
     const { menuTemplateId, templateFrom } = this.state;
     return (
@@ -82,9 +84,9 @@ class ChoiceTemplate extends React.Component {
           bodyStyle={{ padding: '30px 30px 0' }}
         >
           <div className='cardsWrapper'>
-            {newMenuTemplate.records
-              && newMenuTemplate.records.length > 0
-              && newMenuTemplate.records
+            {CMenuTemplate.records
+              && CMenuTemplate.records.length > 0
+              && CMenuTemplate.records
                 .slice(0, 3).map(item =>
                   <TemplateCard
                     // 当前卡片与点击的卡片是同一个，并且是推荐模板
@@ -100,9 +102,9 @@ class ChoiceTemplate extends React.Component {
             <Col><Divider orientation='left'>我的模板：</Divider></Col>
           </Row>
           <div className='cardsWrapper'>
-            {myMenuTemplate.records
-              && myMenuTemplate.records.length > 0
-              && myMenuTemplate.records
+            {PMenuTemplate.records
+              && PMenuTemplate.records.length > 0
+              && PMenuTemplate.records
                 .slice(0, 6).map(item =>
                   (<TemplateCard
                     // 当前卡片与点击的卡片是同一个，并且不是推荐模板
@@ -126,7 +128,7 @@ class ChoiceTemplate extends React.Component {
 }
 
 export default connect(({ menuCenter }) => ({
-  myMenuTemplate: menuCenter.myMenuTemplate,
-  newMenuTemplate: menuCenter.newMenuTemplate
+  PMenuTemplate: menuCenter.PMenuTemplate,
+  CMenuTemplate: menuCenter.CMenuTemplate
 }))(ChoiceTemplate);
 

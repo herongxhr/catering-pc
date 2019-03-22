@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, Card, Row, Col, Tag } from 'antd';
+import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import Moment from 'moment';
 import DescriptionList from '../../components/DescriptionList';
@@ -12,22 +13,33 @@ const ButtonGroup = Button.Group;
 const { Description } = DescriptionList;
 class TemplateDetails extends Component {
     state = {
-        isArrangeDish: false
+        isArrangeDish: false,
+        id: ''
     }
 
-    // 显示排餐表格
-    handleArrangeDishes = () => {
-        this.setState({
-            isArrangeDish: true
-        })
+    static getDerivedStateFromProps(props) {
+        const { location } = props;
+        const { id } = location.state;
+        return { id }
+    }
+    // 跳转至模板编辑页
+    handleEditTemplate = () => {
+        const { id } = this.state;
+        this.props.dispatch(routerRedux.push({
+            pathname: '/menubar/menu-template/edit-template',
+            state: id
+        }))
     }
 
     getTemplateDetail = () => {
-        const { dispatch, location } = this.props;
+        const { dispatch, location, templateFrom } = this.props;
         let { id } = location.state;
         dispatch({
-            type: 'menuCenter/fetchMyTemplateDetails',
-            payload: id
+            type: `menuCenter/fetch${templateFrom}TemplateDetails`,
+            payload: {
+                menuTemplateId: id,
+                templateFrom,
+            }
         })
     }
 
@@ -68,7 +80,7 @@ class TemplateDetails extends Component {
                     : (<ButtonGroup>
                         <Button>复制</Button>
                         <Button>删除</Button>
-                        <Button onClick={this.handleArrangeDishes}>修改</Button>
+                        <Button onClick={this.handleEditTemplate}>修改</Button>
                     </ButtonGroup>)}
                 <Button type='primary'>使用</Button>
             </Fragment>
@@ -87,21 +99,15 @@ class TemplateDetails extends Component {
                     {...this.props}
                 >
                     {/* 排餐区 */}
-                    <Card bordered={false}
+                    <Card
+                        bordered={false}
                         style={{ marginTop: 20 }}>
-                        {isArrangeDish
-                            ? <ArrangeDishes
-                                // isMy判断是不是我的菜单从而对菜品操作权限不同
-                                isMy={true}
-                                // weekData为原始的排餐数据
-                                weekData={camenuTemplateDetailVOMap}
-                                {...this.props} />
-                            : <ShowArrangedDishes
-                                // arrangedDishes为已排菜品数据
-                                arrangedDishes={camenuTemplateDetailVOMap}
-                                // priceDataMap为每餐预估价信息
-                                priceDataMap={priceDataMap}
-                            />}
+                        <ShowArrangedDishes
+                            // arrangedDishes为已排菜品数据
+                            arrangedDishes={camenuTemplateDetailVOMap}
+                            // priceDataMap为每餐预估价信息
+                            priceDataMap={priceDataMap}
+                        />
                     </Card>
                 </PageHeaderWrapper>
             </div>

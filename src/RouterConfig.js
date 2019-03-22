@@ -70,8 +70,7 @@ export default function RouterConfig({ history }) {
               <Route path="/menubar/my-menu/from-template" component={CustomMenu} />
               <Route path="/menubar/menu-template" exact component={MenuTemplate} />
               <Route path="/menubar/menu-template/details" component={TemplateDetails} />
-              <Route path="/menubar/template/newtemplate" exact component={EditTemplate} />
-              <Route path="/menubar/template/new" component={Edit} />
+              <Route path="/menubar/menu-template/edit-template" component={EditTemplate} />
               <Route path="/accSupermarket" component={AccSupermarket}></Route>
               <Route path="/purOrder" exact component={PurOrder}></Route>
               <Route path="/purOrder/detail/adjust" exact component={PurOrderDetailAdjust}></Route>
