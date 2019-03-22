@@ -1,62 +1,73 @@
 import React from 'react';
-import classNames from 'classnames';
 import { Modal, Select, Input, Table } from 'antd';
-import './index.less';
+// import './index.less';
 
 const { Search } = Input;
 const { Option } = Select;
-
-const tableColumns = [
-    {
-        title: '名称',
-        key: 'name',
-        dataIndex: 'name'
-    },
-    {
-        title: '类别',
-        key: 'catalog',
-        dataIndex: 'catalog'
-    },
-    {
-        title: '食材明细',
-        key: 'detail',
-        dataIndex: 'detail'
-    },
-    {
-        title: '图片',
-        key: 'img',
-        dataIndex: 'img',
-        render: () => <a>查看</a>
-    },
-    {
-        title: '操作',
-        key: 'add',
-        dataIndex: 'add',
-        render: () => <a>添加</a>
-    },
-];
-
 class SelectIngredients extends React.Component {
-
+    state = {
+        currId: ''
+    }
+    handleAdd = record => {
+        this.setState({
+            currId: record.id
+        })
+    }
     render() {
+        const tableColumns = [
+            {
+                title: '食材名称',
+                key: 'name',
+                dataIndex: 'name'
+            },
+            {
+                title: '计量单位',
+                key: 'catalog',
+                dataIndex: 'catalog'
+            },
+            {
+                title: '规格',
+                key: 'detail',
+                dataIndex: 'detail'
+            },
+            {
+                title: '价格',
+                key: 'price',
+                dataIndex: 'price'
+            },
+            {
+                title: '供应商',
+                key: 'su',
+                dataIndex: 'su'
+            },
+            {
+                title: '图片',
+                key: 'img',
+                dataIndex: 'img',
+                render: () => <a>查看</a>
+            },
+            {
+                title: '操作',
+                key: 'add',
+                dataIndex: 'add',
+								render: (_, record) =>
+									{		console.log(record)
+										   return(
+												 record.id !== this.state.currId
+                        ? <a onClick={() => this.handleAdd(record)}>选择</a>
+                        : <span>已选</span>
+											 ) 
+									}
+            },
+        ];
+
         const {
             handleModalVisble,
+            handleFilter,
             visible
         } = this.props;
 
         const tableData = [
-            {
-                id: 1,
-                name: "番茄炒蛋",
-                catalog: "素菜",
-                detail: "番茄20g/鸡蛋30g/番茄...",
-            },
-            {
-                id: 2,
-                name: "番茄炒蛋",
-                catalog: "素菜",
-                detail: "番茄20g/鸡蛋30g/番茄...",
-            },
             {
                 id: 3,
                 name: "番茄炒蛋",
@@ -86,52 +97,28 @@ class SelectIngredients extends React.Component {
                 name: "番茄炒蛋",
                 catalog: "素菜",
                 detail: "番茄20g/鸡蛋30g/番茄...",
-            },
-            {
-                id: 8,
-                name: "番茄炒蛋",
-                catalog: "素菜",
-                detail: "番茄20g/鸡蛋30g/番茄...",
-            },
-            {
-                id: 9,
-                name: "番茄炒蛋",
-                catalog: "素菜",
-                detail: "番茄20g/鸡蛋30g/番茄...",
-            },
-            {
-                id: 10,
-                name: "番茄炒蛋",
-                catalog: "素菜",
-                detail: "番茄20g/鸡蛋30g/番茄...",
-            },
+            }
         ]
         return (
             <Modal
-                wrapClassName="selectIngredients"
+                wrapClassName="selectDish"
                 width={1100}
                 closable={false}
                 bodyStyle={{
-                    height: "100%",
-                    display: "table-cell",
-                    verticalAlign: "middle",
-                    overflow: "hidden",
-                    padding: "0 10px"
+                    height: "650px",
                 }}
-                title="选菜"
+                title="选择辅料"
                 visible={visible}
                 okText="保存"
                 onOk={handleModalVisble}
                 onCancel={handleModalVisble}
             >
-                <div className={"leftContent"}>
-                    <div className={"filterWrap"}>
-                        <label style={{ width: 42 }}>类别：
+                <div>
+                    <div>
+                        <label style={{ width: 42 }}>辅料类别：
                                 <Select
-                                style={{ width: 170 }}
-                                defaultValue=""
-                            // onChange={(value) => handleFilter({ dateRange: value })}
-                            >
+																	style={{width:'170px'}}
+                                onChange={(value) => handleFilter({ ingreType: value })}>
                                 <Option value="">全部</Option>
                                 <Option value="meatDish">荤菜</Option>
                                 <Option value="vegetable">素菜</Option>
@@ -142,25 +129,20 @@ class SelectIngredients extends React.Component {
                         </label>
                         <Search
                             placeholder="请输入关键字进行搜索"
-                            onSearch={() => { }}
-                            style={{ width: 190, marginLeft: 10 }}
+														onSearch={() => { }}
+														style={{width:'190px',marginLeft:'20px'}}
                         />
                     </div>
                     <Table
-                        style={{ height: 594 }}
+												pagination={
+													{
+														pageSize:10
+													}
+												}
                         columns={tableColumns}
                         dataSource={tableData}
-                        onRow={
-                            record => {
-                                return {
-
-                                }
-                            }
-                        }
-                        rowKey="id"
                     />
                 </div>
-                <div className={"rightResult"}>111</div>
             </Modal>
         )
     }

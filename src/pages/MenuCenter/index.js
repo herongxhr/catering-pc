@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import Moment from 'moment';
 import { Card, Table, Badge } from 'antd';
 import styles from './index.module.less';
 import BreadcrumbWithTabs from '../../components/BreadcrumbWithTabs';
@@ -119,11 +120,15 @@ class MenuCenter extends React.Component {
 				title: '周次',
 				dataIndex: 'week',
 				key: 'week',
+				render: text => `第${text}周`
 			},
 			{
 				title: '日期',
 				dataIndex: 'date',
 				key: 'date',
+				render: (_, record) =>
+					Moment(record.beginDate).format('YYYY-MM-DD')
+					+ '~' + Moment(record.endDate).format('YYYY-MM-DD')
 			},
 			{
 				title: '下达单位',
@@ -134,6 +139,7 @@ class MenuCenter extends React.Component {
 				title: '下达时间',
 				dataIndex: 'issuedTime',
 				key: 'issuedTime',
+				render: text => Moment(text).format('YYYY-MM-DD')
 			},
 			{
 				title: '执行状态',

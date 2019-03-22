@@ -79,7 +79,7 @@ export default class TemplateCard extends PureComponent {
                   {used}次
                 </Col>}
                 {templateFrom === 'P' && <Col span={6} style={{ textAlign: 'right' }}>
-                  {lastTime.substring(0, 10)}
+                  {Moment(lastTime).format('YYYY-MM-DD HH:mm:ss')}
                 </Col>}
               </Row>
             </Col>
