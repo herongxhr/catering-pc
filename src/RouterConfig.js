@@ -37,19 +37,12 @@ import TemplateDetails from '../src/pages/TemplateDetails';
 import EditTemplate from './pages/EditTemplate';
 import Edit from './pages/Edit';
 import MenuTemplate from '../src/pages/MenuTemplate';
-<<<<<<< HEAD
 import MyMenu from '../src/pages/MyMenu';
 import ParameterDetail from '../src/pages/Parameter/ParameterDetail';
-=======
 import AdjustMenu from '../src/pages/AdjustMenu';
 import CustomMenu from '../src/pages/CustomMenu';
-import MyMenu from './pages/MyMenu';
 import ChoiceTemplate from './pages/ChoiceTemplate';
-import ParameterDetail from '../src/pages/Parameter/ParameterDetail'
->>>>>>> 56f155bc872635bc484cd7d55067f7d4157ae38d
 import PurOrderDetailAdjust from './pages/PurOrder/PurOrderDetailAdjust'
-import NewMenu from './pages/NewMenu'
-import ChoiceTemplate from './pages/ChoiceTemplate'
 
 moment.locale('zh-cn');
 

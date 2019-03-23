@@ -4,7 +4,7 @@ import { Menu, Icon, Badge,  Avatar  } from 'antd';
 import logo from './logo.png';
 import MenuDropDown from '../MenuDropDown'
 import './index.less'
-import home from './img/home.png'
+import { withRouter } from "react-router";
 
 const menu = (
   <Menu>
@@ -35,6 +35,7 @@ class BaseMenu extends Component {
 					theme="dark"
 					mode="horizontal"
 					className="baseMenu"
+					
 				>
 					<Menu.Item disabled style={{ width: 125 }} key="logo">
 							<img src={logo} alt="安品" />
