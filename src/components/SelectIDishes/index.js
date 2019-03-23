@@ -24,12 +24,7 @@ class SelectDishes extends React.Component {
             doFilter,
             handlFetchDishes,
             changeArrangedDishes,
-            modalTableData: {
-                records = [],
-                current = 1,
-                pageSize = 10,
-                total = '',
-            },
+            modalTableData,
             currMeals,
             selectData,
         } = this.props;
@@ -91,7 +86,7 @@ class SelectDishes extends React.Component {
                     <Table
                         style={{ height: 594 }}
                         columns={tableColumns}
-                        dataSource={records}
+                        dataSource={modalTableData}
                         rowKey="foodId"
                         onRow={(record) => {
                             return {

@@ -35,8 +35,11 @@ export default {
     '/setting/security/': '设置',
     '/setting/cuisine/': '设置',
     '/setting/': '设置',
+<<<<<<< HEAD
     '/Setting/outStock/':'缺样上报',
     '/Setting/outStock/reportdetail/':'详情',
+=======
+>>>>>>> e1d16df4a90a8bf2870faf30169638eba858b4ef
     '/ingredetail/':'食材详情',
     '/excipientdetail/':'辅料详情',
     '/purCatalog/': '采购目录',

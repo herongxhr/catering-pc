@@ -2,33 +2,59 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:07:45 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-22 10:53:18
+ * @Last Modified time: 2019-03-22 21:50:11
  */
 import React, { PureComponent, Fragment } from 'react';
-import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag  } from 'antd';
+import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag } from 'antd';
+import SelectIngredients from '../../../components/SelectIngredients';
 import isEqual from 'lodash/isEqual';
+
 
 const Option = Select.Option;
 
+
+const records = [
+  {
+    "id": "006923bed883451eac98797b70af0b2e",
+    "keywords": [
+      "猪腿肉73克/鸡蛋6克",
+      "肉末蒸蛋"
+    ],
+    "superiorId": null,
+    "scope": "C",
+    "type": "HC",
+    "otherName": null,
+    "isNew": null,
+    "gg": "猪腿肉73克/鸡蛋6克"
+  },
+]
+
+const selectData = [
+  ['all', '全部'],
+  ['meatDish', '荤菜'],
+  ['vegetable', '素菜'],
+  ['halfAMeat', '半荤'],
+  ['dessert', '点心'],
+  ['others', '其它'],
+]
 
 class PurOrderTable extends PureComponent {
   index = 0;
 
   cacheOriginData = {};
-
   constructor(props) {
     super(props);
-    if(props.value.isNew) {
-        props.value.records.push({
-          id: `NEW_TEMP_ID_${this.index}`,
-          commodity: '',
-          unit: '',
-          price: '',
-          number:'',
-          supply:'',
-          date:'',
-          editable: true,
-        }
+    if (props.value.isNew) {
+      props.value.records.push({
+        id: `NEW_TEMP_ID_${this.index}`,
+        commodity: '',
+        unit: '',
+        price: '',
+        number: '',
+        supply: '',
+        date: '',
+        editable: true,
+      }
       )
       this.index += 1;
     }
@@ -37,6 +63,7 @@ class PurOrderTable extends PureComponent {
       loading: false,
       /* eslint-disable-next-line react/no-unused-state */
       value: props.value.records,
+      visible: false,
     };
     // const { onChange } = this.props;
     // onChange(this.state.data);
@@ -52,14 +79,25 @@ class PurOrderTable extends PureComponent {
   //   };
   // }
 
+  onAddBtnClick = records => {
+    // this.state.data.concat({commodity: record.gg})
+  }
   getRowByKey(key, newData) {
     const { data } = this.state;
     return (newData || data).filter(item => item.id === key)[0];
   }
-
+  showModal = () => {
+    console.log(1)
+    this.setState({
+      visible:true
+    })
+  }
+  renderActions = record => {
+    return record;
+  }
   toggleEditable = (e, key) => {
     e.preventDefault();
-    const { data } = this.state; 
+    const { data } = this.state;
     const newData = data.map(item => ({ ...item })); //赋值editable
     const target = this.getRowByKey(key, newData);
     if (target) {
@@ -80,9 +118,9 @@ class PurOrderTable extends PureComponent {
       commodity: '',
       unit: '',
       price: '',
-      number:'',
-      supply:'',
-      date:'',
+      number: '',
+      supply: '',
+      date: '',
       editable: true,
     });
     const { onChange } = this.props;
@@ -90,7 +128,7 @@ class PurOrderTable extends PureComponent {
     this.index += 1;
     this.setState({ data: newData });
   };
-                                                                                                                                                                                                                                                                                                                                                                                                                    
+
   remove(id) {
     const { data } = this.state;
     const { onChange } = this.props;
@@ -117,7 +155,7 @@ class PurOrderTable extends PureComponent {
     }
   }
 
-  handleDateChange(fieldName,key,date,dateString) {
+  handleDateChange(fieldName, key, date, dateString) {
     const { data } = this.state;
     const { onChange } = this.props
     const newData = data.map(item => ({ ...item }));
@@ -129,8 +167,7 @@ class PurOrderTable extends PureComponent {
     }
   }
 
-  handleSelectChange(fieldName,key,value) {
-    console.log(value);
+  handleSelectChange(fieldName, key, value) {
     const { data } = this.state;
     const { onChange } = this.props
     const newData = data.map(item => ({ ...item }));
@@ -162,7 +199,42 @@ class PurOrderTable extends PureComponent {
 
 
   render() {
-     const tabColumns = [
+    const modalTableColumns = [
+      {
+        title: '名称',
+        key: 'gg',
+        dataIndex: 'gg'
+      },
+      {
+        title: '类别',
+        key: 'type',
+        dataIndex: 'type'
+      },
+      {
+        title: '食材明细',
+        key: 'keywords',
+        dataIndex: 'keywords',
+        render: text => text.toString()
+      },
+      {
+        title: '图片',
+        key: 'img',
+        dataIndex: 'img',
+        render: (_, record) => (
+          <a onClick={() => {
+            this.handlePreviewItem(record);
+          }}>查看</a>
+        )
+      },
+      {
+        title: '操作',
+        key: 'add',
+        width: 100,
+        render: (_, record) =>
+          <a onClick={() => this.onAddBtnClick(record)}>添加</a>
+      },
+    ];
+    const tabColumns = [
       {
         title: '商品',
         key: 'commodity',
@@ -171,13 +243,20 @@ class PurOrderTable extends PureComponent {
         render: (text, record) => {
           if (record.editable) {
             return (
-              <Input
-                style={{width:'190px'}}
-                autoFocus
-                onChange={e => this.handleFieldChange(e, 'commodity', record.id)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="商品"
-              />
+              // <Input
+              //   style={{ width: '190px' }}
+              //   autoFocus
+              //   onChange={e => this.handleFieldChange(e, 'commodity', record.id)}
+              //   onKeyPress={e => this.handleKeyPress(e, record.key)}
+              //   placeholder="商品"
+              // />
+              <Select  onDropdownVisibleChange={this.showModal} style={{ width: '218px' }} placeholder='请选择'>
+                <Option value="1">Jack</Option>
+                <Option value="2">Lucy</Option>
+                <Option value="3">Disabled</Option>
+                <Option value="4">yiminghe</Option>
+              </Select>
+
             );
           }
           return text;
@@ -191,7 +270,7 @@ class PurOrderTable extends PureComponent {
           if (record.editable) {
             return (
               <Input
-                style={{width:'60px'}}
+                style={{ width: '60px' }}
                 autoFocus
                 onChange={e => this.handleFieldChange(e, 'unit', record.id)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
@@ -211,7 +290,7 @@ class PurOrderTable extends PureComponent {
           if (record.editable) {
             return (
               <Input
-                style={{width:'70px'}}
+                style={{ width: '70px' }}
                 autoFocus
                 onChange={e => this.handleFieldChange(e, 'price', record.id)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
@@ -232,7 +311,7 @@ class PurOrderTable extends PureComponent {
               onChange={e => this.handleFieldChange(e, 'number', record.id)}
               onKeyPress={e => this.handleKeyPress(e, record.id)}
               placeholder="0"
-              style={{width:'70px'}}
+              style={{ width: '70px' }}
             />
           );
         },
@@ -243,7 +322,7 @@ class PurOrderTable extends PureComponent {
         dataIndex: 'supply',
         render: (text, record) => {
           return (
-            <Select onChange={this.handleSelectChange.bind(this,'supply',record.id)} style={{width:'218px'}} placeholder='请选择'>
+            <Select onChange={this.handleSelectChange.bind(this, 'supply', record.id)} style={{ width: '218px' }} placeholder='请选择'>
               <Option value="1">Jack</Option>
               <Option value="2">Lucy</Option>
               <Option value="3">Disabled</Option>
@@ -258,14 +337,14 @@ class PurOrderTable extends PureComponent {
         dataIndex: 'date',
         render: (text, record) => {
           return (
-            <DatePicker onChange={this.handleDateChange.bind(this,'date',record.id)} style={{width:'130px'}} />
+            <DatePicker onChange={this.handleDateChange.bind(this, 'date', record.id)} style={{ width: '130px' }} />
           );
         },
       },
       {
         title: '操作',
-        key:'operation',
-        render: (text,record) => {
+        key: 'operation',
+        render: (text, record) => {
           return (
             <span>
               <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.id)}>
@@ -277,16 +356,17 @@ class PurOrderTable extends PureComponent {
       }
     ];
 
+
     const { loading, data } = this.state;
     let totalLength = null
-    if(data) {
+    if (data) {
       totalLength = data.length
     }
     const CardTitle = () => {
       return (
-        <div style={{marginBottom:'20px'}}>
-          <span style={{marginRight:'10px'}}>商品明细</span>
-          <Tag color="cyan">共{totalLength}条</Tag>        
+        <div style={{ marginBottom: '20px' }}>
+          <span style={{ marginRight: '10px' }}>商品明细</span>
+          <Tag color="cyan">共{totalLength}条</Tag>
         </div>
       )
     }
@@ -299,7 +379,7 @@ class PurOrderTable extends PureComponent {
           dataSource={data}
           pagination={false}
           rowKey='id'
-          // rowClassName={record => (record.editable ? 'editable' : '')} //点击编辑的话样式变化
+        // rowClassName={record => (record.editable ? 'editable' : '')} //点击编辑的话样式变化
         />
         <Button
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
@@ -309,6 +389,15 @@ class PurOrderTable extends PureComponent {
         >
           新增成员
         </Button>
+
+        <SelectIngredients
+          // modal的显示属性
+          visible={this.state.visible}
+          // 隐藏modal的方法
+          handleModalVisble={() => { this.setState({
+            visible:false
+          }) }}
+        />
         {/* <Button onClick={this.saveRow}>
           保存
         </Button> */}

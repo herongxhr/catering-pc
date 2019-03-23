@@ -21,6 +21,7 @@ class PhoneView extends PureComponent {
           placeholder='0752'
         />
         <Input
+          style={{width:'180px'}}
           className='phone_number'
           onChange={e => {
             onChange(`${values[0]}-${e.target.value}`);
