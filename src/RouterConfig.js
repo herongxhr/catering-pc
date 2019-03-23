@@ -98,6 +98,8 @@ export default function RouterConfig({ history }) {
                   </Switch>
                 </Setting>
               }></Route>
+              <Route path='/Setting/outStock' exact component={OutStock}></Route>
+              <Route path="/Setting/outStock/reportdetail" component={ReportDetail} />
               <Route path="/purCatalog" component={PurCatalog}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/reportdetail" component={ReportDetail}></Route>
