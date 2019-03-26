@@ -5,9 +5,9 @@ import * as echarts from 'echarts';
 
 class StatisticChart extends Component {
     initPieChart = () => {
-        const {statistics} = this.props;
+        const {statistics = []} = this.props;
         var data = [];
-        statistics.map((item)=>{
+        statistics.length >0 && statistics.map((item)=>{
            return(
                data.push({
                    name:item.supplierName,

@@ -7,7 +7,6 @@ import './index.less'
 import { withRouter } from "react-router";
 import moment from 'moment'
 
-
 const data=[{
   "key": 1,
   "date": "2019-01-29",
@@ -48,7 +47,7 @@ class Report extends React.Component {
     query:{
       ingredientType:'',
       status:'',
-      searchKey:'',
+      keywords:'',
     },
     pagination: {},
     currId:'',
@@ -74,8 +73,8 @@ class Report extends React.Component {
     if(argm.status){
       dataFilter={status:argm.status}
     }
-    if(argm.searchKey){
-      dataFilter={searchKey:argm.searchKey}
+    if(argm.keywords){
+      dataFilter={keywords:argm.keywords}
     }
     this.setState(
       Object.assign(this.state.query, dataFilter),
@@ -121,6 +120,7 @@ class Report extends React.Component {
           id:id
         }
       })
+      window.location.reload()
   }
   //状态
   onClick = ({ key }) => {
@@ -182,10 +182,10 @@ class Report extends React.Component {
           </div>: <span className='check'>查看详情</span>)
       }
     }];
-    const { report } = this.props
-    const reportList = report.reportList.records
+    const { report={} } = this.props
+    const {reportList= {} }= report
+    const {records=[],current,total}=reportList
     const _this = this
-    const {current,total} = report.reportList
     const menu = (
       <Menu onClick={this.onClick}>
         <Menu.Item key='2'>通过</Menu.Item>
@@ -194,8 +194,10 @@ class Report extends React.Component {
     );
     return (
       <div className='reportTable'>
-        <WrappedReportForm  handleReport={this.handleReport} 
-        queryReportmissing={this.queryReportmissing}/>
+        <WrappedReportForm  
+        handleReport={this.handleReport} 
+        queryReportmissing={this.queryReportmissing}
+        />
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <WrappedReportButton />
           <div>
@@ -208,7 +210,7 @@ class Report extends React.Component {
         </div>                                                                            
         <div style={{ marginTop: 20 }}>
           <Table columns={tabColumns} 
-            dataSource={reportList}
+            dataSource={records}
             rowKey="id"
             pagination={{current,total}}
             onRow={(record)=>{

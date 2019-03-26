@@ -35,20 +35,13 @@ import './style/common.less';
 import MenuDetails from './pages/MenuDetails';
 import TemplateDetails from '../src/pages/TemplateDetails';
 import EditTemplate from './pages/EditTemplate';
-import Edit from './pages/Edit';
+//import Edit from './pages/Edit';
 import MenuTemplate from '../src/pages/MenuTemplate';
-<<<<<<< HEAD
 import MyMenu from '../src/pages/MyMenu';
 import ParameterDetail from '../src/pages/Parameter/ParameterDetail';
-=======
->>>>>>> e1d16df4a90a8bf2870faf30169638eba858b4ef
 import AdjustMenu from '../src/pages/AdjustMenu';
 import CustomMenu from '../src/pages/CustomMenu';
 import ChoiceTemplate from './pages/ChoiceTemplate';
-<<<<<<< HEAD
-=======
-import ParameterDetail from '../src/pages/Parameter/ParameterDetail'
->>>>>>> e1d16df4a90a8bf2870faf30169638eba858b4ef
 import PurOrderDetailAdjust from './pages/PurOrder/PurOrderDetailAdjust'
 
 moment.locale('zh-cn');

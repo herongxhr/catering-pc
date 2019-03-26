@@ -97,13 +97,13 @@ class PurForm extends React.Component {
 
         <FormItem>
           {
-            getFieldDecorator('searchKey',{
+            getFieldDecorator('keywords',{
                 initialValue:'',
             })(
               <Input
                 placeholder="请输入关键字进行搜索"
                 onChange={e => {
-                   queryParams({searchKey:e.target.value})
+                   queryParams({keywords:e.target.value})
                 }}
                 style={{ width:300,}}
             />

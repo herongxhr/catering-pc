@@ -27,6 +27,9 @@ const menu = (
 );
 
 class BaseMenu extends Component {
+	state={
+		currentUrl : '/home'
+	}
 	render() {
 		return (
 			<div className='jWrapper'>
@@ -35,7 +38,6 @@ class BaseMenu extends Component {
 					theme="dark"
 					mode="horizontal"
 					className="baseMenu"
-					
 				>
 					<Menu.Item disabled style={{ width: 125 }} key="logo">
 							<img src={logo} alt="安品" />

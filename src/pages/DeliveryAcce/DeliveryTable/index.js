@@ -33,6 +33,14 @@ class DeliveryTable extends React.Component {
       )
     }
   }
+  handleTable = (pagination) =>{
+   const {current,pageSize} = pagination;
+   const {handleFilterChange} = this.props
+   handleFilterChange({
+    current,
+    pageSize
+   });
+  }
   render() {
     const tab1Columns = [{
       title: '配送单号',
@@ -40,8 +48,9 @@ class DeliveryTable extends React.Component {
       key: 'distributionNo',
     }, {
       title: '供应商',
-      dataIndex: 'supplierName',
-      key: 'supplierName',
+      dataIndex: 'supplier',
+      key: 'supplier',
+      render: supplier => supplier.supplierName
     }, {
       title: '配送日期',
       dataIndex: 'distributionDate',
@@ -57,28 +66,31 @@ class DeliveryTable extends React.Component {
       key: 'summary',
     },
      ];
-    const {delivery,status} = this.props;
+    const {delivery,status,handleFilterChange} = this.props;
+    const {records= [],current,total} = delivery;
     if(status == '1'){
       tab1Columns.push({
         title: '操作',
         dataIndex: 'Operation',
         key: 'Operation',
         render:(text,record)=>{
-         return ( record.status== 0 ? 
-              <span style={{color:'#FF9500'}}>有1个换货申请</span>
-              : <span style={{color:'#FF9500'}}>{text}</span>
+         return ( record.replacementNum ? 
+              <span style={{color:'#FF9500'}}>有{record.replacementNum}个换货申请</span>
+              : ''
               )
         }
       })
     }
     return(
       <div className='DeliveryTable'>
-        <DeliveryForm />
+        <DeliveryForm handleFilterChange={handleFilterChange} />
         <Table  
         columns={tab1Columns} 
-        dataSource={delivery} 
+        dataSource={records} 
         style={{paddingLeft:30,paddingRight:30}}
         rowKey='id'
+        onChange={this.handleTable}
+        pagination={{current,total}}
         onRow={
           (record) => {
               return {

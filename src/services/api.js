@@ -86,7 +86,7 @@ export function querytodayMenu() {
 export function queryReportmissing(params) {
     return request({
         method: 'get',
-        url: '/catering/workbench/shortage/pageList',
+        url: '/catering/shortage/pageQuery',
         data: {
             showLoading: true,
             params,
@@ -318,7 +318,7 @@ export function queryPurCatalog(params) {
     //console.log(params);
     return request({
         method: 'get',
-        url: '/catering/workbench/purchaseList/pageList',
+        url: '/catering/purchaseList/pageQuery',
         data: {
             showLoading: true,
             params,
@@ -328,7 +328,7 @@ export function queryPurCatalog(params) {
 export function queryIngreType(params) {
     return request({
         method: 'get',
-        url: '/catering/workbench/purchaseList/catalog',
+        url: '/catering/purchaseList/catalog',
         data: {
             showLoading: true,
             params,
@@ -338,7 +338,7 @@ export function queryIngreType(params) {
 export function queryPriceHistory(params) {
     return request({
         method: 'get',
-        url: '/catering/workbench/purchaseList/item/priceHistory',
+        url: `/catering/purchaseList/${params.id}/${params.skuId}/price/listQuery`,
         data: {
             showLoading: true,
             params,
@@ -358,22 +358,24 @@ export function queryDelivery(params) {
 }
 
 export function queryEager(params) {
+    const data = JSON.stringify(params)
     return request({
-        method: 'get',
-        url: '/catering/workbench/shortage/item/eager',
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        url: `/catering/shortage/${params.id}/eager`,
         data: {
-            showLoading: true,
-            params,
+            axiosData:data
         }
     })
 }
 export function queryWithdrawal(params) {
+    const data = JSON.stringify(params)
     return request({
-        method: 'get',
-        url: '/catering/workbench/shortage/item/withdrawal',
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json'},
+        url: `/catering/shortage/${params.id}`,
         data: {
-            showLoading: true,
-            params,
+            axiosData:data
         }
     })
 }
@@ -381,7 +383,7 @@ export function queryWithdrawal(params) {
 export function queryDetail(params) {
     return request({
         method: 'get',
-        url: '/catering/workbench/shortage/item/detail',
+        url: `/catering/shortage/${params.id}`,
         data: {
             showLoading: true,
             params,
@@ -395,7 +397,7 @@ export function querySave(params) {
     return request({
         method: 'post',
         headers: {'Content-Type': 'application/json'},
-        url: '/catering/workbench/shortage/item/save',
+        url: '/catering/shortage',
         data: {
             axiosData:data
         }
@@ -427,6 +429,92 @@ export function queryParameterDetail(params) {
     return request({
         method: 'get',
         url: '/catering/ledger/distribution/day',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+//常用供应商
+export function querySupplier(params) {
+    return request({
+        method: 'get',
+        url: '/catering/setting/favoriteSupplier/listQuery',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+//计算数据
+export function queryCount(params) {
+    return request({
+        method: 'get',
+        url:'/catering/distribution/count',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+//配送验收详情
+export function queryDistributionDetail(params) {
+    return request({
+        method: 'get',
+        url: `/catering/distribution/${params.id}`,
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+//换货申请列表
+export function queryDetailReplacement(params) {
+    return request({
+        method: 'get',
+        url: `/catering/distribution/${params.id}/replacement/pageQuery`,
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+//换货申请操作
+export function queryExecute(params) {
+    const data = JSON.stringify(params)
+    return request({
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        url: `/catering/distribution/execute/${params.id}`,
+        data: {
+            axiosData:data
+        }
+    })
+}
+export function queryGoodsMX(params) {
+    return request({
+        method: 'get',
+        url: `/catering/distribution/${params.id}/goods/pageQuery`,
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+export function queryLog(params) {
+    return request({
+        method: 'get',
+        url: `/catering/distribution/${params.id}/log`,
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+export function queryTicket(params) {
+    return request({
+        method: 'get',
+        url: `/catering/distribution/${params.id}/ticket`,
         data: {
             showLoading: true,
             params,

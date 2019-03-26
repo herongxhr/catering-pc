@@ -21,7 +21,7 @@ class PurCatalog extends React.Component {
       catalogId: '',
       startDate: '',
       endDate: '',
-      searchKey: '',
+      keywords: '',
     },
   }
   componentDidMount() {
@@ -48,8 +48,8 @@ class PurCatalog extends React.Component {
       dataFilter = { startDate: startDate };
       dataFilter = { endDate: endDate };
     }
-    if (data.searchKey) {
-      dataFilter = { searchKey: data.searchKey }
+    if (data.keywords) {
+      dataFilter = { keywords: data.keywords }
     }
     this.setState(Object.assign(this.state.query, dataFilter))
   }
@@ -93,9 +93,10 @@ class PurCatalog extends React.Component {
     })
   }
   render() {
-    const { purCatalog, location } = this.props;
-    const catalogData = purCatalog.catalogData.records || [];
-    const historyList = purCatalog.historyList || [];
+    const { purCatalog = {}, location } = this.props;
+    const {catalogData = {}, historyList=[]} = purCatalog;
+    const {records = []} = catalogData;
+    //const catalogData = purCatalog.catalogData.records || [];
     const tabColumns = [{
       title: '食材名称',
       dataIndex: 'goodsInfo',
@@ -143,7 +144,7 @@ class PurCatalog extends React.Component {
     }
     ];
     const { x, y } = this.state;
-    const count = catalogData ? catalogData.length : null
+    const count = records ? records.length : null
     return (
       <div className='purCata'>
         <BreadcrumbComponent {...location} />
@@ -168,14 +169,14 @@ class PurCatalog extends React.Component {
             <div style={{ marginTop: 20 }}>
               <Table
                 columns={tabColumns}
-                dataSource={catalogData}
+                dataSource={records}
                 rowKey="id"
                 pagination={false}
               />
               <Pagination
                 defaultCurrent={1}
                 onChange={this.handleCatalogChange}
-                total={purCatalog.catalogData.total}
+                total={catalogData.total}
                 current={this.state.current}
                 showSizeChanger
                 showQuickJumper />

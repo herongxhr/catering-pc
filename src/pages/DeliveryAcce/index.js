@@ -26,7 +26,14 @@ class E extends React.Component {
       breadContent:'待配送'
     }],
     query:{
-
+      startDate:'',
+      endDate:'',
+      supplierId:'',
+      status:'1',
+      current:'',
+      pageSize:'',
+      timeType:'',
+      isCountReplacement:'1'
     }
   }
 
@@ -35,15 +42,32 @@ class E extends React.Component {
     dispatch({
       type: 'deliveryAcce/queryDelivery',
       payload:{
-       ...params
+        ...this.state.query,
+       ...params,
       }
     })
   }
-  componentDidMount() {
-    this.queryDelivery({
-      status:0,
-      current:1,
-      pageSize:10
+  //统一传参数的函数
+  handleFilterChange = (params = {}) => {
+		// 改变state中相应参数的值
+		const newQueryParams = {
+			...this.state.query,
+			// 直接展开参数进行覆盖
+			...params,
+		}
+		this.setState({
+			query: newQueryParams
+		});
+		// 请求接口
+		this.queryDelivery(newQueryParams);
+	}
+  queryCount = (params = {}) =>{
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'deliveryAcce/queryCount',
+      payload:{
+       ...params,
+      }
     })
   }
 
@@ -56,7 +80,7 @@ class E extends React.Component {
           breadContent:'配送验收'
         },{
           breadContent:'待配送'
-        }]
+        }],
       })  
    }
    if(this.state.status=='2') {
@@ -79,24 +103,39 @@ class E extends React.Component {
       }]
     })
    }
+    this.handleFilterChange({
+      status:this.state.status,
+      isCountReplacement:this.state.status == 1 ? '1' : '0'
+    })
    })
   }
-
+componentDidMount() {
+    this.queryDelivery()
+    this.queryCount()
+  }
   render() {
-    const { deliveryAcce } = this.props;
-    const delivery = deliveryAcce.delivery.records || [];
+    const { delivery={},count={} } = this.props;
     return (
       <div className='DeliveryAcce'>
         <Bread bread={this.state.bread} />
         <Tabs defaultActiveKey="1" onChange={this.callback}>
-					<TabPane tab={'待配送'+'('+delivery.length+')'} key="1">
-            <DeliveryTable delivery={delivery} status={this.state.status}/>
+					<TabPane tab={(count.replacement) ? '待配送'+'('+count.replacement+')' :'待配送'} key="1">
+            <DeliveryTable delivery={delivery} 
+            handleFilterChange={this.handleFilterChange}  
+            status={this.state.status}
+            />
 					</TabPane>
-					<TabPane tab={'待验收'+'('+delivery.length+')'} key="2">
-            <DeliveryTable delivery={delivery} status={this.state.status}/>
+					<TabPane tab={(count.pending) ? '待验收'+'('+count.pending+')' : '待验收'} key="2">
+            <DeliveryTable delivery={delivery} 
+            handleFilterChange={this.handleFilterChange} 
+            status={this.state.status}
+            />
 					</TabPane>
-          <TabPane tab={'已验收'+'('+delivery.length+')'} key="3">
-            <DeliveryTable delivery={delivery} status={this.state.status}/>
+          <TabPane tab={(count.accepted) ? '已验收'+'('+count.accepted+')' : '已验收'} key="3">
+            <DeliveryTable delivery={delivery} 
+            handleFilterChange={this.handleFilterChange} 
+            status={this.state.status}
+            />
 					</TabPane>
 				</Tabs>
       </div>
@@ -105,5 +144,6 @@ class E extends React.Component {
 }
 
 export default connect(({ deliveryAcce }) => ({
-  deliveryAcce,
+  delivery:deliveryAcce.delivery,
+  count:deliveryAcce.count
 }))(E);
