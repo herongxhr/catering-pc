@@ -73,6 +73,9 @@ class MyMenu extends React.Component {
 	}
 	// 获取我的菜单数据
 	getMenuData = (params = {}) => {
+		this.setState({
+			queryParams: params
+		});
 		this.props.dispatch({
 			type: 'menuCenter/fetchMenuData',
 			payload: {
@@ -82,54 +85,23 @@ class MyMenu extends React.Component {
 		});
 	}
 
-	// 筛选区域下拉框或状态按钮组变化时的回调
-	handleFilterChange = (params = {}) => {
-		// 改变state中相应参数的值
-		const newQueryParams = {
-			...this.state.queryParams,
-			// 直接展开参数进行覆盖
-			...params,
-		}
-		this.setState({
-			queryParams: newQueryParams
-		});
-		// 请求接口
-		this.getMenuData(newQueryParams);
+	componentDidMount() {
+		this.getMenuData();
 	}
 
 	// commonFilter新建按钮点击回调
 	// 下拉式按钮返回e指向当前点击按钮本身
-	// 新建时，清空之前排餐数据
+	// 自定义菜单时，清空之前排餐数据
 	handleBtnClick = e => {
 		const { dispatch } = this.props;
 		// 清空之前菜单数据，菜单详情数据
 		dispatch({
 			type: 'menuCenter/clearMenuDetails'
 		})
-		// 跳转页面,从模板新建要先选择模板
+		// 跳转页面,从模板新建要先经过选择模板
 		dispatch(routerRedux.push({
 			pathname: `/menubar/my-menu/${e.key}`,
 		}))
-	}
-
-	// 表格的onChange方法
-	handleTableChange = pagination => {
-		const { current, pageSize } = pagination;
-		const newQueryParams = {
-			...this.state.queryParams,
-			current,
-			pageSize
-		}
-		// 改变state中current,pageSize
-		this.setState({
-			queryParams: newQueryParams
-		})
-		// 向后端发送请求
-		this.getMenuData(newQueryParams);
-	}
-	componentDidMount() {
-		// 使用默认的state值发请求
-		this.getMenuData();
 	}
 
 	render() {
@@ -170,14 +142,9 @@ class MyMenu extends React.Component {
 					return text === '未执行' ? <a>删除</a> : <span style={{ cursor: 'pointer' }}>查看</span>;
 				}
 			}];
-		const { location, menuList = {} } = this.props;
-		// menuList可能为空对象，报以设置默认值
-		const {
-			current = 1,
-			records = [],
-			size = 10,
-			total = '',
-		} = menuList;
+		const { location, menuList } = this.props;
+		// 状态筛选条状态值
+		const { status } = this.state.queryParams;
 		const { activeTabKey } = this.state;
 		return (
 			<div>
@@ -193,26 +160,27 @@ class MyMenu extends React.Component {
 							// 过滤器所用控件数据
 							filterData={filterData}
 							// 控制改变时的回调
-							handleFilterChange={this.handleFilterChange}
+							handleFilterChange={this.getMenuData}
 							// 点击按钮时的回调
 							handleMenuBtnClick={this.handleBtnClick}
+							defaultStatus={status}
 						/>
 						<Table
 							columns={tableColumns}
-							dataSource={records}
+							dataSource={menuList.records || []}
 							rowKey="id"
 							onRow={(record) => {
 								return {
 									onClick: () => this.handleShowDetail(record)
 								}
-							}
-							}
-							pagination={{
-								current,
-								pageSize: size,
-								total
 							}}
-							onChange={this.handleTableChange}
+							pagination={{
+								current: menuList.current || 1,
+								pageSize: menuList.size || 10,
+								total: menuList.total || 0
+							}}
+							onChange={({ current, pageSize }) =>
+								this.getMenuData({ current, pageSize })}
 						/>
 					</div>
 				</Card>

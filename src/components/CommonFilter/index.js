@@ -11,6 +11,7 @@ export default class OrderFilter extends React.Component {
       handleFilterChange,
       filterData,
       handleMenuBtnClick,
+      defaultStatus,
     } = this.props;
 
     const {
@@ -96,7 +97,7 @@ export default class OrderFilter extends React.Component {
                 {/* 状态筛选按钮组 */}
                 {statusGroup &&
                   <Radio.Group
-                    defaultValue={statusGroup[0][0]}
+                    defaultValue={defaultStatus}
                     onChange={e => handleFilterChange({ status: e.target.value })}>
                     {statusGroup.map(([value, text], index) =>
                       <Radio.Button key={index} value={value}>{text}</Radio.Button>)}

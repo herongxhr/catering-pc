@@ -1,19 +1,36 @@
-//https://github.com/ljharb/qs
-//qs.stringify(object, [options]);
-import { stringify } from 'qs';
 import request from '../utils/request';
 import requestpub from '../utils/common';
 // 辅料商城
-export function queryGoodsF({ params }) {
+// 查询分类
+export function queryCatalogF(params) {
     return request({
         method: 'get',
-        url: '/catering/accsupermarket/queryGoodF',
+        url: '/pub/catalog/listQuery',
         data: {
             showLoading: true,
-            params: {
-                ...params,
-                isF: "y",
-            },
+            params,
+        }
+    });
+}
+// 查询品牌
+export function queryBrands(params) {
+    return request({
+        method: 'get',
+        url: '/pub/brand/pageQuery',
+        data: {
+            showLoading: true,
+            params,
+        }
+    });
+}
+// 查询品牌
+export function queryFGoods(params) {
+    return request({
+        method: 'get',
+        url: '/pub/sku/pageQuery',
+        data: {
+            showLoading: true,
+            params,
         }
     });
 }
@@ -187,7 +204,7 @@ export function toUpdateMenu(params) {//修改菜单数据
         }
     })
 }
-export function toNewMenu(params) {//新建菜单数据
+export function addMenuData(params) {//新建菜单数据
     return request({
         method: 'post',
         url: `/catering/camenu/`,
@@ -200,7 +217,7 @@ export function toNewMenu(params) {//新建菜单数据
 export function queryDishes(params) {//获取菜品数据
     return request({
         method: 'get',
-        url: '/catering/camenu/selectDishes',
+        url: '/pub/food/pageQuery',
         data: {
             showLoading: true,
             params: { ...params }
@@ -394,10 +411,10 @@ export function querySave(params) {
     const data = JSON.stringify(params)
     return request({
         method: 'post',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         url: '/catering/workbench/shortage/item/save',
         data: {
-            axiosData:data
+            axiosData: data
         }
     })
 }

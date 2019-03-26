@@ -4,28 +4,49 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router'
 import DescriptionList from '../../components/DescriptionList';
 import BreadcrumbComponents from '../../components/BreadcrumbComponent';
+import Moment from 'moment';
 import PageHeadWrapper from '../../components/PageHeaderWrapper';
 import styles from './index.module.less';
 import ShowArrangedDishes from '../../components/ShowArrangedDishes';
+import { getYMD, getYMDHms } from '../../utils/utils';
 
 const Step = Steps.Step;
 const { Description } = DescriptionList;
 const ButtonGroup = Button.Group;
+
+/**
+ * 菜单详情组件，不同状态显示不同按钮
+ * 统一菜单和我的菜单共用一个组件，只是路径不一样
+ * 通过location.state.type进行区分
+ */
 class MenuDetails extends React.Component {
-  // 根据type值的不同，调用不同方法来请求不同的接口
+  state = {
+    id: '',
+    type: '',
+  }
+
+  static getDerivedStateFromProps(nextProps) {
+    const { location } = nextProps;
+    if (location.state) {
+      //console.log('state:',location.state);
+      const { id = '', type = '' } = location.state;
+      return { id, type };
+    }
+    return null;
+  }
+
   getMenuDetail = () => {
-    const { location, dispatch } = this.props;
-    const { id } = location.state;
-    dispatch({
+    const { id } = this.state;
+    this.props.dispatch({
       type: `menuCenter/fetchMenuDetails`,
       payload: id
     })
   }
-  // 点击调整菜单按钮
+  // 点击调整菜单按钮，跳转到调整页面
+  // 把id和菜单类型传递过去
   handleArrangeDishes = () => {
-    const { location, dispatch } = this.props;
-    const { id, type } = location.state;
-    dispatch(routerRedux.push({
+    const { id, type } = this.state;
+    this.props.dispatch(routerRedux.push({
       pathname: '/menubar/unified-menu/adjust',
       state: { id, type }
     }))
@@ -35,25 +56,33 @@ class MenuDetails extends React.Component {
     this.getMenuDetail();
   }
   render() {
-    // 设置state中一级属性的默认值
-    const { location, menuDetails = {} } = this.props;
-    const { type } = location.state;
-    const {
-      date = '',
-      menuCode = '',
-      issuedTime = '',
-      executeTime = '',
-      orderCreateTime = '',
-      status = '',
-      superiorName = '',
-      week = '',
-      camenuDetailVOMap = {},
-      priceDataMap = {}
-    } = menuDetails;
-     // 是否我的菜单
-    const isMy = type === 'my' ? true : false;
+    const { location, menuDetails, allMealsData } = this.props;
+    const { type } = this.state;
+    // 是否我的菜单
+    const isMy = type === 'my';
+    // 菜单编号
+    const menuCode = menuDetails.menuCode || '';
+    const beginDate = menuDetails.beginDate || '';
+    const endDate = menuDetails.endDate || '';
+    // 菜单创建时间
+    const createTime = menuDetails.createTime || '';
+    // 适用年份
+    const nd = menuDetails.nd || '';
+    // 适用周次
+    const week = menuDetails.week || '';
+    const status = menuDetails.status || '';
+    // 供应商
+    const superior = menuDetails.superiorName || '';
+    // 预估价
+    const priceDataMap = menuDetails.week || {};
+    // 订单信息，未下单的订单没有订单信息
+    const order = menuDetails.order || {};
+    // 订单采购时间
+    const orderCreateTime = order.createTime || '';
+    // 订单的采购时间
+    const orderTime = order.orderTime || '';
     // 记录订单是否已经执行，在下面内容中根据条件显示
-    const isExecuted = status === '1' ;
+    const isExecuted = status === '1';
     // 操作区
     const action = (
       <Fragment>
@@ -70,10 +99,13 @@ class MenuDetails extends React.Component {
     // 详细描述
     const description = (
       <DescriptionList className={styles.headerList} size="small" col="2">
-        <Description term="周次">{week}</Description>
-        {!isMy && <Description term="下达单位">{superiorName}</Description>}
-        <Description term="日期">{date}</Description>
-        <Description term="下达时间">{orderCreateTime}</Description>
+        <Description term="周次">{`第${week}周`}</Description>
+        {/* 下达单位只有订单为统一菜单时才显示 */}
+        {!isMy && <Description term="下达单位">{superior}</Description>}
+        <Description term="日期">
+          {getYMD(beginDate) + '~' + getYMD(endDate)}
+        </Description>
+        <Description term={isMy ? "生成日期" : "下达日期"}>{getYMD(createTime)}</Description>
       </DescriptionList>
     );
     // 汇总区
@@ -81,7 +113,9 @@ class MenuDetails extends React.Component {
       <Row>
         <Col>
           <div className={styles.textSecondary}>状态</div>
-          <div style={{ fontSize: 18 }}>{status}</div>
+          <div style={{ fontSize: 18 }}>
+            {isExecuted ? '已执行' : (status === '0' ? '未执行' : '已失效')}
+          </div>
         </Col>
       </Row>
     );
@@ -100,18 +134,17 @@ class MenuDetails extends React.Component {
           {/* 进度条 */}
           <Card style={{ width: 1160, marginTop: 20 }}>
             <Steps current={isExecuted ? 2 : 1} progressDot>
-              <Step title="菜单下达" description={issuedTime} />
-              <Step title="采购订单" description={executeTime} />
-              <Step title="下达订单" description={isExecuted && orderCreateTime} />
+              <Step title="菜单下达" description={getYMDHms(createTime)} />
+              <Step title="采购食材" description={getYMDHms(orderCreateTime)} />
+              <Step title="下达订单" description={getYMDHms(orderTime)} />
             </Steps>
           </Card>
           {/* 排餐区 */}
           <Card
             style={{ width: 1160, marginTop: 20 }}
-            bodyStyle={{ padding: 20 }}
-          >
+            bodyStyle={{ padding: 20 }}>
             <ShowArrangedDishes
-              arrangedDishes={camenuDetailVOMap}
+              allMealsData={allMealsData}
               priceDataMap={priceDataMap}
             />
           </Card>

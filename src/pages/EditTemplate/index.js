@@ -18,15 +18,17 @@ class EditTemplate extends Component {
   }
 
   static getDerivedStateFromProps(props) {
-    const { location, dispatch } = props;
+    const { location } = props;
     // 只有从模板新建，选择了模板后才会有这两个属性
     // 直接自定义菜单是没有这两个属性的
-    const { menuTemplateId = '', templateFrom = '' } = location.state;
-    return {
-      menuTemplateId,
-      templateFrom,
-      dispatch
+    if (location.state) {
+      const { menuTemplateId = '', templateFrom = '' } = location.state;
+      return {
+        menuTemplateId,
+        templateFrom,
+      }
     }
+    return null;
   }
   // 选择周次回调
   handleSelectWeek = (_, dateString) => {

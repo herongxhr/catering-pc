@@ -5,29 +5,33 @@ import { connect } from 'dva';
 import ArrangeDishes from '../../components/ArrangeDishes';
 import styles from './index.module.less';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
+import createHistory from 'history/createBrowserHistory';
 
+const history = createHistory();
 const { WeekPicker, } = DatePicker;
 class AdjustMenu extends Component {
   state = {
     id: '',
     type: '',
-    dispatch: null,
     nd: '',
     week: ''
   }
 
   static getDerivedStateFromProps(props) {
-    const { location, dispatch } = props;
-    const { id = '', type = '' } = location.state;
-    return { id, type, dispatch }
+    const { location } = props;
+    if (location.state) {
+      const { id = '', type = '' } = location.state;
+      return { id, type }
+    }
+    return null;
   }
 
   // 从location.state中获取页面传过来的参数
   // 根据type值的不同，调用不同方法来请求不同的接口
   getMenuDetail = () => {
-    const { id, type, dispatch } = this.state;
+    const { id, type } = this.state;
     const url = type === 'unified' ? 'Unified' : 'My';
-    dispatch({
+    this.props.dispatch({
       type: `menuCenter/fetch${url}MenuDetails`,
       payload: id
     })
@@ -39,7 +43,7 @@ class AdjustMenu extends Component {
   }
 
   handleClickCancel = () => {
-    this.props.history.back();
+    history.goBack();
   }
 
   handleClickOk = () => {

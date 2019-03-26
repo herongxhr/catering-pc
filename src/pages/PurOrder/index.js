@@ -73,67 +73,62 @@ const tabColumns = [
 ];
 
 class PurOrder extends React.Component {
+	state = {
+		current: 1,
+		pageSize: 10,
+		channel: '',
+		keywords: '',
+		status: '',
+		startDate: '',
+		endDate: '',
+	}
 
 	// 请求采购订单表格数据
-	getOrderTable = () => {
-		const { dispatch } = this.props;
-		dispatch({
+	changeToGetData = (params = {}) => {
+		this.setState({
+			...params
+		})
+		this.props.dispatch({
 			type: 'purOrder/queryOrderTable',
-			payload: { 
-				current:1,
-				pageSize:10
+			payload: {
+				...this.state,
+				...params
 			},
 		})
 	}
 
-	handleFilter = (args) => {
-		let newArgs = {};
-		if (args.dateRange) {
-			newArgs = { dateRange: args.dateRange }
-		} else if (args.channel) {
-			newArgs = { channel: args.channel }
-		} else {
-			newArgs = { status: args.status }
-		}
-		this.setState(
-			Object.assign(this.state, newArgs),
-			this.getOrderData(this.state)
-		);
-	}
-
-
 	//新建按钮跳转
-	handleLinkChange = (pathname,isNew) => {
+	handleLinkChange = (pathname, isNew) => {
 		const { props } = this
-		props.dispatch(routerRedux.push({ 
+		props.dispatch(routerRedux.push({
 			pathname,
 			isNew
 		}))
 	}
 
-	TableLinkChange = (pathname,record,rest) => {
+	TableLinkChange = (pathname, record, rest) => {
 		const { props } = this
-		props.dispatch(routerRedux.push({ 
+		props.dispatch(routerRedux.push({
 			pathname,
-			id:record.id,
+			id: record.id,
 			...rest
 		}))
 	}
-	
 
 	componentDidMount() {
-		this.getOrderTable();
+		this.changeToGetData();
 	}
 
 	//table current 跳转
-	handleTableChange = (page) => {   
-		const { dispatch } = this.props;
-		dispatch({
-			type: 'purOrder/queryOrderTable',
-			payload: { 
-				current:page,
-				pageSize:10
-			},
+	handleTableChange = pagination => {
+		const { current, pageSize } = pagination;
+		// 先改变state
+		this.setState({ current, pageSize });
+		// 发请求
+		this.changeToGetData({
+			...this.state,
+			current,
+			pageSize
 		})
 	}
 
@@ -149,8 +144,8 @@ class PurOrder extends React.Component {
 			const pathname = '/purOrder/detail/adjust'
 			const menu = (
 				<Menu>
-					<Menu.Item key="FOrder" onClick={() => this.handleLinkChange(pathname,true)}>食材订单</Menu.Item>
-					<Menu.Item key="SOrder" onClick={() => this.handleLinkChange(pathname,true)}>辅料订单</Menu.Item>
+					<Menu.Item key="FOrder" onClick={() => this.handleLinkChange(pathname, true)}>食材订单</Menu.Item>
+					<Menu.Item key="SOrder" onClick={() => this.handleLinkChange(pathname, true)}>辅料订单</Menu.Item>
 				</Menu>
 			)
 			return (
@@ -177,14 +172,14 @@ class PurOrder extends React.Component {
 				<div className={styles.orderWrapper}>
 					{/* 排序筛选部分 */}
 					<WrappedOrderFilter
-						handleFilter={this.handleFilter}
+						handleFilter={this.changeToGetData}
 						className="wrappedOrderForm" />
 					<div className="buttonsWrapper">
 						{/* 新建及按钮组部分 */}
 						{dropdownBtn()}
 						<span>
 							<Radio.Group defaultValue="all" onChange={e => {
-								this.handleFilter({
+								this.changeToGetData({
 									status: e.target.value
 								})
 							}} >
@@ -199,18 +194,18 @@ class PurOrder extends React.Component {
 							columns={tabColumns}
 							dataSource={records}
 							pagination={{
-								total:total,
-								current:current
+								total: total,
+								current: current
 							}}
 							onChange={this.handleTableChange}
 							rowKey="id"
 							onRow={(record) => {
 								const rest = {
-									status:record.status
+									status: record.status
 								}
 								return {
 									onClick: () => {
-										this.TableLinkChange('/purOrder/details',record,rest)
+										this.TableLinkChange('/purOrder/details', record, rest)
 									}
 								}
 							}}
@@ -223,5 +218,5 @@ class PurOrder extends React.Component {
 }
 
 export default connect(({ purOrder }) => ({
-	orderTable:purOrder.orderTable
+	orderTable: purOrder.orderTable
 }))(withRouter(PurOrder))

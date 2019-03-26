@@ -16,6 +16,7 @@ export default {
     '/menubar/menu-template/': '菜单模板',
     '/menubar/menu-template/details/': '模板详情',
     '/menubar/menu-template/edit-template/': '编辑模板',
+    '/menubar/menu-template/new/': '新建模板',
     '/menubar/public/details/': '详情',
     '/menubar/private/': '我的菜单',
     '/menubar/private/new/': '新增',
@@ -35,11 +36,8 @@ export default {
     '/setting/security/': '设置',
     '/setting/cuisine/': '设置',
     '/setting/': '设置',
-<<<<<<< HEAD
     '/ingredetail/':'食材详情',
-    '/excipientdetail/':'辅料详情'
-=======
+    '/excipientdetail/':'辅料详情',
     '/purCatalog/': '采购目录',
     '/purCatalog/ingredetail/': '详情'
->>>>>>> 56f155bc872635bc484cd7d55067f7d4157ae38d
 }
