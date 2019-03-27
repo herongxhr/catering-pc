@@ -1,97 +1,56 @@
-import { queryGoodsF } from '../services/api';
+import { queryCatalogF, queryBrands, queryFGoods } from '../services/api';
 
 export default {
     namespace: 'accSupermarket',
     state: {
-        catalogList: [
-            {
-                id: 0,
-                catalog_name: "全部",
-            }
-        ],
-        currCatalog: 0,
-        brandList: [
-            {
-                id: 0,
-                brand_name: "全部",
-            }
-        ],
-        currBrand: 0,
-        collectStatus: [
-            {
-                id: 0,
-                status_name: "全部"
-            },
-            {
-                id: 1,
-                status_name: "采购目录中商品"
-            },
-            {
-                id: 2,
-                status_name: "采购目录外商品"
-            }
-        ],
-        currCollectStatus: 0,
-        goodsList: [
-            // {
-            //     id,
-            //     brand,
-            //     isCollected,
-            //     img,
-            //     price,
-            //     unit
-            //     goodsName,
-            //     provider,
-            // }
-        ],
-        pageSize: 12,
-        currPage: 1,
+        catalogList: [],
+        brandList: [],
+        FGoodData: {},
         showCartDrawer: false,
         shoppingCart: []
     },
     effects: {
-        // payload = {
-        //     currCatalog,
-        //     currBrand,
-        //     currCollectStatus
-        // }
-        *fetchGoodsF({ payload }, { call, put }) {
-            //call方法首参数为要调用的异步方法
-            const data = yield call(queryGoodsF, payload);
-            //put方法类似于dispatch方法
+        *fetchCatalogF({ payload }, { call, put }) {
+            const data = yield call(queryCatalogF, payload);
             yield put({
-                //本模块内方法的type不需要加namespace前缀
-                type: 'saveGoods',
-                payload: {
-                    data,
-                    ...payload,
-                },
+                type: 'saveCatalogF',
+                payload: data
             });
         },
+        *fetchBrands({ payload }, { call, put }) {
+            const data = yield call(queryBrands, payload);
+            yield put({
+                type: 'saveBrands',
+                payload: data
+            });
+        },
+        *fetchFGoods({ payload }, { call, put }) {
+            const data = yield call(queryFGoods, payload);
+            yield put({
+                type: 'saveFGoods',
+                payload: data
+            })
+        }
     },
 
     reducers: {
-        saveGoods(state, { payload }) {
-            const {
-                data: {
-                    catalog_list,
-                    brand_list,
-                    goods_list
-                },
-                currCatalog,
-                currBrand,
-                currCollectStatus,
-            } = payload;
-
+        saveCatalogF(state, { payload }) {
             return {
                 ...state,
-                catalogList: state.catalogList.slice(0, 1).concat(...catalog_list),
-                brandList: state.brandList.slice(0, 1).concat(...brand_list),
-                goodsList: goods_list,
-                currCatalog,
-                currBrand,
-                currCollectStatus
+                catalogList: payload
             };
+        },
+        saveBrands(state, { payload }) {
+            return {
+                ...state,
+                brandList: payload.records
+            }
+        },
+        saveFGoods(state, { payload }) {
+            return {
+                ...state,
+                FGoodData: payload || {}
+            }
         },
         // 显示购物车页面
         showCartDrawer(state) {

@@ -4,9 +4,13 @@
     padding:20px 0;
   }
   .cardsWrapper{
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    float: left;
+    .cardInner{
+      margin-right: 40px;
+    }
+    :nth-child(3n) {
+      margin-right: 0
+    }
   }
 .templateCardWrap {
   width: 1160px;

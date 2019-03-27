@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-22 14:24:53 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-22 16:30:28
+ * @Last Modified time: 2019-03-23 16:21:25
  */
 import React from 'react'
 import { Select,Input } from 'antd'
@@ -37,7 +37,8 @@ class CitySelect extends React.Component {
     });
     const { onChange } = this.props
     this.geography.porvince = value
-    onChange(this.geography)
+    let dataString = this.geography.porvince + this.geography.city + this.geography.address 
+    onChange(dataString)  
   }
 
   onSecondCityChange = (value) => {
@@ -46,14 +47,16 @@ class CitySelect extends React.Component {
     });
     const { onChange } = this.props
     this.geography.city = value
-    onChange(this.geography)
+    let dataString = this.geography.porvince + this.geography.city + this.geography.address 
+    onChange(dataString)  
   }
 
   inputChange = (e) => {
     const { onChange } = this.props
     const value = e.target.value
     this.geography.address = value
-    onChange(this.geography)
+    let dataString = this.geography.porvince + this.geography.city + this.geography.address 
+    onChange(dataString)  
   }
 
   render() {

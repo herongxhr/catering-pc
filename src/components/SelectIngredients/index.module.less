@@ -1,23 +1,26 @@
-.selectIngredients {
-    .ant-modal-content{ 
-        height: 787px;
+.selectDishes {
+    :global{
+        .ant-modal-content{ 
+            height: 787px;
+        }
         .ant-modal-header {
-            height: 69px;
-            line-height: 69px;
-            padding: 0 24px;
-            border: 0;
+            height: 60px;
+            line-height: 60px;
+            padding: 0 30px;
+            margin-bottom: 9px;
             .ant-modal-title {
-                line-height: 69px;
+                line-height: 60px;
             }
     
         }
+        .ant-modal-body{
+            height: 646px;
+            padding: 0 8px 0 10px;
+        }
         .ant-modal-footer{
-            position: relative;
-            top: -50px;
-            border: 0;
+            height: 72px;
         }
     }
-    
     .leftContent {
         float: left;
         width: 732px;
@@ -26,7 +29,8 @@
         }
         .filterWrap{
             margin-left:20px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            margin-top: 5px;
             height: 32px;
             line-height: 32px;
         }
@@ -47,5 +51,4 @@
             padding: 10px;
         }
     }
-    
 }

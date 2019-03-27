@@ -14,7 +14,7 @@ const PageHeaderWrapper = ({
         <div style={{ margin: '0 0 20px' }} className={wrapperClassName}>
             {top}
             <PageHeader
-                wide={contentWidth === 'Fixed'}
+                wide={true}
                 home={'Home'}
                 key="pageheader"
                 {...restPropss}

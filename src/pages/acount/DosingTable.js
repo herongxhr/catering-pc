@@ -1,41 +1,36 @@
 /*
  * @Author: suwei 
- * @Date: 2019-03-27 12:02:30 
+ * @Date: 2019-03-26 09:40:59 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-27 14:52:25
+ * @Last Modified time: 2019-03-27 09:57:38
  */
-import React from 'react';
+import React, { Component } from 'react'
 import { Modal, Select, Input, Table, Tag } from 'antd';
-import styles from './index.module.less';
+import styles from './DosingTable.module.less';
+
 const { Search } = Input;
+const Option = Select.Option;
 
-class Selectf extends React.Component {
-	cacheOriginData = [];
-	count = 0
-
-	constructor(props) {
+class DosingTable extends Component {
+  constructor(props) {
 		super(props)
-
 		this.state = {
 			data: props.dataSource,
 		}
-	}
-
-	getRowByKey(key, newData) {
-		const { data } = this.state;
-		return (newData || data).filter(item => item.id === key)[0];
-	}
-
-	deleteMeal = (params) => {
-		this.props.dispatch({
-			type: 'meal/saveMeal',
-			payload: params,
-		})
-	}
-
-	render() {
-		const { deleteMeal } = this.props;
-		const tagListDom = this.props.mealArray.map(item => (
+  }
+  
+  render() {
+    //暴露出的方法
+		const {
+			handleModalVisble,
+			handleModalHidden,
+			handleFilter,
+      visible,
+      deleteMeal,
+      modalSelect
+    } = this.props;
+    
+    const tagListDom = this.props.mealArray.map(item => (
 			// 自己新增的绿色显示
 			<Tag color={'green'}
 				style={{
@@ -44,27 +39,16 @@ class Selectf extends React.Component {
 					fontSize: "14px",
 					marginBottom: 10
 				}}
-				key={item.id}
+				key={item.skuId}
 				// 判断是不是自己加的菜
 				closable={true}
 				afterClose={() => deleteMeal(item)}
 			>
 				{item.goodsName}{item.property}
-			</Tag>));
-
-		//暴露出的方法
-		const {
-			handleModalVisble,
-			handleModalHidden,
-			handleFilter,
-			visible,
-		} = this.props;
-
-		const {
-			data
-		} = this.state
-
-		const columns = [{
+      </Tag>
+    ));
+    
+    const columns = [{
 			title: '食材名称',
 			dataIndex: 'goodsName',
 			key: 'goodsName',
@@ -89,29 +73,32 @@ class Selectf extends React.Component {
 			render: () => {
 				return <a>查看</a>
 			}
-		}, 
-		{
+		}, {
 			title: '操作',
 			dataIndex: 'opertaion',
 			key: 'opertaion',
 			render: (text, record) => {
 				let newRecord = {
-					id:record.id,
 					forStaff:0,
 					skuId:record.id,
-					goodsName:record.goodsName + '+' + record.property,
+					goodsName:record.goodsName,
 					unit:record.unit,
-					price:record.price
+          price:record.price,
+          quantity:record.quantity
 				}
-				
-				return	this.props.mealArray.some(item => item.id == record.id)
+				return	this.props.mealArray.some(item => item.skuId == record.id)
 						? <span>已添加</span>
 						: <a onClick={(() => this.props.addMeal(newRecord))}>添加</a>
 			}
 		}];
 
-		return (
-			<Modal
+    const {
+			data
+    } = this.state
+    
+    return (
+      <div>
+      <Modal
 				wrapClassName={styles.selectDishes}
 				width={1100}
 				closable={false}
@@ -123,11 +110,16 @@ class Selectf extends React.Component {
 			>
 				<div className={styles.leftContent}>
 					<div className={styles.filterWrap}>
-						<label style={{ width: 42 }}>类别：
-							<Select
-								style={{ width: 170 }}
-								defaultValue={''}
+						<label style={{ width: 42 }}>食材类别：
+              <Select
+                style={{ width: 170 }}
+                defaultValue={''}
 							>
+                {/* {
+                  modalSelect.map((item,index) => <Option key={index}>
+
+                  </Option>)
+                } */}
 							</Select>
 						</label>
 						<Search
@@ -141,11 +133,6 @@ class Selectf extends React.Component {
 						columns={columns}
 						dataSource={data}
 						rowKey="id"
-						onRow={record => {
-							return {
-								onClick: () => { },
-							};
-						}}
 					/>
 				</div>
 				<div className={styles.rightResult}>
@@ -154,8 +141,9 @@ class Selectf extends React.Component {
 					</ul>
 				</div>
 			</Modal>
-		)
-	}
+      </div>
+    )
+  }
 }
 
-export default Selectf
+export default DosingTable

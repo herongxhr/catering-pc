@@ -2,16 +2,14 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:41:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-22 21:53:27
+ * @Last Modified time: 2019-03-27 16:37:54
  */
 import React, { Fragment } from 'react'
 import Bread from '../../../components/Bread'
-// import TotalNumber from '../../../components/TotalNumber'
 import PurOrderTable from '../PurOrderTable'
 import { connect } from 'dva';
-import { Card , Button , Form , message } from 'antd'
+import { Card , Button , Form , message , Alert , Icon } from 'antd'
 import { routerRedux } from 'dva/router';
-import moment from 'moment';
 
 import './index.less'
 
@@ -22,56 +20,56 @@ const bread = [{
   breadContent:'调整'
 }]
 
-// const dataSource = [
-//   {
-//     id:'1',
-//     commodity:'名称',
-//     unit:'斤',
-//     price:'26',
-//     supply:'东阳市食品有限公司',
-//     date:'2018-12-01',
-//     number:''
-//   },
-//   {
-//     id:'2',
-//     commodity:'名称',
-//     unit:'斤',
-//     price:'26',
-//     supply:'东阳市食品有限公司',
-//     date:'2018-12-01',
-//     number:''
-//   },
-//   {
-//     id:'3',
-//     commodity:'名称',
-//     unit:'斤',
-//     price:'26',
-//     supply:'东阳市食品有限公司',
-//     date:'2018-12-01',
-//     number:''
-//   },
-// ]
-
 class PurOrderAdjust extends React.Component {
+  state = {
+    showAlert:false,
+    alertPrice:false,
+    index:1,
+  }
+
   handleSubmit = () => {
-    let userInfo = this.props.form.getFieldsValue();
-    const { goodsInfo } = userInfo
-    // const { records } = goodsInfo
-    // debugger;
-    // console.log(records);
-    //newID 传给另外的页面表示新从新建页面跳转到详情页面.
-    const { records } = goodsInfo
-    console.log(userInfo)
-    const newID = {
-      id:'new'
-    }
-    for(let i = 0; i < goodsInfo.length; i++) {
-      if(!goodsInfo[i].commodity ||  !goodsInfo[i].price || !goodsInfo[i].supply || !goodsInfo[i].date || !goodsInfo[i].number) {
-        message.error('请完善所有信息.');
+    let object = {}
+    const { type } = this.props.location
+    const { orderTableForm , orderItemGoods} = this.props
+    //表单验证 message提示
+    for(let i = 0; i < orderTableForm.length; i++) {
+      if(orderTableForm[i].price.toString() == '0' ) {
+        message.error('商品单价不能为0')
+        return      
+      }
+      if(!orderTableForm[i].price || !orderTableForm[i].quantity || !orderTableForm[i].supplierId || !orderTableForm[i].requiredDate) {
+        message.error('请完善所有信息')    
         return
-      }  
+      }
     }
-    // this.purOrderSave('/purOrder/details',newID)
+    if(type) {
+      object.type = type
+      object.channel = 'N'
+      object.orderDetails = orderTableForm
+    }
+    console.log(object)
+    this.queryOrderForm(object) 
+    // if(orderItemGoods) {
+    //   message.success('请求成功')
+    //   this.purOrderSave(orderItemGoods)
+    // }
+    // this.purOrderSave('',{
+    //   id:'303c452ba8d4b4a068f84413d286aedf'
+    // })
+  }
+
+  queryOrderForm = (data) => {
+    const { props } = this
+    props.dispatch({
+      type:'purOrder/queryOrderForm',
+      payload:data
+    })
+  }
+  //点击出现表单验证card
+  showAlert = () => {
+    this.setState({
+      showAlert:!this.state.showAlert
+    })
   }
 
   purOrderSave = (pathname,rest) => {
@@ -83,26 +81,30 @@ class PurOrderAdjust extends React.Component {
   }   
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const { isNew } = this.props.location //从purOrder表格页面传递到adjust的标识符
-    const dataSource = {
-      isNew,
-      records:[
-        
-      ]
-    }
+    const { alertPrice } = this.props
     return (
       <Fragment>
         <Bread bread={bread} value='/purOrder'></Bread>
         <Card
           style={{width:'1160px',margin:'10px auto 0px auto'}}>
-            {getFieldDecorator('goodsInfo', {
-              initialValue: dataSource,
-            })(<PurOrderTable />)}
+          <PurOrderTable />
         </Card>
         <div className='PurOrderDetailAdjust-footer'>
-          <Button>取消</Button>
-          <Button onClick={this.handleSubmit} type='primary' style={{margin:'0px 20px'}}>保存</Button>
+          {
+            this.state.showAlert ? ( 
+            <Card title="表单校验结果" style={{width:'290px',height:'215px'}}>
+              { alertPrice ? <Alert showIcon message="商品单价不能为0" type="error"  description="单价"  /> : null}
+              <Alert showIcon message="商品数量不能为0" type="error"  description="单价"  />
+            </Card> ) : null
+          }
+          <div className='footer'>
+            <a style={{marginRight:'20px'}} onClick={this.showAlert}>
+              <Icon type="info-circle" theme="twoTone" twoToneColor="red" />
+              { alertPrice ?<span style={{marginLeft:'5px'}}>{this.state.index}</span>:null}
+            </a>
+            <Button>取消</Button>
+            <Button onClick={this.handleSubmit} type='primary' style={{margin:'0px 20px'}}>保存</Button>
+          </div>
         </div>
       </Fragment>
     )
@@ -111,5 +113,8 @@ class PurOrderAdjust extends React.Component {
 
 const  PurOrderDetailAdjust =  Form.create()(PurOrderAdjust)
 
-export default connect(({  }) => ({
+export default connect(({ purOrder }) => ({
+  alertPrice:purOrder.alertPrice,
+  orderTableForm:purOrder.orderTableForm,
+  orderItemGoods:purOrder.changeOrderForm,
 }))(PurOrderDetailAdjust);
