@@ -2,47 +2,46 @@ import React from 'react';
 import { connect } from 'dva';
 import './index.less'
 import Img from "./pic.jpg"
+import { withRouter } from "react-router";
 
 class Ticket extends React.Component {
+  queryTicket = (params = {}) => {
+    const { dispatch, location } = this.props;
+    const id = location.state && location.state.id;
+    dispatch({
+      type: 'deliveryAcce/queryTicket',
+      payload: {
+        ...params,
+        id:id
+      }
+    })
+  }
+  componentDidMount(){
+    this.queryTicket()
+  }
   render() {
+    const { ticketData=[] } = this.props
     return (
         <div className='ticket'>
             <div className='ticketTitle'>索证索票</div>
             <div className='ticketPic'>
-                <figure>
-                <img src={Img} alt=""/>
-                <figcaption>
-                    食品检验检测证
-                </figcaption>            
+            {
+              ticketData.map((item,index)=>{
+                return(
+                  <figure key={index}>
+                    <img src={Img} alt=""/>
+                    <figcaption>
+                        {item.ticketName}
+                    </figcaption>            
                 </figure>
-                <figure>
-                <img src={Img} alt=""/>
-                <figcaption>
-                动物检测检疫证明
-                </figcaption>            
-                </figure>
-                <figure>
-                <img src={Img} alt=""/>
-                <figcaption>
-                动物检测检疫证明
-                </figcaption>            
-                </figure>
-                <figure>
-                <img src={Img} alt=""/>
-                <figcaption>
-                动物检测检疫证明
-                </figcaption>            
-                </figure>
-                <figure>
-                <img src={Img} alt=""/>
-                <figcaption>
-                    食品检验检测证
-                </figcaption>            
-                </figure>
-            </div>
+                )
+              })
+            }
+           </div>
     </div>
     )
   }
 }
-export default connect(({ }) => ({
-}))(Ticket);
+export default connect(({deliveryAcce }) => ({
+  ticketData:deliveryAcce.ticketData,
+}))(withRouter(Ticket));

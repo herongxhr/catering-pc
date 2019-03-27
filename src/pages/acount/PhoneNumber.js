@@ -22,6 +22,7 @@ class PhoneNumber extends React.Component {
           }}
         />
         <Input
+          style={{ width:180 }}
           placeholder='15858134718'
           className='phone-area'
           onChange={e => {

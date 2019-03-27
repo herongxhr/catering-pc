@@ -2,12 +2,13 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:07:45 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-22 10:53:18
+ * @Last Modified time: 2019-03-22 21:50:11
  */
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag } from 'antd';
 import SelectIngredients from '../../../components/SelectIngredients';
 import isEqual from 'lodash/isEqual';
+
 
 const Option = Select.Option;
 
@@ -39,7 +40,6 @@ const selectData = [
 
 class PurOrderTable extends PureComponent {
   index = 0;
-
 
   cacheOriginData = {};
   constructor(props) {
@@ -356,6 +356,7 @@ class PurOrderTable extends PureComponent {
       }
     ];
 
+
     const { loading, data } = this.state;
     let totalLength = null
     if (data) {
@@ -388,11 +389,12 @@ class PurOrderTable extends PureComponent {
         >
           新增成员
         </Button>
+
         <SelectIngredients
           // modal的显示属性
           visible={this.state.visible}
           // 隐藏modal的方法
-          handleHideModal={() => { this.setState({
+          handleModalVisble={() => { this.setState({
             visible:false
           }) }}
         />

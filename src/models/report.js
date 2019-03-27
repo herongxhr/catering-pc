@@ -3,7 +3,7 @@ import { message } from 'antd';
 export default {
     namespace: 'report',
     state: {
-       reportList:[],
+       reportList:{},
        urgent:'',
        apply:'',
        detailData:{},
@@ -11,7 +11,6 @@ export default {
     },
     effects: {     
         *queryReportmissing({ payload }, { call, put }) {
-            //call方法首参数为要调用的异步方法
             const  data  = yield call(queryReportmissing,payload);
             //console.log(data);
             yield put({
@@ -20,7 +19,6 @@ export default {
             });
         },
         *queryEager({ payload }, { call, put }) {
-            //call方法首参数为要调用的异步方法
             const  data  = yield call(queryEager,payload);
             //console.log(data);
             yield put({
@@ -29,7 +27,6 @@ export default {
             });
         },
         *queryWithdrawal({ payload }, { call, put }) {
-            //call方法首参数为要调用的异步方法
             const  data  = yield call(queryWithdrawal,payload);
             //console.log(data);
             yield put({
@@ -38,9 +35,8 @@ export default {
             });
         },
         *queryDetail({ payload }, { call, put }) {
-            //call方法首参数为要调用的异步方法
             const  data  = yield call(queryDetail,payload);
-            console.log(data);
+            //console.log(data);
             yield put({
                 type: 'saveDetail',
                 payload: data || {},
@@ -48,7 +44,6 @@ export default {
         },
         //上报商品
         *querySave({ payload }, { call, put }) {
-            //call方法首参数为要调用的异步方法
             const  data  = yield call(querySave,payload);
             //console.log(data);
             yield put({

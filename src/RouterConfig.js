@@ -35,14 +35,14 @@ import './style/common.less';
 import MenuDetails from './pages/MenuDetails';
 import TemplateDetails from '../src/pages/TemplateDetails';
 import EditTemplate from './pages/EditTemplate';
-import Edit from './pages/Edit';
+//import Edit from './pages/Edit';
 import MenuTemplate from '../src/pages/MenuTemplate';
 import MyMenu from '../src/pages/MyMenu';
-import AdjustMenu from '../src/pages/AdjustMenu';
 import CustomMenu from '../src/pages/CustomMenu';
 import ChoiceTemplate from './pages/ChoiceTemplate';
-import ParameterDetail from '../src/pages/Parameter/ParameterDetail';
 import PurOrderDetailAdjust from './pages/PurOrder/PurOrderDetailAdjust';
+import ParameterDetail from '../src/pages/Parameter/ParameterDetail';
+import AdjustMenu from '../src/pages/AdjustMenu';
 
 moment.locale('zh-cn');
 
@@ -92,6 +92,8 @@ export default function RouterConfig({ history }) {
                   </Switch>
                 </Setting>
               }></Route>
+              <Route path='/Setting/outStock' exact component={OutStock}></Route>
+              <Route path="/Setting/outStock/reportdetail" component={ReportDetail} />
               <Route path="/purCatalog" component={PurCatalog}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/reportdetail" component={ReportDetail}></Route>

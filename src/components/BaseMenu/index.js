@@ -4,7 +4,7 @@ import { Menu, Icon, Badge,  Avatar  } from 'antd';
 import logo from './logo.png';
 import MenuDropDown from '../MenuDropDown'
 import './index.less'
-import home from './img/home.png'
+import { withRouter } from "react-router";
 
 const menu = (
   <Menu>
@@ -27,6 +27,9 @@ const menu = (
 );
 
 class BaseMenu extends Component {
+	state={
+		currentUrl : '/home'
+	}
 	render() {
 		return (
 			<div className='jWrapper'>

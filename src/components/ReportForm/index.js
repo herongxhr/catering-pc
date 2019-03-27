@@ -39,7 +39,7 @@ class ReportForm extends React.Component {
             })(
               <Search
                 placeholder="名称/备注"
-                onSearch={(value) => {this.props.handleReport({searchKey:value})}}
+                onSearch={(value) => {this.props.handleReport({keywords:value})}}
                 style={{ width: 300, height: 32 }}
               />
             )

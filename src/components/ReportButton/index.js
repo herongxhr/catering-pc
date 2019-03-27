@@ -83,7 +83,7 @@ class ReportButton extends React.Component {
             </Form.Item>
             <Form.Item>
             {getFieldDecorator('eager', {
-                  initialValue:false,
+                  initialValue:true,
             })(
               <Checkbox onChange={this.handleOnchange}>紧急<span style={{color:'rgba(0,0,0,0.45)',fontSize:12}}>（勾选此选项后，请务必填写您的联系电话，以便工作人员与您进行联系）</span></Checkbox>
             )}

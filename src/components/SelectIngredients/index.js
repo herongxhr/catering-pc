@@ -51,7 +51,7 @@ class SelectIngredients extends React.Component {
                 key: 'add',
                 dataIndex: 'add',
 								render: (_, record) =>
-									{		console.log(record)
+									{		
 										   return(
 												 record.id !== this.state.currId
                         ? <a onClick={() => this.handleAdd(record)}>选择</a>
