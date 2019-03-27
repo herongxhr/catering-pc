@@ -43,7 +43,7 @@ class CustomMenu extends Component {
   handleClickOk = () => {
     const { dispatch, templateDetails } = this.props;
     const ndWeek = this.weekpicker.value;
-    
+    console.log(Moment(ndWeek).isoWeeksInYear());
     const { nd = '', week = '' } = templateDetails;
     // 从局部state中取数据，再向后端传数据
     const { menuTemplateId, templateFrom, } = this.state;

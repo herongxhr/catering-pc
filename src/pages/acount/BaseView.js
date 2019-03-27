@@ -1,8 +1,16 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-23 15:11:29 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-23 16:40:21
+ */
 import React, { Component } from 'react';
 import { Form, Input, Upload, Select, Button , Card } from 'antd';
 import PhoneView from './PhoneView';
 import CitySelect from './citySelect';
 import PhoneNumber from './PhoneNumber';
+import { connect } from 'dva';
+
 
 
 import './BaseView.less';
@@ -40,12 +48,34 @@ class Imformation extends Component {
 
   handleSubmit = ()=>{
     let userInfo = this.props.form.getFieldsValue();
+    const { props } = this
+    props.dispatch({
+      type:'setting/querySendBaseView',
+      payload:userInfo
+    })
     // this.props.form.validateFields((err,values)=>{
     //     if(!err){
     //         message.success(`${userInfo.userName} 恭喜你，您通过本次表单组件学习，当前密码为：${userInfo.userPwd}`)
     //     }
     // })
-    console.log(userInfo)
+  }
+
+  queryBaseView = (params = {}) => {
+	// 	this.setState({
+	// 		...params
+  //   })
+  //   console.log(this.state,params)
+		this.props.dispatch({
+			type: 'setting/queryBaseView',
+			payload: {
+				// ...this.state,
+				// ...params
+			},
+		})
+  }
+  
+  componentDidMount() {
+    this.queryBaseView()
   }
 
   getViewDom = ref => {
@@ -55,6 +85,7 @@ class Imformation extends Component {
   render() {
     const {
       form: { getFieldDecorator },
+      baseView
     } = this.props;
     return (
       <div className='baseView' ref={this.getViewDom} >
@@ -69,7 +100,7 @@ class Imformation extends Component {
           </div>
           <Form layout='vertical' onSubmit={this.handleSubmit} hideRequiredMark>
             <FormItem label='单位全称'>
-              {getFieldDecorator('company', {
+              {getFieldDecorator('cateringName', {
                 rules: [
                   {
                     required: true,
@@ -79,7 +110,7 @@ class Imformation extends Component {
               })(<Input placeholder='浙江省东阳市横店镇中心小学' />)}
             </FormItem>
             <FormItem label='单位简称'>
-              {getFieldDecorator('corporation', {
+              {getFieldDecorator('shortName', {
                 rules: [
                   {
                     required: true,
@@ -89,14 +120,14 @@ class Imformation extends Component {
               })(<Input placeholder='横店中心小学' />)}
             </FormItem>
             <FormItem label='单位地址'>
-              {getFieldDecorator('city',{
+              {getFieldDecorator('address',{
                 initialValue:''
               })
                 (<CitySelect />)
               }
             </FormItem>
             <FormItem label={<span>平台管理员/手机号<span style={{color:'#D9D9D9',marginLeft:10}}>(用于接收平台相关信息)</span></span>}>
-              {getFieldDecorator('Telephone', {
+              {getFieldDecorator('mobile', {
                 rules: [
                   {
                     required: true,
@@ -119,7 +150,7 @@ class Imformation extends Component {
               )}
             </FormItem>
             <FormItem label={<span>固定电话<span style={{color:'#D9D9D9',marginLeft:10}}>(用于接收日常咨询)</span></span>}>
-              {getFieldDecorator('phone', {
+              {getFieldDecorator('telephone', {
                 rules: [
                   {
                     required: true,
@@ -141,4 +172,5 @@ class Imformation extends Component {
 
 const BaseView = Form.create()(Imformation)
 
-export default BaseView
+export default connect(({setting})=>({baseView:setting.baseView}))
+(BaseView);

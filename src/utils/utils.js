@@ -2,9 +2,11 @@
  * @Author: suwei 
  * @Date: 2019-03-22 15:08:43 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-22 15:09:06
+ * @Last Modified time: 2019-03-27 16:08:33
  */
 import { routerRedux } from 'dva/router';
+import { array } from 'prop-types';
+import { log } from 'util';
 import Moment from 'moment';
 
 
@@ -110,6 +112,14 @@ const city = () => {
 
 const isEven = num => num % 2 === 0
 
+var lenthPush = (array,secondArray) => {
+  var data = array.splice(array.length - 1)
+  const [last] = data
+  array.push(secondArray)
+  array.push(last)
+  return array
+}
+
 /**
  * 把毫秒的时间转化为年月日
  * @param {number} dateTime 
@@ -143,5 +153,6 @@ export {
   city,
   getYMD,
   getYMDHms,
-  sortMealsData
+  sortMealsData,
+  lenthPush
 }

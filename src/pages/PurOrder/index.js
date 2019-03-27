@@ -2,75 +2,18 @@
  * @Author: suwei 
  * @Date: 2019-03-21 17:55:51 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-22 09:16:09
+ * @Last Modified time: 2019-03-27 16:12:31
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon } from 'antd';
+import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon, Modal } from 'antd';
 import WrappedOrderFilter from '../../components/OrderFilter';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
 import { withRouter } from 'react-router'
 import { routerRedux } from 'dva/router';
 import styles from './index.module.less';
+import moment from  'moment'
 // 定义表格列
-const tabColumns = [
-	{
-		title: '采购单号',
-		key: 'orderNo',
-		dataIndex: 'orderNo',
-		filterMultiple: true,
-	},
-	{
-		title: '订单来源',
-		key: 'channel',
-		dataIndex: 'channel',
-		render: (channel) => {
-			switch (channel) {
-				case 'N':
-					return <Tag color="orange">自建订单</Tag>;
-				case 'M':
-					return <Tag color="green">菜单生成</Tag>
-				case 'S':
-					return <Tag color="cyan">辅料订单</Tag>
-				default:
-					break;
-			}
-		},
-	},
-	{
-		title: '创建日期',
-		key: 'orderTime',
-		dataIndex: 'orderTime',
-	},
-	{
-		title: '摘要',
-		key: 'summary',
-		dataIndex: 'summary',
-
-	},
-	{
-		title: '状态',
-		key: 'status',
-		dataIndex: 'status',
-		render: (status) => {
-			return status === '0' ?
-				(<span><Badge status="warning" />未下单</span>) :
-				(<span><Badge status="success" />已下单</span>)
-		}
-	},
-	{
-		title: '操作',
-		render: (text, record) => {
-			return record.status === "0" ?
-				(<div className='opertion'>
-					<a onClick={() => this.previewOrder(record.orderId)} className='orders'>下单</a>
-					<Divider type="vertical" />
-					<a className='delete'>删除</a>
-				</div>) :
-				(<a className='acceptance'>配送验收情况</a>)
-		}
-	}
-];
 
 class PurOrder extends React.Component {
 	state = {
@@ -81,6 +24,7 @@ class PurOrder extends React.Component {
 		status: '',
 		startDate: '',
 		endDate: '',
+		visible: false
 	}
 
 	// 请求采购订单表格数据
@@ -97,15 +41,32 @@ class PurOrder extends React.Component {
 		})
 	}
 
+	// handleFilter = (args) => {
+	// 	let newArgs = {};
+	// 	if (args.dateRange) {
+	// 		newArgs = { dateRange: args.dateRange }
+	// 	} else if (args.channel) {
+	// 		newArgs = { channel: args.channel }
+	// 	} else {
+	// 		newArgs = { status: args.status }
+	// 	}
+	// 	this.setState(
+	// 		Object.assign(this.state, newArgs),
+	// 		this.getOrderData(this.state)
+	// 	);
+	// }
+
+
 	//新建按钮跳转
-	handleLinkChange = (pathname, isNew) => {
+	handleLinkChange = (pathname, type) => {
 		const { props } = this
 		props.dispatch(routerRedux.push({
 			pathname,
-			isNew
+			type
 		}))
 	}
 
+	//表格点击行跳转
 	TableLinkChange = (pathname, record, rest) => {
 		const { props } = this
 		props.dispatch(routerRedux.push({
@@ -115,11 +76,7 @@ class PurOrder extends React.Component {
 		}))
 	}
 
-	componentDidMount() {
-		this.changeToGetData();
-	}
-
-	//table current 跳转
+	//表格 current 跳转
 	handleTableChange = pagination => {
 		const { current, pageSize } = pagination;
 		// 先改变state
@@ -132,6 +89,38 @@ class PurOrder extends React.Component {
 		})
 	}
 
+
+	componentDidMount() {
+		this.changeToGetData();
+	}
+
+	//modal展示
+	handleOk = (e) => {
+    this.setState({
+      visible: false,
+    });
+  }
+
+	//modal取消
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  }
+
+	//table current 跳转
+	handleTableChange = (page) => {
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'purOrder/queryOrderTable',
+			payload: {
+				current: page,
+				pageSize: 10
+			},
+		})
+	}
+
 	render() {
 		const {
 			className,
@@ -139,13 +128,74 @@ class PurOrder extends React.Component {
 			orderTable,
 		} = this.props;
 
+		const tabColumns = [
+			{
+				title: '采购单号',
+				key: 'orderNo',
+				dataIndex: 'orderNo',
+				filterMultiple: true,
+			},
+			{
+				title: '订单来源',
+				key: 'channel',
+				dataIndex: 'channel',
+				render: (channel) => {
+					switch (channel) {
+						case 'N':
+							return <Tag color="orange">自建订单</Tag>;
+						case 'M':
+							return <Tag color="green">菜单生成</Tag>
+						case 'S':
+							return <Tag color="cyan">辅料订单</Tag>
+						default:
+							break;
+					}
+				},
+			},
+			{
+				title: '创建日期',
+				key: 'orderTime',
+				dataIndex: 'orderTime',
+				render:(text) => {
+					return <span>{moment(text).format('YYYY-MM-DD')}</span>
+				}
+			},
+			{
+				title: '摘要',
+				key: 'summary',
+				dataIndex: 'summary',
+		
+			},
+			{
+				title: '状态',
+				key: 'status',
+				dataIndex: 'status',
+				render: (status) => {
+					return status === '0' ?
+						(<span><Badge status="warning" />未下单</span>) :
+						(<span><Badge status="success" />已下单</span>)
+				}
+			},
+			{
+				title: '操作',
+				render: (text, record) => {
+					return record.status === "0" ?
+						(<div className='opertion'>
+							<a onClick={() => this.previewOrder(record.orderId)} className='orders'>下单</a>
+							<Divider type="vertical" />
+							<a className='delete'>删除</a>
+						</div>) :
+						(<a className={styles.acceptance} onClick={() => this.setState({visible:true})}>配送验收情况</a>)
+				}
+			}
+		];
 		// 点击新建时会下拉的按钮
 		const dropdownBtn = () => {
 			const pathname = '/purOrder/detail/adjust'
 			const menu = (
 				<Menu>
-					<Menu.Item key="FOrder" onClick={() => this.handleLinkChange(pathname, true)}>食材订单</Menu.Item>
-					<Menu.Item key="SOrder" onClick={() => this.handleLinkChange(pathname, true)}>辅料订单</Menu.Item>
+					<Menu.Item key="FOrder" onClick={() => this.handleLinkChange(pathname, 's')}>食材订单</Menu.Item>
+					<Menu.Item key="SOrder" onClick={() => this.handleLinkChange(pathname, 'f')}>辅料订单</Menu.Item>
 				</Menu>
 			)
 			return (
@@ -212,6 +262,14 @@ class PurOrder extends React.Component {
 						/>
 					</div>
 				</div>
+				<Modal title="配送验收情况" 
+					visible={this.state.visible}
+					onOk={this.handleOk}
+          onCancel={this.handleCancel}
+				>
+						<Table></Table>
+				</Modal>
+				
 			</div>
 		)
 	}

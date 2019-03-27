@@ -296,10 +296,12 @@ export function myCopy(params) {
 // }
 
 // 采购订单专区
-export function queryOrderTable(params) {
+
+//请求选菜模板的select框
+export function queryModalSelect(params) {
     return request({
         method: 'get',
-        url: '/catering/order/orders',
+        url: '/pub/catalog/listQuery',
         data: {
             showLoading: true,
             params: {
@@ -308,6 +310,45 @@ export function queryOrderTable(params) {
         }
     })
 }
+
+export function queryOrderForm(params) {
+    const data = JSON.stringify(params)
+    return request({
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        url: '/catering/order',
+        data: {
+            axiosData:data
+        }
+    })
+}
+
+export function queryOrderSelectf(params) {
+    return request({
+        method: 'get',
+        url: '/pub/sku/complex/pageQuery',
+        data: {
+            showLoading: true,
+            params: {
+                ...params
+            }
+        }
+    })
+}
+
+export function queryOrderTable(params) {
+    return request({
+        method: 'get',
+        url: '/catering/order/pageQuery',
+        data: {
+            showLoading: true,
+            params: {
+                ...params
+            }
+        }
+    })
+}
+
 export function queryOrderDetails(params) {
     return request({
         method: 'get',
@@ -445,7 +486,7 @@ export function queryIngreDetail(params) {
 export function queryParameterTable(params) {
     return request({
         method: 'get',
-        url: '/catering/ledger/distribution/month',
+        url: '/catering/ledger/pageQuery',
         data: {
             showLoading: true,
             params
@@ -453,18 +494,89 @@ export function queryParameterTable(params) {
     })
 }
 
-export function queryParameterDetail(params) {
+export function queryParameterUnfold(params) {
     return request({
         method: 'get',
-        url: '/catering/ledger/distribution/day',
+        url: `/catering/ledger/${params.id}`,
+        data: {
+            showLoading: true,
+        }
+    })
+}
+
+export function queryParameterUnfoldItem(params) {
+    return request({
+        method: 'get',
+        url: `/catering/ledger/item/${params.id}`,
+        data: {
+            showLoading: true,
+        }
+    })
+}
+
+//设置专区
+export function querySaveSettingData(params) {
+    const data = JSON.stringify(params)
+    return request({
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        url: '/catering/setting/menuPartner',
+        data: {
+            axiosData:data
+        }
+    })
+}
+
+export function queryBaseView(params) {
+    return request({
+        method: 'get',
+        url: '/catering/setting/catering',
         data: {
             showLoading: true,
             params,
         }
     })
 }
-//常用供应商
-export function querySupplier(params) {
+
+export function querySendBaseView(params) {
+    const data = JSON.stringify(params)
+    return request({
+        method: 'put',
+        headers: {'Content-Type': 'application/json'},
+        url: '/catering/setting/catering',
+        data: {
+            axiosData:data
+        }
+    })
+}
+
+export function queryModifyPassword(params) {
+    const data = JSON.stringify(params)
+    console.log(data);
+    return request({
+        method: 'put',
+        headers: {'Content-Type': 'application/json'},
+        url: '/catering/setting/catering/pwd',
+        data: {
+            axiosData:data
+        }
+    })
+}
+
+export function queryageQuery(params) {
+    const data = JSON.stringify(params)
+    console.log(data);
+    return request({
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        url: '/superior/setting/superior',
+        data: {
+            axiosData:data
+        }
+    })
+}
+
+export function queryListQuery(params) {
     return request({
         method: 'get',
         url: '/catering/setting/favoriteSupplier/listQuery',
@@ -474,6 +586,9 @@ export function querySupplier(params) {
         }
     })
 }
+
+
+
 //计算数据
 export function queryCount(params) {
     return request({
@@ -496,6 +611,17 @@ export function queryDistributionDetail(params) {
         }
     })
 }
+
+export function querySupplier(params) {
+    return request({
+        method: 'get',
+        url: '/pub/supplier/listQuery',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
 //换货申请列表
 export function queryDetailReplacement(params) {
     return request({
@@ -507,18 +633,42 @@ export function queryDetailReplacement(params) {
         }
     })
 }
+
+export function queryfavoriteSupplier(params) {
+    const data = JSON.stringify(params)
+    return request({
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        url: '/catering/setting/favoriteSupplier',
+        data: {
+            axiosData:data
+        }
+    })
+}
 //换货申请操作
 export function queryExecute(params) {
     const data = JSON.stringify(params)
     return request({
         method: 'post',
         headers: {'Content-Type': 'application/json'},
+        url: '/catering/setting/favoriteSupplier',
         url: `/catering/distribution/execute/${params.id}`,
         data: {
             axiosData:data
         }
     })
 }
+
+export function queryDeleteFavoriteSupplier(params) {
+    console.log(params);
+    return request({
+        method: 'delete',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        url: `/catering/setting/favoriteSupplier/${params}`,
+    })
+}
+
+
 export function queryGoodsMX(params) {
     return request({
         method: 'get',
@@ -539,6 +689,27 @@ export function queryLog(params) {
         }
     })
 }
+
+export function queryDosingTable(params) {
+    return request({
+        method: 'get',
+        url: '/catering/setting/menuPartner/listQuery',
+        data: {
+            params,
+        }
+    })
+}
+
+//选菜组件模块专区
+// export function queryDosingTable(params) {
+//     return request({
+//         method: 'get',
+//         url: '/catering/setting/menuPartner/listQuery',
+//         data: {
+//             params,
+//         }
+//     })
+// }
 export function queryTicket(params) {
     return request({
         method: 'get',

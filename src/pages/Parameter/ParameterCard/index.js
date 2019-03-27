@@ -1,6 +1,13 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-23 10:47:07 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-25 10:08:44
+ */
 import React from 'react'
 import { Card , List} from 'antd'
 import ParameterList from '../ParameterList'
+import { connect } from 'dva';
 
 import './index.less'
 
@@ -29,14 +36,33 @@ const data = [
 
 
 class ParameterCard extends React.Component {
+
+  queryParameterUnfold() {
+    const { dispatch , location , id } = this.props
+    console.log(id);
+    dispatch({
+      type:'parameter/queryParameterUnfold',
+      payload: {
+        id,
+        // startDate:location.startDate,
+      }
+    })
+  }
+
+  componentDidMount() {
+    this.queryParameterUnfold()
+  }
+
   render() {
+    const { ParameterUnfold } = this.props
+    const { records } = ParameterUnfold
     return(
       <Card title='明细' className='ParameterDetail-card'>
         <List
           itemLayout="horizontal"
-          dataSource={data}
+          dataSource={records}
           renderItem={item => (
-            <ParameterList date={item.date} number={item.number} price={item.price} />
+            <ParameterList date={item.distributionDate} number={item.distributionNo} price={item.total} id={item.id} />
           )}
         />
     </Card>
@@ -44,4 +70,5 @@ class ParameterCard extends React.Component {
   }
 }
 
-export default ParameterCard
+export default connect(({parameter})=>({ParameterUnfold:parameter.ParameterUnfold}))
+(ParameterCard);

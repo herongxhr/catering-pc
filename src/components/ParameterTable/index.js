@@ -1,10 +1,15 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-23 09:59:50 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-25 18:12:52
+ */
 import React from 'react'
 import { Table } from 'antd'
 import ParameterForm from './ParameterForm'
-import { withRouter } from 'react-router'
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-
+import moment from  'moment'
 import './index.less'
 
 const Columns = [{
@@ -15,6 +20,9 @@ const Columns = [{
   title: '结算月份',
   dataIndex: 'distributionDate',
   key: 'distributionDate',
+  render:(text) => {
+    return <span>{moment(text).format('YYYY年MM月')}</span>
+  }
 }, {
 	title: '配送单数量(张)',
   dataIndex: 'distributionNum',
@@ -28,35 +36,65 @@ const Columns = [{
 
 
 class ParameterTable extends React.Component {
-  queryParameterTable() {
-    const { dispatch } = this.props
-    dispatch({
-      type:'parameter/queryParameterTable'
+  state = {
+		current: 1,
+		pageSize: 10,
+		date: '',
+		supplierId: '',
+		startDate: '',
+		endDate: '',
+	}
+
+  //请求台账表格数据
+  queryParameterTable = (params = {}) => {
+		this.setState({
+			...params
     })
-  }
+    console.log(this.state,params)
+		this.props.dispatch({
+			type: 'parameter/queryParameterTable',
+			payload: {
+				...this.state,
+				...params
+			},
+		})
+	}
 
   componentDidMount() {
     this.queryParameterTable()
   }
 
-  handleLinkChange(record,id,startDate) {   
+  //点击表格行套装
+  handleLinkChange(record) {   
     const { props } = this
     props.dispatch(routerRedux.push({ 
       pathname: '/parameter/detail',
-      id,
-      startDate,
-      endDate:record.endDate
+      record:record,
     }))
   }
 
-  handleTableChange = (page) => {   
-		const { dispatch } = this.props;
-		dispatch({
-			type: 'purOrder/queryOrderTable',
-			payload: { 
-				current:page,
-				pageSize:10
-			},
+  // //表格current跳转
+  // handleTableChange = (page) => {   
+	// 	const { dispatch } = this.props;
+	// 	dispatch({
+	// 		type: 'purOrder/queryOrderTable',
+	// 		payload: { 
+	// 			current:page,
+	// 			pageSize:10
+	// 		},
+	// 	})
+  // }
+
+  //表格current跳转
+  handleTableChange = pagination => {
+		const { current, pageSize } = pagination;
+		// 先改变state
+		this.setState({ current, pageSize });
+		// 发请求
+		this.queryParameterTable({
+			...this.state,
+			current,
+			pageSize
 		})
 	}
 
@@ -67,14 +105,15 @@ class ParameterTable extends React.Component {
       records,
       total,
 		} = ParameterTable;
-
     return(
       <div className='ParameterTable'>
-        <ParameterForm />
+        <ParameterForm 
+        	handleFilter={this.queryParameterTable}
+        />
         <Table 
           columns={Columns} 
           dataSource={records} 
-          rowKey='supplierId'
+          rowKey='id'
           pagination={{
             total:total,
             current:current
@@ -83,11 +122,8 @@ class ParameterTable extends React.Component {
           onRow={(record) => {
           return {
             onClick:() => {
-              this.props.history.push('/parameter/detail')
               this.handleLinkChange(
-                record,
-                record.id,
-                record.distributionDate
+                record
               )
             }
           }
@@ -99,4 +135,4 @@ class ParameterTable extends React.Component {
 
 
 export default connect(({parameter})=>({ParameterTable:parameter.ParameterTable}))
-(withRouter(ParameterTable));
+(ParameterTable);

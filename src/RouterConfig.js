@@ -40,8 +40,9 @@ import MenuTemplate from '../src/pages/MenuTemplate';
 import MyMenu from '../src/pages/MyMenu';
 import CustomMenu from '../src/pages/CustomMenu';
 import ChoiceTemplate from './pages/ChoiceTemplate';
-import PurOrderDetailAdjust from './pages/PurOrder/PurOrderDetailAdjust';
-import ParameterDetail from '../src/pages/Parameter/ParameterDetail';
+import ParameterDetail from '../src/pages/Parameter/ParameterDetail'
+import PurOrderDetailAdjust from './pages/PurOrder/PurOrderDetailAdjust'
+import Test from './pages/Test'
 import AdjustMenu from '../src/pages/AdjustMenu';
 
 moment.locale('zh-cn');
@@ -105,6 +106,8 @@ export default function RouterConfig({ history }) {
               <Route path="/arrangeDishes" component={ArrangeDishes}></Route>
               <Route path="/selectIngredients" component={SelectIngredients}></Route>
               <Route path="/dishDetails" component={DishDetails}></Route>
+              <Route path="/test" component={Test}></Route>
+
               {/* <Route path="/deliveryAcceDetail" component={DeliveryAcceDetail}></Route> */}
               <Redirect to="/home" />
             </Switch>

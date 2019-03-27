@@ -2,255 +2,200 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:07:45 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-22 21:50:11
+ * @Last Modified time: 2019-03-27 14:55:29
  */
 import React, { PureComponent, Fragment } from 'react';
-import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag } from 'antd';
-import SelectIngredients from '../../../components/SelectIngredients';
-import isEqual from 'lodash/isEqual';
+import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag, message } from 'antd';
+import { connect } from 'dva';
+import Selectf from '../../../components/SelectIngredients';
+
+import './index.less'
 
 
 const Option = Select.Option;
 
 
-const records = [
-  {
-    "id": "006923bed883451eac98797b70af0b2e",
-    "keywords": [
-      "猪腿肉73克/鸡蛋6克",
-      "肉末蒸蛋"
-    ],
-    "superiorId": null,
-    "scope": "C",
-    "type": "HC",
-    "otherName": null,
-    "isNew": null,
-    "gg": "猪腿肉73克/鸡蛋6克"
-  },
-]
-
-const selectData = [
-  ['all', '全部'],
-  ['meatDish', '荤菜'],
-  ['vegetable', '素菜'],
-  ['halfAMeat', '半荤'],
-  ['dessert', '点心'],
-  ['others', '其它'],
-]
 
 class PurOrderTable extends PureComponent {
   index = 0;
 
-  cacheOriginData = {};
+
   constructor(props) {
     super(props);
-    if (props.value.isNew) {
-      props.value.records.push({
-        id: `NEW_TEMP_ID_${this.index}`,
-        commodity: '',
-        unit: '',
-        price: '',
-        number: '',
-        supply: '',
-        date: '',
-        editable: true,
-      }
-      )
-      this.index += 1;
-    }
     this.state = {
-      data: props.value.records,
       loading: false,
-      /* eslint-disable-next-line react/no-unused-state */
-      value: props.value.records,
+      value: [],
       visible: false,
     };
-    // const { onChange } = this.props;
-    // onChange(this.state.data);
   }
 
-  // static getDerivedStateFromProps(nextProps, preState) {
-  //   if (isEqual(nextProps.value, preState.value)) {
-  //     return null;
-  //   }
-  //   return {
-  //     data: nextProps.value,
-  //     value: nextProps.value,
-  //   };
-  // }
-
-  onAddBtnClick = records => {
-    // this.state.data.concat({commodity: record.gg})
-  }
+  //获取单一表格数据
   getRowByKey(key, newData) {
     const { data } = this.state;
     return (newData || data).filter(item => item.id === key)[0];
   }
+
   showModal = () => {
-    console.log(1)
     this.setState({
       visible:true
     })
   }
-  renderActions = record => {
-    return record;
+
+
+  //请求供货商列表
+  querySupplier = (params = {}) => {
+    this.props.dispatch({
+      type: 'setting/querySupplier',
+      payload: {
+        ...params
+      },
+    })
   }
-  toggleEditable = (e, key) => {
-    e.preventDefault();
-    const { data } = this.state;
-    const newData = data.map(item => ({ ...item })); //赋值editable
-    const target = this.getRowByKey(key, newData);
-    if (target) {
-      // 进入编辑状态时保存原始数据
-      if (!target.editable) {
-        this.cacheOriginData[key] = { ...target };
+
+  componentDidMount() {
+    this.querySupplier()
+  }
+
+
+  deleteMeal = (params) => {
+    const { props } = this
+    props.dispatch({
+      type:'purOrder/delelteOrderTableForm',
+      payload:params
+    })
+    props.dispatch({
+      type: 'meal/removeMeal',
+      payload:params ,
+    })
+  }
+
+  addMeal = (params) => {
+    this.props.dispatch({
+      type: 'meal/addMeal',
+      payload: params,
+    })
+    this.props.dispatch({
+      type:'purOrder/addOrderTableForm',
+      payload:params
+    })
+  }
+
+  //Input输入的时候改变值
+  handleFieldChange = (e, fieldName, key) => {
+    let changeValue = Number(e.target.value)
+    const { props } = this
+    const { orderTableForm } = props
+    const newData = orderTableForm.map(item => ({ ...item }));
+    const target = this.getRowByKey(key,newData)
+    if(target) {
+      if(changeValue == 0) {
+        props.dispatch({
+          type:'purOrder/priceVerify',
+          payload:true
+        })    
       }
-      target.editable = !target.editable;
-      this.setState({ data: newData });
-    }
-  };
+      if(changeValue < 0) {
+        props.dispatch({
+          type:'purOrder/priceVerify',
+          payload:true
+        })
+      }
+      if(changeValue > 0) {
+        props.dispatch({
+          type:'purOrder/priceVerify',
+          payload:false
+        })
+      }
 
-  newMember = () => {
-    const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    newData.push({
-      id: `NEW_TEMP_ID_${this.index}`,
-      commodity: '',
-      unit: '',
-      price: '',
-      number: '',
-      supply: '',
-      date: '',
-      editable: true,
-    });
-    const { onChange } = this.props;
-    onChange(newData);
-    this.index += 1;
-    this.setState({ data: newData });
-  };
-
-  remove(id) {
-    const { data } = this.state;
-    const { onChange } = this.props;
-    const newData = data.filter(item => item.id !== id);
-    this.setState({ data: newData });
-    onChange(newData);
-  }
-
-  handleKeyPress(e, key) {
-    if (e.key === 'Enter') {
-      this.saveRow(e, key);
+      target[fieldName] = changeValue;
+      props.dispatch({
+        type:'purOrder/InputorderForm',
+        payload:newData
+      })
     }
   }
 
-  handleFieldChange(e, fieldName, key) {
-    const { data } = this.state;
-    const { onChange } = this.props;
-    const newData = data.map(item => ({ ...item }));
-    const target = this.getRowByKey(key, newData);
-    if (target) {
-      target[fieldName] = e.target.value;
-      onChange(newData);
-      this.setState({ data: newData });
-    }
-  }
-
+  //datePicker输入的时候改变值
   handleDateChange(fieldName, key, date, dateString) {
-    const { data } = this.state;
-    const { onChange } = this.props
-    const newData = data.map(item => ({ ...item }));
+    const { props } = this
+    const { orderTableForm } = props
+    const newData = orderTableForm.map(item => ({ ...item }));
     const target = this.getRowByKey(key, newData);
     if (target) {
       target[fieldName] = dateString;
-      onChange(newData);
-      this.setState({ data: newData });
+      props.dispatch({
+        type:'purOrder/InputorderForm',
+        payload:newData
+      })
     }
   }
 
+  //select选择的时候改变值
   handleSelectChange(fieldName, key, value) {
-    const { data } = this.state;
-    const { onChange } = this.props
-    const newData = data.map(item => ({ ...item }));
+    const { props } = this
+    const { orderTableForm } = props
+    const newData = orderTableForm.map(item => ({ ...item }));
     const target = this.getRowByKey(key, newData);
     if (target) {
       target[fieldName] = value;
-      onChange(newData);
-      this.setState({ data: newData });
+      props.dispatch({
+        type:'purOrder/InputorderForm',
+        payload:newData
+      })
     }
   }
 
-  // saveRow = (e, key) => {
-  //   // e.persist();
-  //   // this.setState({
-  //   //   loading: true,
-  //   // });
-  //   // setTimeout(() => {
-  //   //   const { data } = this.state;
-  //   //   const { onChange } = this.props;
-  //   //   onChange(data);
-  //   //   this.setState({
-  //   //     loading: false,
-  //   //   });
-  //   // }, 500);
-  //   const { data } = this.state;
-  //   const { onChange } = this.props;
-  //   onChange(data);
-  // }
+  handleModalVisble = (params) => {
+    this.setState({
+     visible:false,
+    }) 
+   }
+ 
+   handleModalHidden = () => {
+     this.setState({
+       visible:false
+     })
+   }
 
+
+  //请求食材选择器列表
+   queryNewOrderSelectf = () => {
+     const { props } = this
+     props.dispatch({
+       type:'purOrder/queryOrderSelectf',
+       payload:{
+         cateringId:'f970fb8a4e99402da175dba8ca87ef1c'
+       },       
+      callback: (value) => {
+        this.setState({
+          visible: true,
+          value:value
+        });
+      },
+     }) 
+   }
+
+   componentWillMount() {
+    this.props.dispatch({
+      type: 'meal/clearMeal',
+    })
+   }
 
   render() {
-    const modalTableColumns = [
-      {
-        title: '名称',
-        key: 'gg',
-        dataIndex: 'gg'
-      },
-      {
-        title: '类别',
-        key: 'type',
-        dataIndex: 'type'
-      },
-      {
-        title: '食材明细',
-        key: 'keywords',
-        dataIndex: 'keywords',
-        render: text => text.toString()
-      },
-      {
-        title: '图片',
-        key: 'img',
-        dataIndex: 'img',
-        render: (_, record) => (
-          <a onClick={() => {
-            this.handlePreviewItem(record);
-          }}>查看</a>
-        )
-      },
-      {
-        title: '操作',
-        key: 'add',
-        width: 100,
-        render: (_, record) =>
-          <a onClick={() => this.onAddBtnClick(record)}>添加</a>
-      },
-    ];
     const tabColumns = [
       {
         title: '商品',
-        key: 'commodity',
-        dataIndex: 'commodity',
+        key: 'goodsName',
+        dataIndex: 'goodsName',
         width: '25%',
         render: (text, record) => {
           if (record.editable) {
             return (
-              // <Input
-              //   style={{ width: '190px' }}
-              //   autoFocus
-              //   onChange={e => this.handleFieldChange(e, 'commodity', record.id)}
-              //   onKeyPress={e => this.handleKeyPress(e, record.key)}
-              //   placeholder="商品"
-              // />
-              <Select  onDropdownVisibleChange={this.showModal} style={{ width: '218px' }} placeholder='请选择'>
+              <Select  															
+              open={false}
+              onDropdownVisibleChange={this.showModal} 
+              style={{ width: '218px' }} 
+              placeholder='请选择'>
                 <Option value="1">Jack</Option>
                 <Option value="2">Lucy</Option>
                 <Option value="3">Disabled</Option>
@@ -267,18 +212,6 @@ class PurOrderTable extends PureComponent {
         key: 'unit',
         dataIndex: 'unit',
         render: (text, record) => {
-          if (record.editable) {
-            return (
-              <Input
-                style={{ width: '60px' }}
-                autoFocus
-                onChange={e => this.handleFieldChange(e, 'unit', record.id)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="单位"
-                disabled
-              />
-            );
-          }
           return text;
         },
       },
@@ -287,29 +220,31 @@ class PurOrderTable extends PureComponent {
         key: 'price',
         dataIndex: 'price',
         render: (text, record) => {
-          if (record.editable) {
-            return (
-              <Input
-                style={{ width: '70px' }}
-                autoFocus
-                onChange={e => this.handleFieldChange(e, 'price', record.id)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="单价"
-              />
-            );
+          if(record.price.toString() == '0') {
+            return <Input
+              // defaultValue={0}
+              style={{ width: '70px',border:'1px solid red' }}
+              autoFocus
+              onChange={e => this.handleFieldChange(e, 'price', record.id)}
+              placeholder="单价"
+            />
           }
-          return text;
+          return <Input
+            style={{ width: '70px' }}
+            autoFocus
+            onChange={e => this.handleFieldChange(e, 'price', record.id)}
+            placeholder="单价"
+          />
         },
       },
       {
         title: '数量',
-        key: 'number',
-        dataIndex: 'number',
+        key: 'quantity',
+        dataIndex: 'quantity',
         render: (text, record) => {  //render里面三个参数的意思 text , record ,index  当前行的值，当前行数据，行索引
           return (
             <Input
-              onChange={e => this.handleFieldChange(e, 'number', record.id)}
-              onKeyPress={e => this.handleKeyPress(e, record.id)}
+              onChange={e => this.handleFieldChange(e, 'quantity', record.id)}
               placeholder="0"
               style={{ width: '70px' }}
             />
@@ -318,26 +253,25 @@ class PurOrderTable extends PureComponent {
       },
       {
         title: '供应商',
-        key: 'supply',
-        dataIndex: 'supply',
+        key: 'supplierId',
+        dataIndex: 'supplierId',
         render: (text, record) => {
           return (
-            <Select onChange={this.handleSelectChange.bind(this, 'supply', record.id)} style={{ width: '218px' }} placeholder='请选择'>
-              <Option value="1">Jack</Option>
-              <Option value="2">Lucy</Option>
-              <Option value="3">Disabled</Option>
-              <Option value="4">yiminghe</Option>
+            <Select onChange={this.handleSelectChange.bind(this, 'supplierId', record.id)} style={{ width: '218px' }} placeholder='请选择'>
+                {supplier.map(item => (
+                  <Option key={item.id} value={item.id}>{item.supplierName}</Option>
+                ))}
             </Select>
           );
         },
       },
       {
         title: '配送日期',
-        key: 'date',
-        dataIndex: 'date',
+        key: 'requiredDate',
+        dataIndex: 'requiredDate',
         render: (text, record) => {
           return (
-            <DatePicker onChange={this.handleDateChange.bind(this, 'date', record.id)} style={{ width: '130px' }} />
+            <DatePicker onChange={this.handleDateChange.bind(this, 'requiredDate', record.id)} style={{ width: '130px' }} />
           );
         },
       },
@@ -347,7 +281,7 @@ class PurOrderTable extends PureComponent {
         render: (text, record) => {
           return (
             <span>
-              <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.id)}>
+              <Popconfirm title="是否要删除此行？" onConfirm={() => this.deleteMeal(record.skuId)}>
                 <a>删除</a>
               </Popconfirm>
             </span>
@@ -355,18 +289,18 @@ class PurOrderTable extends PureComponent {
         }
       }
     ];
-
-
-    const { loading, data } = this.state;
-    let totalLength = null
-    if (data) {
-      totalLength = data.length
-    }
+    const { loading,  visible } = this.state;
+    const { supplier } = this.props
+    //解数据
+    const { value } = this.state
+    const { records } = value
+    const { orderTableForm } = this.props
+    //
     const CardTitle = () => {
       return (
         <div style={{ marginBottom: '20px' }}>
           <span style={{ marginRight: '10px' }}>商品明细</span>
-          <Tag color="cyan">共{totalLength}条</Tag>
+          <Tag color="cyan">共条</Tag>
         </div>
       )
     }
@@ -376,34 +310,40 @@ class PurOrderTable extends PureComponent {
         <Table
           loading={loading}  //通过loading这个变量的值判断页面是否在加载中
           columns={tabColumns}
-          dataSource={data}
+          dataSource={orderTableForm}
           pagination={false}
           rowKey='id'
-        // rowClassName={record => (record.editable ? 'editable' : '')} //点击编辑的话样式变化
+          className='purorderTable'
         />
         <Button
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
           type="dashed"
-          onClick={this.newMember}
+          onClick={this.queryNewOrderSelectf}
           icon="plus"
         >
-          新增成员
+          添加
         </Button>
 
-        <SelectIngredients
-          // modal的显示属性
+       {
+         visible ? <Selectf 
+          dataSource={records} 
+          handleModalVisble={this.handleModalVisble} 
+          handleModalHidden={this.handleModalHidden}
+          addMeal={this.addMeal}
+          deleteMeal={this.deleteMeal}
+          mealArray={this.props.mealArray}
           visible={this.state.visible}
-          // 隐藏modal的方法
-          handleModalVisble={() => { this.setState({
-            visible:false
-          }) }}
-        />
-        {/* <Button onClick={this.saveRow}>
-          保存
-        </Button> */}
+          
+        /> : null
+       }
       </Fragment>
     );
   }
 }
 
-export default PurOrderTable;
+export default connect(({purOrder,meal,setting})=>({
+  orderTableForm:purOrder.orderTableForm,
+  mealArray: meal.mealArray,
+  supplier:setting.supplier
+}))
+(PurOrderTable);
