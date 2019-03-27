@@ -20,7 +20,10 @@ export default async function request(options) {
         ReactDOM.render(<Spin />, document.getElementById('ajaxLoading'));
     }
     // let baseApi = 'http://yapi.jgzh.com/mock/17/';
-    let baseApi = 'http://anpin.jgzh.test/';
+    //贾宇晓
+    //let baseApi = 'http://anpin.jgzh.test:9002/';
+    //金鹏强
+    let baseApi = 'http://192.168.5.149/';
     try {
         const response = await axios({
             method: options.method,

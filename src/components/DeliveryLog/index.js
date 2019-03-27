@@ -9,11 +9,11 @@ class DeliveryLog extends React.Component {
   state = {
     opertion:true
   }
-  queryLog = (params = {}) => {
+  queryDistributionDetail = (params = {}) => {
     const { dispatch, location } = this.props;
     const id = location.state && location.state.id;
     dispatch({
-      type: 'deliveryAcce/queryLog',
+      type: 'deliveryAcce/queryDistributionDetail',
       payload: {
         ...params,
         id:id
@@ -21,10 +21,11 @@ class DeliveryLog extends React.Component {
     })
   }
   componentDidMount(){
-    this.queryLog()
+    this.queryDistributionDetail()
   }
   render() {
-    const {logList=[]} = this.props
+    const {detailData={}} = this.props
+    const logVos = detailData.logVos || []
     const tab1Columns = [{
       title: '操作类型',
       dataIndex: 'type',
@@ -56,12 +57,12 @@ class DeliveryLog extends React.Component {
           <Table  
             columns={tab1Columns}  
             rowKey='id'
-            dataSource={logList}
+            dataSource={logVos}
             />
       </div>
     )
   }
 }
 export default connect(({deliveryAcce }) => ({
-  logList:deliveryAcce.logList,
+  detailData:deliveryAcce.detailData,
 }))(withRouter(DeliveryLog));

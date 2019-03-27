@@ -1,10 +1,9 @@
 import React from 'react'
-import { Form , Select , DatePicker , Input, Button ,LocaleProvider   } from "antd";
+import { Form , Cascader , DatePicker , Input, Button ,LocaleProvider   } from "antd";
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import { connect } from 'dva';
-const Option = Select.Option;
 
 const Search = Input.Search;
 const FormItem = Form.Item;  
@@ -12,9 +11,7 @@ const { RangePicker } = DatePicker;
 
 class PurForm extends React.Component {
 
-  componentDidMount(){
-    this.queryIngreType()
-  }
+  
   queryIngreType = (params = {}) =>{
     const { dispatch, } = this.props;
     dispatch({
@@ -25,41 +22,28 @@ class PurForm extends React.Component {
     })
   }
   handleIngreType = (value)=>{
-    const { ingreType,queryParams } = this.props;
-    this.queryIngreType({
-      ingredientType:ingreType,
-      catalogId:value
-    })
-    queryParams({catalogId:value})
+    const { queryParams } = this.props;
+    const subcatalogId = value[1] || ''
+    queryParams({catalogId:value[0],subcatalogId:subcatalogId})
   }
-  //查询按钮
-  handleSubmit = (e) => {
-    const { queryPurCatalog,ingreType,current,pageSize } = this.props;
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const startDate = moment(values.orderTime[0]).format('YYYY-MM-DD');
-        const endDate = moment(values.orderTime[1]).format('YYYY-MM-DD');
-        queryPurCatalog({
-            catalogId:values.catalogId,
-            startDate:startDate,
-            endDate:endDate,
-            searchKey:values.searchKey,
-            ingredientType:ingreType,
-            current:current,
-            pageSize:pageSize
-          })
-      }
-    });
+  componentDidMount(){
+    this.queryIngreType()
   }
   render() {
     const { getFieldDecorator } = this.props.form;
     const {purCatalog,queryParams} = this.props;
     const ingreTypeList =purCatalog.ingreTypeList || [] ;
-    const ingreOptions = ingreTypeList.map((item)=>{
-      return(
-        <Option value={item.id} key={item.id}>{item.catalogName}</Option>
-      )
+    let typeOptions = ingreTypeList.map(item => {
+      return {
+        value:item.id,
+        label:item.catalogName,
+        children: item.subCataLogs.map(subItem => {
+          return {
+            value:subItem.id,
+            label:subItem.subcatalogName,
+          }
+        })
+      }
     })
     return(
       <LocaleProvider locale={zh_CN}>
@@ -70,13 +54,12 @@ class PurForm extends React.Component {
             getFieldDecorator('catalogId',{
                 initialValue:'',
             })(
-              <Select     
-                style={{ width: 170 }}
+              <Cascader     
+                style={{ width: 220 }}
                 onChange={this.handleIngreType}
                 placeholder="请选择食材类别"
-              > 
-               {ingreOptions}
-              </Select>            
+                options= {typeOptions}
+              />            
             )
           }
         </FormItem>
@@ -86,9 +69,16 @@ class PurForm extends React.Component {
             getFieldDecorator('orderTime',{
                 initialValue:'',
             })(
-              <RangePicker style={{width:240}}
+              <RangePicker style={{width:240,}}
                 onChange={(value)=>{
-                  queryParams({orderTime:value})
+                  const startDate = moment(value[0]).format('YYYY-MM-DD');
+                  const endDate = moment(value[1]).format('YYYY-MM-DD');
+                  queryParams(
+                    {
+                      startDate: startDate,
+                      endDate: endDate
+                    }
+                  )
                 }}
               />
             )
@@ -100,19 +90,15 @@ class PurForm extends React.Component {
             getFieldDecorator('keywords',{
                 initialValue:'',
             })(
-              <Input
+              <Search
                 placeholder="请输入关键字进行搜索"
-                onChange={e => {
-                   queryParams({keywords:e.target.value})
+                onSearch={(value) => {
+                   queryParams({keywords:value})
                 }}
                 style={{ width:300,}}
             />
             )
           }
-        </FormItem>
-        <FormItem>
-            <Button type="primary" htmlType="submit" style={{width:74,marginRight:10,marginLeft:39}}>查询</Button>
-            <Button htmlType="submit" style={{width:74}}>重置</Button>
         </FormItem>
       </Form>
       </div>

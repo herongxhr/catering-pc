@@ -20,6 +20,7 @@ class Ticket extends React.Component {
     this.queryTicket()
   }
   render() {
+    // .sort((a,b)=>a.type.codePointAt(0)-b.type.codePointAt(0))
     const { ticketData=[] } = this.props
     return (
         <div className='ticket'>

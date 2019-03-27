@@ -41,7 +41,7 @@ export default class Axios {
         loading = document.getElementById('ajaxLoading');
         loading.style.display = 'block';
 
-				let baseApi = 'http://yapi.jgzh.com:7777/mock/17/catering';
+		let baseApi = 'http://yapi.jgzh.com:7777/mock/17/catering';
 				
         return new Promise((resolve,reject)=>{
             axios({
@@ -71,8 +71,8 @@ export default class Axios {
 		
 		
     static ajaxGroup(requests) {
-			let baseApi = 'http://yapi.jgzh.com:7777/mock/17/catering';
-      let promises = []
+		let baseApi = 'http://yapi.jgzh.com:7777/mock/17/catering';
+        let promises = []
 			for(let i = 0; i <  requests.length; i++) {
 				promises.push(axios.get(`${baseApi}${requests[i].url}`))
 			}

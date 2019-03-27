@@ -8,12 +8,12 @@ import Img from "./pic.jpg"
 class ExcipientDetail extends Component{
     queryIngreDetail = (params = {}) => {
         const { dispatch, location } = this.props;
-        // const id=location.state.id;
+         const id=location.state.skuId;
         dispatch({
             type: 'purCatalog/queryIngreDetail',
             payload: {
-                //    ...params,
-                id: 2
+               ...params,
+                id: id
             }
         })
     }
