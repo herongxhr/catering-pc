@@ -33,7 +33,7 @@ export default {
         // 对模板操作的结果
         templateActionResult: true,
         // 新建菜单结果
-        createMenuDataResult: true
+        createMenuDataResult: ''
     },
     effects: {
         // 获取菜单列表,统一接口
@@ -151,13 +151,12 @@ export default {
         },
         *newMenu({ payload }, { call, put, select }) {
             const params = yield select(({ menuCenter }) => {
-                const camenuTemplateDetailVOMap = menuCenter.allMealsData;
+                const camenuDetails = menuCenter.allMealsData;
                 return {
                     ...payload,
-                    camenuTemplateDetailVOMap
+                    camenuDetails
                 }
             });
-            console.log('parmas:', params);
             const res = yield call(toNewMenu, params);
             yield put({
                 type: 'saveNewMenuDataResult',
@@ -223,8 +222,9 @@ export default {
         clearMenuDetails(state, _) {
             return {
                 ...state,
-                allMealsData: {},
+                allMealsData: [],
                 menuDetails: {},
+                templateDetails: {}
             }
         },
         // 对模板的操作复制、删除结果

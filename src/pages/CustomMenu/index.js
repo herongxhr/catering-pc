@@ -42,14 +42,15 @@ class CustomMenu extends Component {
 
   handleClickOk = () => {
     const { dispatch, templateDetails } = this.props;
+    const ndWeek = this.weekpicker.value;
+    
     const { nd = '', week = '' } = templateDetails;
-    // 显示加载按钮
-    dispatch({
-      type: 'menuCenter/saveNewMenuDataResult',
-      payload: ''// 即没有返回id值
-    })
     // 从局部state中取数据，再向后端传数据
     const { menuTemplateId, templateFrom, } = this.state;
+    if (nd && week) {
+      message.warn('请选择菜单的适用周次');
+      return;
+    }
     dispatch({
       type: 'menuCenter/newMenu',
       payload: {
@@ -79,22 +80,19 @@ class CustomMenu extends Component {
   componentDidUpdate() {
     const { dispatch, createMenuDataResult } = this.props;
     // 如果createMenuDataResult有id，即为true,定向到详情页
-    if (createMenuDataResult !== true) {
-      console.log('id:',createMenuDataResult)
+    if (createMenuDataResult) {
       this.success();
       dispatch(routerRedux.push({
         pathname: '/menubar/my-menu/details',
         // 传递后端返回的id
         state: { id: createMenuDataResult }
-        
       }))
     }
   }
 
   render() {
-    const { location, createMenuDataResult, templateDetails } = this.props;
-    const { nd = '', week = '' } = templateDetails;
-    const weekMoment = Moment().week(`${nd}-W${week}`);
+    const { location, loading } = this.props;
+    const isLoading = loading.effects['menuCenter/newMenu'];
     // 是否从模板新建
     return (
       <div>
@@ -104,7 +102,7 @@ class CustomMenu extends Component {
           <Row>
             <Col span={8}>适用周次：<WeekPicker
               ref={ref => this.weekpicker = ref}
-              defaultValue={weekMoment}
+              defaultValue={Moment()}
               style={{ width: 260 }}
               onChange={this.handleSelectWeek}
               placeholder="选择周次"
@@ -127,7 +125,7 @@ class CustomMenu extends Component {
             >取消</Button>
             <Button
               onClick={this.handleClickOk} type='primary'
-              loading={!createMenuDataResult}
+              loading={isLoading}
             >保存</Button>
           </div>
         </div>
@@ -136,7 +134,7 @@ class CustomMenu extends Component {
   }
 }
 
-export default connect(({ menuCenter,loading }) => ({
-  loading: loading,
+export default connect(({ menuCenter, loading }) => ({
+  loading,
   ...menuCenter
 }))(CustomMenu);
