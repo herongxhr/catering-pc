@@ -124,6 +124,7 @@ class MenuDetails extends React.Component {
       <div className='menuDetails'>
         <BreadcrumbComponents {...location} />
         <PageHeadWrapper
+          className={styles.headerWrap}
           title={`菜单编号：${menuCode}`}
           logo={<img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png" />}
           action={action}
