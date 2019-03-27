@@ -64,7 +64,6 @@ export default class ArrangeDishes extends Component {
         // 记录当前点击菜名的id，要考虑点了按钮的情况
         let currFoodId = (!isAdd && foodId) || '';
         const flag = e.target.getAttribute('flag') || null;
-        console.log('rowCol:', zj, mealTimes);
         this.setState({
             mealTimes,
             zj,
@@ -84,23 +83,24 @@ export default class ArrangeDishes extends Component {
     // 在选菜/选食材弹出框中点击添加或点击标签关闭时回调
     // flag为1为添加，-1时为删除，0为替换
     // 使用state中的zj和mealTimes定位单元格
-    changeArrangedMeals = (record, flag) => {
-        const { dispatch } = this.props;
-        const { isAdd } = this.state;
-        dispatch({
-            type: 'menuCenter/changeArrangedMeals',
-            payload: {
-                record,
-                ...this.state,
-                flag
+    changeArrangedMeals = (e, record, flag) => {
+        if (e.target.nodeName === 'A' || e.target.nodeName === 'svg') {
+            const { isAdd } = this.state;
+            this.props.dispatch({
+                type: 'menuCenter/changeArrangedMeals',
+                payload: {
+                    record,
+                    ...this.state,
+                    flag
+                }
+            });
+            // 当换过一次菜后，将之前所换菜的id设为currFoodId
+            if (!isAdd) {
+                this.setState({
+                    currFoodId: record.id
+                })
             }
-        });
-        // 当换过一次菜后，将之前所换菜的id设为currFoodId
-        if (!isAdd) {
-            this.setState({
-                currFoodId: record.foodId
-            })
-        }
+        };
     }
 
     // 选菜或选食材中筛选区域
@@ -123,19 +123,19 @@ export default class ArrangeDishes extends Component {
     }
 
     // 得到当前天当前餐次的菜品列表
-    getCurrMeals = () => {
+    getCurrTDMeals = () => {
         const { zj, mealTimes } = this.state;
         const { allMealsData } = this.props;
         if (zj && mealTimes) {
             // 按周几分类数据，返回对象
             const mealsSortedByWeekday = sortMealsData(allMealsData, 'zj');
             // 按餐次分类数据，返回对象
-            const oneMeal = mealsSortedByWeekday[zj] != null
-                ? sortMealsData(mealsSortedByWeekday[zj], mealTimes) : {}
-            // 转换成数组
-            return Object.values(oneMeal);
+            const onedayMeals = mealsSortedByWeekday[zj] != null
+                ? sortMealsData(mealsSortedByWeekday[zj], 'mealTimes') : {};
+            return onedayMeals[mealTimes] || [];
+        } else {
+            return [];
         }
-        return [];
     }
 
     // 构造表格行的DOM
@@ -247,7 +247,7 @@ export default class ArrangeDishes extends Component {
                     mealTimes={mealTimes}
                     zj={zj}
                     // 当前周次和餐次中菜品数据
-                    currMeals={this.getCurrMeals()}
+                    currTDMeals={this.getCurrTDMeals()}
                 />
             </div>
         )

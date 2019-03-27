@@ -88,10 +88,10 @@ export default class ShowArrangedDishes extends Component {
                         {mealsName.map(mealName => {
                             const oneMeal = oneDayMealsSorted[mealName] || [];
                             return (
-                                <td key={mealName} >
+                                <td key={`${mealName}price`} >
                                     {oneMeal.reduce((acc, curr) => {
                                         return acc = acc + curr.price;
-                                    }, 0)}
+                                    }, 0) || ''}
                                 </td>
                             )
                         }
@@ -125,7 +125,7 @@ export default class ShowArrangedDishes extends Component {
                     <tbody>
                         {/* 周一到周日都调用一下方法生成表格行 */}
                         {weekdaysNum.map(weekdayNum => this.renderWeekday(weekdayNum)
-                        )}
+                        ) || <tr><td>暂无数据</td></tr>}
                     </tbody>
                 </table>
             </Fragment>

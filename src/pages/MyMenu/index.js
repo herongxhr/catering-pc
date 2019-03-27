@@ -67,7 +67,7 @@ class MyMenu extends React.Component {
 			pathname: `/menubar/my-menu/details`,
 			state: {
 				id: record.id,
-				type: 'my'
+				type: 'my-menu'
 			}
 		}));
 	}

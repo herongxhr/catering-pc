@@ -127,7 +127,7 @@ const getYMDHms = dateTime => {
 }
 
 const sortMealsData = (objectArray = [], property) => {
-  return objectArray.reduce((acc, obj) => {
+  return objectArray.length >0  && objectArray.reduce((acc, obj) => {
     let key = obj[property];
     if (!acc[key]) {
       acc[key] = [];

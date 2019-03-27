@@ -59,7 +59,7 @@ class MenuCenter extends React.Component {
 			pathname: `/menubar/unified-menu/details`,
 			state: {
 				id: record.id,
-				type: 'unified'
+				type: 'unified-menu'
 			}
 		}));
 	}

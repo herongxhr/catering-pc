@@ -194,7 +194,18 @@ export function queryCTemplateDetails(templateId) {//查看模板
 }
 
 export function toUpdateMenu(params) {//修改菜单数据
-    const id = params.camenu.id || '';
+    const id = params.id || '';
+    return request({
+        method: 'post',
+        url: `/catering/camenu/${id}`,
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+            axiosData: JSON.stringify(params)
+        }
+    })
+}
+export function toNewMenu(params) {//修改菜单数据
+    const id = params.id || '';
     return request({
         method: 'post',
         url: `/catering/camenu/${id}`,

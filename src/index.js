@@ -1,12 +1,15 @@
 import dva from 'dva';
 import createHistory from 'history/createBrowserHistory';
 import RouterConfig from './RouterConfig';
+import createLoading from 'dva-loading';
 
 
 //创建应用
 const app = dva({
     history: createHistory(),
 });
+
+app.use(createLoading());
 
 //加载插件
 // app.use({});

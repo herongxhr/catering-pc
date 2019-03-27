@@ -28,7 +28,7 @@ class MenuDetails extends React.Component {
   static getDerivedStateFromProps(nextProps) {
     const { location } = nextProps;
     if (location.state) {
-      //console.log('state:',location.state);
+      console.log('state:',location.state);
       const { id = '', type = '' } = location.state;
       return { id, type };
     }
@@ -47,7 +47,7 @@ class MenuDetails extends React.Component {
   handleArrangeDishes = () => {
     const { id, type } = this.state;
     this.props.dispatch(routerRedux.push({
-      pathname: '/menubar/unified-menu/adjust',
+      pathname: `/menubar/${type}/adjust`,
       state: { id, type }
     }))
   }

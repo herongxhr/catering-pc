@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Card, DatePicker, Button, Row, Col, message } from 'antd';
 import { connect } from 'dva';
+import Moment from 'moment';
 import ArrangeDishes from '../../components/ArrangeDishes';
 import styles from './index.module.less';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
-import creatHistory from 'history/createBrowserHistory'
+import creatHistory from 'history/createBrowserHistory';
 import { routerRedux } from 'dva/router';
 
 const history = creatHistory();
@@ -19,17 +20,12 @@ class CustomMenu extends Component {
   }
 
   static getDerivedStateFromProps(props) {
-    const { location, createMenuDataResult, dispatch } = props;
-    console.log('result:', createMenuDataResult);
+    const { location } = props;
     // 只有从模板新建，选择了模板后
-    // location.state才存在
-    // 直接自定义菜单是location.state为undefined
+    // location.state才存在，直接自定义菜单是location.state为undefined
     if (location.state) {
       const { menuTemplateId = '', templateFrom = '' } = location.state;
-      return {
-        menuTemplateId,
-        templateFrom,
-      }
+      return { menuTemplateId, templateFrom }
     }
     return null;
   }
@@ -45,23 +41,23 @@ class CustomMenu extends Component {
   }
 
   handleClickOk = () => {
-    const { nd, week } = this.state;
-    // 确定选择了周次
-    if (!nd || !week) {
-      this.weekpicker.focus();
-      message.warn('请选择菜单的适用周次！');
-      return;
-    }
-    const { dispatch } = this.props;
+    const { dispatch, templateDetails } = this.props;
+    const { nd = '', week = '' } = templateDetails;
     // 显示加载按钮
     dispatch({
-      type: 'menuCenter/saveCreateMenuDataResult',
+      type: 'menuCenter/saveNewMenuDataResult',
       payload: ''// 即没有返回id值
     })
     // 从局部state中取数据，再向后端传数据
+    const { menuTemplateId, templateFrom, } = this.state;
     dispatch({
-      type: 'menuCenter/createMenuData',
-      payload: { ...this.state }
+      type: 'menuCenter/newMenu',
+      payload: {
+        menuTemplateId,
+        templateFrom,
+        nd: this.state.nd || nd,//state中有设置过值则取之，否则取默认
+        week: this.state.week || week
+      }
     });
   }
 
@@ -82,18 +78,23 @@ class CustomMenu extends Component {
 
   componentDidUpdate() {
     const { dispatch, createMenuDataResult } = this.props;
-    if (createMenuDataResult) {
+    // 如果createMenuDataResult有id，即为true,定向到详情页
+    if (createMenuDataResult !== true) {
+      console.log('id:',createMenuDataResult)
       this.success();
       dispatch(routerRedux.push({
         pathname: '/menubar/my-menu/details',
+        // 传递后端返回的id
         state: { id: createMenuDataResult }
+        
       }))
     }
   }
 
   render() {
-    const { location, createMenuDataResult } = this.props;
-
+    const { location, createMenuDataResult, templateDetails } = this.props;
+    const { nd = '', week = '' } = templateDetails;
+    const weekMoment = Moment().week(`${nd}-W${week}`);
     // 是否从模板新建
     return (
       <div>
@@ -103,6 +104,7 @@ class CustomMenu extends Component {
           <Row>
             <Col span={8}>适用周次：<WeekPicker
               ref={ref => this.weekpicker = ref}
+              defaultValue={weekMoment}
               style={{ width: 260 }}
               onChange={this.handleSelectWeek}
               placeholder="选择周次"
@@ -125,7 +127,7 @@ class CustomMenu extends Component {
             >取消</Button>
             <Button
               onClick={this.handleClickOk} type='primary'
-              loading={!!createMenuDataResult}
+              loading={!createMenuDataResult}
             >保存</Button>
           </div>
         </div>
@@ -134,6 +136,7 @@ class CustomMenu extends Component {
   }
 }
 
-export default connect(({ menuCenter }) => ({
+export default connect(({ menuCenter,loading }) => ({
+  loading: loading,
   ...menuCenter
 }))(CustomMenu);

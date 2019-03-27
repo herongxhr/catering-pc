@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Card, DatePicker, Button } from 'antd';
+import Moment from 'moment';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import ArrangeDishes from '../../components/ArrangeDishes';
@@ -30,7 +31,7 @@ class AdjustMenu extends Component {
   // 根据type值的不同，调用不同方法来请求不同的接口
   getMenuDetail = () => {
     const { id, type } = this.state;
-    const url = type === 'unified' ? 'Unified' : 'My';
+    const url = type === 'unified-menu' ? 'Unified' : 'My';
     this.props.dispatch({
       type: `menuCenter/fetch${url}MenuDetails`,
       payload: id
@@ -47,14 +48,10 @@ class AdjustMenu extends Component {
   }
 
   handleClickOk = () => {
-    const { dispatch } = this.props;
     const { id, nd, week } = this.state;
-    dispatch({
-      type: 'menuCenter/editMenuSummary',
+    this.props.dispatch({
+      type: 'menuCenter/updateMenu',
       payload: { id, nd, week, }
-    });
-    dispatch({
-      type: 'menuCenter/updateMenu'
     });
   }
 
@@ -63,17 +60,21 @@ class AdjustMenu extends Component {
   }
 
   render() {
-    const { location } = this.props;
+    const { location, menuDetails } = this.props;
+    const nd = menuDetails.nd || '';
+    const week = menuDetails.week || '';
+    const weekMoment = Moment().week(`${nd}-W${week}`);
     // 新建菜单的类型type
     const { type } = this.state;
-    const isMy = type === 'my';
+    const isMy = type === 'my-menu';
     return (
       <div>
         <BreadcrumbComponent {...location} />
         {/* 如果是自定义菜单时显示 */}
-        {type === 'my' && <Card className={styles.wrap}>
+        {isMy && <Card className={styles.wrap}>
           <span>适用周次：
             <WeekPicker
+              defaultValue={weekMoment}
               style={{ width: 260 }}
               onChange={this.handleSelectWeek}
               placeholder="选择周次"

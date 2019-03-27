@@ -9,7 +9,7 @@ import {
     queryMenuData,
     queryMenuDetails,
     toUpdateMenu,
-    addMenuData
+    toNewMenu,
 } from '../services/api';
 import { sortMealsData } from '../utils/utils';
 
@@ -33,7 +33,7 @@ export default {
         // 对模板操作的结果
         templateActionResult: true,
         // 新建菜单结果
-        createMenuDataResult: ''
+        createMenuDataResult: true
     },
     effects: {
         // 获取菜单列表,统一接口
@@ -71,6 +71,14 @@ export default {
                 payload: data,
             })
         },
+        // 获取我的模板详情数据
+        *fetchPTemplateDetails({ payload }, { call, put }) {
+            const data = yield call(queryPTemplateDetails, payload);
+            yield put({
+                type: 'saveTemplateDetails',
+                payload: data || {},
+            });
+        },
         // 餐饮管理单位模板列表
         *fetchCMenuTemplate({ payload = {} }, { call, put }) {
             const defultOptions = {
@@ -91,29 +99,11 @@ export default {
             })
         },
         // 获取我的模板详情数据
-        *fetchPTemplateDetails({ payload }, { call, put }) {
-            const data = yield call(queryPTemplateDetails, payload);
-            yield put({
-                type: 'saveTemplateDetails',
-                payload: data,
-            });
-            // 将模板数据扁平化
-            yield put({
-                type: 'saveEverydayData',
-                payload: data && data.camenuTemplateDetailVOMap
-            });
-        },
-        // 获取我的模板详情数据
         *fetchCTemplateDetails({ payload }, { call, put }) {
             const data = yield call(queryCTemplateDetails, payload);
             yield put({
                 type: 'saveTemplateDetails',
-                payload: data,
-            });
-            // 将模板数据扁平化
-            yield put({
-                type: 'saveEverydayData',
-                payload: data && data.camenuTemplateDetailVOMap
+                payload: data || {},
             });
         },
         // 对模板进行复制和删除
@@ -149,63 +139,30 @@ export default {
             })
         },
         // 更新菜单数据
-        *updateMenu(_, { call, put, select }) {
+        *updateMenu({ payload }, { call, put, select }) {
             const params = yield select(({ menuCenter }) => {
-                const {
-                    camenu,
-                    monday,
-                    tuesday,
-                    wednesday,
-                    thursday,
-                    friday,
-                    saturday,
-                    sunday,
-                } = menuCenter;
+                const camenuDetailVos = menuCenter.allMealsData;
                 return {
-                    camenu,
-                    camenuDetailsMap: {
-                        monday,
-                        tuesday,
-                        wednesday,
-                        thursday,
-                        friday,
-                        saturday,
-                        sunday,
-                    }
+                    ...payload,
+                    camenuDetailVos
                 }
             });
             const res = yield call(toUpdateMenu, params);
         },
-        // 新建菜单数据
-        *createMenuData({ payload }, { call, put, select }) {
+        *newMenu({ payload }, { call, put, select }) {
             const params = yield select(({ menuCenter }) => {
-                const {
-                    monday,
-                    tuesday,
-                    wednesday,
-                    thursday,
-                    friday,
-                    saturday,
-                    sunday,
-                } = menuCenter;
+                const camenuTemplateDetailVOMap = menuCenter.allMealsData;
                 return {
-                    camenuDetailsMap: {
-                        monday,
-                        tuesday,
-                        wednesday,
-                        thursday,
-                        friday,
-                        saturday,
-                        sunday,
-                    }
+                    ...payload,
+                    camenuTemplateDetailVOMap
                 }
             });
-            const res = yield call(addMenuData, { ...params, camenu: payload, });
+            console.log('parmas:', params);
+            const res = yield call(toNewMenu, params);
             yield put({
-                type: 'saveCreateMenuDataResult',
+                type: 'saveNewMenuDataResult',
                 payload: res
             })
-            console.log('上传', res);
         },
         // 获取菜品数据 
         *fetchDishes({ payload }, { call, put }) {
@@ -232,24 +189,16 @@ export default {
                 allMealsData: payload.camenuDetailVos || [],
             }
         },
-        // 保存菜单/模板详情中每天的排餐数据
-        saveEverydayData(state, { payload }) {
-            return {
-                ...state,
-                // 直接扁平化每天排餐数据
-                ...payload,
-            }
-        },
         savePMenuTemplate(state, { payload }) {
             return {
                 ...state,
-                PMenuTemplate: { ...payload }
+                PMenuTemplate: payload || {}
             }
         },
         saveCMenuTemplate(state, { payload }) {
             return {
                 ...state,
-                CMenuTemplate: { ...payload }
+                CMenuTemplate: payload || {}
             }
         },
         // 保存我的或推荐模板详情
@@ -257,7 +206,8 @@ export default {
             return {
                 ...state,
                 // 直接扁平化每天排餐数据
-                templateDetails: payload
+                templateDetails: payload,
+                allMealsData: payload.camenuTemplateDetailVos || [],
             }
         },
         // 保存菜品库中的菜品数据
@@ -273,15 +223,8 @@ export default {
         clearMenuDetails(state, _) {
             return {
                 ...state,
-                monday: {},
-                tuesday: {},
-                wednesday: {},
-                thursday: {},
-                friday: {},
-                saturday: {},
-                sunday: {},
+                allMealsData: {},
                 menuDetails: {},
-                templateDetails: {},
             }
         },
         // 对模板的操作复制、删除结果
@@ -292,10 +235,10 @@ export default {
             }
         },
         // 新建菜单执行结果
-        saveCreateMenuDataResult(state, { payload }) {
+        saveNewMenuDataResult(state, { payload }) {
             return {
                 ...state,
-                createMenuDataResult: !payload
+                createMenuDataResult: payload
             }
         },
 
@@ -328,27 +271,26 @@ export default {
             const {
                 record, mealTimes, zj, forStaff, isAdd, currFoodId, flag
             } = payload;
-            // const oneDayMealsSorted = state.mealsByWeekday[zj] != null
-            //     ? sortMealsData(mealsByWeekday[zj], 'mealTimes') : {};
-            // const oneMeal = oneDayMealsSorted[mealTimes] != null
-            //     ? getTD(oneDayMealsSorted[mealTimes])
-            //     : [];
-            // 增加
+            // const mealsByWeekday = sortMealsData(allMealsData, 'zj');
+            // const oneDayMeals = zj && mealsByWeekday[zj] || {};
+            // const oneDayMealsSortByName = mealTimes && sortMealsData(oneDayMeals, 'mealTimes') || {}
+            // const isExist = oneDayMealsSortByName[mealTimes].some(meal => meal.foodId === currFoodId);
             switch (flag) {
                 // 增加
                 case 1:
                     return {
                         ...state,
-                        allMealsData: state.allMealsData.concat({
+                        allMealsData: [...state.allMealsData, {
                             foodId: record.id,
-                            foodVo: {
-                                foodName: record.foodName
+                            viewFood: {
+                                foodName: record.foodName,
+                                gg: record.gg
                             },
                             forStaff,
                             mealTimes,
                             zj,
                             isAdd,
-                        })
+                        }]
                     }
                 // 删除
                 case -1:
@@ -365,7 +307,11 @@ export default {
                                 if (meal.foodId === currFoodId) {
                                     return {
                                         sort: meal.sort,
-                                        foodId: currFoodId,
+                                        foodId: record.id,
+                                        viewFood: {
+                                            foodName: record.foodName,
+                                            gg: record.gg
+                                        },
                                         forStaff,
                                         mealTimes,
                                         zj,

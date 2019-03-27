@@ -32,32 +32,6 @@ class SelectDishes extends React.Component {
             ...params
         });
     }
-    // 点击分页操作
-    handleTableChange = pagination => {
-        const { getDishes } = this.props;
-        const { current, pageSize } = pagination;
-        this.setState({ current, pagination });
-        // 发请求
-        getDishes({
-            ...this.state,
-            current,
-            pageSize,
-        });
-    }
-
-    // 根据条件来显示选菜modal中，操作文本显示内容
-    // 并根据模式不同，实现多选或单选功能
-    renderActions = record => {
-        // 判断当前食材或菜品是否已经添加
-        // 当前是加菜还是换菜模式
-        let { isAdd, currMeals, changeArrangedMeals } = this.props;
-        let flag = isAdd ? 1 : 0;
-        return currMeals.some(item => item.id === record.id)
-            ? <span>已选</span>
-            : <a onClick={() => {
-                changeArrangedMeals(record, flag);
-            }}>选择</a>
-    }
 
     componentDidMount() {
         this.props.getDishes()
@@ -99,7 +73,15 @@ class SelectDishes extends React.Component {
                 key: 'add',
                 width: 100,
                 render: (_, record) => {
-                    return this.renderActions(record);
+                    // 判断当前食材或菜品是否已经添加
+                    // 当前是加菜还是换菜模式
+                    let { isAdd, currTDMeals, changeArrangedMeals } = this.props;
+                    let flag = isAdd ? 1 : 0;
+                    return currTDMeals.some(item => item.foodId === record.id)
+                        ? <span>已选</span>
+                        : <a onClick={e => {
+                            changeArrangedMeals(e, record, flag);
+                        }}>选择</a>
                 }
             },
         ];
@@ -109,19 +91,17 @@ class SelectDishes extends React.Component {
             handleHideModal, // 隐藏modal的方法
             changeArrangedMeals, // 选菜，删菜，换菜方法
             dishesData, // 菜品数据
-            currMeals, // 已选菜品数据
+            currTDMeals, // 已选菜品数据
         } = this.props;
         // 把后端返回的菜品数据dishData解构，考虑为空的情况
         const {
             current = 1,
             pages = 1,
-            records = [],
-            searchCount,
             size = 10,
             total = ''
         } = dishesData;
-        // currMeals初始为空数组
-        const tagListDom = currMeals.map(item => (
+        const records = dishesData.records || [];
+        const tagListDom = currTDMeals.map(item => (
             // 自己新增的绿色显示
             <Tag color={item.isAdd ? 'green' : ''}
                 style={{
@@ -130,13 +110,13 @@ class SelectDishes extends React.Component {
                     fontSize: "14px",
                     marginBottom: 10
                 }}
-                key={item.id}
+                key={item.foodId}
                 // 判断是不是自己加的菜
                 closable={item.isAdd}
-                onClose={() => {
-                    changeArrangedMeals(item, -1)
+                onClose={e => {
+                    changeArrangedMeals(e, item, -1)
                 }} >
-                {item.foodName}{item.properties}
+                {item.viewFood.foodName}：{item.viewFood.gg && item.viewFood.gg.substring(0, 14) + '...'}
             </Tag>));
         return (
             <Modal
@@ -172,6 +152,7 @@ class SelectDishes extends React.Component {
                         style={{ height: 594 }}
                         columns={tableColumns}
                         dataSource={records}
+                        onChange={({ current, pageSize }) => this.filterToGetData({ current, pageSize })}
                         rowKey="id"
                         pagination={{
                             current,

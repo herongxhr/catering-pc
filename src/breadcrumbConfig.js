@@ -11,6 +11,7 @@ export default {
     '/menubar/my-menu/': '我的菜单',
     '/menubar/my-menu/details/': '详情',
     '/menubar/my-menu/custom/': '自建菜单',
+    '/menubar/my-menu/adjust/': '调整菜单',
     '/menubar/my-menu/choice-template/': '选择模板',
     '/menubar/my-menu/from-template/': '从模板新建',
     '/menubar/menu-template/': '菜单模板',
