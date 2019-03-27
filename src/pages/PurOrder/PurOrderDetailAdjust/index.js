@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:41:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-27 15:17:40
+ * @Last Modified time: 2019-03-27 16:37:54
  */
 import React, { Fragment } from 'react'
 import Bread from '../../../components/Bread'
@@ -49,10 +49,13 @@ class PurOrderAdjust extends React.Component {
     }
     console.log(object)
     this.queryOrderForm(object) 
-    if(orderItemGoods) {
-      message.success('请求成功')
-      this.purOrderSave(orderItemGoods)
-    }
+    // if(orderItemGoods) {
+    //   message.success('请求成功')
+    //   this.purOrderSave(orderItemGoods)
+    // }
+    // this.purOrderSave('',{
+    //   id:'303c452ba8d4b4a068f84413d286aedf'
+    // })
   }
 
   queryOrderForm = (data) => {

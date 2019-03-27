@@ -587,17 +587,8 @@ export function queryListQuery(params) {
     })
 }
 
-//常用供应商
-export function querySupplier(params) {
-    return request({
-        method: 'get',
-        url: '/catering/setting/favoriteSupplier/listQuery',
-        data: {
-            showLoading: true,
-            params,
-        }
-    })
-}
+
+
 //计算数据
 export function queryCount(params) {
     return request({
@@ -621,16 +612,16 @@ export function queryDistributionDetail(params) {
     })
 }
 
-// export function querySupplier(params) {
-//     return request({
-//         method: 'get',
-//         url: '/pub/supplier/listQuery',
-//         data: {
-//             showLoading: true,
-//             params,
-//         }
-//     })
-// }
+export function querySupplier(params) {
+    return request({
+        method: 'get',
+        url: '/pub/supplier/listQuery',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
 //换货申请列表
 export function queryDetailReplacement(params) {
     return request({
