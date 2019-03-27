@@ -43,6 +43,7 @@ import MyMenu from './pages/MyMenu';
 import ChoiceTemplate from './pages/ChoiceTemplate';
 import ParameterDetail from '../src/pages/Parameter/ParameterDetail'
 import PurOrderDetailAdjust from './pages/PurOrder/PurOrderDetailAdjust'
+import Test from './pages/Test'
 
 moment.locale('zh-cn');
 
@@ -102,6 +103,8 @@ export default function RouterConfig({ history }) {
               <Route path="/arrangeDishes" component={ArrangeDishes}></Route>
               <Route path="/selectIngredients" component={SelectIngredients}></Route>
               <Route path="/dishDetails" component={DishDetails}></Route>
+              <Route path="/test" component={Test}></Route>
+
               {/* <Route path="/deliveryAcceDetail" component={DeliveryAcceDetail}></Route> */}
               <Redirect to="/home" />
             </Switch>

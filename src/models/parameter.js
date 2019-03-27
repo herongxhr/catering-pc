@@ -1,31 +1,41 @@
-import {  queryParameterTable , queryParameterDetail } from '../services/api';
+import {  queryParameterTable , queryParameterUnfold , queryParameterUnfoldItem } from '../services/api';
 
 export default {
     namespace: 'parameter',
     state: {
         ParameterTable:[],
-        ParameterDetail:[]
+        ParameterUnfold:[],
+        ParameterUnfoldItem:[]
     },
     effects: {     
         *queryParameterTable({ payload }, { call, put }) {
             //call方法首参数为要调用的异步方法
             
             const  data  = yield call(queryParameterTable,payload);
-            //console.log(data);
+            console.log(data);
             yield put({
                 type: 'saveParameterTable',
                 payload: data || {},
             });
         },
-        *queryParameterDetail({ payload }, { call, put }) {
+        *queryParameterUnfold({ payload }, { call, put }) {
           //call方法首参数为要调用的异步方法
-          const  data  = yield call(queryParameterDetail,payload);
+          const  data  = yield call(queryParameterUnfold,payload);
           //console.log(data);
           yield put({
-              type: 'saveParameterDetail',
+              type: 'saveParameterUnfold',
               payload: data || {},
           });
-      },
+        },
+        *queryParameterUnfoldItem({ payload }, { call, put }) {
+            //call方法首参数为要调用的异步方法
+            const  data  = yield call(queryParameterUnfoldItem,payload);
+            //console.log(data);
+            yield put({
+                type: 'saveParameterUnfoldItem',
+                payload: data || {},
+            });
+          },
     },
     reducers: {
         saveParameterTable(state, { payload }) {
@@ -35,12 +45,19 @@ export default {
                 ParameterTable: payload,
             };
         },
-        saveParameterDetail(state, { payload }) {
+        saveParameterUnfold(state, { payload }) {
           //console.log(payload);
           return {
               ...state,
-              ParameterDetail: payload,
+              ParameterUnfold: payload,
           };
-      },
+        },
+        saveParameterUnfoldItem(state, { payload }) {
+            //console.log(payload);
+            return {
+                ...state,
+                ParameterUnfoldItem: payload,
+            };
+        },
     },
 };

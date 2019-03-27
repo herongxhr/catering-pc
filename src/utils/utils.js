@@ -2,9 +2,11 @@
  * @Author: suwei 
  * @Date: 2019-03-22 15:08:43 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-22 15:09:06
+ * @Last Modified time: 2019-03-23 13:01:03
  */
 import { routerRedux } from 'dva/router';
+import { array } from 'prop-types';
+import { log } from 'util';
 
 
 const TableLinkChange = (pathname,record,rest) => {
@@ -109,4 +111,12 @@ const city = () => {
 
 const isEven = num => num % 2 === 0
 
-export { TableLinkChange , isEven , city }
+var lenthPush = (array,secondArray) => {
+  var data = array.splice(array.length - 1)
+  const [last] = data
+  array.push(secondArray)
+  array.push(last)
+  return array
+}
+
+export { TableLinkChange , isEven , city , lenthPush }

@@ -2,29 +2,23 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:20:39 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-22 10:14:30
+ * @Last Modified time: 2019-03-27 09:48:31
  */
 import React, { PureComponent, Fragment } from 'react';
-import { Table, Button, Input, message, Popconfirm, Divider, Select, Form, Modal, Card } from 'antd';
+import { Table, Button, message, Popconfirm, Select, Form, Modal } from 'antd';
 import isEqual from 'lodash/isEqual';
+import { connect } from 'dva';
 
 import './style.less';
 
 const Option = Select.Option
-const FormItem = Form.item
 
 class SettingTableForm extends PureComponent {
-  index = 0;
-
-  cacheOriginData = {};
-
   constructor(props) {
     super(props);
-
     this.state = {
       data: props.value,
       loading: false,
-      /* eslint-disable-next-line react/no-unused-state */
       value: props.value,
       visible: false
     };
@@ -40,247 +34,90 @@ class SettingTableForm extends PureComponent {
     };
   }
 
-  getRowByKey(key, newData) {
-    const { data } = this.state;
-    return (newData || data).filter(item => item.key === key)[0];
-  }
-
-  toggleEditable = (e, key) => {
-    e.preventDefault();
-    const { data } = this.state;
-    const newData = data.map(item => ({ ...item })); //赋值editable
-    const target = this.getRowByKey(key, newData);
-    if (target) {
-      // 进入编辑状态时保存原始数据
-      if (!target.editable) {
-        this.cacheOriginData[key] = { ...target };
-      }
-      target.editable = !target.editable;
-      this.setState({ data: newData });
-    }
-  };
-
-  newMember = () => {
-    const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    newData.push({
-      key: `NEW_TEMP_ID_${this.index}`,
-      supply: '',
-      legalPerson: '',
-      address: '',
-      phone:'',
-      editable: true,
-      isNew: true,
-    });
-    this.index += 1;
-    this.setState({ data: newData });
-  };
-                                                                                                                                                                                                                                                                                                                                                                                                                    
+  //删除按钮                                                                                                                                                                                                                                                                                                                                                                                                        
   remove(key) {
-    const { data } = this.state;
-    const { onChange } = this.props;
-    const newData = data.filter(item => item.key !== key);
-    this.setState({ data: newData });
-    onChange(newData);
+    const { props } = this
+    props.dispatch({
+      type:'setting/queryDeleteFavoriteSupplier',
+      payload:key
+    })
   }
 
-  handleKeyPress(e, key) {
-    if (e.key === 'Enter') {
-      this.saveRow(e, key);
-    }
-  }
-
-  handleFieldChange(e, fieldName, key) {
-    const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    const target = this.getRowByKey(key, newData);
-    if (target) {
-      target[fieldName] = e.target.value;
-      this.setState({ data: newData });
-    }
-  }
-
+  //modal确定按钮
   handleOk = (e) => {
+    let userInfo = this.props.form.getFieldsValue();
+    const { props } = this
+    const { savefavoriteSupplier } = props
+    props.dispatch({
+      type:'setting/queryfavoriteSupplier',
+      payload:userInfo
+    })
     this.setState({
-      visible: false,
-    });
+      visible:false
+    })
   }
 
+  //modal框取消按钮
   handleCancel = (e) => {
-    console.log(e);
     this.setState({
       visible: false,
     });
   }
 
-  saveRow(e, key) {
-    e.persist();
-    this.setState({
-      loading: true,
-    });
-    setTimeout(() => {
-      if (this.clickedCancel) {
-        this.clickedCancel = false;
-        return;
-      }
-      const target = this.getRowByKey(key) || {};
-      console.log(target)
-      if (!target.supply || !target.legalPerson || !target.address || !target.phone) {
-        message.error('请填写完整成员信息。');
-        e.target.focus();
-        this.setState({
-          loading: false,
-        });
-        return;
-      }
-      delete target.isNew;
-      this.toggleEditable(e, key);
-      const { data } = this.state;
-      const { onChange } = this.props;
-      onChange(data);
-      this.setState({
-        loading: false,
-      });
-    }, 500);
+  //查询供应商列表
+  querySupplier = (params = {}) => {
+    this.props.dispatch({
+      type: 'setting/querySupplier',
+      payload: {
+        ...params
+      },
+    })
   }
 
-  cancel(e, key) {
-    this.clickedCancel = true;
-    e.preventDefault();
-    const { data } = this.state;
-    const newData = data.map(item => ({ ...item }));
-    const target = this.getRowByKey(key, newData);
-    if (this.cacheOriginData[key]) {
-      Object.assign(target, this.cacheOriginData[key]);
-      delete this.cacheOriginData[key];
-    }
-    target.editable = false;
-    this.setState({ data: newData });
-    this.clickedCancel = false;
-  }
 
+  //展开modal框
   showModal = () => {
     this.setState({
       visible: true,
     });
+    this.querySupplier()
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const modalObject = {
-      height:'380px'
-    }
     const columns = [
       {
         title: '供应商',
-        dataIndex: 'supply',
-        key: 'supply',
+        dataIndex: 'supplierName',
+        key: 'supplierName',
         width: '20%',
-        render: (text, record) => {
-          if (record.editable) {
-            return (
-              <Input
-                value={text}
-                autoFocus
-                onChange={e => this.handleFieldChange(e, 'supply', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="供应商"
-              />
-            );
-          }
-          return text;
-        },
       },
       {
         title: '地区',
-        dataIndex: 'address',
-        key: 'address',
+        dataIndex: 'zoneInfo',
+        key: 'zoneInfo',
         width: '20%',
-        render: (text, record) => {
-          if (record.editable) {
-            return (
-              <Input
-                value={text}
-                onChange={e => this.handleFieldChange(e, 'address', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="地区"
-              />
-            );
-          }
-          return text;
-        },
       },
       {
         title: '联系电话',
-        dataIndex: 'phone',
-        key: 'phone',
+        dataIndex: 'mobile',
+        key: 'mobile',
         width: '20%',
-        render: (text, record) => {
-          if (record.editable) {
-            return (
-              <Input
-                value={text}
-                onChange={e => this.handleFieldChange(e, 'phone', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="联系电话"
-              />
-            );
-          }
-          return text;
-        },
       },
       {
         title: '法人',
-        dataIndex: 'legalPerson',
-        key: 'legalPerson',
+        dataIndex: 'corporation',
+        key: 'corporation',
         width: '20%',
-        render: (text, record) => {  //render里面三个参数的意思 text , record ,index  当前行的值，当前行数据，行索引
-          if (record.editable) {
-            return (
-              <Input
-                value={text}
-                onChange={e => this.handleFieldChange(e, 'legalPerson', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="法人"
-              />
-            );
-          }
-          return text;
-        },
       },
       {
         title: '操作',
         key: 'action',
         render: (text, record) => {
-          const { loading } = this.state;
-          if (!!record.editable && loading) {
-            return null;
-          }
-          if (record.editable) {
-            if (record.isNew) {
-              return (
-                <span>
-                  <a onClick={e => this.saveRow(e, record.key)}>添加</a>
-                  <Divider type="vertical" />
-                  <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
-                    <a>删除</a>
-                  </Popconfirm>
-                </span>
-              );
-            }
-            return (
-              <span>
-                <a onClick={e => this.saveRow(e, record.key)}>保存</a>  
-                <Divider type="vertical" />
-                <a onClick={e => this.cancel(e, record.key)}>取消</a>
-              </span>
-            );
-          }
           return (
             <span>
               {/* <a onClick={e => this.toggleEditable(e, record.key)}>编辑</a> */}
               {/* <Divider type="vertical" /> */}
-              <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
+              <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.supplierId)}>
                 <a>删除</a>
               </Popconfirm>
             </span>
@@ -288,9 +125,12 @@ class SettingTableForm extends PureComponent {
         },
       },
     ];
-
+    const { getFieldDecorator } = this.props.form;
+    const modalObject = {
+      height:'328px'
+    }
     const { loading, data } = this.state;
-
+    const { supplier } = this.props
     return (
       <Fragment>
         <Table
@@ -298,6 +138,7 @@ class SettingTableForm extends PureComponent {
           columns={columns}
           dataSource={data}
           pagination={false}
+          rowKey='supplierId'
           rowClassName={record => (record.editable ? 'editable' : '')} //点击编辑的话样式变化
         />
         <Button
@@ -321,12 +162,16 @@ class SettingTableForm extends PureComponent {
           // getContainer={() => document.getElementsByClassName('security-view')}
         >   
           <div style={{marginBottom:'20px'}}>添加供货商</div>
-          <Select defaultValue="1" style={{width:'330px'}}>
-              <Option value="1">东阳市康有食品有限公司</Option>
-              <Option value="2">浙江市康有食品有限公司</Option>
-              <Option value="3">无锡市康有食品有限公司</Option>
-              <Option value="4">武汉市康有食品有限公司</Option>
-          </Select>
+            {getFieldDecorator('supplierId', {
+
+            })(
+              <Select  style={{width:'330px'}} placeholder='请选择'>
+                {supplier.map(item => (
+                  <Option key={item.id} value={item.id}>{item.supplierName}</Option>
+                ))}
+              </Select>
+            )}
+
         </Modal>
       </Fragment>
     );
@@ -335,5 +180,11 @@ class SettingTableForm extends PureComponent {
 
 const TableForm = Form.create()(SettingTableForm)
 
-export default TableForm
+export default connect(({setting})=>({
+  listQuery:setting.listQuery,
+  supplier:setting.supplier,
+  savefavoriteSupplier:setting.savefavoriteSupplier,
+  deleteSupply:setting.deleteSupply
+}))(TableForm);
+
 

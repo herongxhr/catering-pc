@@ -1,41 +1,46 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-23 16:56:28 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-24 10:20:11
+ */
 import React from 'react'
-import { Form , Tabs , Table , Card } from 'antd';
-
+import { Form , Tabs , Card } from 'antd';
+import { connect } from 'dva';
 import TableForm from './TableForm';
 import NestedTable from './NestedTable'
 
 import './style.less'
 
 const TabPane = Tabs.TabPane;
-const FormItem = Form.Item;
-
-
-const tableData = [{
-  key: '1',
-  supply: '坚果智慧',
-  legalPerson: '赵丽颖',
-  address: '横店',
-  phone:'111111111'
-}, {
-  key: '2',
-  supply: '东阳市康有食品有限公司',
-  legalPerson: '王海',
-  address: '东阳市',
-  phone:'17683763005'
-}];
-
 
 class CommonSupply extends React.Component {
-  state = {
-    supplier:[]
+
+  queryListQuery = (params = {}) => {
+    this.props.dispatch({
+      type: 'setting/queryListQuery',
+      payload: {
+        ...params
+      },
+    })
   }
 
-
+  componentDidMount() {
+    this.queryListQuery()
+  }
 
   render() {
     const {
       form: { getFieldDecorator },
+      listQuery
     } = this.props;
+    //对后端返回的数据进行包装
+    const tableData = listQuery
+    const array = []
+    tableData.forEach(item => array.push(item.supplierVo))
+    for(let i = 0; i < array.length; i++) {
+      array[i].supplierId = tableData[i].supplierId
+    }
     return(
       <div>
         <h1>供货商</h1>
@@ -43,7 +48,7 @@ class CommonSupply extends React.Component {
           <TabPane tab="常见供货商" key="1">
             <Card bordered={false}>
               {getFieldDecorator('members', {
-                initialValue: tableData,
+                initialValue: array,
               })(<TableForm />)}
             </Card>
           </TabPane>
@@ -58,7 +63,5 @@ class CommonSupply extends React.Component {
 
 const Supply = Form.create()(CommonSupply)
 
-
-
-
-export default Supply
+export default connect(({setting})=>({listQuery:setting.listQuery}))
+(Supply);

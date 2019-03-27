@@ -1,89 +1,50 @@
 import React from 'react'
 import { Table } from 'antd';
 import axios from 'axios';
+import Selectf from '../../components/SelectIngredients';
 
-const columns = [{
-  title: 'Name',
-  dataIndex: 'name',
-  sorter: true,
-  render: name => `${name.first} ${name.last}`,
-  width: '20%',
-}, {
-  title: 'Gender',
-  dataIndex: 'gender',
-  filters: [
-    { text: 'Male', value: 'male' },
-    { text: 'Female', value: 'female' },
-  ],
-  width: '20%',
-}, {
-  title: 'Email',
-  dataIndex: 'email',
-}];
+
 
 class Test extends React.Component {
+
   state = {
-    data: [],
-    pagination: {},
-    loading: false,
-  };
-
-  componentDidMount() {
-    this.fetch();
+    visible:false
   }
 
-  handleTableChange = (pagination, filters, sorter) => {
-    const pager = { ...this.state.pagination };
-    pager.current = pagination.current;
+  handleModalVisble = () => {
+   this.setState({
+    visible:true
+   }) 
+  }
+
+  handleModalHidden = () => {
     this.setState({
-      pagination: pager,
-    });
-    this.fetch({
-      results: pagination.pageSize,
-      page: pagination.current,
-      sortField: sorter.field,
-      sortOrder: sorter.order,
-      ...filters,
-    });
+      visible:false
+    })
   }
 
-  fetch = (params = {}) => {
-		console.log('params:', params);
-    this.setState({ loading: true });
-    axios({
-      url: 'https://randomuser.me/api',
-      method: 'get',
-      data: {
-        results: 10,
-        ...params,
-      },
-      type: 'json',
-    }).then((data) => {
-      console.log(data)
-      const pagination = { ...this.state.pagination };
-      // Read total count from server
-      // pagination.total = data.totalCount;
-      pagination.total = 200;
-      this.setState({
-        loading: false,
-        data: data.results,
-        pagination,
-      });
-    });
-  }
-
-  render() {
-    return (
-      <Table
-        columns={columns}
-        rowKey={record => record.login.uuid}
-        dataSource={this.state.data}
-        pagination={this.state.pagination}
-        loading={this.state.loading}
-        onChange={this.handleTableChange}
-      />
-    );
-  }
+	render() {
+		const dataSource = [{
+			id: '1',
+			name: '胡彦斌',
+			age: 32,
+			address: '西湖区湖底公园1号'
+		}, {
+			id: '2',
+			name: '胡彦祖',
+			age: 42,
+			address: '西湖区湖底公园1号'
+		}];
+		
+		return(
+      <Selectf 
+        dataSource={dataSource} 
+        handleModalVisble={this.handleModalVisble} 
+        handleModalHidden={this.handleModalHidden} 
+        visible={this.state.visible}
+        />
+		)
+	}
 }
 
 export default Test

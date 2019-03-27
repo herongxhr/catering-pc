@@ -25,7 +25,13 @@ class OrderFilter extends React.Component {
               getFieldDecorator('date', {
                 initialValue: "",
               })( 
-                <RangePicker style={{ width: 250 }}/> 
+                <RangePicker 
+                  style={{ width: 250 }}
+                  onChange={(_, dateStrings) => {
+                    let [startDate, endDate] = dateStrings;
+                    handleFilter({ startDate, endDate, })
+                  }} 
+                /> 
               )
             }
           </FormItem>
@@ -53,7 +59,7 @@ class OrderFilter extends React.Component {
               })(
                 <Search
                   placeholder="订单号"
-                  onSearch={value => console.log(value)}
+                  onSearch={value => handleFilter({ keywords: value })}
                   style={{ width: 300 }}
               />
               )

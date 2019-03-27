@@ -26,7 +26,7 @@ export default class PageHeader extends PureComponent {
             extraContent,
             className,
             loading = false,
-            wide = true,
+            wide = false,
             // tabList,
             // tabActiveKey,
             // tabDefaultActiveKey,

@@ -2,10 +2,11 @@
  * @Author: suwei 
  * @Date: 2019-03-22 09:48:17 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-22 10:15:16
+ * @Last Modified time: 2019-03-23 16:42:20
  */
 import React, { Component } from 'react';
 import { List , Modal , Form , Input , message } from 'antd';
+import { connect } from 'dva';
 
 import './SecurityView.less'
 
@@ -21,10 +22,26 @@ class Security extends Component {
   }
 
   handleOk = (e) => {
-    this.setState({
-      visible: false,
-    });
-    message.success('操作成功');
+    let userInfo = this.props.form.getFieldsValue();
+    console.log(userInfo);
+    if(userInfo.password !== userInfo.newpassword) {
+      message.warning('密码不一致')
+    } else {
+      this.setState({
+        visible: false,
+      });
+      const { props } = this
+      props.dispatch({
+        type:'setting/queryModifyPassword',
+        payload:userInfo
+      })
+    }
+
+    // const { props } = this
+    // props.dispatch({
+    //   type:'setting/querySendBaseView',
+    //   payload:userInfo
+    // })
   }
 
   handleCancel = (e) => {
@@ -110,7 +127,7 @@ class Security extends Component {
           <Form layout='vertical'>
             <FormItem>重置密码</FormItem>
             <FormItem label={<span>原密码<span style={{color:'#D9D9D9',marginLeft:10}}>(请先验证原密码)</span></span>}>
-              {getFieldDecorator('originalPassword', {
+              {getFieldDecorator('oldPassword', {
                 rules: [
                   {
                     // required: true,
@@ -118,11 +135,11 @@ class Security extends Component {
                   },
                 ],
               })(
-                <Input placeholder='请输入' style={{...inputObject}} />
+                <Input placeholder='请输入' style={{...inputObject}} type='password'/>
               )}
             </FormItem>
             <FormItem label={<span>新密码<span style={{color:'#D9D9D9',marginLeft:10}}>(最小长度为6个字符)</span></span>}>
-              {getFieldDecorator('newPassword', {
+              {getFieldDecorator('password', {
                 rules: [
                   {
                     // required: true,
@@ -130,11 +147,11 @@ class Security extends Component {
                   },
                 ],
               })(
-                <Input placeholder='请输入'  />
+                <Input placeholder='请输入'  type='password'/>
               )}
             </FormItem>
             <FormItem label={<span>新密码<span style={{color:'#D9D9D9',marginLeft:10}}>(最小长度为6个字符)</span></span>}>
-              {getFieldDecorator('newPassword', {
+              {getFieldDecorator('newpassword', {
                 rules: [
                   {
                     // required: true,
@@ -142,7 +159,7 @@ class Security extends Component {
                   },
                 ],
               })(
-                <Input placeholder='请输入'  />
+                <Input placeholder='请输入'  type='password'/>
                 )}
             </FormItem>
           </Form>
@@ -152,4 +169,6 @@ class Security extends Component {
   }
 }
 const SecurityView =  Form.create()(Security)
-export default SecurityView;
+
+export default connect(({setting})=>({setting}))
+(SecurityView);
