@@ -9,62 +9,48 @@ import {
     queryMenuData,
     queryMenuDetails,
     toUpdateMenu,
-    toNewMenu
+    toNewMenu,
 } from '../services/api';
+import { sortMealsData } from '../utils/utils';
 
 export default {
     namespace: 'menuCenter',
     state: {
-        monday: {},
-        tuesday: {},
-        wednesday: {},
-        thursday: {},
-        friday: {},
-        saturday: {},
-        sunday: {},
         // 统一或我的菜单数据
         menuList: {},
         // 统一或我的菜单详情
         menuDetails: {},
-        // 菜单概要数据
-        camenu: {},
-        // 菜单模板数据
-        menuTemplate: {},
-        // 周菜单模板数据
-        PMenuTemplate: {},
+        // 每个菜单中所有的菜品数据
+        allMealsData: [],
         // 餐饮单位模板数据
+        PMenuTemplate: {},
+        // 管理单位模板数据
         CMenuTemplate: {},
-        // 所有可选菜品数据
-        dishesData: {},
         // 模板详情页数据
         templateDetails: {},
-        // 排餐表格中菜品数据
-        arrangedDishes: [],
-        // 是不是统一菜单模式下
-        isUnified: true,
+        // 所有可选菜品数据
+        dishesData: {},
         // 对模板操作的结果
         templateActionResult: true,
+        // 新建菜单结果
+        createMenuDataResult: true
     },
     effects: {
-        // 获取菜单详情,统一接口
-        *fetchMenuDetails({ payload }, { call, put }) {
-            const data = yield call(queryMenuDetails, payload);
-            yield put({
-                type: 'saveMenuDetails',
-                payload: data
-            });
-            yield put({
-                type: 'saveEverydayData',
-                payload: data.camenuDetailVOMap || {}
-            })
-        },
         // 获取菜单列表,统一接口
         *fetchMenuData({ payload }, { call, put }) {
             const data = yield call(queryMenuData, payload);
             yield put({
                 type: 'saveMenuList',
-                payload: data,
+                payload: data || {}
             })
+        },
+        // 获取菜单详情,统一接口
+        *fetchMenuDetails({ payload }, { call, put }) {
+            const data = yield call(queryMenuDetails, payload);
+            yield put({
+                type: 'saveMenuDetails',
+                payload: data || {}
+            });
         },
         // 餐饮单位模板列表
         *fetchPMenuTemplate({ payload = {} }, { call, put }) {
@@ -84,6 +70,14 @@ export default {
                 type: 'savePMenuTemplate',
                 payload: data,
             })
+        },
+        // 获取我的模板详情数据
+        *fetchPTemplateDetails({ payload }, { call, put }) {
+            const data = yield call(queryPTemplateDetails, payload);
+            yield put({
+                type: 'saveTemplateDetails',
+                payload: data || {},
+            });
         },
         // 餐饮管理单位模板列表
         *fetchCMenuTemplate({ payload = {} }, { call, put }) {
@@ -105,29 +99,11 @@ export default {
             })
         },
         // 获取我的模板详情数据
-        *fetchPTemplateDetails({ payload }, { call, put }) {
-            const data = yield call(queryPTemplateDetails, payload);
-            yield put({
-                type: 'saveTemplateDetails',
-                payload: data,
-            });
-            // 将模板数据扁平化
-            yield put({
-                type: 'saveEverydayData',
-                payload: data && data.camenuTemplateDetailVOMap
-            });
-        },
-        // 获取我的模板详情数据
         *fetchCTemplateDetails({ payload }, { call, put }) {
             const data = yield call(queryCTemplateDetails, payload);
             yield put({
                 type: 'saveTemplateDetails',
-                payload: data,
-            });
-            // 将模板数据扁平化
-            yield put({
-                type: 'saveEverydayData',
-                payload: data && data.camenuTemplateDetailVOMap
+                payload: data || {},
             });
         },
         // 对模板进行复制和删除
@@ -163,62 +139,30 @@ export default {
             })
         },
         // 更新菜单数据
-        *updateMenu(_, { call, put, select }) {
+        *updateMenu({ payload }, { call, put, select }) {
             const params = yield select(({ menuCenter }) => {
-                const {
-                    camenu,
-                    monday,
-                    tuesday,
-                    wednesday,
-                    thursday,
-                    friday,
-                    saturday,
-                    sunday,
-                } = menuCenter;
+                const camenuDetailVos = menuCenter.allMealsData;
                 return {
-                    camenu,
-                    camenuDetailsMap: {
-                        monday,
-                        tuesday,
-                        wednesday,
-                        thursday,
-                        friday,
-                        saturday,
-                        sunday,
-                    }
+                    ...payload,
+                    camenuDetailVos
                 }
             });
             const res = yield call(toUpdateMenu, params);
         },
-        // 新建菜单数据
-        *newMenuData(_, { call, select }) {
+        *newMenu({ payload }, { call, put, select }) {
             const params = yield select(({ menuCenter }) => {
-                const {
-                    camenu,
-                    monday,
-                    tuesday,
-                    wednesday,
-                    thursday,
-                    friday,
-                    saturday,
-                    sunday,
-                } = menuCenter;
+                const camenuTemplateDetailVOMap = menuCenter.allMealsData;
                 return {
-                    camenu,
-                    camenuDetailsMap: {
-                        monday,
-                        tuesday,
-                        wednesday,
-                        thursday,
-                        friday,
-                        saturday,
-                        sunday,
-                    }
+                    ...payload,
+                    camenuTemplateDetailVOMap
                 }
             });
-            console.log('newMenuData:', params);
+            console.log('parmas:', params);
             const res = yield call(toNewMenu, params);
-            console.log('上传', res);
+            yield put({
+                type: 'saveNewMenuDataResult',
+                payload: res
+            })
         },
         // 获取菜品数据 
         *fetchDishes({ payload }, { call, put }) {
@@ -230,16 +174,40 @@ export default {
         },
     },
     reducers: {
+        // 保存菜单列表数据
+        saveMenuList(state, { payload }) {
+            return {
+                ...state,
+                menuList: payload
+            }
+        },
+        // 保存菜单详情
+        saveMenuDetails(state, { payload }) {
+            return {
+                ...state,
+                menuDetails: payload,
+                allMealsData: payload.camenuDetailVos || [],
+            }
+        },
         savePMenuTemplate(state, { payload }) {
             return {
                 ...state,
-                PMenuTemplate: { ...payload }
+                PMenuTemplate: payload || {}
             }
         },
         saveCMenuTemplate(state, { payload }) {
             return {
                 ...state,
-                CMenuTemplate: { ...payload }
+                CMenuTemplate: payload || {}
+            }
+        },
+        // 保存我的或推荐模板详情
+        saveTemplateDetails(state, { payload }) {
+            return {
+                ...state,
+                // 直接扁平化每天排餐数据
+                templateDetails: payload,
+                allMealsData: payload.camenuTemplateDetailVos || [],
             }
         },
         // 保存菜品库中的菜品数据
@@ -249,78 +217,14 @@ export default {
                 dishesData: { ...payload }
             }
         },
-        // 保存菜单列表数据
-        saveMenuList(state, { payload }) {
-            return {
-                ...state,
-                menuList: { ...payload }
-            }
-        },
-        // 保存菜单详情
-        saveMenuDetails(state, { payload }) {
-            return {
-                ...state,
-                // 直接扁平化每天排餐数据
-                menuDetails: payload
-            }
-        },
-        // 保存菜单详情中每天的排餐数据
-        saveEverydayData(state, { payload }) {
-            return {
-                ...state,
-                // 直接扁平化每天排餐数据
-                ...payload,
-            }
-        },
-        // 调整菜单概要信息
-        editMenuSummary(state, { payload }) {
-            return {
-                ...state,
-                camenu: payload
-            }
-        },
-        // 新建菜单概要信息
-        newMenuSummary(state, { payload }) {
-            console.log('newMenu', payload);
-            return {
-                ...state,
-                camenu: payload
-            }
-        },
+        // 清空state中的菜单/模板的排餐数据
+        // 包含菜单详情，模板详情
+        // 以及它们展开之后每天的排餐数据
         clearMenuDetails(state, _) {
             return {
                 ...state,
-                monday: {},
-                tuesday: {},
-                wednesday: {},
-                thursday: {},
-                friday: {},
-                saturday: {},
-                sunday: {},
+                allMealsData: {},
                 menuDetails: {},
-                camenu: {},
-                templateDetails: {},
-            }
-        },
-        // 保存我的或推荐模板详情
-        saveTemplateDetails(state, { payload }) {
-            return {
-                ...state,
-                // 直接扁平化每天排餐数据
-                templateDetails: payload
-            }
-        },
-        // 改变菜单模式
-        changeMenuMode(state, { payload }) {
-            return {
-                ...state,
-                isUnified: payload
-            }
-        },
-        changeTemplateType(state, { payload }) {
-            return {
-                ...state,
-                templateFrom: payload
             }
         },
         // 对模板的操作复制、删除结果
@@ -330,6 +234,14 @@ export default {
                 templateActionResult: payload
             }
         },
+        // 新建菜单执行结果
+        saveNewMenuDataResult(state, { payload }) {
+            return {
+                ...state,
+                createMenuDataResult: payload
+            }
+        },
+
         editTag(state, { payload }) {
             const { tag, flag } = payload;
             // tags有可能undefined或为''
@@ -357,63 +269,58 @@ export default {
         // 根据flag确定是增加还是删除
         changeArrangedMeals(state, { payload }) {
             const {
-                record, colIndex, rowIndex, forStaff, isAdd, currFoodId, flag
+                record, mealTimes, zj, forStaff, isAdd, currFoodId, flag
             } = payload;
-            console.log('payload:', payload);
-            // 进行数组操作时，没有排餐的餐次取默认空数组
-            const rawDishes = state[rowIndex][colIndex] || [];
-            // 增加
+            // const mealsByWeekday = sortMealsData(allMealsData, 'zj');
+            // const oneDayMeals = zj && mealsByWeekday[zj] || {};
+            // const oneDayMealsSortByName = mealTimes && sortMealsData(oneDayMeals, 'mealTimes') || {}
+            // const isExist = oneDayMealsSortByName[mealTimes].some(meal => meal.foodId === currFoodId);
             switch (flag) {
                 // 增加
                 case 1:
                     return {
                         ...state,
-                        // [rowIndex] 代表的是周几，如monday
-                        [rowIndex]: {
-                            ...state[rowIndex],
-                            // [colIndex] 为餐次名称，如早、中、晚餐
-                            [colIndex]: rawDishes.concat({
-                                ...record,
-                                forStaff,
-                                isAdd
-                            })
-                        }
+                        allMealsData: [...state.allMealsData, {
+                            foodId: record.id,
+                            viewFood: {
+                                foodName: record.foodName,
+                                gg: record.gg
+                            },
+                            forStaff,
+                            mealTimes,
+                            zj,
+                            isAdd,
+                        }]
                     }
                 // 删除
                 case -1:
                     return {
                         ...state,
-                        [rowIndex]: {
-                            ...state[rowIndex],
-                            // [colIndex] 为餐次名称，如breakfast,lunch等
-                            [colIndex]: rawDishes.filter(item =>
-                                item.foodId !== record.foodId
-                            )
-                        }
+                        allMealsData: state.allMealsData
+                            .filter(meal => meal.foodId !== currFoodId)
                     }
-                // 点击列表时对菜品进行替换
-                // 如果是统一菜品，isAdd和forStaff属性值为undefined
-                // 如果是自己加的菜品，这些属性可以在属性展开的时候保留
                 case 0:
                     return {
                         ...state,
-                        [rowIndex]: {
-                            ...state[rowIndex],
-                            [colIndex]: rawDishes.map(item => {
-                                // 如果是我们点进去准备操作的菜品
-                                if (item.foodId === currFoodId) {
+                        allMealsData: state.allMealsData
+                            .map(meal => {
+                                if (meal.foodId === currFoodId) {
                                     return {
-                                        ...item,
-                                        // 记录之前的菜名和id
-                                        preFoodId: item.foodId,
-                                        preFoodName: item.foodName,
-                                        ...record,
+                                        sort: meal.sort,
+                                        foodId: record.id,
+                                        viewFood: {
+                                            foodName: record.foodName,
+                                            gg: record.gg
+                                        },
+                                        forStaff,
+                                        mealTimes,
+                                        zj,
+                                        isAdd
                                     }
                                 }
-                                // 如果不是我们点进去的那个菜品
-                                return item;
+                                return meal;
                             })
-                        }
+
                     };
                 default:
                     return;

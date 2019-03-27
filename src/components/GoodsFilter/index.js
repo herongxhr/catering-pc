@@ -1,91 +1,114 @@
 import React from 'react';
-// import classNames from 'classnames';
-import styles from './index.less';
+import { Row, Col } from 'antd';
+import classNames from 'classnames';
+import styles from './index.module.less';
 
 // 类似于按钮组的东西，显示效果更接近链接
 export default class GoodsFilter extends React.Component {
     state = {
-        brandLimit: true,
-        showMoreText: true,
+        pageSize: 10 // 请求品牌时品牌数量
     }
-    handleShowMoreBrand = () => {
-        this.setState({
-            brandLimit: !this.state.brandLimit,
-            showMoreText: !this.state.showMoreText,
+    // 获取更多品牌
+    handleExpand = () => {
+        const { getBrands } = this.props;
+        let { catalogId, pageSize } = this.state;
+        pageSize = pageSize > 10 ? 10 : 30;
+        this.setState({ pageSize });
+        getBrands({
+            catalogId: catalogId,
+            pageSize,
         })
     }
-    
+
     render() {
         const {
-            clickToFilter,
-            className,
-            catalogList,
-            brandList,
-            collectStatus,
-            currCatalog,
-            currBrand,
-            currCollectStatus,
+            catalogList = [],
+            brandList = [],
+            catalogId,
+            brand,
+            notInclude,
+            getFGoods,
         } = this.props;
+        const { pageSize } = this.state;
         // 按分类筛选
-        const catalogFilter = catalogList.map(item => {
-            //是否有active样式
-            const itemStyle = item.id == currCatalog ? 'filterLink filterActive' : 'filterLink';
-            return (
-                <li
-                    className={itemStyle}
-                    key={item.id}
-                    onClick={() => clickToFilter(item.id, currBrand, currCollectStatus)}
-                >
-                    {item.catalog_name}
-                </li>
-            )
-        })
-
-        // 按品牌筛选
-        console.log(brandList);
-        const brandFilter = brandList.slice(0, (this.state.brandLimit ? 10 : 100)).map(item => {
-            //是否有active样式
-            const itemStyle = item.id == currBrand ? 'filterLink filterActive' : 'filterLink';
-            return (
-                <li
-                    className={itemStyle}
-                    key={item.id}
-                    onClick={() => clickToFilter(currCatalog, item.id, currCollectStatus)}
-                >
-                    {item.brand_name}
-                </li>
-            )
-        }).concat(<li className="filterLink moreBrand" onClick={this.handleShowMoreBrand} key={brandList.length + 1}>{this.state.showMoreText ? "更多" : "收起"}</li>)
-
-        // 按收录状态筛选
-        const collectStatusFilter = collectStatus.map(item => {
-            //是否有active样式
-            const itemStyle = item.id == currCollectStatus ? 'filterLink filterActive' : 'filterLink';
-            return (
-                <li
-                    className={itemStyle}
-                    key={item.id}
-                    onClick={() => clickToFilter(currCatalog, currBrand, item.id)}
-                >
-                    {item.status_name}
-                </li>
-            )
-        })
+        const catalogAllStyle = catalogList.some(item => item.id === catalogId) ? '' : styles.selected;
+        const catalogFilterDom =
+            <ul className={styles.filterRow}>
+                <li id='all' className={catalogAllStyle}
+                    onClick={() => getFGoods({ catalogId: '' })}>全部</li>
+                {catalogList.sort((a, b) => a.sort - b.sort)
+                    .map(item =>
+                        <li
+                            key={item.id}
+                            className={classNames({ [styles.selected]: item.id === catalogId })}
+                            onClick={() => getFGoods({ catalogId: item.id })}
+                        >{item.catalogName}</li>
+                    )}
+            </ul>
+        // 品牌筛选
+        const brandAllStyle = brandList.some(item => item.id === brand) ? '' : styles.selected;
+        const brandFilterDom =
+            <ul className={classNames(styles.filterRow, {
+                [styles.expanded]: pageSize > 10
+            })}>
+                <li id='' className={brandAllStyle}
+                    onClick={() => getFGoods({ brand: '' })}>全部</li>
+                {brandList.map(item =>
+                    <li key={item.id}
+                        className={classNames({ [styles.selected]: item.id === brand })}
+                        onClick={() => getFGoods({ brand: item.id })}
+                    > {item.brand}</li>
+                )}
+            </ul>
+        //收录状态筛选
+        const collectStatusList = [
+            { id: true, collectName: '采购目录中商品' },
+            { id: false, collectName: '采购目录外商品' }
+        ]
+        const collectAllStyle
+            = collectStatusList.some(item => item.id === notInclude) ? '' : styles.selected;
+        const collectFilterDom =
+            <ul className={styles.filterRow}>
+                <li id='' className={collectAllStyle}
+                    onClick={() => getFGoods({ notInclude: '' })}>全部</li>
+                {collectStatusList.map(item =>
+                    <li key={item.id}
+                        className={classNames({ [styles.selected]: item.id === notInclude })}
+                        onClick={() => getFGoods({ notInclude: item.id })}
+                    > {item.collectName}</li>
+                )}
+            </ul>
 
         return (
-            <div className="filterWraper">
-                <ul className="filterRow">
-                    <span className="filterTitle">分类</span>
-                    {catalogFilter}
-                </ul>
-                <ul className="filterRow">
-                    <span className="filterTitle">品牌</span>
-                    <span className="brandWrapper">{brandFilter}</span>
-                </ul>
-                <ul className="filterRow">
-                    <span className="filterTitle">收录</span>
-                    {collectStatusFilter}
-                </ul>
+            <div className={styles.filterWraper}>
+                <Row style={{ marginBottom: 20 }}>
+                    <Col span={2}>
+                        <span className={styles.title}>分类</span>
+                    </Col>
+                    <Col span={20}>
+
+                        {catalogFilterDom}
+                    </Col>
+                </Row>
+                <Row style={{ marginBottom: 20 }}>
+                    <Col span={2}>
+                        <span className={styles.title}>品牌</span>
+                    </Col>
+                    <Col span={20}>{brandFilterDom}</Col>
+                    <Col span={2}>
+                        <span className={styles.moreBrand}
+                            onClick={this.handleExpand}
+                        >{pageSize > 10 ? '收起' : '展开'}</span>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={2}>
+                        <span className={styles.title}>收录</span>
+                    </Col>
+                    <Col span={20}>
+                        {collectFilterDom}
+                    </Col>
+                </Row>
             </div>
         )
     }

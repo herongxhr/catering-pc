@@ -3,7 +3,7 @@ import { InputNumber } from 'antd';
 import GoodsIcon from './wine.png';
 import './index.less';
 
-export default class CartPageBody extends React.Component {
+export default class GoodsItem extends React.Component {
     state = {
         isMouseOver: false,
     }
@@ -42,7 +42,7 @@ export default class CartPageBody extends React.Component {
             this.state.isMouseOver ? "goodsItemWrapper itemMouseOver" : "goodsItemWrapper";
 
         return (
-            <div className={className}>
+            <div>
                 <div
                     onMouseOver={this.handMouseOver}
                     onMouseOut={this.handMouseOut}

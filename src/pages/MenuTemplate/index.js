@@ -155,7 +155,7 @@ class MenuTemplate extends React.Component {
           </div>
           <div className='filterWrapper'>
             <Button type="primary" >
-              <Link to='/menubar/template/new'>创建模板</Link>
+              <Link to='/menubar/menu-template/new'>创建模板</Link>
             </Button>
             <RadioGroup onChange={this.changeTemplateType} defaultValue={this.state.currTemplateType}>
               <RadioButton value="P">我的</RadioButton>

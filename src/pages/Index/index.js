@@ -4,14 +4,13 @@ import TodayMenuCard from '../../components/TodayMenuCard/TodayMenuCard'
 import TodoListCard from '../../components/TodoListCard/TodoListCard'
 import Accepting from '../../components/Accepting/Accepting'
 import StatisticChart from '../../components/StatisticChart'
-import { Card, Button, Tabs, Radio, Divider } from 'antd';
+import { Card, Button, Tabs, Radio, Divider,Empty } from 'antd';
 import moment from 'moment'
 import { connect } from 'dva';
 import { withRouter } from "react-router";
 import homeBanner from './homeBanner.png';
 
 const TabPane = Tabs.TabPane;
-const operations = <span className='extra'>查看全部</span>;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
@@ -76,7 +75,7 @@ class A extends Component {
   }
   componentDidMount() {
     this.queryTodoList()
-    this.querytodayMenu()
+    this.querytodayMenu()    
     this.querydeviceInfo()
     this.queryStatistics()
   }
@@ -89,6 +88,11 @@ class A extends Component {
     var timestamp = Date.parse(new Date());
     const date = moment(timestamp).format("YYYY-MM-DD dddd")
     const weeks = moment(timestamp).format("WW")
+    const operations = <span className='extra' onClick={
+      ()=>{
+        this.props.history.push('/delivery')
+      }
+    }>查看全部</span>;
     return (
       <div className="App">
         <div>{this.props.children}</div>
@@ -139,16 +143,25 @@ class A extends Component {
                   </RadioGroup>
                 </div>
               </div>
-             <StatisticChart statistics={statistics} />
+             {statistics.length > 0 ? <StatisticChart statistics={statistics} /> : <Empty />}
             </div>
             <div className='App-content-opening'>
               <div className='timeTitle'>设备最后开机时间</div>
               <Divider />
-              <div className='openingItem'><span>晨检仪</span><span>{deviceInfo.morningDetector}</span></div>
+              <div className='openingItem'>
+                <span>晨检仪</span>
+                <span>{moment(deviceInfo.morningDetector).format('YYYY-MM-DD HH:mm:ss')}</span>
+              </div>
               <Divider />
-              <div className='openingItem'><span>验货机</span><span>{deviceInfo.inspectionMachine}</span></div>
+              <div className='openingItem'>
+                <span>验货机</span>
+                <span>{moment(deviceInfo.inspectionMachinemoment).format('YYYY-MM-DD HH:mm:ss')}</span>
+              </div>
               <Divider />
-              <div className='openingItem'><span>易检设备</span><span>{deviceInfo.inspectionEquipment}</span></div>
+              <div className='openingItem'>
+                <span>易检设备</span>
+                <span>{moment(deviceInfo.easyInspectionEquipment).format('YYYY-MM-DD HH:mm:ss')}</span>
+              </div>
               <Divider />
               <div style={{ width: 350, height: 54, textAlign: 'center', marginTop: 18, color: '#54C4CE' }}>查看全部</div>
             </div>

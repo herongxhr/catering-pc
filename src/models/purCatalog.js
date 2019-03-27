@@ -3,7 +3,7 @@ import { queryPurCatalog,queryIngreType,queryPriceHistory,queryIngreDetail    } 
 export default {
     namespace:'purCatalog',
     state: {
-        catalogData: [],
+        catalogData: {},
         ingreTypeList:[],
         historyList:[],
         detailData:{}

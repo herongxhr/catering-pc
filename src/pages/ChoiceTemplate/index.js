@@ -43,15 +43,14 @@ class ChoiceTemplate extends React.Component {
       return;
     }
     this.props.dispatch(routerRedux.push({
-      pathname: '/menubar/my-menu/from-template',
+      pathname: '/menubar/my-menu/custom',
       state: { menuTemplateId, templateFrom }
     }))
   }
 
   // 点击取消回调
   handleClickCancel = () => {
-    const { dispatch } = this.props;
-    dispatch(routerRedux.push({
+    this.props.dispatch(routerRedux.push({
       pathname: '/menubar/my-menu',
     }))
   }
@@ -74,6 +73,8 @@ class ChoiceTemplate extends React.Component {
       PMenuTemplate,
       CMenuTemplate,
     } = this.props
+    const CMenuTemplateRecords = CMenuTemplate.records || [];
+    const PMenuTemplateRecords = PMenuTemplate.records || [];
     const { menuTemplateId, templateFrom } = this.state;
     return (
       <div>
@@ -84,36 +85,32 @@ class ChoiceTemplate extends React.Component {
           bodyStyle={{ padding: '30px 30px 0' }}
         >
           <div className='cardsWrapper'>
-            {CMenuTemplate.records
-              && CMenuTemplate.records.length > 0
-              && CMenuTemplate.records
-                .slice(0, 3).map(item =>
-                  <TemplateCard
-                    // 当前卡片与点击的卡片是同一个，并且是推荐模板
-                    isSelect={item.id === menuTemplateId && templateFrom === 'C'}
-                    templateFrom='C'
-                    key={item.id}
-                    itemData={item}
-                    handleTemplateActions={this.handleTemplateActions}>
-                  </TemplateCard>)}
+            {CMenuTemplateRecords.slice(0, 3).map(item =>
+              <div className='cardInner' key={item.id}>
+                <TemplateCard
+                  // 当前卡片与点击的卡片是同一个，并且是推荐模板
+                  isSelect={item.id === menuTemplateId && templateFrom === 'C'}
+                  templateFrom='C'
+                  itemData={item}
+                  handleTemplateActions={this.handleTemplateActions}>
+                </TemplateCard></div>
+            )}
           </div>
           {/* 分隔线 */}
           <Row>
             <Col><Divider orientation='left'>我的模板：</Divider></Col>
           </Row>
           <div className='cardsWrapper'>
-            {PMenuTemplate.records
-              && PMenuTemplate.records.length > 0
-              && PMenuTemplate.records
-                .slice(0, 6).map(item =>
-                  (<TemplateCard
-                    // 当前卡片与点击的卡片是同一个，并且不是推荐模板
-                    isSelect={item.id === menuTemplateId && templateFrom === 'P'}
-                    templateFrom='P'
-                    key={item.id}
-                    itemData={item}
-                    handleTemplateActions={this.handleTemplateActions}>
-                  </TemplateCard>))}
+            {PMenuTemplateRecords.slice(0, 6).map(item =>
+              (<div className='cardInner' key={item.id}>
+                <TemplateCard
+                  // 当前卡片与点击的卡片是同一个，并且不是推荐模板
+                  isSelect={item.id === menuTemplateId && templateFrom === 'P'}
+                  templateFrom='P'
+                  itemData={item}
+                  handleTemplateActions={this.handleTemplateActions}>
+                </TemplateCard>
+              </div>))}
           </div>
         </Card>
         <div className={'footerWrap'}>

@@ -1,47 +1,53 @@
 import React from 'react'
 import {  Table} from 'antd'
+import { connect } from 'dva';
 import { withRouter } from "react-router";
 import './index.less'
+import moment from 'moment'
 
 class DeliveryLog extends React.Component {
   state = {
     opertion:true
   }
+  queryLog = (params = {}) => {
+    const { dispatch, location } = this.props;
+    const id = location.state && location.state.id;
+    dispatch({
+      type: 'deliveryAcce/queryLog',
+      payload: {
+        ...params,
+        id:id
+      }
+    })
+  }
+  componentDidMount(){
+    this.queryLog()
+  }
   render() {
+    const {logList=[]} = this.props
     const tab1Columns = [{
       title: '操作类型',
-      dataIndex: 'operType',
-      key: 'operType',
+      dataIndex: 'type',
+      key: 'type',
     },{
       title: '操作人',
       dataIndex: 'operator',
       key: 'operator',
     }, {
       title: '操作时间',
-      dataIndex: 'operTime',
-      key: 'operTime',
+      dataIndex: 'operationTime',
+      key: 'operationTime',
+      render:(text)=>{
+        return(
+            <span>{moment(text).format("YYYY-MM-DD HH:mm:ss")}</span>
+        )
+      }
     },{
         title: '耗时',
-        dataIndex: 'timeConsume',
-        key: 'timeConsume',
+        dataIndex: 'useTime',
+        key: 'useTime',
       }
      ];
-     const data = [
-      {
-        key: '1',
-        operType: '发起换货申请',
-        operator: '供货商名称',
-        operTime: '2018-11-28 12:26:58',
-        timeConsume: '1mins',
-      },
-      {
-        key: '2',
-        operType: '配送单生成',
-        operator: '管理员',
-        operTime: '2018-11-28  12:11:10',
-        timeConsume: '1mins',
-      },
-     ]
     return(
       <div className='DeliveryLog'>
         <div className='delilogTitle'>
@@ -50,10 +56,12 @@ class DeliveryLog extends React.Component {
           <Table  
             columns={tab1Columns}  
             rowKey='id'
-            dataSource={data}
+            dataSource={logList}
             />
       </div>
     )
   }
 }
-export default DeliveryLog;
+export default connect(({deliveryAcce }) => ({
+  logList:deliveryAcce.logList,
+}))(withRouter(DeliveryLog));

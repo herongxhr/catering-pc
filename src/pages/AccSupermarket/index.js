@@ -1,51 +1,96 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Input, Icon, Badge, } from 'antd';
+import { Input, Icon, Badge, Pagination, } from 'antd';
 import CartPage from '../CartPage';
 import GoodsFilter from '../../components/GoodsFilter';
-import GoodsCardList from '../../components/GoodsCardList';
-
+import FGoodList from '../../components/FGoodList';
 import './index.less';
 
 const { Search } = Input;
 
 class AccSupermarket extends PureComponent {
-    /**
-     * 点击链接按要求请求后台数据
-     * 有三个筛选条件，还有一个默认条件选择辅料
-     * 写在api方法queryGoods中
-     * @param{number} currCatalog 当前所选分类
-     * @param{number} currBrand 当前所选分类
-     * @param{number} currCollectStatus 当前所选分类
-     */
-	filterGoods = (currCatalog = 0, currBrand = 0, currCollectStatus = 0) => {
-		const { dispatch } = this.props;
-		dispatch({
-			type: 'accSupermarket/fetchGoodsF',
+	state = {
+		type: 'F',
+		keywords: '',
+		catalogId: '',
+		notInclude: '',
+		brand: '',
+		current: 1,
+		pageSize: 12,
+	}
+	// 获取辅料分类
+	getCatalogF = (params = {}) => {
+		const defaultParams = {
+			type: 'F',
+			orderByField: '',
+			isAsc: true
+		}
+		this.props.dispatch({
+			type: 'accSupermarket/fetchCatalogF',
 			payload: {
-				currCatalog,
-				currBrand,
-				currCollectStatus
+				...defaultParams,
+				...params
 			},
 		})
 	}
-
+	// 获取品牌列表
+	getBrands = (params = {}) => {
+		const defaultParams = {
+			catalogId: '',
+			current: 1,
+			pageSize: 10
+		}
+		this.props.dispatch({
+			type: 'accSupermarket/fetchBrands',
+			payload: {
+				...defaultParams,
+				...params
+			},
+		})
+	}
+	// 获取辅料商品列表
+	getFGoods = (params = {}) => {
+		this.getCatalogF();
+		this.setState(params);
+		// 如果params中有catalogId属性，也就是点击了分类
+		this.getBrands({ catalogId: params.catalogId || '' });
+		this.props.dispatch({
+			type: 'accSupermarket/fetchFGoods',
+			payload: {
+				...this.state,
+				...params
+			}
+		})
+	}
 	// 显示购物车页面
 	showCartDrawer = () => {
-		const { dispatch } = this.props;
-		dispatch({
+		this.props.dispatch({
 			type: 'accSupermarket/showCartDrawer',
 		})
-
+	}
+	// 加购物车功能
+	handleAddToCart = (id, quantity) => {
+		this.props.dispatch({
+			type: 'accSupermarket/addToCart',
+			payload: { id, quantity }
+		})
 	}
 
 	componentDidMount() {
-		this.filterGoods();
-
+		this.getFGoods();
 	}
 
 	render() {
-		const { shoppingCart } = this.props;
+		const {
+			shoppingCart,
+			catalogList,
+			brandList,
+			FGoodData,
+		} = this.props;
+		const records = FGoodData.records || [];
+		const total = FGoodData.total || 0;
+		const current = FGoodData.current || 1;
+		const { catalogId, brand, notInclude } = this.state;
 		// 悬浮购物车图标
 		const cartSquare = (
 			<div className="shoppingCart">
@@ -61,20 +106,40 @@ class AccSupermarket extends PureComponent {
 				{/* 页面头部：面包屑+搜索框 */}
 				<div className="header-container">
 					<div className="headeInner">
-							<a className="breadcrumb">辅料超市</a>
-						<Search className="goodsSearch" placeholder="请输入关键字进行搜索" onSearch={() => ({})} />
+						<a className="breadcrumb">辅料超市</a>
+						<Search className="goodsSearch"
+							placeholder="请输入关键字进行搜索"
+							onSearch={value => this.getFGoods({ keywords: value })} />
 					</div>
-
 				</div>
 
 				{/* 筛选区域 */}
 				<div className="section-wrapper">
-					<GoodsFilter clickToFilter={this.filterGoods} {...this.props} />
+					<GoodsFilter
+						catalogList={catalogList}
+						brandList={brandList}
+						getBrands={this.getBrands}
+						getFGoods={this.getFGoods}
+						catalogId={catalogId}
+						brand={brand}
+						notInclude={notInclude}
+					/>
 				</div>
 
 				{/* 筛选商品结果列表 */}
 				<div className="goodsCardList">
-					<GoodsCardList  {...this.props} />
+					<FGoodList
+						handleAddToCart={this.handleAddToCart}
+						records={records} />
+					<Pagination
+						style={{ float: 'right', marginBottom: 20 }}
+						showQuickJumper
+						current={current}
+						total={total}
+						pageSize={12}
+						showTotal={total => `共${total}条数据`}
+						onChange={(page, pageSize) => this.getFGoods({ current: page, pageSize })}
+					/>
 				</div>
 
 				{/* 悬浮购物车图标 */}

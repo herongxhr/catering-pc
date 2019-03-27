@@ -35,15 +35,15 @@ import './style/common.less';
 import MenuDetails from './pages/MenuDetails';
 import TemplateDetails from '../src/pages/TemplateDetails';
 import EditTemplate from './pages/EditTemplate';
-import Edit from './pages/Edit';
+//import Edit from './pages/Edit';
 import MenuTemplate from '../src/pages/MenuTemplate';
-import AdjustMenu from '../src/pages/AdjustMenu';
+import MyMenu from '../src/pages/MyMenu';
 import CustomMenu from '../src/pages/CustomMenu';
-import MyMenu from './pages/MyMenu';
 import ChoiceTemplate from './pages/ChoiceTemplate';
 import ParameterDetail from '../src/pages/Parameter/ParameterDetail'
 import PurOrderDetailAdjust from './pages/PurOrder/PurOrderDetailAdjust'
 import Test from './pages/Test'
+import AdjustMenu from '../src/pages/AdjustMenu';
 
 moment.locale('zh-cn');
 
@@ -62,15 +62,16 @@ export default function RouterConfig({ history }) {
               <Route path="/menubar/unified-menu" exact component={MenuCenter} />
               <Route path="/menubar/unified-menu/details" exact component={MenuDetails} />
               <Route path="/menubar/unified-menu/adjust" exact component={AdjustMenu} />
+              <Route path="/menubar/my-menu/details" exact component={MenuDetails} />
+              <Route path="/menubar/my-menu/adjust" exact component={AdjustMenu} />
+              <Route path="/menubar/my-menu/custom"  exact component={CustomMenu} />
+              <Route path="/menubar/my-menu/choice-template" exact component={ChoiceTemplate} />
+              <Route path="/menubar/my-menu/from-template" exact component={CustomMenu} />
               <Route path="/menubar/my-menu" exact component={MyMenu} />
-              <Route path="/menubar/my-menu/details" component={MenuDetails} />
-              <Route path="/menubar/my-menu/adjust" component={AdjustMenu} />
-              <Route path="/menubar/my-menu/custom" component={CustomMenu} />
-              <Route path="/menubar/my-menu/choice-template" component={ChoiceTemplate} />
-              <Route path="/menubar/my-menu/from-template" component={CustomMenu} />
               <Route path="/menubar/menu-template" exact component={MenuTemplate} />
               <Route path="/menubar/menu-template/details" component={TemplateDetails} />
               <Route path="/menubar/menu-template/edit-template" component={EditTemplate} />
+              <Route path="/menubar/menu-template/new" component={EditTemplate} />
               <Route path="/accSupermarket" component={AccSupermarket}></Route>
               <Route path="/purOrder" exact component={PurOrder}></Route>
               <Route path="/purOrder/detail/adjust" exact component={PurOrderDetailAdjust}></Route>
@@ -92,6 +93,8 @@ export default function RouterConfig({ history }) {
                   </Switch>
                 </Setting>
               }></Route>
+              <Route path='/Setting/outStock' exact component={OutStock}></Route>
+              <Route path="/Setting/outStock/reportdetail" component={ReportDetail} />
               <Route path="/purCatalog" component={PurCatalog}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/reportdetail" component={ReportDetail}></Route>

@@ -1,27 +1,32 @@
 import React from 'react';
 import { Link } from 'dva/router';
-import { Drawer, Badge, Icon, List } from 'antd';
+import { connect } from 'dva';
+import { routerRedux } from 'dva/router'
+import { Drawer, Badge, Icon, List, Row, Col } from 'antd';
 import GoodsItem from '../../components/GoodsItem';
-import './index.less';
+import styles from './index.module.less';
 
-export default class CartPage extends React.Component {
+class CartPage extends React.Component {
+    // 显示购物车页面
+    showCartDrawer = () => {
+        this.props.dispatch({
+            type: 'accSupermarket/showCartDrawer',
+        })
+    }
     // 隐藏购物车页面
     hideCartDrawer = () => {
-        const { dispatch } = this.props;
-        dispatch({
+        this.props.dispatch({
             type: 'accSupermarket/hideCartDrawer',
         })
     }
     // 返回id相匹配的商品
     getDetailByGoodsId = (id) => {
-        const { goodsList } = this.props;
-        return goodsList.find(item => item.id === id);
+        const { FGoodData } = this.props;
+        return FGoodData.records && FGoodData.records.find(item => item.id === id);
     }
     // 改变商品数量
     handleChangeNum = (id, value) => {
-        const { dispatch } = this.props;
-        console.log("商品数量变为:", value);
-        dispatch({
+        this.props.dispatch({
             type: "accSupermarket/changeCartNum",
             payload: { id, value }
         })
@@ -29,17 +34,21 @@ export default class CartPage extends React.Component {
 
     // 删除购物车中商品
     handleDeleteGoods = (id) => {
-        const { dispatch } = this.props;
-        console.log("要删除的商品id", id);
-        dispatch({
+        this.props.dispatch({
             type: "accSupermarket/deleteCartGoods",
-            payload: {
-                id,
-            }
+            payload: { id }
         })
     }
+    yieldPurOrder = () => {
+        const { shoppingCart, dispatch } = this.props;
+
+        dispatch(routerRedux.push({
+            pathname: '/purOrder/detail/adjust',
+            state: { accSupermarket: shoppingCart }
+        }))
+    }
+
     render() {
-        console.log("props in cartPage", this.props)
         const {
             className,
             showCartDrawer,
@@ -49,30 +58,41 @@ export default class CartPage extends React.Component {
         let countCart = shoppingCart.length;
         // 购物车详情标题
         const cartPageTitle = (
-            <Badge onClick={this.showCartDrawer} className="titleWithBadge fixedTop" count={countCart} >
-                <Icon type="shopping-cart" style={{ fontSize: 20, color: "rgba(0, 0, 0, 0.25)" }} />
-                <span className="cartText">购物车</span>
+            <Badge
+                onClick={this.showCartDrawer}
+                className={styles.titleWithBadge}
+                count={countCart} >
+                <Icon type="shopping-cart" className={styles.shoppingCartIcon} />
+                <div className={styles.cartText}>购物车</div>
             </Badge>
         )
 
         const cartPageFooter = (
-            <div className="cartPageFooter fixedBottom">
-                <span className="goodsInCartCount">共有 {countCart} 件商品
+            <div className={styles.cartPageFooter}>
+                <Row>
+                    <Col span={16}><span className={styles.goodsInCartCount}>
+                        共有 <div className={styles.count}>{countCart || 0}</div> 件商品
                     <Icon
-                        type="exclamation-circle"
-                        theme="filled"
-                        style={{ fontSize: 18, marginLeft: 20, color: "rgba(245, 34, 45, 1)" }}
-                    />
-                </span>
-                <Link to="/purOrder/details" className="createOrder">生成采购单</Link>
+                            type="exclamation-circle"
+                            theme="filled"
+                            style={{ fontSize: 18, marginLeft: 20, color: "rgba(245, 34, 45, 1)" }}
+                        />
+                    </span>
+                    </Col>
+                    <Col span={8}>
+                        <Link to="/purOrder/details"
+                            className={styles.createOrder}
+                            onClick={this.yieldPurOrder}
+                        >生成采购单</Link>
+                    </Col>
+                </Row>
             </div>
         )
         return (
             <div className={className}>
                 <Drawer
-                    className="cartDrawer"
+                    className={styles.cartDrawer}
                     placement="right"
-                    bodyStyle={{ padding: 0 }}
                     title={cartPageTitle}
                     closable={true}
                     width={470}
@@ -80,7 +100,7 @@ export default class CartPage extends React.Component {
                     visible={showCartDrawer}
                     zIndex={99999}
                 >
-                    <div className="cartPageBody">
+                    <div className={'itemWrap'}>
                         <List
                             dataSource={shoppingCart}
                             renderItem={item => {
@@ -97,8 +117,7 @@ export default class CartPage extends React.Component {
                                         />
                                     </List.Item>
                                 )
-                            }
-                            }
+                            }}
                         />
                     </div>
                     {cartPageFooter}
@@ -107,3 +126,7 @@ export default class CartPage extends React.Component {
         )
     }
 }
+
+export default connect(({ accSupermarket }) => ({
+    ...accSupermarket
+}))(CartPage)
