@@ -74,7 +74,6 @@ export default class ArrangeDishes extends Component {
             // 点击了删除按钮,则执行删除操作
             if (flag === '-1') {
                 this.changeArrangedMeals({ id: this.state.currFoodId }, -1);
-                debugger
                 return;
             }
             this.showModal();
