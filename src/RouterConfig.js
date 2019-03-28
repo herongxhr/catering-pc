@@ -99,7 +99,6 @@ export default function RouterConfig({ history }) {
               <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/reportdetail" component={ReportDetail}></Route>
               <Route path="/excipientdetail" component={ExcipientDetail}></Route>
-              <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/pendingAcceDetail" component={PendingAcceDetail}></Route>
               <Route path="/pendingDeliveryDetail" component={PendingDeliveryDetail}></Route>
               <Route path="/acceptedDetail" component={AcceptedDetail}></Route>

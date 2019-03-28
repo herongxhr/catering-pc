@@ -1,5 +1,6 @@
 import request from '../utils/request';
 import requestpub from '../utils/common';
+import { stringify } from 'qs';
 // 辅料商城
 // 查询分类
 export function queryCatalogF(params) {
@@ -372,9 +373,7 @@ export function queryOrderTable(params) {
         url: '/catering/order/pageQuery',
         data: {
             showLoading: true,
-            params: {
-                ...params
-            }
+            params,
         }
     })
 }
@@ -412,7 +411,28 @@ export function queryGoodsByOrderId(id) {
         }
     })
 }
-
+export function queryOrderPlace(params) {
+    const data = JSON.stringify(params)
+    return request({
+        method: 'put',
+        headers: {'Content-Type': 'application/json'},
+        url: `catering/order/place/${params.id}`,
+        data: {
+            axiosData:data
+        }
+    })
+}
+export function queryDeleteByIds(params) {
+    return request({
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+        url: `/catering/order/deleteByIds`,
+        data: {
+            axiosData: stringify({'ids[]':params.ids.toString()})
+        }
+    })
+}
+//工作台专区
 export function queryPurCatalog(params) {
     //console.log(params);
     return request({
@@ -425,9 +445,9 @@ export function queryPurCatalog(params) {
     })
 }
 export function queryIngreType(params) {
-    return request({
+    return requestpub({
         method: 'get',
-        url: '/catering/purchaseList/catalog',
+        url: '/pub/catalog/listQuery',
         data: {
             showLoading: true,
             params,
@@ -437,7 +457,7 @@ export function queryIngreType(params) {
 export function queryPriceHistory(params) {
     return request({
         method: 'get',
-        url: `/catering/purchaseList/${params.id}/${params.skuId}/price/listQuery`,
+        url: `/catering/purchaseList/${params.id}/priceList/${params.skuId}`,
         data: {
             showLoading: true,
             params,
@@ -689,33 +709,11 @@ export function queryExecute(params) {
 }
 
 export function queryDeleteFavoriteSupplier(params) {
-    console.log(params);
+
     return request({
         method: 'delete',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         url: `/catering/setting/favoriteSupplier/${params}`,
-    })
-}
-
-
-export function queryGoodsMX(params) {
-    return request({
-        method: 'get',
-        url: `/catering/distribution/${params.id}/goods/pageQuery`,
-        data: {
-            showLoading: true,
-            params,
-        }
-    })
-}
-export function queryLog(params) {
-    return request({
-        method: 'get',
-        url: `/catering/distribution/${params.id}/log`,
-        data: {
-            showLoading: true,
-            params,
-        }
     })
 }
 
@@ -739,10 +737,22 @@ export function queryDosingTable(params) {
 //         }
 //     })
 // }
+//索证索票
 export function queryTicket(params) {
     return request({
         method: 'get',
         url: `/catering/distribution/${params.id}/ticket`,
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+//签字
+export function querySignature(params) {
+    return request({
+        method: 'get',
+        url: `/catering/distribution/${params.id}/signature`,
         data: {
             showLoading: true,
             params,

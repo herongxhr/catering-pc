@@ -22,27 +22,18 @@ class ExchangeApplay extends React.Component {
       expander: !this.state.expander,
     })
   }
-
-  queryDetailReplacement = (params = {}) => {
+  queryDistributionDetail = (params = {}) => {
     const { dispatch, location } = this.props;
     const id = location.state && location.state.id;
     dispatch({
-      type: 'deliveryAcce/queryDetailReplacement',
-      payload: {
-        ...params,
-        id:id
-      }
+        type: 'deliveryAcce/queryDistributionDetail',
+        payload: {
+            ...params,
+            id
+        }
     })
-  }
-  handleTablePager = pagination => {
-    const { current, pageSize } = pagination;
-    const newQueryParams = {
-      current,
-      pageSize
-    }
-    // 向后端发送请求
-    this.queryDetailReplacement(newQueryParams);
-  }
+}
+ 
   queryExecute = (params={}) =>{
     const { dispatch} = this.props;
     dispatch({
@@ -62,7 +53,6 @@ class ExchangeApplay extends React.Component {
      approveStatus:'1',
      distributionId:id
    })
-   window.location.reload()
   }
   handleRefuse = (params) => {
     //console.log(params,'2222')
@@ -74,11 +64,10 @@ class ExchangeApplay extends React.Component {
       approveStatus:'0',
       distributionId:id
     })
-    window.location.reload()
   }
 
   componentDidMount() {
-    this.queryDetailReplacement()
+    this.queryDistributionDetail()
   }
   render() {
     const handleRender = (text,record)=>{
@@ -179,20 +168,16 @@ class ExchangeApplay extends React.Component {
       }
     }
     ];
-    const { replacementList = {} } = this.props
-    const {
-      current = 1,
-      records = [],
-      size = 10,
-      total = '',
-    } = replacementList;
-     const remark = records[0] || {}
+    const { detailData = {} } = this.props
+    const replacementVoList = detailData.replacementVoList || []
+     const remark = replacementVoList[0] || {}
+     const total = replacementVoList.length ? replacementVoList.length : 0
     return (
       // 换货申请的逻辑待修改
       <div className='exchangeApplay'>
         <div className='exchangeHead'>
           <div className='exchangeTitle'>换货申请</div>
-          <Alert message={`共${total ? total : 0}条`} type="warning" showIcon className='alert' />
+          <Alert message={`共${total}条`} type="warning" showIcon className='alert' />
           <div className='operation' onClick={this.handleExpender}>{this.state.expander ? '收起' : '展开'}</div>
         </div>
         {this.state.expander ?
@@ -200,14 +185,9 @@ class ExchangeApplay extends React.Component {
             <Table
               style={{ background: 'white' }}
               columns={tab1Columns}
-              dataSource={records}
+              dataSource={replacementVoList}
               rowKey='id'
-              onChange={this.handleTablePager}
-              pagination={{
-                current,
-                pageSize: size,
-                total
-              }}
+              pagination={false}
               footer={() => <div className="changeMark">
                 换货备注：{remark.remark}
             </div>}
@@ -220,6 +200,6 @@ class ExchangeApplay extends React.Component {
 }
 
 export default connect(({ deliveryAcce }) => ({
-  replacementList: deliveryAcce.replacementList,
+  detailData: deliveryAcce.detailData,
   execute:deliveryAcce.execute
 }))(withRouter(ExchangeApplay));

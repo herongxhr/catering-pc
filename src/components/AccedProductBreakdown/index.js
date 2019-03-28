@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
-import './index.less'
 import { Alert, Table,Badge } from 'antd';
 import { withRouter } from "react-router";
 import moment from 'moment'
 
-class ProductBreakdown extends React.Component {
+class AccedProductBreakdown extends React.Component {
   state = {
     proExpander: true,
     opertion: true
@@ -29,9 +28,10 @@ class ProductBreakdown extends React.Component {
   componentDidMount(){
     this.queryDistributionDetail()
   }
+ 
   render() {
     const { detailData = {} } = this.props
-   const { disOrderDetailVos = [] } = detailData
+    const { disOrderDetailVos = []} = detailData
     const tab1Columns = [{
       title: '商品',
       dataIndex: 'disviewSku',
@@ -107,6 +107,37 @@ class ProductBreakdown extends React.Component {
       }
     },
     {
+      title: '验收数量',
+      dataIndex: 'validQuantity',
+      key: 'validQuantity',
+      render: (text, record) => {
+        return (
+          record.skuId === record.distributionSkuId ?
+            <span>{text}</span> :
+            <div className='tabItem'>
+              <div style={{ textDecoration: 'line-through ' }}>无</div>
+              <div>{text}</div>
+            </div>
+        )
+      }
+    },
+    {
+      title: '验收总价(元)',
+      dataIndex: 'validTotalPrice',
+      key: 'validTotalPrice',
+      render: (text, record) => {
+        return (
+          record.skuId === record.distributionSkuId ?
+          <span>{record.distributionPrice * record.validQuantity}</span>
+          :
+          <div className='tabItem'>
+              <div style={{ textDecoration: 'line-through ' }}>无</div>
+              <div>{record.distributionPrice * record.validQuantity}</div>
+          </div>
+        )
+      }
+    },
+    {
       title: '进货渠道',
       dataIndex: 'supplies',
       key: 'supplies',
@@ -116,7 +147,7 @@ class ProductBreakdown extends React.Component {
           ( text ? <span>{text}</span>
             : <span style={{ color: '#F5222D' }}>未上传</span>)
          :  <div className='tabItem'>
-              <div style={{ textDecoration: 'line-through ' }}>未上传</div>
+              <div style={{ textDecoration: 'line-through ' }}>无</div>
               <div>
                 {text ? <span>{text}</span>
                 : <span style={{ color: '#F5222D' }}>未上传</span>} 
@@ -134,7 +165,7 @@ class ProductBreakdown extends React.Component {
           ( text ? <span>{moment(text).format('YYYY-MM-DD')}</span>
             : <span style={{ color: '#F5222D' }}>未上传</span>)
          :  <div className='tabItem'>
-              <div style={{ textDecoration: 'line-through ' }}>未上传</div>
+              <div style={{ textDecoration: 'line-through ' }}>无</div>
               <div>
                 {text ? <span>{moment(text).format('YYYY-MM-DD')}</span>
                 : <span style={{ color: '#F5222D' }}>未上传</span>} 
@@ -161,12 +192,12 @@ class ProductBreakdown extends React.Component {
       }
     }
     ];
-    const total = disOrderDetailVos.length ? disOrderDetailVos.length : 0
+    const total = disOrderDetailVos ? disOrderDetailVos.length : 0
     return (
       <div className='productBreakdown'>
         <div className='productHead'>
           <div className='productTitle'>商品明细</div>
-          <Alert message={`共${total }条`} type="warning" showIcon className='alert' />
+          <Alert message={`共${total}条`} type="warning" showIcon className='alert' />
           <div className='operation' onClick={this.handleProExpender}>{this.state.proExpander ? '收起' : '展开'}</div>
         </div>
         {this.state.proExpander ?
@@ -184,4 +215,4 @@ class ProductBreakdown extends React.Component {
 }
 export default connect(({ deliveryAcce }) => ({
   detailData: deliveryAcce.detailData,
-}))(withRouter(ProductBreakdown));
+}))(withRouter(AccedProductBreakdown));

@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import '../PendingDeliveryDetail/index.less'
 import DisDetailPageHeader from '../../components/DisDetailPageHeader'
 import ExchangeApplay from '../../components/ExchangeApplay'
-import ProductBreakdown from '../../components/ProductBreakdown'
+import AccepProductBreakdown from '../../components/AccedProductBreakdown';
 import DeliveryLog from '../../components/DeliveryLog'
 import Ticket from '../../components/Ticket'
 import Img from "./pic.jpg"
@@ -12,15 +12,27 @@ import { withRouter } from "react-router";
 
 
 class AcceptedDetail extends React.Component {
+  querySignature = (params = {}) => {
+    const { dispatch, location } = this.props;
+    const id = location.state && location.state.id;
+    dispatch({
+      type: 'deliveryAcce/querySignature',
+      payload: {
+        ...params,
+        id:id
+      }
+    })
+  }
+  componentDidMount(){
+    this.querySignature()
+  }
   render() {
-    // const { location } = this.props;
-    // const status = location.state.status;
-    
+     const { signatureData } = this.props;
     return (
       <div className='AcceptedDetail'>
         <DisDetailPageHeader/>
         <ExchangeApplay/>
-        <ProductBreakdown/>
+        <AccepProductBreakdown/>
         <Ticket/>
         <div className='signature'>
             <div className='signatureTitle'>签名</div>
@@ -36,7 +48,7 @@ class AcceptedDetail extends React.Component {
                     <figcaption>
                     配送员签字
                     </figcaption>            
-                </figure>
+                </figure>  
             </div>
         </div>
         <DeliveryLog/>
@@ -45,5 +57,6 @@ class AcceptedDetail extends React.Component {
   }
 }
 const ShowAcceptedDetailRouter = withRouter(AcceptedDetail);
-export default connect(({ }) => ({
+export default connect(({deliveryAcce }) => ({
+  signatureData:deliveryAcce.signatureData || [],
 }))(ShowAcceptedDetailRouter);

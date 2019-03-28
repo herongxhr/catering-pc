@@ -6,13 +6,15 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon, Modal } from 'antd';
+import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon, Modal ,Popconfirm} from 'antd';
 import WrappedOrderFilter from '../../components/OrderFilter';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
+import DisAcceptTable from '../../components/DisAcceptTable'
 import { withRouter } from 'react-router'
+import { Scrollbars } from 'react-custom-scrollbars';
 import { routerRedux } from 'dva/router';
 import styles from './index.module.less';
-import moment from  'moment'
+import moment from 'moment'
 // 定义表格列
 
 class PurOrder extends React.Component {
@@ -24,6 +26,8 @@ class PurOrder extends React.Component {
 		status: '',
 		startDate: '',
 		endDate: '',
+		orderByField:'',
+		isAsc: '',
 		visible: false
 	}
 
@@ -40,7 +44,15 @@ class PurOrder extends React.Component {
 			},
 		})
 	}
-
+	queryDelivery = (params={}) =>{
+		const { dispatch, } = this.props;
+		dispatch({
+			type: 'deliveryAcce/queryDelivery',
+			payload:{
+			 ...params
+			}
+		})
+}
 	// handleFilter = (args) => {
 	// 	let newArgs = {};
 	// 	if (args.dateRange) {
@@ -65,7 +77,25 @@ class PurOrder extends React.Component {
 			type
 		}))
 	}
-
+//下单
+	previewOrder = (id) =>{
+		const { dispatch } = this.props;
+			dispatch({
+				type: 'purOrder/queryOrderPlace',
+				payload: {
+					id:id
+				},
+			})
+	}
+	orderDelete = (id) =>{   
+		const { dispatch } = this.props;
+			dispatch({
+				type: 'purOrder/queryDeleteByIds',
+				payload: {
+					ids: [id]
+				},
+			})
+	}
 	//表格点击行跳转
 	TableLinkChange = (pathname, record, rest) => {
 		const { props } = this
@@ -89,36 +119,26 @@ class PurOrder extends React.Component {
 		})
 	}
 
-
-	componentDidMount() {
-		this.changeToGetData();
-	}
+	showDistributionModal = (orderNo,e) => {
+		e.stopPropagation()
+    this.setState({
+      visible: true,
+		});
+		this.queryDelivery({
+			orderNo:orderNo
+		})
+  }
 
 	//modal展示
 	handleOk = (e) => {
-    this.setState({
-      visible: false,
-    });
-  }
-
-	//modal取消
-  handleCancel = (e) => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  }
-
-	//table current 跳转
-	handleTableChange = (page) => {
-		const { dispatch } = this.props;
-		dispatch({
-			type: 'purOrder/queryOrderTable',
-			payload: {
-				current: page,
-				pageSize: 10
-			},
-		})
+		this.setState({
+			visible: false,
+		});
+	}
+	
+	componentDidMount() {
+		this.changeToGetData();
+		this.queryDelivery()
 	}
 
 	render() {
@@ -154,9 +174,9 @@ class PurOrder extends React.Component {
 			},
 			{
 				title: '创建日期',
-				key: 'orderTime',
-				dataIndex: 'orderTime',
-				render:(text) => {
+				key: 'createTime',
+				dataIndex: 'createTime',
+				render: (text) => {
 					return <span>{moment(text).format('YYYY-MM-DD')}</span>
 				}
 			},
@@ -164,7 +184,6 @@ class PurOrder extends React.Component {
 				title: '摘要',
 				key: 'summary',
 				dataIndex: 'summary',
-		
 			},
 			{
 				title: '状态',
@@ -181,12 +200,16 @@ class PurOrder extends React.Component {
 				render: (text, record) => {
 					return record.status === "0" ?
 						(<div className='opertion'>
-							<a onClick={() => this.previewOrder(record.orderId)} className='orders'>下单</a>
+							<Popconfirm title="确定继续此操作?" onConfirm={this.previewOrder.bind(this,record.id)}>
+									<a className='orders'>下单</a>
+  						</Popconfirm>
 							<Divider type="vertical" />
-							<a className='delete'>删除</a>
+							<Popconfirm title="确定继续此操作?" onConfirm={this.orderDelete.bind(this,record.id)}>
+									<a className='delete'>删除</a>
+  						</Popconfirm>
 						</div>) :
-						(<a className={styles.acceptance} onClick={() => this.setState({visible:true})}>配送验收情况</a>)
-				}
+						(<a className={styles.acceptance} onClick={this.showDistributionModal.bind(this,record.orderNo)}>配送验收情况</a>)
+				},
 			}
 		];
 		// 点击新建时会下拉的按钮
@@ -209,12 +232,11 @@ class PurOrder extends React.Component {
 			)
 		}
 		// 表格数据
-		const {
-			current,
-			total,
-			records
-		} = orderTable
-		// const tableData = orderTable.records
+		const current = orderTable.current || 1;
+		const total = orderTable.total || 0;
+		const records = orderTable.records || [];
+		const { delivery={} }= this.props
+		const deliveryRecords = delivery.records || []
 		return (
 			<div className={className}>
 				{/* 面包屑 */}
@@ -228,12 +250,12 @@ class PurOrder extends React.Component {
 						{/* 新建及按钮组部分 */}
 						{dropdownBtn()}
 						<span>
-							<Radio.Group defaultValue="all" onChange={e => {
+							<Radio.Group defaultValue="" onChange={e => {
 								this.changeToGetData({
 									status: e.target.value
 								})
 							}} >
-								<Radio.Button value="all">全部</Radio.Button>
+								<Radio.Button value="">全部</Radio.Button>
 								<Radio.Button value="0">未下单</Radio.Button>
 								<Radio.Button value="1">已下单</Radio.Button>
 							</Radio.Group>
@@ -243,38 +265,48 @@ class PurOrder extends React.Component {
 						<Table
 							columns={tabColumns}
 							dataSource={records}
-							pagination={{
-								total: total,
-								current: current
-							}}
+							pagination={{ total, current }}
 							onChange={this.handleTableChange}
 							rowKey="id"
 							onRow={(record) => {
 								const rest = {
 									status: record.status
 								}
-								return {
-									onClick: () => {
-										this.TableLinkChange('/purOrder/details', record, rest)
+								if(record.status === '1'){
+									return {
+										onClick: (e) => {
+											this.TableLinkChange('/purOrder/details', record, rest)
+										}
 									}
 								}
 							}}
 						/>
 					</div>
 				</div>
-				<Modal title="配送验收情况" 
-					visible={this.state.visible}
-					onOk={this.handleOk}
-          onCancel={this.handleCancel}
-				>
-						<Table></Table>
-				</Modal>
-				
+					<Scrollbars style={{width:1060, height:628}}>
+							<Modal title="配送验收情况"
+								className={styles.orderModal}
+								visible={this.state.visible}
+								onOk={this.handleOk}
+								//onCancel={this.handleCancel}
+								closable={false}
+								width={1060}
+								maskStyle={{background:'rgba(0,0,0,0.25)'}}
+								footer={[
+									<Button key="submit" type="primary" onClick={this.handleOk}>
+										关闭
+									</Button>,
+								]}
+							>
+									<DisAcceptTable records={deliveryRecords}/>
+							</Modal>
+					</Scrollbars>
 			</div>
 		)
 	}
 }
 
-export default connect(({ purOrder }) => ({
-	orderTable: purOrder.orderTable
+export default connect(({ purOrder,deliveryAcce }) => ({
+	orderTable: purOrder.orderTable,
+	delivery:deliveryAcce.delivery,
 }))(withRouter(PurOrder))

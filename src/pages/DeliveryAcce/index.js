@@ -32,7 +32,6 @@ class E extends React.Component {
       status:'1',
       current:'',
       pageSize:'',
-      timeType:'',
       isCountReplacement:'1'
     }
   }
@@ -119,24 +118,24 @@ componentDidMount() {
       <div className='DeliveryAcce'>
         <Bread bread={this.state.bread} />
         <Tabs defaultActiveKey="1" onChange={this.callback}>
-					<TabPane tab={(count.replacement) ? '待配送'+'('+count.replacement+')' :'待配送'} key="1">
+					{this.state.status&&<TabPane tab={(count.replacement) ? '待配送'+'('+count.replacement+')' :'待配送'} key="1">
             <DeliveryTable delivery={delivery} 
             handleFilterChange={this.handleFilterChange}  
             status={this.state.status}
             />
-					</TabPane>
-					<TabPane tab={(count.pending) ? '待验收'+'('+count.pending+')' : '待验收'} key="2">
+					</TabPane>}
+					{this.state.status&&<TabPane tab={(count.pending) ? '待验收'+'('+count.pending+')' : '待验收'} key="2">
             <DeliveryTable delivery={delivery} 
             handleFilterChange={this.handleFilterChange} 
             status={this.state.status}
             />
-					</TabPane>
-          <TabPane tab={(count.accepted) ? '已验收'+'('+count.accepted+')' : '已验收'} key="3">
-            <DeliveryTable delivery={delivery} 
-            handleFilterChange={this.handleFilterChange} 
-            status={this.state.status}
-            />
-					</TabPane>
+					</TabPane>}
+        {this.state.status&&<TabPane tab={(count.accepted) ? '已验收'+'('+count.accepted+')' : '已验收'} key="3">
+          <DeliveryTable delivery={delivery} 
+          handleFilterChange={this.handleFilterChange} 
+          status={this.state.status}
+          />
+        </TabPane>}
 				</Tabs>
       </div>
     );

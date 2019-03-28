@@ -11,17 +11,18 @@ class PurCatalog extends React.Component {
   state = {
     disabled: true,
     visible: false,
-    ingreType: '',
-    pageSize: '',
-    current: 1,
     show: false,
     x: 0,
     y: 0,
     query: {
       catalogId: '',
+      subcatalogId:'',
       startDate: '',
       endDate: '',
-      keywords: '',
+      keywords: '', 
+      ingredientType: '', 
+      pageSize: '',
+      current: '',
     },
   }
   componentDidMount() {
@@ -32,56 +33,59 @@ class PurCatalog extends React.Component {
     dispatch({
       type: 'purCatalog/queryPurCatalog',
       payload: {
+        ...this.state.query,
         ...params
       }
     })
   }
   //分页器的功能
-  queryParams = (data) => {
-    let dataFilter = {}
-    if (data.catalogId) {
-      dataFilter = { catalogId: data.catalogId }
-    }
-    if (data.orderTime) {
-      const startDate = moment(data.orderTime[0]).format('YYYY-MM-DD');
-      const endDate = moment(data.orderTime[1]).format('YYYY-MM-DD');
-      dataFilter = { startDate: startDate };
-      dataFilter = { endDate: endDate };
-    }
-    if (data.keywords) {
-      dataFilter = { keywords: data.keywords }
-    }
-    this.setState(Object.assign(this.state.query, dataFilter))
+  queryParams = (params={}) => {
+		const newQueryParams = {
+			...this.state.query,
+			...params,
+		}
+		this.setState({
+			query: newQueryParams
+		});
+		this.queryPurCatalog(newQueryParams);
   }
   handleCatalogChange = (current, pageSize) => {
+    const newQueryParams = {
+			...this.state.queryParams,
+			current,
+			pageSize
+    }
     this.setState({
-      current: current,
-      pageSize: pageSize
-    }, () => {
-      this.queryPurCatalog({
-        ...this.state.query,
-        ingredientType: this.state.ingreType,
-        pageSize: this.state.pageSize,
-        current: this.state.current
-      })
+			query: newQueryParams
     })
-
+    this.queryPurCatalog(newQueryParams)
+  }
+  queryIngreType = (params = {}) =>{
+    const { dispatch, } = this.props;
+    dispatch({
+      type:'purCatalog/queryIngreType',
+      payload:{
+       ...params,
+      }
+    })
   }
   handleType = (e) => {
-    this.setState({ ingreType: e.target.value })
+  this.queryParams({ingredientType:e.target.value})
+  this.queryIngreType({type:e.target.value})
   }
-
-  handleMouseOver = (id, e) => {
+  handleMouseOver = (record, e) => {
     this.setState({
       show: !this.state.show,
-      x: e.pageX, 
+      x: e.pageX,
       y: e.pageY,
     }, () => {
       const { dispatch } = this.props;
+      const { skuId,id } = record
       dispatch({
         type: 'purCatalog/queryPriceHistory',
         payload: {
-          skuId: id
+          skuId,
+          id
         }
       })
       if (this.state.show) {
@@ -94,23 +98,22 @@ class PurCatalog extends React.Component {
   }
   render() {
     const { purCatalog = {}, location } = this.props;
-    const {catalogData = {}, historyList=[]} = purCatalog;
-    const {records = []} = catalogData;
-    //const catalogData = purCatalog.catalogData.records || [];
+    const { catalogData = {}, historyList = [] } = purCatalog;
+    const { records = [] } = catalogData;
     const tabColumns = [{
       title: '食材名称',
-      dataIndex: 'goodsInfo',
-      key: 'goodsInfo',
+      dataIndex: 'viewSku',
+      key: 'viewSku',
+      width: 200,
       render: (text, record) => {
+        const type = record.viewSku.type
         var timestamp = Date.parse(new Date());
         var isNew = (timestamp - record.createDate) < 15 * 24 * 3600 * 1000;
-        {
-         return  isNew ? <Link to={{pathname: '/ingredetail',state:{id:record.id}}}
-          >{text}<Tag color="red" style={{ marginLeft: 8 }}>NEW</Tag></Link> 
-          : 
-          <Link to={{pathname: '/ingredetail',state:{id:record.id}}}>{text}</Link>
-        }
-
+        return (<Link to={{ pathname: type === 'S' ? '/ingredetail' : '/excipientdetail', 
+          state: { id: record.id,skuId:record.skuId } }}>
+          {text.wholeName}
+          {isNew && <Tag color="red" style={{ marginLeft: 8 }}>NEW</Tag>}
+        </Link>)
       },
       width: '260'
     },
@@ -120,8 +123,13 @@ class PurCatalog extends React.Component {
       key: 'unit',
     }, {
       title: '分类',
-      dataIndex: 'catalogName',
+      dataIndex: 'viewSku',
       key: 'catalogName',
+      render: (text) => {
+        return (
+          <span>{text.catalogName}</span>
+        )
+      }
     }, {
       title: '价格（元）',
       dataIndex: 'price',
@@ -130,7 +138,7 @@ class PurCatalog extends React.Component {
         return (
           <Tooltip title="查看定价记录" >
             <span
-              onClick={this.handleMouseOver.bind(this, record.id)}
+              onClick={this.handleMouseOver.bind(this, record)}
             >
               {text}
             </span>
@@ -144,17 +152,13 @@ class PurCatalog extends React.Component {
     }
     ];
     const { x, y } = this.state;
-    const count = records ? records.length : null
     return (
       <div className='purCata'>
         <BreadcrumbComponent {...location} />
         <Card>
           <div className='cataTable'>
-            <WrappedPurForm queryPurCatalog={this.queryPurCatalog.bind(this)}
-              ingreType={this.state.ingreType}
-              current={this.state.current}
-              pageSize={this.state.pageSize}
-              queryParams={this.queryParams.bind(this)}
+            <WrappedPurForm  queryParams ={this.queryParams}
+              ingredientType={this.state.query.ingredientType}
             />
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 30 }}>
               <div style={{ display: 'flex', }}>
@@ -163,7 +167,7 @@ class PurCatalog extends React.Component {
                   <Radio.Button value="S">食材</Radio.Button>
                   <Radio.Button value="F">辅料</Radio.Button>
                 </Radio.Group>
-                <Alert message={'共'+count+'条'} type="warning" showIcon className='alert' />
+                <Alert message={'共' + catalogData.total ? catalogData.total : '0' + '条'} type="warning" showIcon className='alert' />
               </div>
             </div>
             <div style={{ marginTop: 20 }}>
@@ -177,7 +181,7 @@ class PurCatalog extends React.Component {
                 defaultCurrent={1}
                 onChange={this.handleCatalogChange}
                 total={catalogData.total}
-                current={this.state.current}
+                current={catalogData.current}
                 showSizeChanger
                 showQuickJumper />
             </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Accepting.less';
+import './index.less';
 import { Table,Badge } from 'antd';
 import { connect } from 'dva';
 import { Link } from 'react-router-dom';
@@ -54,49 +54,21 @@ const Columns = [{
     render:(text)=>{return <span>{moment(text).format("YYYY-MM-DD dddd")}</span>}
   }];
   
-class Accepting extends Component {
-    state={
-        pagination: {},
-    }
-      componentDidMount() {
-        this.props.queryList()
-      }
-      
-      handleTableChange = (pagination) =>{
-        const pager = { ...this.state.pagination };
-        pager.current = pagination.current;
-        pager.pageSize = pagination.pageSize;
-        this.setState({
-          pagination: pager,
-        });
-        this.props.queryList({
-          current:pagination.current,
-          pageSize:pagination.pageSize,
-          timeType:this.props.timeType
-        })
-        this.props.handleQuery({
-          current:pagination.current,
-          pageSize:pagination.pageSize,
-        })
-      }
+class DisAcceptTable extends Component {
     render() {
-      const { delivery={} }= this.props
-      const records = delivery.records || []
-      const {current,total} = delivery
+      const records = this.props.deliveryRecords || []
         return ( 
         <div className="accepting">
            <Table 
            columns={Columns} 
            dataSource={records} 
-           onChange={this.handleTableChange} 
-           pagination={{current,total}}
+           pagination={false}
            rowKey="id"
            /> 
         </div>
         );
     }
     }
-
-    export default connect(( {deliveryAcce} ) => ({
-      delivery:deliveryAcce.delivery,
-    }))(Accepting); 
+export default connect(( {deliveryAcce} ) => ({
+  delivery:deliveryAcce.delivery,
+}))(DisAcceptTable); 
