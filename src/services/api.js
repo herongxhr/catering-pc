@@ -158,17 +158,17 @@ export function queryPMenuTemplate(params) {//餐饮单位模板
         url: '/catering/camenuTemplate/pageQuery',
         data: {
             showLoading: true,
-            params: { ...params }
+            params,
         }
     })
 }
 export function queryCMenuTemplate(params) {//餐饮管理单位模板
     return request({
         method: 'get',
-        url: '/catering/menuTemplate/pageQuery',
+        url: '/catering/menuTemplate/recommend/pageQuery',
         data: {
             showLoading: true,
-            params: { ...params }
+            params,
         }
     })
 }
@@ -207,7 +207,7 @@ export function toUpdateMenu(params) {//修改菜单数据
 export function toNewMenu(params) {//修改菜单数据
     const id = params.id || '';
     return request({
-        method: 'post',
+        method: 'put',
         url: `/catering/camenu/${id}`,
         headers: { 'Content-Type': 'application/json' },
         data: {
@@ -238,8 +238,8 @@ export function queryDishes(params) {//获取菜品数据
 
 export function toCopyTemplate(templateId) {//复制模板
     return request({
-        method: 'get',
-        url: '/catering/camenuTemplate/my/item/copy',
+        method: 'post',
+        url: `/catering/camenuTemplate/${templateId}/copy`,
         data: {
             showLoading: true,
             params: { templateId }
@@ -248,18 +248,48 @@ export function toCopyTemplate(templateId) {//复制模板
 }
 export function toDeleteTemplate(templateId) {//删除模板
     return request({
-        method: 'get',
-        url: 'catering/camenuTemplate/my/item/delete',
+        method: 'delete',
+        url: `/catering/camenuTemplate/${templateId}`,
         data: {
             showLoading: true,
-            params: { templateId }
+            params: { id: templateId }
         }
     })
 }
-export function isRecommend() {
+export function toSaveAsMyTemplate(templateId) {//保存为我的模板
+    return request({
+        method: 'post',
+        url: `/catering/menutemplate/recommend/copy/${templateId}`,
+        data: {
+            showLoading: true,
+            params: { id: templateId }
+        }
+    })
+}
+export function toNewTemplate(params) {//新建模板
+    return request({
+        method: 'post',
+        url: `/catering/camenuTemplate`,
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+            axiosData: JSON.stringify(params)
+        }
+    })
+}
+export function toUpdateTemplate(params) {//编辑模板
+    return request({
+        method: 'put',
+        url: '/catering/camenuTemplate',
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+            axiosData: JSON.stringify(params)
+        }
+    })
+}
+export function queryHasAnyTemplate() {
     return request({
         method: 'get',
-        url: '/catering/camenuTemplate/hasRecommend',
+        url: '/catering/menuTemplate/recommend/hasAny',
         data: {
             showLoading: true
         }
@@ -315,10 +345,10 @@ export function queryOrderForm(params) {
     const data = JSON.stringify(params)
     return request({
         method: 'post',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         url: '/catering/order',
         data: {
-            axiosData:data
+            axiosData: data
         }
     })
 }
@@ -430,10 +460,10 @@ export function queryEager(params) {
     const data = JSON.stringify(params)
     return request({
         method: 'post',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         url: `/catering/shortage/${params.id}/eager`,
         data: {
-            axiosData:data
+            axiosData: data
         }
     })
 }
@@ -441,10 +471,10 @@ export function queryWithdrawal(params) {
     const data = JSON.stringify(params)
     return request({
         method: 'DELETE',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         url: `/catering/shortage/${params.id}`,
         data: {
-            axiosData:data
+            axiosData: data
         }
     })
 }
@@ -460,12 +490,11 @@ export function queryDetail(params) {
     })
 }
 //上报商品 put方法 除了get请求其他都要添加headers    http://192.168.122.10
-
 export function querySave(params) {
     const data = JSON.stringify(params)
     return request({
         method: 'post',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         url: '/catering/shortage',
         data: {
             axiosData: data
@@ -519,10 +548,10 @@ export function querySaveSettingData(params) {
     const data = JSON.stringify(params)
     return request({
         method: 'post',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         url: '/catering/setting/menuPartner',
         data: {
-            axiosData:data
+            axiosData: data
         }
     })
 }
@@ -542,10 +571,10 @@ export function querySendBaseView(params) {
     const data = JSON.stringify(params)
     return request({
         method: 'put',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         url: '/catering/setting/catering',
         data: {
-            axiosData:data
+            axiosData: data
         }
     })
 }
@@ -555,10 +584,10 @@ export function queryModifyPassword(params) {
     console.log(data);
     return request({
         method: 'put',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         url: '/catering/setting/catering/pwd',
         data: {
-            axiosData:data
+            axiosData: data
         }
     })
 }
@@ -568,10 +597,10 @@ export function queryageQuery(params) {
     console.log(data);
     return request({
         method: 'post',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         url: '/superior/setting/superior',
         data: {
-            axiosData:data
+            axiosData: data
         }
     })
 }
@@ -593,7 +622,7 @@ export function queryListQuery(params) {
 export function queryCount(params) {
     return request({
         method: 'get',
-        url:'/catering/distribution/count',
+        url: '/catering/distribution/count',
         data: {
             showLoading: true,
             params,
@@ -638,10 +667,10 @@ export function queryfavoriteSupplier(params) {
     const data = JSON.stringify(params)
     return request({
         method: 'post',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         url: '/catering/setting/favoriteSupplier',
         data: {
-            axiosData:data
+            axiosData: data
         }
     })
 }
@@ -650,11 +679,11 @@ export function queryExecute(params) {
     const data = JSON.stringify(params)
     return request({
         method: 'post',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         url: '/catering/setting/favoriteSupplier',
         url: `/catering/distribution/execute/${params.id}`,
         data: {
-            axiosData:data
+            axiosData: data
         }
     })
 }
@@ -663,7 +692,7 @@ export function queryDeleteFavoriteSupplier(params) {
     console.log(params);
     return request({
         method: 'delete',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         url: `/catering/setting/favoriteSupplier/${params}`,
     })
 }

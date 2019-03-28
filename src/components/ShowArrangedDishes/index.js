@@ -100,7 +100,6 @@ export default class ShowArrangedDishes extends Component {
                 </Fragment>
             )
         }
-
     }
 
     render() {

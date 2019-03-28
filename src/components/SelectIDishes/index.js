@@ -19,7 +19,7 @@ class SelectDishes extends React.Component {
     state = {
         type: '',
         keywords: '',
-        current: 0,
+        current: 1,
         pageSize: 10
     }
     // 点击分类或搜索关键字搜索菜品
@@ -80,7 +80,7 @@ class SelectDishes extends React.Component {
                     return currTDMeals.some(item => item.foodId === record.id)
                         ? <span>已选</span>
                         : <a onClick={e => {
-                            changeArrangedMeals(e, record, flag);
+                            changeArrangedMeals(record, flag);
                         }}>选择</a>
                 }
             },
@@ -93,13 +93,6 @@ class SelectDishes extends React.Component {
             dishesData, // 菜品数据
             currTDMeals, // 已选菜品数据
         } = this.props;
-        // 把后端返回的菜品数据dishData解构，考虑为空的情况
-        const {
-            current = 1,
-            pages = 1,
-            size = 10,
-            total = ''
-        } = dishesData;
         const records = dishesData.records || [];
         const tagListDom = currTDMeals.map(item => (
             // 自己新增的绿色显示
@@ -114,7 +107,7 @@ class SelectDishes extends React.Component {
                 // 判断是不是自己加的菜
                 closable={item.isAdd}
                 onClose={e => {
-                    changeArrangedMeals(e, item, -1)
+                    changeArrangedMeals(item, -1)
                 }} >
                 {item.viewFood.foodName}：{item.viewFood.gg && item.viewFood.gg.substring(0, 14) + '...'}
             </Tag>));
@@ -155,10 +148,10 @@ class SelectDishes extends React.Component {
                         onChange={({ current, pageSize }) => this.filterToGetData({ current, pageSize })}
                         rowKey="id"
                         pagination={{
-                            current,
-                            pages,
-                            size,
-                            total,
+                            current: dishesData.current || 1,
+                            pages: dishesData.pages || 0,
+                            pageSize: dishesData.size || 10,
+                            total: dishesData.total || 0,
                             showTotal: total => `共 ${total} 道菜`,
                             showQuickJumper: true
                         }}

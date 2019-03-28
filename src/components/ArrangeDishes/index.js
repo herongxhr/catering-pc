@@ -74,6 +74,7 @@ export default class ArrangeDishes extends Component {
             // 点击了删除按钮,则执行删除操作
             if (flag === '-1') {
                 this.changeArrangedMeals({ id: this.state.currFoodId }, -1);
+                debugger
                 return;
             }
             this.showModal();
@@ -83,25 +84,23 @@ export default class ArrangeDishes extends Component {
     // 在选菜/选食材弹出框中点击添加或点击标签关闭时回调
     // flag为1为添加，-1时为删除，0为替换
     // 使用state中的zj和mealTimes定位单元格
-    changeArrangedMeals = (e, record, flag) => {
-        if (e.target.nodeName === 'A' || e.target.nodeName === 'svg') {
-            const { isAdd } = this.state;
-            this.props.dispatch({
-                type: 'menuCenter/changeArrangedMeals',
-                payload: {
-                    record,
-                    ...this.state,
-                    flag
-                }
-            });
-            // 当换过一次菜后，将之前所换菜的id设为currFoodId
-            if (!isAdd) {
-                this.setState({
-                    currFoodId: record.id
-                })
+    changeArrangedMeals = (record, flag) => {
+        const { isAdd } = this.state;
+        this.props.dispatch({
+            type: 'menuCenter/changeArrangedMeals',
+            payload: {
+                record,
+                ...this.state,
+                flag
             }
-        };
-    }
+        });
+        // 当换过一次菜后，将之前所换菜的id设为currFoodId
+        if (!isAdd) {
+            this.setState({
+                currFoodId: record.id
+            })
+        }
+    };
 
     // 选菜或选食材中筛选区域
     getDishes = params => {
