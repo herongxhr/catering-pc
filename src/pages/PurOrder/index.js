@@ -87,7 +87,7 @@ class PurOrder extends React.Component {
 				},
 			})
 	}
-	orderDelete = (id) =>{
+	orderDelete = (id) =>{   
 		const { dispatch } = this.props;
 			dispatch({
 				type: 'purOrder/queryDeleteByIds',
