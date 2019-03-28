@@ -50,10 +50,10 @@ class A extends Component {
        }
     })
   }
-  queryList = (params={}) =>{
+  queryDelivery = (params={}) =>{
       const { dispatch, } = this.props;
       dispatch({
-        type: 'accept/queryList',
+        type: 'deliveryAcce/queryDelivery',
         payload:{
          ...params
         }
@@ -64,7 +64,7 @@ class A extends Component {
   }
   handleAccet = (value) =>{
     this.setState({timeType:value},()=>{
-      this.queryList({
+      this.queryDelivery({
         ...this.state.pager,
         timeType:this.state.timeType
       })
@@ -127,8 +127,8 @@ class A extends Component {
           </div>
           <div className="App-content-accepting">
             <Tabs tabBarExtraContent={operations} onChange={this.handleAccet}>
-              <TabPane tab="今日验收" key="today"><Accepting queryList={this.queryList} timeType={this.state.timeType} handleQuery={this.handleQuery} /></TabPane>
-              <TabPane tab="明日验收" key="tomorrow"><Accepting queryList={this.queryList} timeType={this.state.timeType} handleQuery={this.handleQuery}/></TabPane>
+              <TabPane tab="今日验收" key="today"><Accepting queryList={this.queryDelivery} timeType={this.state.timeType} handleQuery={this.handleQuery} /></TabPane>
+              <TabPane tab="明日验收" key="tomorrow"><Accepting queryList={this.queryDelivery} timeType={this.state.timeType} handleQuery={this.handleQuery}/></TabPane>
             </Tabs>
           </div>
           <div className='App-content-paying-wrapper'>
@@ -173,6 +173,6 @@ class A extends Component {
 }
 
 const ShowARouter = withRouter(A);
-export default connect(({ home ,accept}) => ({
-  home,accept
+export default connect(({ home ,deliveryAcce}) => ({
+  home,deliveryAcce
 }))(ShowARouter);
