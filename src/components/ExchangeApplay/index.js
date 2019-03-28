@@ -53,7 +53,6 @@ class ExchangeApplay extends React.Component {
      approveStatus:'1',
      distributionId:id
    })
-   window.location.reload()
   }
   handleRefuse = (params) => {
     //console.log(params,'2222')
@@ -65,7 +64,6 @@ class ExchangeApplay extends React.Component {
       approveStatus:'0',
       distributionId:id
     })
-    window.location.reload()
   }
 
   componentDidMount() {

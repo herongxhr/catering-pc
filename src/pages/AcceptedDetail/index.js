@@ -12,10 +12,22 @@ import { withRouter } from "react-router";
 
 
 class AcceptedDetail extends React.Component {
+  querySignature = (params = {}) => {
+    const { dispatch, location } = this.props;
+    const id = location.state && location.state.id;
+    dispatch({
+      type: 'deliveryAcce/querySignature',
+      payload: {
+        ...params,
+        id:id
+      }
+    })
+  }
+  componentDidMount(){
+    this.querySignature()
+  }
   render() {
-    // const { location } = this.props;
-    // const status = location.state.status;
-    
+     const { signatureData } = this.props;
     return (
       <div className='AcceptedDetail'>
         <DisDetailPageHeader/>
@@ -36,7 +48,7 @@ class AcceptedDetail extends React.Component {
                     <figcaption>
                     配送员签字
                     </figcaption>            
-                </figure>
+                </figure>  
             </div>
         </div>
         <DeliveryLog/>
@@ -46,5 +58,5 @@ class AcceptedDetail extends React.Component {
 }
 const ShowAcceptedDetailRouter = withRouter(AcceptedDetail);
 export default connect(({deliveryAcce }) => ({
-  deliveryAcce,
+  signatureData:deliveryAcce.signatureData || [],
 }))(ShowAcceptedDetailRouter);

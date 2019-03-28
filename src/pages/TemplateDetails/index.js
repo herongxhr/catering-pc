@@ -7,21 +7,29 @@ import DescriptionList from '../../components/DescriptionList';
 import BreadcurmbComponent from '../../components/BreadcrumbComponent';
 import PageHeaderWrapper from '../../components/PageHeaderWrapper';
 import ShowArrangedDishes from '../../components/ShowArrangedDishes';
-import ArrangeDishes from '../../components/ArrangeDishes';
 
 const ButtonGroup = Button.Group;
 const { Description } = DescriptionList;
+/**
+ * 模板新建后会跳转到详情页
+ * 模板查看和编辑页也会跳转到详情页
+ * 此时location.state会带有templateFrom属性
+ */
 class TemplateDetails extends Component {
     state = {
-        isArrangeDish: false,
-        id: ''
+        id: '',
+        templateFrom: ''
     }
 
     static getDerivedStateFromProps(props) {
         const { location } = props;
-        const { id } = location.state;
-        return { id }
+        if (location.state) {
+            const { id = '', templateFrom = '' } = location.state;
+            return { id, templateFrom }
+        }
+        return null;
     }
+
     // 跳转至模板编辑页
     handleEditTemplate = () => {
         const { id } = this.state;
@@ -32,14 +40,10 @@ class TemplateDetails extends Component {
     }
 
     getTemplateDetail = () => {
-        const { dispatch, location, templateFrom } = this.props;
-        let { id } = location.state;
-        dispatch({
+        const { id, templateFrom } = this.state;
+        this.props.dispatch({
             type: `menuCenter/fetch${templateFrom}TemplateDetails`,
-            payload: {
-                menuTemplateId: id,
-                templateFrom,
-            }
+            payload: { id }
         })
     }
 
@@ -48,31 +52,23 @@ class TemplateDetails extends Component {
     }
 
     render() {
-        const { location, templateDetails } = this.props;
-        // 加默认值初始取值时不容易报错
-        const {
-            camenuTemplateDetailVOMap = {},
-            id = '',
-            templateName = '',
-            used = 0,
-            tags = '',
-            lastTime = '',
-            priceDataMap = {}
-        } = templateDetails;
-        const { isArrangeDish } = this.state;
+        const { location, templateDetails, allMealsData } = this.props;
+        const tags = templateDetails.tags || '';
         const description = (
             <DescriptionList>
-                <Description term='使用次数'>{used}</Description>
-                <Description term='上次使用'>{Moment(lastTime).format('YYYY-MM-DD HH:mm')}</Description>
+                <Description term='使用次数'>{templateDetails.used}</Description>
+                <Description term='上次使用'>{Moment(templateDetails.lastTime).format('YYYY-MM-DD HH:mm')}</Description>
                 <Description style={{ clear: 'both' }} term=''>
-                    {tags.split(',').map((item, index) =>
-                        <Tag key={index} color='green'>{item}</Tag>)}
+                    {tags.split(',').map((tag, index) => {
+                        const colors = ['cyan', 'orange', 'green', 'magenta', 'lime', 'pruple', 'red', 'blue'];
+                        return <Tag key={index} color={colors[index]}>{tag}</Tag>
+                    })}
                 </Description>
             </DescriptionList>
         );
         const action = (
             <Fragment>
-                {isArrangeDish
+                {false
                     ? (<ButtonGroup>
                         <Button onClick={this.getMenuDetail}>取消</Button>
                         <Button>保存</Button>
@@ -90,7 +86,7 @@ class TemplateDetails extends Component {
             <div>
                 <BreadcurmbComponent {...location} />
                 <PageHeaderWrapper
-                    title={`模板名称${templateName}`}
+                    title={`模板名称${templateDetails.templateName}`}
                     logo={
                         <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png" />
                     }
@@ -103,10 +99,7 @@ class TemplateDetails extends Component {
                         bordered={false}
                         style={{ marginTop: 20 }}>
                         <ShowArrangedDishes
-                            // arrangedDishes为已排菜品数据
-                            arrangedDishes={camenuTemplateDetailVOMap}
-                            // priceDataMap为每餐预估价信息
-                            priceDataMap={priceDataMap}
+                            allMealsData={allMealsData}
                         />
                     </Card>
                 </PageHeaderWrapper>

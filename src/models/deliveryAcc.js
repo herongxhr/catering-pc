@@ -1,5 +1,5 @@
-import { queryDelivery , querySupplier , queryCount , queryDistributionDetail , queryDetailReplacement ,
-    queryExecute , queryGoodsMX , queryLog , queryTicket } from '../services/api';
+import { queryDelivery ,  queryCount , queryDistributionDetail , queryDetailReplacement ,
+    queryExecute , queryTicket,querySignature } from '../services/api';
 
 export default {
     namespace:'deliveryAcce',
@@ -8,12 +8,13 @@ export default {
         count:{},
         detailData:{},
         execute:'',
-        ticketData:[]
+        ticketData:[],
+        signatureData:[]
     },
     effects: {
         *queryDelivery({payload}, { call, put }) {
             const data = yield call(queryDelivery,payload);
-           //console.log(data)
+           console.log(data)
             yield put({
                 type:'saveDelivery',
                 payload: data,
@@ -42,12 +43,25 @@ export default {
                 type:'saveExecute',   
                 payload: data,
             })
+            if(data){
+                yield put({
+                    type: 'queryDistributionDetail',
+                })
+            }
         },
         *queryTicket({payload}, { call, put }) {
             const data = yield call(queryTicket,payload);
             //console.log(data)
             yield put({
                 type:'saveTicket',   
+                payload: data,
+            })
+        },
+        *querySignature({payload}, { call, put }) {
+            const data = yield call(querySignature,payload);
+            //console.log(data)
+            yield put({
+                type:'saveSignature',   
                 payload: data,
             })
         },
@@ -81,6 +95,12 @@ export default {
             return {
                 ...state,
                 ticketData: payload,
+            }
+        },
+        saveSignature(state, { payload }) {
+            return {
+                ...state,
+                signatureData: payload,
             }
         },
     }

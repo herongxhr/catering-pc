@@ -34,7 +34,7 @@ import 'moment/locale/zh-cn';
 import './style/common.less';
 import MenuDetails from './pages/MenuDetails';
 import TemplateDetails from '../src/pages/TemplateDetails';
-import EditTemplate from './pages/EditTemplate';
+import NewTemplate from './pages/NewTemplate';
 //import Edit from './pages/Edit';
 import MenuTemplate from '../src/pages/MenuTemplate';
 import MyMenu from '../src/pages/MyMenu';
@@ -70,8 +70,8 @@ export default function RouterConfig({ history }) {
               <Route path="/menubar/my-menu" exact component={MyMenu} />
               <Route path="/menubar/menu-template" exact component={MenuTemplate} />
               <Route path="/menubar/menu-template/details" component={TemplateDetails} />
-              <Route path="/menubar/menu-template/edit-template" component={EditTemplate} />
-              <Route path="/menubar/menu-template/new" component={EditTemplate} />
+              <Route path="/menubar/menu-template/edit-template" component={NewTemplate} />
+              <Route path="/menubar/menu-template/new" component={NewTemplate} />
               <Route path="/accSupermarket" component={AccSupermarket}></Route>
               <Route path="/purOrder" exact component={PurOrder}></Route>
               <Route path="/purOrder/detail/adjust" exact component={PurOrderDetailAdjust}></Route>
@@ -81,6 +81,8 @@ export default function RouterConfig({ history }) {
               <Route path="/outStock" component={OutStock}></Route>
               <Route path="/parameter" exact component={Parameter}></Route>
               <Route path="/parameter/detail" component={ParameterDetail} exact></Route>
+              <Route path='/Setting/outStock' exact component={OutStock}></Route>
+              <Route path="/Setting/outStock/reportdetail" exact component={ReportDetail} />
               <Route path="/Setting" render={() =>
                 <Setting>
                   <Switch>
@@ -93,8 +95,6 @@ export default function RouterConfig({ history }) {
                   </Switch>
                 </Setting>
               }></Route>
-              <Route path='/Setting/outStock' exact component={OutStock}></Route>
-              <Route path="/Setting/outStock/reportdetail" component={ReportDetail} />
               <Route path="/purCatalog" component={PurCatalog}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/reportdetail" component={ReportDetail}></Route>

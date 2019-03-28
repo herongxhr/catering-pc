@@ -22,13 +22,14 @@ export default async function request(options) {
     // let baseApi = 'http://yapi.jgzh.com/mock/17/';
     let baseApi = 'http://anpin.jgzh.test:9000/';
     //贾宇晓
-    //let baseApi = 'http://anpin.jgzh.test:9002/';
+    // let baseApi = 'http://anpin.jgzh.test:9002/';
     //金鹏强
 //     let baseApi = 'http://192.168.5.149/';
 // =======
 //     let baseApi = 'http://anpin.jgzh.test:9001/';
 // >>>>>>> c62b66a6ba4b0e61379d683660bc6948328a8e25
 // >>>>>>> 9e5d7195f155b4803e6843e6df396f9e800ae295
+    //let baseApi = 'http://192.168.5.149/';
     try {
         const response = await axios({
             method: options.method,

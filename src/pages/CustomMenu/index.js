@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Card, DatePicker, Button, Row, Col, message } from 'antd';
 import { connect } from 'dva';
-import Moment from 'moment';
 import ArrangeDishes from '../../components/ArrangeDishes';
 import styles from './index.module.less';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
-import creatHistory from 'history/createBrowserHistory';
-import { routerRedux } from 'dva/router';
+import createHistory from 'history/createBrowserHistory';
 
-const history = creatHistory();
-
+const history = createHistory();
 const { WeekPicker, } = DatePicker;
+/**
+ * 从模板新建菜单与自定义菜单共用一个页面
+ */
 class CustomMenu extends Component {
   state = {
     menuTemplateId: '',
@@ -41,30 +41,25 @@ class CustomMenu extends Component {
   }
 
   handleClickOk = () => {
-    const { dispatch, templateDetails } = this.props;
-    const ndWeek = this.weekpicker.value;
-    console.log(Moment(ndWeek).isoWeeksInYear());
-    const { nd = '', week = '' } = templateDetails;
     // 从局部state中取数据，再向后端传数据
-    const { menuTemplateId, templateFrom, } = this.state;
-    if (nd && week) {
-      message.warn('请选择菜单的适用周次');
+    const { nd = '', week = '' } = this.state;
+    if (!nd || !week) {
+      this.warning();
       return;
     }
-    dispatch({
+    this.props.dispatch({
       type: 'menuCenter/newMenu',
-      payload: {
-        menuTemplateId,
-        templateFrom,
-        nd: this.state.nd || nd,//state中有设置过值则取之，否则取默认
-        week: this.state.week || week
-      }
+      payload: { ...this.state }
     });
   }
 
   success = () => {
     message.success('菜单保存成功')
   }
+  warning = () => {
+    message.warning('请选择菜单的适用周次');
+  };
+
 
   componentDidMount() {
     const { menuTemplateId, templateFrom } = this.state;
@@ -77,23 +72,9 @@ class CustomMenu extends Component {
     }
   }
 
-  componentDidUpdate() {
-    const { dispatch, createMenuDataResult } = this.props;
-    // 如果createMenuDataResult有id，即为true,定向到详情页
-    if (createMenuDataResult) {
-      this.success();
-      dispatch(routerRedux.push({
-        pathname: '/menubar/my-menu/details',
-        // 传递后端返回的id
-        state: { id: createMenuDataResult }
-      }))
-    }
-  }
-
   render() {
     const { location, loading } = this.props;
     const isLoading = loading.effects['menuCenter/newMenu'];
-    // 是否从模板新建
     return (
       <div>
         <BreadcrumbComponent {...location} />
@@ -102,7 +83,6 @@ class CustomMenu extends Component {
           <Row>
             <Col span={8}>适用周次：<WeekPicker
               ref={ref => this.weekpicker = ref}
-              defaultValue={Moment()}
               style={{ width: 260 }}
               onChange={this.handleSelectWeek}
               placeholder="选择周次"

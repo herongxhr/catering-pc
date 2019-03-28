@@ -73,8 +73,6 @@ class MenuDetails extends React.Component {
     const status = menuDetails.status || '';
     // 供应商
     const superior = menuDetails.superiorName || '';
-    // 预估价
-    const priceDataMap = menuDetails.week || {};
     // 订单信息，未下单的订单没有订单信息
     const order = menuDetails.order || {};
     // 订单采购时间
@@ -146,7 +144,6 @@ class MenuDetails extends React.Component {
             bodyStyle={{ padding: 20 }}>
             <ShowArrangedDishes
               allMealsData={allMealsData}
-              priceDataMap={priceDataMap}
             />
           </Card>
         </PageHeadWrapper>

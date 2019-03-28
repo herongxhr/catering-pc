@@ -21,9 +21,9 @@ class EditableTagGroup extends React.Component {
 
   handleInputConfirm = () => {
     const { inputValue } = this.state;
-    const { tags, editTag } = this.props;
+    const { tagString, editTag } = this.props;
     // 不是空值并且不和原标签相同
-    let newTag = inputValue && tags.indexOf(inputValue) === -1 ? inputValue : null;
+    let newTag = inputValue && tagString.indexOf(inputValue) === -1 ? inputValue : null;
     this.setState({
       inputVisible: false,
       inputValue: '',
@@ -32,11 +32,11 @@ class EditableTagGroup extends React.Component {
   }
 
   render() {
-    const { tags = [] } = this.props;
+    const { tagString = '' } = this.props;
     const { inputVisible, inputValue } = this.state;
     return (
       <div>
-        {tags.split(',').map((tag, index) => {
+        {tagString && tagString.split(',').map((tag, index) => {
           const colors = ['cyan', 'orange', 'green', 'magenta', 'lime', 'red', 'blue'];
           const isLongTag = tag.length > 10;
           const tagElem = (<Tag

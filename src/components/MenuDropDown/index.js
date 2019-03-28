@@ -1,8 +1,8 @@
 /*
  * @Author: suwei 
  * @Date: 2019-03-28 16:42:20 
- * @Last Modified by:   suwei 
- * @Last Modified time: 2019-03-28 16:42:20 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-28 17:15:27
  */
 import React from 'react'
 import { Menu, Icon, Dropdown, Avatar  } from 'antd';
@@ -32,9 +32,10 @@ class MenuDropDown extends React.Component {
           </a>
         </Menu.Item>
         <Menu.Item key="1">
-          <a onClick={() => this.props.history.push('/Setting/outStock/')}>
-          <Icon type="snippets" />
-          <span style={{marginLeft:10}}>缺样上报</span></a>
+          <a href='/Setting/outStock' >
+            <Icon type="snippets" />
+            <span style={{marginLeft:10}}>缺样上报</span>
+          </a>
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item key="3">
