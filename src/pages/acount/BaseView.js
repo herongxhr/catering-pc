@@ -2,10 +2,10 @@
  * @Author: suwei 
  * @Date: 2019-03-23 15:11:29 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-23 16:40:21
+ * @Last Modified time: 2019-03-28 10:18:48
  */
 import React, { Component } from 'react';
-import { Form, Input, Upload, Select, Button , Card } from 'antd';
+import { Form, Input, Select, Button , message} from 'antd';
 import PhoneView from './PhoneView';
 import CitySelect from './citySelect';
 import PhoneNumber from './PhoneNumber';
@@ -16,60 +16,52 @@ import { connect } from 'dva';
 import './BaseView.less';
 
 const FormItem = Form.Item;
-const { Option } = Select;
 
 
 const validatorPhone = (rule, value, callback) => {
   const values = value.split('-');
-  console.log(values)
   if (!values[0]) {
-    callback('Please input your area code!');
+    callback('请输入固定电话!');
   }
   if (!values[1]) {
-    callback('Please input your phone number!');
+    callback('请输入固定电话!');
+  }
+  callback();
+};
+
+const validatorMobile = (rule, value, callback) => {
+  const values = value.split('-');
+  if (!values[0]) {
+    callback('请输入平台管理员!');
+  }
+  if (!values[1]) {
+    callback('请输入手机号!');
   }
   callback();
 };
 
 
 class Imformation extends Component {
-  // componentDidMount() {
-  //   this.setBaseInfo();
-  // }
-
-  setBaseInfo = () => {
-    const { currentUser, form } = this.props;
-    Object.keys(form.getFieldsValue()).forEach(key => {
-      const obj = {};
-      obj[key] = currentUser[key] || null;
-      form.setFieldsValue(obj);
-    });
-  };
 
   handleSubmit = ()=>{
     let userInfo = this.props.form.getFieldsValue();
+    const { cateringName , shortName , address , email , mobile ,telephone } = userInfo
+    if(!cateringName || !shortName || !address || !email || !mobile || !telephone) {
+      message.error('请完善所有信息')
+      return 
+    }
     const { props } = this
     props.dispatch({
       type:'setting/querySendBaseView',
       payload:userInfo
     })
-    // this.props.form.validateFields((err,values)=>{
-    //     if(!err){
-    //         message.success(`${userInfo.userName} 恭喜你，您通过本次表单组件学习，当前密码为：${userInfo.userPwd}`)
-    //     }
-    // })
   }
 
   queryBaseView = (params = {}) => {
-	// 	this.setState({
-	// 		...params
-  //   })
-  //   console.log(this.state,params)
 		this.props.dispatch({
 			type: 'setting/queryBaseView',
 			payload: {
-				// ...this.state,
-				// ...params
+
 			},
 		})
   }
@@ -78,17 +70,15 @@ class Imformation extends Component {
     this.queryBaseView()
   }
 
-  getViewDom = ref => {
-    this.view = ref;
-  };
   
   render() {
     const {
       form: { getFieldDecorator },
       baseView
     } = this.props;
+    const { cateringName , shortName  } = baseView
     return (
-      <div className='baseView' ref={this.getViewDom} >
+      <div className='baseView'  >
         <div className='left'>
           <div className='setting-title'>
             <div className='setting-main-title'>
@@ -104,20 +94,20 @@ class Imformation extends Component {
                 rules: [
                   {
                     required: true,
-                    message: '浙江省东阳市横店镇中心小学',
+                    message:'请输入单位全称'
                   },
                 ],
-              })(<Input placeholder='浙江省东阳市横店镇中心小学' />)}
+              })(<Input placeholder={cateringName} />)}
             </FormItem>
             <FormItem label='单位简称'>
               {getFieldDecorator('shortName', {
                 rules: [
                   {
                     required: true,
-                    message: '横店中心小学',
+                    message:'请输入单位简称'
                   },
                 ],
-              })(<Input placeholder='横店中心小学' />)}
+              })(<Input placeholder={shortName} />)}
             </FormItem>
             <FormItem label='单位地址'>
               {getFieldDecorator('address',{
@@ -131,8 +121,9 @@ class Imformation extends Component {
                 rules: [
                   {
                     required: true,
-                    message: 'a',
-                  }
+                    message: '请输入您的联系电话',
+                  },
+                  { validator: validatorMobile },
                 ],
               })(<PhoneNumber />)}
             </FormItem>
@@ -152,10 +143,6 @@ class Imformation extends Component {
             <FormItem label={<span>固定电话<span style={{color:'#D9D9D9',marginLeft:10}}>(用于接收日常咨询)</span></span>}>
               {getFieldDecorator('telephone', {
                 rules: [
-                  {
-                    required: true,
-                    message: '请输入您的联系电话',
-                  },
                   { validator: validatorPhone },
                 ],
               })(<PhoneView />)}

@@ -4,7 +4,7 @@ export default {
     namespace: 'purOrder',
     state: {
         orderTable:[],
-        orderDetails: [],
+        orderDetails: {},
         orderItemGoods:[],
         orderSelectf:[],
         changeOrderForm:false,
@@ -63,8 +63,14 @@ export default {
                 payload: data,
             })
         },
-        *queryOrderForm({ payload },{ call, put}) {
+        *queryOrderForm({ payload},{ call, put}) {
             const data = yield call(queryOrderForm, payload);
+            if(data) {
+                yield put({
+                    type:'queryOrderDetails',
+                    payload: data,
+                })
+            }
             yield put({
                 type: 'changeOrderForm',
                 payload: data,
@@ -141,11 +147,11 @@ export default {
                 orderItemGoods: payload.records.concat(state.orderItemGoods),
             }
         },
-        changeOrderForm(state, { payload }) {
-            return {
-                ...state,
-                orderItemGoods: payload,
-            }
-        },
+        // changeOrderForm(state, { payload }) {
+        //     return {
+        //         ...state,
+        //         orderItemGoods: payload,
+        //     }
+        // },
     }
 }

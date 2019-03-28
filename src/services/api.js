@@ -297,6 +297,8 @@ export function myCopy(params) {
 
 // 采购订单专区
 
+//请求详情页的接口
+
 //请求选菜模板的select框
 export function queryModalSelect(params) {
     return request({
@@ -352,7 +354,7 @@ export function queryOrderTable(params) {
 export function queryOrderDetails(params) {
     return request({
         method: 'get',
-        url: `/catering/order/${params.id}`,
+        url: `/catering/order/${params}`,
         data: {
             showLoading: true,
             ...params
@@ -515,6 +517,29 @@ export function queryParameterUnfoldItem(params) {
 }
 
 //设置专区
+export function queryCateringSupplier(params) {
+    const data = JSON.stringify(params)
+    return request({
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        url: '/catering/setting/cateringSupplier',
+        data: {
+            axiosData:data
+        }
+    })
+}
+
+export function queryCateringCatalog(params) {
+    return request({
+        method: 'get',
+        url: '/catering/setting/catalog',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+
 export function querySaveSettingData(params) {
     const data = JSON.stringify(params)
     return request({

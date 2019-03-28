@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:41:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-27 16:37:54
+ * @Last Modified time: 2019-03-27 19:27:10
  */
 import React, { Fragment } from 'react'
 import Bread from '../../../components/Bread'
@@ -29,8 +29,9 @@ class PurOrderAdjust extends React.Component {
 
   handleSubmit = () => {
     let object = {}
+    let id = '' //建立一个变量保存后端返回的ID
     const { type } = this.props.location
-    const { orderTableForm , orderItemGoods} = this.props
+    const { orderTableForm , orderItemGoods , orderDetails} = this.props
     //表单验证 message提示
     for(let i = 0; i < orderTableForm.length; i++) {
       if(orderTableForm[i].price.toString() == '0' ) {
@@ -49,6 +50,7 @@ class PurOrderAdjust extends React.Component {
     }
     console.log(object)
     this.queryOrderForm(object) 
+    this.purOrderSave('/purOrder/details')
     // if(orderItemGoods) {
     //   message.success('请求成功')
     //   this.purOrderSave(orderItemGoods)
@@ -114,6 +116,7 @@ class PurOrderAdjust extends React.Component {
 const  PurOrderDetailAdjust =  Form.create()(PurOrderAdjust)
 
 export default connect(({ purOrder }) => ({
+  orderDetails:purOrder.orderDetails,
   alertPrice:purOrder.alertPrice,
   orderTableForm:purOrder.orderTableForm,
   orderItemGoods:purOrder.changeOrderForm,

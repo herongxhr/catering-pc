@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:43:54 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-27 15:24:52
+ * @Last Modified time: 2019-03-28 09:10:10
  */
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
@@ -10,9 +10,10 @@ import { Button, Card, Row, Col, Table, Tag, Modal, Alert, message } from 'antd'
 import DescriptionList from '../../components/DescriptionList';
 import Bread from '../../components/Bread'
 import PageHeadWrapper from '../../components/PageHeaderWrapper';
-import Cartoon from '../../components/Cartoon'
 import styles from './index.module.less';
 import { routerRedux, Redirect } from 'dva/router';
+import isLength from 'lodash/isEqual';
+
 
 import Item from 'antd/lib/list/Item';
 
@@ -71,7 +72,7 @@ class PurOrderDetails extends React.Component {
 			current: 1,
 			visible: false
 		}
-		this.onLoadMore = this.onLoadMore.bind(this)
+		// this.onLoadMore = this.onLoadMore.bind(this)
 	}
 
 	showModal = () => {
@@ -93,11 +94,6 @@ class PurOrderDetails extends React.Component {
 			visible: false,
 		});
 	}
-	// static getDerivedStateFromProps(props, state) {
-	// 	return {
-	// 		data:props.orderDetails
-	// 	}
-	// }
 
 	purOrderAdjust = (pathname, rest) => {
 		const { props } = this
@@ -120,60 +116,45 @@ class PurOrderDetails extends React.Component {
 
 	//点击loadMore的时候拼接数据
 
-	async queryChangeOrderItemGoods() {
-		console.log(1);
-		const { dispatch, location } = this.props
-		await dispatch({
-			type: 'purOrder/queryChangeOrderItemGoods',
-			payload: {
-				id: location.id,
-				current: this.state.current,
-				pageSize: 10
-			}
-		})
-		this.setState({
-			loading: false
-		})
-	}
+	// queryChangeOrderItemGoods = () => {
+	// 	console.log(1);
+	// 	const { dispatch, location } = this.props
+	// 	dispatch({
+	// 		type: 'purOrder/queryChangeOrderItemGoods',
+	// 		payload: {
+	// 			id: location.id,
+	// 			current: this.state.current,
+	// 			pageSize: 10
+	// 		}
+	// 	})
+	// 	this.setState({
+	// 		loading: false
+	// 	})
+	// }
 
-	//当页面加载的时候请求数据
-	queryOrderItemGoods() {
-		const { dispatch, location } = this.props
-		dispatch({
-			type: 'purOrder/queryOrderItemGoods',
-			payload: {
-				id: location.id,
-				current: this.state.current,
-				pageSize: 10
-			}
-		})
+	// //当页面加载的时候请求数据
+	// queryOrderItemGoods() {
+	// 	const { dispatch, location } = this.props
+	// 	dispatch({
+	// 		type: 'purOrder/queryOrderItemGoods',
+	// 		payload: {
+	// 			id: location.id,
+	// 			current: this.state.current,
+	// 			pageSize: 10
+	// 		}
+	// 	})
 
-	}
+	// }
 
-	async onLoadMore() {
-		this.setState({
-			loading: true,
-		});
-		this.queryChangeOrderItemGoods()
-
-		// this.getData((res) => {
-		// 	const data = this.state.data.concat(res.results);
-		// 	this.setState({
-		// 		data,
-		// 		list: data,
-		// 		loading: false,
-		// 	}, () => {
-		// 		// Resetting window's offsetTop so as to display react-virtualized demo underfloor.
-		// 		// In real scene, you can using public method of react-virtualized:
-		// 		// https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
-		// 		window.dispatchEvent(new Event('resize'));
-		// 	});
-		// });
-	}
+	//  onLoadMore() {
+	// 	this.setState({
+	// 		loading: true,
+	// 	});
+	// 	this.queryChangeOrderItemGoods()
+	// }
 
 	componentDidMount() {
 		this.queryOrderDetails()
-		this.queryOrderItemGoods()
 	}
 
 	render() {
@@ -185,11 +166,26 @@ class PurOrderDetails extends React.Component {
 		const {
 			location,
 			orderDetails,
-			orderItemGoods
 		} = this.props;
 		const {
 			...rest
 		} = orderDetails //取值
+		let records = [];
+		let orderDetailVos = rest.orderDetailVos || [];
+		if(orderDetailVos) {
+			const length = orderDetailVos.length
+			records = Array(length).fill(undefined).map(() => Object.create(null));
+			for(let i = 0; i < length; i++) {
+				records[i].id = orderDetailVos[i].id
+				records[i].goodsName = orderDetailVos[i].viewSku.goodsName
+				records[i].price = orderDetailVos[i].price
+				records[i].quantity = orderDetailVos[i].quantity
+				records[i].requireDate = orderDetailVos[i].requireDate
+				records[i].supplierName = orderDetailVos[i].supplier.supplierName
+			}
+		}
+
+		// console.log(records)
 		let orderChannel;
 		if (rest.channel === 'M') {
 			orderChannel = '菜单生成';
@@ -203,6 +199,7 @@ class PurOrderDetails extends React.Component {
 			<Row>
 				<Col xs={24} sm={12}>
 					<div className={styles.textSecondary}>状态</div>
+					{rest.status == '0' ? <span>未下单</span> : <span>已下单</span>}
 					<div className={styles.heading}>未下单</div>
 				</Col>
 				<Col xs={24} sm={12}>
@@ -223,7 +220,7 @@ class PurOrderDetails extends React.Component {
 
 
 		const cardTitle = (
-			<span className={styles.cardTitle}>商品明细：<Tag color="cyan">共{orderItemGoods ? orderItemGoods.length : null}条</Tag></span>
+			<span className={styles.cardTitle}>商品明细：<Tag color="cyan">共8条</Tag></span>
 		);
 
 		const { id, status } = location
@@ -263,9 +260,9 @@ class PurOrderDetails extends React.Component {
 		}
 
 		const { loading, data, visible } = this.state
-		console.log(loading);
 		return (
 			<div className={styles.PurOrderDetails}>
+				{  orderDetailVos   ? null : <Redirect to='/purOrder'></Redirect>}
 				{/* {location.id ? null : <Redirect to="/purOrder" />} */}
 				<Bread bread={bread} value='/purOrder'></Bread>
 				{/* 页头容器 */}
@@ -277,7 +274,8 @@ class PurOrderDetails extends React.Component {
 					}
 					action={chooseButtonGroup()}
 					content={description}
-					extraContent={extra}
+					
+					Content={extra}
 					{...this.props}
 				>
 					<Card
@@ -292,7 +290,7 @@ class PurOrderDetails extends React.Component {
 							loading={loading}
 							rowKey='id'
 							columns={tabColumns}
-							dataSource={orderItemGoods}
+							dataSource={records}
 							footer={() => loadMore()}
 						/>
 					</Card>
