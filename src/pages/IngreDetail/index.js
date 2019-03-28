@@ -9,12 +9,12 @@ import Img from "./pic.jpg"
 class IngreDetail extends Component {
     queryIngreDetail = (params = {}) => {
         const { dispatch, location } = this.props;
-        // const id=location.state.id;
+         const id=location.state.skuId;
         dispatch({
             type: 'purCatalog/queryIngreDetail',
             payload: {
-                //    ...params,
-                id: 1
+               ...params,
+                id: id
             }
         })
     }
@@ -24,6 +24,7 @@ class IngreDetail extends Component {
     render() {
         const { location, purCatalog } = this.props;
         const detailData = purCatalog.detailData;
+        //console.log(detailData,'1111')
         //const property = purCatalog.detailData.property;
         const property =  '产地:新西兰|品种:乳牛|类型:块状';
         let regularObj = []

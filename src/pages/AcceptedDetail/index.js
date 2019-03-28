@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import '../PendingDeliveryDetail/index.less'
 import DisDetailPageHeader from '../../components/DisDetailPageHeader'
 import ExchangeApplay from '../../components/ExchangeApplay'
-import ProductBreakdown from '../../components/ProductBreakdown'
+import AccepProductBreakdown from '../../components/AccedProductBreakdown';
 import DeliveryLog from '../../components/DeliveryLog'
 import Ticket from '../../components/Ticket'
 import Img from "./pic.jpg"
@@ -20,7 +20,7 @@ class AcceptedDetail extends React.Component {
       <div className='AcceptedDetail'>
         <DisDetailPageHeader/>
         <ExchangeApplay/>
-        <ProductBreakdown/>
+        <AccepProductBreakdown/>
         <Ticket/>
         <div className='signature'>
             <div className='signatureTitle'>签名</div>
@@ -45,5 +45,6 @@ class AcceptedDetail extends React.Component {
   }
 }
 const ShowAcceptedDetailRouter = withRouter(AcceptedDetail);
-export default connect(({ }) => ({
+export default connect(({deliveryAcce }) => ({
+  deliveryAcce,
 }))(ShowAcceptedDetailRouter);

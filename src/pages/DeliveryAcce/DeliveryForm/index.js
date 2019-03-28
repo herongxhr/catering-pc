@@ -24,11 +24,18 @@ class InForm extends React.Component {
     const {handleFilterChange} = this.props
      //获取本日
      const today = moment().format('YYYY-MM-DD');
-    if(e.target.value == 'today')
-    handleFilterChange({
-      startDate:today,
-      endDate:today,
-    })
+    if(e.target.value == 'today'){
+      handleFilterChange({
+            startDate:today,
+            endDate:today,
+      })
+    }
+    if(e.target.value == 'all'){
+      handleFilterChange({
+            startDate:'',
+            endDate:'',
+      })
+    }
   }
   handleMenu = (e) => {
     const {handleFilterChange} = this.props
@@ -56,7 +63,6 @@ class InForm extends React.Component {
         endDate:weekEndDate,
       })
     }
-    
   }
   componentDidMount() {
     this.querySupplier()

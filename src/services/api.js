@@ -397,9 +397,9 @@ export function queryPurCatalog(params) {
     })
 }
 export function queryIngreType(params) {
-    return request({
+    return requestpub({
         method: 'get',
-        url: '/catering/purchaseList/catalog',
+        url: '/pub/catalog/listQuery',
         data: {
             showLoading: true,
             params,
@@ -409,7 +409,7 @@ export function queryIngreType(params) {
 export function queryPriceHistory(params) {
     return request({
         method: 'get',
-        url: `/catering/purchaseList/${params.id}/${params.skuId}/price/listQuery`,
+        url: `/catering/purchaseList/${params.id}/priceList/${params.skuId}`,
         data: {
             showLoading: true,
             params,
