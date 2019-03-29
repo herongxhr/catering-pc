@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Card, Tag } from 'antd';
-import { getYMD, getYMDHms } from '../../utils/utils';
+import { Button, Card, Tag, message } from 'antd';
+import { getYMDHms } from '../../utils/utils';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import DescriptionList from '../../components/DescriptionList';
@@ -13,19 +13,19 @@ const { Description } = DescriptionList;
 /**
  * 模板新建后会跳转到详情页
  * 模板查看和编辑页也会跳转到详情页
- * 此时location.state会带有templateFrom属性
+ * 此时location.state会带有templateType属性
  */
 class TemplateDetails extends Component {
     state = {
         id: '',
-        templateFrom: ''
+        templateType: ''
     }
 
     static getDerivedStateFromProps(props) {
         const { location } = props;
         if (location.state) {
-            const { id = '', templateFrom = '' } = location.state;
-            return { id, templateFrom }
+            const { id = '', templateType = '' } = location.state;
+            return { id, templateType }
         }
         return null;
     }
@@ -34,19 +34,44 @@ class TemplateDetails extends Component {
     handleEditTemplate = () => {
         const { id } = this.state;
         this.props.dispatch(routerRedux.push({
-            pathname: '/menubar/menu-template/edit-template',
-            state: id
+            pathname: '/menubar/menu-template/new',
+            state: { id, templateType: this.state.templateType }
         }))
     }
 
+    // 对模板进行复制，删除等操作
+    handleTemplateActions = e => {
+        const { dispatch } = this.props;
+        const { id, templateType } = this.state;
+        // 通过e.target.id来获取当前操作类型copy,delete,edit
+        const action = e.target.id;
+        switch (action) {
+            case 'update':
+                dispatch(routerRedux.push({
+                    pathname: '/menubar/menu-template/update',
+                    state: { id, templateType }
+                }));
+                return;
+            case 'copy':
+            case 'delete':
+                dispatch({
+                    type: `menuCenter/templateActions`,
+                    payload: { id, action, callback: this.callback }
+                }).then(this.success)
+            default:
+                return;
+        }
+    }
     getTemplateDetails = () => {
-        const { id, templateFrom } = this.state;
+        const { id, templateType } = this.state;
         this.props.dispatch({
-            type: `menuCenter/fetch${templateFrom}TemplateDetails`,
+            type: `menuCenter/fetch${templateType}TemplateDetails`,
             payload: id
         })
     }
-
+    success() {
+        message.success('操作成功');
+    }
     componentDidMount() {
         this.getTemplateDetails();
     }
@@ -68,17 +93,12 @@ class TemplateDetails extends Component {
         );
         const action = (
             <Fragment>
-                {false
-                    ? (<ButtonGroup>
-                        <Button onClick={this.getMenuDetail}>取消</Button>
-                        <Button>保存</Button>
-                    </ButtonGroup>)
-                    : (<ButtonGroup>
-                        <Button>复制</Button>
-                        <Button>删除</Button>
-                        <Button onClick={this.handleEditTemplate}>修改</Button>
-                    </ButtonGroup>)}
-                <Button type='primary'>使用</Button>
+                <ButtonGroup onClick={this.handleTemplateActions}>
+                    {/* <Button id='copy' >复制</Button>
+                    <Button id='delete' >删除</Button> */}
+                    <Button id='update'>修改</Button>
+                </ButtonGroup>
+                <Button type='primary' id='yieldMenu'>使用</Button>
             </Fragment>
         );
 

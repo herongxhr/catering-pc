@@ -32,7 +32,7 @@ class MenuTemplate extends React.Component {
     activeTabKey: 'menu-template',
     // 当前操作的模板
     currTemplateId: '',
-    currTemplateType: 'P',
+    templateType: 'P',
     queryParams: {
       orderByAttr: 'create_date',
       isAsc: false,
@@ -53,7 +53,7 @@ class MenuTemplate extends React.Component {
   // 改变模板类型
   changeTemplateType = e => {
     this.setState({
-      currTemplateType: e.target.value
+      templateType: e.target.value
     })
     this.props.dispatch({
       type: `menuCenter/fetch${e.target.value}MenuTemplate`,
@@ -72,14 +72,14 @@ class MenuTemplate extends React.Component {
       case 'preview':
         dispatch(routerRedux.push({
           pathname: '/menubar/menu-template/details',
-          state: { id, templateFrom: this.state.currTemplateType }
+          state: { id, templateType: this.state.templateType }
         }))
         return;
       case 'update':
         dispatch(routerRedux.push({
-          pathname: '/menubar/menu-template/new',
-          state: { id, templateFrom: this.state.currTemplateType }
-        }))
+          pathname: '/menubar/menu-template/update',
+          state: { id, templateType: this.state.templateType }
+        }));
         return;
       case 'copy':
       case 'delete':
@@ -109,6 +109,7 @@ class MenuTemplate extends React.Component {
     })
     dispatch(routerRedux.push({
       pathname: `/menubar/menu-template/new`,
+      state: { templateType: 'P' }
     }))
   }
 
@@ -126,7 +127,7 @@ class MenuTemplate extends React.Component {
       }
     });
     this.props.dispatch({
-      type: `menuCenter/fetch${this.state.currTemplateType}MenuTemplate`,
+      type: `menuCenter/fetch${this.state.templateType}MenuTemplate`,
       payload: { ...this.state.queryParams, ...params }
     })
   }
@@ -138,11 +139,11 @@ class MenuTemplate extends React.Component {
 
   render() {
     const { location, loading, queryHasAnyTemplate } = this.props
-    const { currTemplateId, currTemplateType } = this.state;
+    const { currTemplateId, templateType } = this.state;
     const isLoading = loading.effects['menuCenter/templateActions'];
-    const templateList = this.props[`${currTemplateType}MenuTemplate`];
+    const templateList = this.props[`${templateType}MenuTemplate`];
     // 解构相应的（餐饮单位/管理单位）模板数据
-    const records = this.props[`${currTemplateType}MenuTemplate`].records || [];
+    const records = this.props[`${templateType}MenuTemplate`].records || [];
     return (
       <div>
         <BreadcrumbWithTabs
@@ -172,9 +173,9 @@ class MenuTemplate extends React.Component {
           {/* 我的/推荐模板按钮组 */}
           <div className={styles.filterWrapper}>
             <Button onClick={this.handleNewTemplate} type="primary" >创建模板</Button>
-            <RadioGroup onChange={this.changeTemplateType} defaultValue={this.state.currTemplateType}>
+            <RadioGroup onChange={this.changeTemplateType} defaultValue={this.state.templateType}>
               <RadioButton value="P">我的</RadioButton>
-              <Badge count={currTemplateType === 'P' ? queryHasAnyTemplate : 0} >
+              <Badge count={templateType === 'P' ? queryHasAnyTemplate : 0} >
                 <RadioButton
                   style={{ borderRadius: '0 4px 4px 0', borderLeft: 'none' }}
                   value="C">
@@ -202,7 +203,7 @@ class MenuTemplate extends React.Component {
                   itemData={item}
                   key={item.id}
                   // 指出模板类型
-                  templateType={currTemplateType}
+                  templateType={templateType}
                   handleTemplateActions={this.handleTemplateActions}
                   // 当前卡片必须与点击的卡片相同时，具备加载状态
                   spinning={item.id === currTemplateId && isLoading}>

@@ -13,7 +13,8 @@ import {
     toCopyTemplate,
     toDeleteTemplate,
     toSaveAsMyTemplate,
-    queryHasAnyTemplate
+    queryHasAnyTemplate,
+
 } from '../services/api';
 
 export default {
@@ -34,10 +35,10 @@ export default {
         // 所有可选菜品数据
         dishesData: {},
         // 对模板操作的结果
-        templateActionResult: true,
+        templateActionResult: '',
         // 对菜单操作结果
         createMenuDataResult: '',
-        newTemplateResult: '',
+        customTemplateResult: '',
         // 模板标签
         tagString: '',
         // 模板名
@@ -138,41 +139,31 @@ export default {
                 type: 'saveTemplateActionResult',
                 payload: data,
             });
-            callback();
+            callback && callback();
         },
-        // 新建模板
-        *newTemplate({ payload }, { call, put, select }) {
+        // 新建或编辑模板
+        *customTemplate({ payload }, { call, put, select }) {
+            const { id, callback } = payload;
+            // 请求的接口不一样
+            const queryFunction = id ? toUpdateTemplate : toNewTemplate;
+            // 从全局state中获取数据
             const params = yield select(({ menuCenter }) => {
-                const camenuTemplateDetails = menuCenter.allMealsData;
-                const tags = menuCenter.tagString;
+                const { templateName, tags, allMealsData: camenuTemplateDetails } = menuCenter
                 return {
-                    templateName: payload.templateName || '',
+                    templateName,
                     tags,
                     camenuTemplateDetails
                 }
             });
-            const data = yield call(toNewTemplate, params);
+            // 上传的数据区别在于新建无需id，编辑要
+            const newData = id ? { ...params, id } : params;
+            const data = yield call(queryFunction, newData)
             yield put({
-                type: 'saveNewTemplateResult',
+                type: 'saveCustomTemplateResult',
                 payload: data || ''
             })
-        },
-        // 新建模板或编辑模板
-        *updateTemplate({ payload }, { call, put, select }) {
-            const params = yield select(({ menuCenter }) => {
-                const camenuTemplateDetails = menuCenter.allMealsData;
-                const tags = menuCenter.tagString;
-                return {
-                    ...payload,
-                    tags,
-                    camenuTemplateDetails
-                }
-            });
-            const res = yield call(toUpdateTemplate, params);
-            yield put({
-                type: 'saveNewTemplateDataResult',
-                payload: res
-            })
+            // 执行callback
+            data && callback();
         },
         *hasAnyTemplate(_, { call, put }) {
             const data = yield call(queryHasAnyTemplate)
@@ -273,10 +264,10 @@ export default {
             }
         },
         // 新建模板执行结果
-        saveNewTemplateResult(state, { payload }) {
+        saveCustomTemplateResult(state, { payload }) {
             return {
                 ...state,
-                newTemplateResult: payload
+                customTemplateResult: payload
             }
         },
         editTag(state, { payload }) {

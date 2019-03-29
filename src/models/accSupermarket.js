@@ -70,7 +70,7 @@ export default {
         addToCart(state, { payload }) {
             const { id, quantity } = payload;
             // 看一下购物车里，有没有要加的商品
-            let isExist = state.shoppingCart.find(item => item.id === id);
+            let isExist = state.shoppingCart.find(item => item.skuId === id);
             // 如果有的话,改一下数量
             if (isExist) {
                 return {
