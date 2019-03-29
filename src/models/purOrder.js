@@ -1,6 +1,6 @@
 import { queryModalSelect, queryOrderForm, queryOrderSelectf, 
     queryOrderTable, queryOrderDetails, queryOrderItemGoods,
-    queryOrderPlace, queryDeleteByIds } from '../services/api';
+    queryOrderPlace, queryDeleteByIds, mallPreOrder } from '../services/api';
 
 export default {
     namespace: 'purOrder',
@@ -17,6 +17,18 @@ export default {
         orderDelete:''
     },
     effects: {
+        *mallPreOrder({ payload }, { call, put }) {
+            const data = yield call(mallPreOrder, payload);
+            for(let i = 0; i < data.length; i++) {
+                data[i].goodsName = data[i].viewSku.wholeName
+                data[i].skuId = data[i].viewSku.id
+                data[i].id = data[i].viewSku.id
+            }
+            yield put({
+                type: 'saveMallPreOrder',
+                payload: data
+            });
+        },
         *queryModalSelect({ payload }, { call, put }) {
             const data = yield call(queryModalSelect, payload);
             yield put({
@@ -70,6 +82,12 @@ export default {
         },
         *queryOrderForm({ payload }, { call, put }) {
             const data = yield call(queryOrderForm, payload);
+            if(data) {
+                yield put({
+                    type:'queryOrderDetails',
+                    payload: data,
+                })
+            }
             yield put({
                 type: 'changeOrderForm',
                 payload: data,
@@ -103,6 +121,12 @@ export default {
         },
     },
     reducers: {
+        saveMallPreOrder(state, { payload }) {
+            return {
+                ...state,
+                orderTableForm: payload
+            }
+        },
         priceVerify(state, { payload }) {
             return {
                 ...state,

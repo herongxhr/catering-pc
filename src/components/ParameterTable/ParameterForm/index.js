@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-22 14:15:46 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-23 10:37:49
+ * @Last Modified time: 2019-03-28 09:22:39
  */
 import React from 'react'
 import { Form , Select , DatePicker ,Radio } from "antd";
@@ -55,7 +55,7 @@ class InForm extends React.Component {
             )
           }
         </FormItem>
-        <FormItem style={{marginLeft:270,marginTop:20}}>
+        <FormItem style={{marginLeft:250,marginTop:20}}>
         <RadioGroup onChange={e => {
 								handleFilter({
 									date: e.target.value

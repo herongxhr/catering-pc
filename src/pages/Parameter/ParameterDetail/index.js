@@ -2,13 +2,12 @@
  * @Author: suwei 
  * @Date: 2019-03-20 16:55:19 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-25 09:45:04
+ * @Last Modified time: 2019-03-29 09:16:42
  */
 import React from 'react'
 import Bread from '../../../components/Bread'
 import { Card , Button , Row, Col } from 'antd'
 import ParameterCard from '../ParameterCard'
-// import { Redirect } from 'dva/router';
 import { withRouter } from "react-router";
 import { connect } from 'dva';
 
@@ -25,36 +24,9 @@ const bread = [{
 
 
 class MyComponent extends React.Component {
-  // queryParameterTable() {
-  //   const { dispatch , location } = this.props
-  //   dispatch({
-  //     type:'parameter/queryParameterTable',
-  //     payload: {
-  //       id:location.id,
-  //       startDate:location.startDate,
-  //       endDate:location.endDate
-  //     }
-  //   })
-  // }
-
-  // queryParameterDetail() {
-  //   const { dispatch , location } = this.props
-  //   dispatch({
-  //     type:'parameter/queryParameterDetail',
-  //     payload: {
-  //       id:location.id,
-  //       startDate:location.startDate,
-  //     }
-  //   })
-  // }
-
-
-  // componentDidMount() {
-  //   this.queryParameterTable()
-  // }
 
   render() {
-    const { record } = this.props.location
+    const { record = {} } = this.props.location.state
     if(!record) {
       this.props.history.push('/parameter')
       return null

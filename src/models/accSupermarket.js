@@ -78,7 +78,7 @@ export default {
                     shoppingCart: state.shoppingCart.map(item => {
                         if (item.id === id) {
                             return {
-                                id,
+                                skuId: id,
                                 quantity: item.quantity + quantity,
                             }
                         }
@@ -89,7 +89,7 @@ export default {
                 return {
                     ...state,
                     shoppingCart: state.shoppingCart.concat({
-                        id,
+                        skuId: id,
                         quantity,
                     }),
                 }

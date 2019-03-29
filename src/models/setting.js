@@ -2,9 +2,9 @@
  * @Author: suwei 
  * @Date: 2019-03-23 16:56:31 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-27 09:47:24
+ * @Last Modified time: 2019-03-28 16:46:19
  */
-import { querySaveSettingData , queryDosingTable , queryDeleteFavoriteSupplier, queryfavoriteSupplier, queryBaseView , querySendBaseView , queryModifyPassword , queryListQuery , querySupplier} from '../services/api';
+import { queryCateringSupplier , queryCateringCatalog , querySaveSettingData , queryDosingTable , queryDeleteFavoriteSupplier, queryfavoriteSupplier, queryBaseView , querySendBaseView , queryModifyPassword , queryListQuery , querySupplier} from '../services/api';
 import { message } from 'antd';
 
 export default {
@@ -18,8 +18,22 @@ export default {
 			savefavoriteSupplier:false,
 			saveSettingData:false,
 			dosingTable:[],
+			cateringCatalog:[]
     },
     effects: {
+			*queryCateringSupplier({ payload }, { call, put }) {
+				const data = yield call(queryCateringSupplier, payload);
+				if(data) {
+					message.success('保存成功')
+				}
+			},
+			*querySettingCateringCatalog({ payload }, { call, put }) {
+				const data = yield call(queryCateringCatalog, payload);
+				yield put({
+						type: 'saveCateringCatalog',
+						payload: data,
+				})
+			},
 			*querySaveSettingData({ payload }, { call, put }) {
 				const data = yield call(querySaveSettingData, payload);
 				yield put({
@@ -106,6 +120,13 @@ export default {
 			},
     },
     reducers: {
+			saveCateringCatalog(state,{ payload }) {
+				console.log(payload)
+				return {
+					...state,
+					cateringCatalog:payload
+				}
+			},
 			saveSettingData(state,{ payload }) {
 				if(payload) {
 					message.success('提交成功')

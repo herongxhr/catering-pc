@@ -1,160 +1,130 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-28 16:45:44 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-28 18:38:28
+ */
 import React from 'react'
 import {
-  Table, Select,Modal,Icon
+  Table, Select, Modal
 } from 'antd';
+import { connect } from 'dva';
+import { destruct } from '@aximario/json-tree';
 
 import './NestedTable.less'
 
 const Option = Select.Option;
 
-function CustomExpandIcon(props) {
-  let text;
-  if (props.expanded) {
-    text = '&#x25BC';
-  } else {
-    text = '&#x25BA';
-  }
-  return (
-    <a
-      className="expand-row-icon"
-      onClick={e => props.onExpand(props.record, e)}
-      dangerouslySetInnerHTML={{ __html: text }}
-      style={{ color: 'gray', cursor: 'pointer' }}
-    />
-  );
-}
 
 class NestedTable extends React.Component {
-  state = { visible: false }
+  state = {
+    visible: false,
+    supplierId: '',
+    skuIds: []
+  }
 
-  showModal = () => {
+  querySettingCateringCatalog = () => {
+    const { props } = this
+    props.dispatch({
+      type: 'setting/querySettingCateringCatalog'
+    })
+  }
+
+  componentDidMount() {
+    this.querySettingCateringCatalog()
+  }
+
+  showModal = (record) => {
+    this.querySupplier()
+    let destructedData = destruct([record], {
+      pid: 'parentId',
+    })
+    destructedData = destructedData.map(item => {
+      return item.id
+    })  //取出数组id中的值
     this.setState({
       visible: true,
+      skuIds: destructedData
     });
   }
 
   handleOk = (e) => {
-    console.log(e);
+    const { props, state } = this
+    const { supplierId, skuIds } = state
+    props.dispatch({
+      type: 'setting/queryCateringSupplier',
+      payload: {
+        supplierId,
+        skuIds
+      }
+    })
     this.setState({
       visible: false,
     });
   }
 
   handleCancel = (e) => {
-    console.log(e);
     this.setState({
       visible: false,
     });
   }
-  
+
   handleChange = (value) => {
-    console.log(`selected ${value}`);
+    this.setState({
+      supplierId: value
+    })
   }
 
-  expandedRowRender = () => {
-    const columns = [
-      { dataIndex: 'category', key: 'category' },
-      { dataIndex: 'Supplier', key: 'Supplier' },
-      {
-        key: 'operation',
-        render: () => (
-          <a onClick={this.showModal}>
-            设置
-          </a>
-        ),
+  querySupplier = (params = {}) => {
+    this.props.dispatch({
+      type: 'setting/querySupplier',
+      payload: {
+        ...params
       },
-    ];
-
-    const data = [];
-    for (let i = 0; i < 3; ++i) {
-      data.push({
-        key: i,
-        category: '米类',
-        Supplier: '宁波方兴食品有限公司',
-      });
-    }
-    return (
-      <Table
-        showHeader={false}
-        columns={columns}
-        dataSource={data}
-        pagination={false}
-        expandedRowRender={this.expandedThirdRowRender}
-        expandIcon={CustomExpandIcon}
-      />
-    );
-  };
-
-  expandedThirdRowRender = () => {
-    const columns = [
-      { dataIndex: 'category', key: 'category' },
-      { dataIndex: 'Supplier', key: 'Supplier' },
-      {
-        key: 'operation',
-        render: () => (
-          <a onClick={this.showModal}>
-            设置
-          </a>
-        ),
-      },
-    ];
-    
-    const data = [];
-    for (let i = 0; i < 3; ++i) {
-      data.push({
-        key: i,
-        category: '黄豆',
-        Supplier: '东阳市康有食品有限公司',
-      });
-    }
-    return(
-      <Table
-        className='thirdTable'
-        showHeader={false}
-        columns={columns}
-        dataSource={data}
-        pagination={false}
-      ></Table>
-    )
+    })
   }
+
 
 
 
   render() {
     const columns = [
       { title: '食材类别', dataIndex: 'name', key: 'name' },
-      { title: '供应商', dataIndex: 'supply', key: 'supply' },
-      { 
+      {
+        title: '供应商',
+        dataIndex: 'supplierNames',
+        key: 'supplierNames',
+        render: name => {
+          if(`${name}`.length >= 30) {
+            return `${name}`.substring(0,30)+'...'
+          }
+            return name
+          }         
+      },
+      {
         title: '操作',
         key: 'setting',
-        render: () => (
-          <a onClick={this.showModal}>
+        render: (text, record) => (
+          <a onClick={() => this.showModal(record)}>
             设置
           </a>
         ),
       },
     ];
 
-    const data = [];
-
-    for (let i = 0; i < 3; ++i) {
-      data.push({
-        key: i,
-        name: '粮油米面',
-        supply: '东阳市康有食品有限公司'
-      });
-    }
     const modalObject = {
-      height:'273px'
+      height: '273px'
     }
+
+    const { cateringCatalog, supplier } = this.props
+
     return (
       <div>
         <Table
           className="components-table-demo-nested"
           columns={columns}
-          expandedRowRender={this.expandedRowRender}
-          dataSource={data}
-          expandIcon={CustomExpandIcon}
+          dataSource={cateringCatalog}
+          rowKey='id'
         />
         <Modal
           title="设置供货商"
@@ -164,9 +134,10 @@ class NestedTable extends React.Component {
           width='370px'
           bodyStyle={modalObject}
         >
-          <Select defaultValue="1" style={{ width: 300 }} onChange={this.handleChange}>
-            <Option value="1">东阳市康有食品有限公司</Option>
-            <Option value="2">浙江方兴食品有限公司</Option>
+          <Select style={{ width: '330px' }} placeholder='请选择' onChange={this.handleChange}>
+            {supplier.map(item => (
+              <Option key={item.id} value={item.id}>{item.supplierName}</Option>
+            ))}
           </Select>
         </Modal>
       </div>
@@ -176,4 +147,8 @@ class NestedTable extends React.Component {
 
 }
 
-export default NestedTable
+export default connect(({ setting }) => ({
+  cateringCatalog: setting.cateringCatalog,
+  supplier: setting.supplier,
+}))
+  (NestedTable)
