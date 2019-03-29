@@ -12,16 +12,6 @@ const Description = ({ term, children, }) => (
         <div className="detail">{children}</div>
     </div>
 );
-const bread = [{
-    href: '/delivery',
-    breadContent: '配送验收'
-}, {
-    href: '/delivery',
-    breadContent: '待配送'
-}, {
-    href: '/delivery',
-    breadContent: '详情'
-}]
 
 class DisDetailPageHeader extends React.Component {
     queryDistributionDetail = (params = {}) => {
@@ -41,6 +31,18 @@ class DisDetailPageHeader extends React.Component {
     render() {
         const { detailData = {} } = this.props
         const supplier=detailData.supplier || {}
+        const bread = [{
+            href: '/delivery',
+            breadContent: '配送验收'
+        }, {
+            href: '/delivery',
+            breadContent: detailData.status === '1'
+            ? '待配送'
+            : (detailData.status === '2' ? '待验收' : '已验收')
+        }, {
+            href: '/delivery',
+            breadContent: '详情'
+        }]
         const content = (
             <Row >
                 <Col span={13} offset={1}>

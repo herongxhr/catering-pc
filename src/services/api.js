@@ -378,17 +378,17 @@ export function queryOrderTable(params) {
     })
 }
 
-export function queryOrderDetails(params) {
+export function queryOrderDetails(id) {
     return request({
         method: 'get',
-        url: `/catering/order/${params.id}`,
+        url: `/catering/order/${id}`,
         data: {
             showLoading: true,
-            ...params
+            params: {id}
         }
     })
 }
-
+//待修改
 export function queryOrderItemGoods(params) {
     return request({
         method: 'get',

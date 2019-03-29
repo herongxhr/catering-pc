@@ -13,6 +13,7 @@ import PageHeadWrapper from '../../components/PageHeaderWrapper';
 import Cartoon from '../../components/Cartoon'
 import styles from './index.module.less';
 import { routerRedux, Redirect } from 'dva/router';
+import moment from 'moment'
 
 import Item from 'antd/lib/list/Item';
 
@@ -23,8 +24,9 @@ const { Description } = DescriptionList;
 const tabColumns = [
 	{
 		title: '商品',
-		key: "skuSummary",
-		dataIndex: "skuSummary"
+		key: "viewSku",
+		dataIndex: "viewSku",
+		render:(text)=>text.goodsName
 	},
 	{
 		title: '单位',
@@ -43,13 +45,15 @@ const tabColumns = [
 	},
 	{
 		title: '供应商',
-		key: "supplierName",
-		dataIndex: "supplierName"
+		key: "supplier",
+		dataIndex: "supplier",
+		render:(text)=>text.supplierName
 	},
 	{
 		title: '配送日期',
 		key: "requiredDate",
-		dataIndex: "requiredDate"
+		dataIndex: "requiredDate",
+		render:(text)=>moment(text).format('YYYY-MM-DD')
 	},
 ]
 
@@ -69,9 +73,20 @@ class PurOrderDetails extends React.Component {
 			data: [],
 			list: [],
 			current: 1,
-			visible: false
+			visible: false,
+			id: '',// 订单id
+			status: ''// 订单状态
 		}
 		this.onLoadMore = this.onLoadMore.bind(this)
+	}
+
+	static getDerivedStateFromProps(props) {
+		const { location } = props
+		if (location.state) {
+			const { id = '', status = '' } = location.state;
+			return { id, status }
+		}
+		return null;
 	}
 
 	showModal = () => {
@@ -88,7 +103,7 @@ class PurOrderDetails extends React.Component {
 	}
 
 	handleCancel = (e) => {
-		console.log(e);
+		//console.log(e);
 		this.setState({
 			visible: false,
 		});
@@ -107,21 +122,18 @@ class PurOrderDetails extends React.Component {
 		}))
 	}
 
-	queryOrderDetails() {
-		const { dispatch, location } = this.props
-		console.log(location.id)
-		dispatch({
-			type: 'purOrder/queryOrderDetails',
-			payload: {
-				id: location.id
-			}
+	getOrderDetails() {
+		const { id } = this.state;
+		this.props.dispatch({
+			type: 'purOrder/getOrderDetails',
+			payload: id
 		})
 	}
 
 	//点击loadMore的时候拼接数据
 
 	async queryChangeOrderItemGoods() {
-		console.log(1);
+		//console.log(1);
 		const { dispatch, location } = this.props
 		await dispatch({
 			type: 'purOrder/queryChangeOrderItemGoods',
@@ -155,24 +167,10 @@ class PurOrderDetails extends React.Component {
 			loading: true,
 		});
 		this.queryChangeOrderItemGoods()
-
-		// this.getData((res) => {
-		// 	const data = this.state.data.concat(res.results);
-		// 	this.setState({
-		// 		data,
-		// 		list: data,
-		// 		loading: false,
-		// 	}, () => {
-		// 		// Resetting window's offsetTop so as to display react-virtualized demo underfloor.
-		// 		// In real scene, you can using public method of react-virtualized:
-		// 		// https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
-		// 		window.dispatchEvent(new Event('resize'));
-		// 	});
-		// });
 	}
 
 	componentDidMount() {
-		this.queryOrderDetails()
+		this.getOrderDetails()
 		this.queryOrderItemGoods()
 	}
 
@@ -185,11 +183,14 @@ class PurOrderDetails extends React.Component {
 		const {
 			location,
 			orderDetails,
-			orderItemGoods
+			//orderItemGoods
 		} = this.props;
 		const {
 			...rest
 		} = orderDetails //取值
+		const startDate = rest.startDate || ''
+		const endDate = rest.endDate || ''
+		const orderDetailVos = rest.orderDetailVos || []
 		let orderChannel;
 		if (rest.channel === 'M') {
 			orderChannel = '菜单生成';
@@ -203,7 +204,7 @@ class PurOrderDetails extends React.Component {
 			<Row>
 				<Col xs={24} sm={12}>
 					<div className={styles.textSecondary}>状态</div>
-					<div className={styles.heading}>未下单</div>
+					<div className={styles.heading}>{rest.status === '0' ? '未下单' : '已下单'}</div>
 				</Col>
 				<Col xs={24} sm={12}>
 					<div className={styles.textSecondary}>总金额</div>
@@ -215,15 +216,17 @@ class PurOrderDetails extends React.Component {
 		const description = (
 			<DescriptionList className={styles.headerList} size="small" col="2">
 				<Description term="订单来源">{orderChannel}</Description>
-				<Description term="采购区间">{rest.interval}</Description>
-				<Description term="创建时间">{rest.createTime}</Description>
+				<Description term="采购区间">
+				{`${moment(startDate).format('YYYY-MM-DD')}~${moment(endDate).format('YYYY-MM-DD')}`}
+				</Description>
+				<Description term="创建时间">{moment(rest.createTime).format('YYYY-MM-DD')}</Description>
 				<Description term="备注内容">{rest.remark}</Description>
 			</DescriptionList>
 		);
 
 
 		const cardTitle = (
-			<span className={styles.cardTitle}>商品明细：<Tag color="cyan">共{orderItemGoods ? orderItemGoods.length : null}条</Tag></span>
+			<span className={styles.cardTitle}>商品明细：<Tag color="cyan">共{orderDetailVos ? orderDetailVos.length : '0'}条</Tag></span>
 		);
 
 		const { id, status } = location
@@ -244,11 +247,9 @@ class PurOrderDetails extends React.Component {
 
 		const otherAction = (
 			<Fragment>
-				{/* <Cartoon bell={false} value={'点击这里可以查看配送验收情况哦'} /> */}
 				<Button>打印</Button>
 				<Button style={{ marign: '0px 20px' }}>再来一单</Button>
 				<Button type="primary">查看配送验收情况</Button>
-				{/* <Button type="primary">查看配送验收情况</Button> */}
 			</Fragment>
 		)
 		const loadMore = () => {
@@ -263,7 +264,7 @@ class PurOrderDetails extends React.Component {
 		}
 
 		const { loading, data, visible } = this.state
-		console.log(loading);
+		//console.log(loading);
 		return (
 			<div className={styles.PurOrderDetails}>
 				{/* {location.id ? null : <Redirect to="/purOrder" />} */}
@@ -292,7 +293,7 @@ class PurOrderDetails extends React.Component {
 							loading={loading}
 							rowKey='id'
 							columns={tabColumns}
-							dataSource={orderItemGoods}
+							dataSource={orderDetailVos}
 							footer={() => loadMore()}
 						/>
 					</Card>
