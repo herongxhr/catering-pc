@@ -69,9 +69,15 @@ class MenuTemplate extends React.Component {
     const action = e.delAction || e.target.id;
     switch (action) {
       case 'view':
-      case 'useIt':
+      case 'preview':
         dispatch(routerRedux.push({
           pathname: '/menubar/menu-template/details',
+          state: { id, templateFrom: this.state.currTemplateType }
+        }))
+        return;
+      case 'update':
+        dispatch(routerRedux.push({
+          pathname: '/menubar/menu-template/new',
           state: { id, templateFrom: this.state.currTemplateType }
         }))
         return;
@@ -168,7 +174,7 @@ class MenuTemplate extends React.Component {
             <Button onClick={this.handleNewTemplate} type="primary" >创建模板</Button>
             <RadioGroup onChange={this.changeTemplateType} defaultValue={this.state.currTemplateType}>
               <RadioButton value="P">我的</RadioButton>
-              <Badge count={currTemplateType === 'T' ? queryHasAnyTemplate : 0} >
+              <Badge count={currTemplateType === 'P' ? queryHasAnyTemplate : 0} >
                 <RadioButton
                   style={{ borderRadius: '0 4px 4px 0', borderLeft: 'none' }}
                   value="C">

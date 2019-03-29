@@ -40,6 +40,8 @@ export default {
         newTemplateResult: '',
         // 模板标签
         tagString: '',
+        // 模板名
+        templateName: '',
         queryHasAnyTemplate: 0
     },
     effects: {
@@ -92,14 +94,6 @@ export default {
                 payload: data || {},
             })
         },
-        // 获取我的模板详情数据
-        *fetchPTemplateDetails({ payload }, { call, put }) {
-            const data = yield call(queryPTemplateDetails, payload);
-            yield put({
-                type: 'saveTemplateDetails',
-                payload: data || {},
-            });
-        },
         // 餐饮管理单位模板列表
         *fetchCMenuTemplate({ payload }, { call, put }) {
             const data = yield call(queryCMenuTemplate, payload);
@@ -107,6 +101,14 @@ export default {
                 type: 'saveCMenuTemplate',
                 payload: data || {},
             })
+        },
+        // 获取我的模板详情数据
+        *fetchPTemplateDetails({ payload }, { call, put }) {
+            const data = yield call(queryPTemplateDetails, payload);
+            yield put({
+                type: 'saveTemplateDetails',
+                payload: data || {},
+            });
         },
         // 获取我的模板详情数据
         *fetchCTemplateDetails({ payload }, { call, put }) {
@@ -144,7 +146,7 @@ export default {
                 const camenuTemplateDetails = menuCenter.allMealsData;
                 const tags = menuCenter.tagString;
                 return {
-                    payload,
+                    templateName: payload.templateName || '',
                     tags,
                     camenuTemplateDetails
                 }
@@ -159,8 +161,10 @@ export default {
         *updateTemplate({ payload }, { call, put, select }) {
             const params = yield select(({ menuCenter }) => {
                 const camenuTemplateDetails = menuCenter.allMealsData;
+                const tags = menuCenter.tagString;
                 return {
                     ...payload,
+                    tags,
                     camenuTemplateDetails
                 }
             });
@@ -218,10 +222,10 @@ export default {
         saveTemplateDetails(state, { payload }) {
             return {
                 ...state,
-                // 直接扁平化每天排餐数据
                 templateDetails: payload,
-                tagString: state.templateDetails.tagString || '',
-                allMealsData: payload.foodArrangeVOMap || [],
+                templateName: payload.templateName,
+                tagString: payload.tags || '',
+                allMealsData: payload.camenuTemplateDetailVos || payload.menuTemplateDetailVos || [],
             }
         },
         // 保存菜品库中的菜品数据
@@ -248,6 +252,8 @@ export default {
                 ...state,
                 allMealsData: [],
                 templateDetails: {},
+                templateName: '',
+                tagString: '',
                 newTemplateResult: ''
             }
 
@@ -291,6 +297,12 @@ export default {
                     tagString: state.tagString.replace(tagReg, '')
                 }
             };
+        },
+        handleTemplateNameInput(state, { payload }) {
+            return {
+                ...state,
+                templateName: payload || ''
+            }
         },
         saveQueryHasAnyTemplate(state, { payload }) {
             return {

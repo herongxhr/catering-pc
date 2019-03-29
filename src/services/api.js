@@ -187,7 +187,7 @@ export function queryPTemplateDetails(templateId) {
 export function queryCTemplateDetails(templateId) {//查看模板
     return request({
         method: 'get',
-        url: `/catering/menuTemplate/${templateId}`,
+        url: `/catering/menuTemplate/recommend/vo/${templateId}`,
         data: {
             showLoading: true,
         }
@@ -260,10 +260,9 @@ export function toDeleteTemplate(templateId) {//删除模板
 export function toSaveAsMyTemplate(templateId) {//保存为我的模板
     return request({
         method: 'post',
-        url: `/catering/menutemplate/recommend/copy/${templateId}`,
+        url: `/catering/menuTemplate/recommend/copy/${templateId}`,
         data: {
             showLoading: true,
-            params: { id: templateId }
         }
     })
 }
@@ -290,7 +289,7 @@ export function toUpdateTemplate(params) {//编辑模板
 export function queryHasAnyTemplate() {
     return request({
         method: 'get',
-        url: '/catering/menuTemplate/recommend/hasAny',
+        url: '/catering/menuTemplate/recommend/count',
         data: {
             showLoading: true
         }

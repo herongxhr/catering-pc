@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Card, Row, Col, Tag } from 'antd';
+import { Button, Card, Tag } from 'antd';
+import { getYMD, getYMDHms } from '../../utils/utils';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import Moment from 'moment';
 import DescriptionList from '../../components/DescriptionList';
 import BreadcurmbComponent from '../../components/BreadcrumbComponent';
 import PageHeaderWrapper from '../../components/PageHeaderWrapper';
@@ -39,16 +39,16 @@ class TemplateDetails extends Component {
         }))
     }
 
-    getTemplateDetail = () => {
+    getTemplateDetails = () => {
         const { id, templateFrom } = this.state;
         this.props.dispatch({
             type: `menuCenter/fetch${templateFrom}TemplateDetails`,
-            payload: { id }
+            payload: id
         })
     }
 
     componentDidMount() {
-        this.getTemplateDetail();
+        this.getTemplateDetails();
     }
 
     render() {
@@ -57,7 +57,7 @@ class TemplateDetails extends Component {
         const description = (
             <DescriptionList>
                 <Description term='使用次数'>{templateDetails.used}</Description>
-                <Description term='上次使用'>{Moment(templateDetails.lastTime).format('YYYY-MM-DD HH:mm')}</Description>
+                <Description term='上次使用'>{getYMDHms(templateDetails.lastTime) || '未使用'}</Description>
                 <Description style={{ clear: 'both' }} term=''>
                     {tags.split(',').map((tag, index) => {
                         const colors = ['cyan', 'orange', 'green', 'magenta', 'lime', 'pruple', 'red', 'blue'];

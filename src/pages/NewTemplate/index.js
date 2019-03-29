@@ -14,20 +14,20 @@ const history = createHistory();
  */
 class NewTemplate extends Component {
   state = {
-    menuTemplateId: '',
+    id: '',
     templateFrom: '',
-    templateName: '',
     tag: '' // 模板标签
   }
 
   static getDerivedStateFromProps(props) {
-    const { location } = props;
+    const { location, templateName } = props;
     // 编辑模式才有state
     if (location.state) {
-      const { menuTemplateId = '', templateFrom = '' } = location.state;
+      const { id = '', templateFrom = '' } = location.state;
       return {
-        menuTemplateId,
+        id,
         templateFrom,
+        templateName,
       }
     }
     return null;
@@ -35,7 +35,10 @@ class NewTemplate extends Component {
 
   // 输入模板名称
   handleTemplateNameInput = e => {
-    this.setState({ templateName: e.target.value });
+    this.props.dispatch({
+      type: 'menuCenter/handleTemplateNameInput',
+      payload: e.target.value
+    })
   }
   // 编辑标签的回调
   editTag = (tag, flag) => {
@@ -51,14 +54,14 @@ class NewTemplate extends Component {
 
   handleClickOk = () => {
     // 从局部state中取数据，再向后端传数据
-    const { templateName } = this.state;
+    const { id, templateName } = this.state;
     if (!templateName) {
       this.warning();
       return;
     }
     this.props.dispatch({
       type: 'menuCenter/newTemplate',
-      payload: templateName 
+      payload: { id, templateName }
     });
   }
 
@@ -70,12 +73,12 @@ class NewTemplate extends Component {
   };
 
   componentDidMount() {
-    const { menuTemplateId, templateFrom } = this.state;
+    const { id, templateFrom } = this.state;
     // 如果是从编辑模板，要获取相应模板的详情
-    if (menuTemplateId) {
-     this.props.dispatch({
+    if (id) {
+      this.props.dispatch({
         type: `menuCenter/fetch${templateFrom}TemplateDetails`,
-        payload: menuTemplateId
+        payload: id
       })
     }
   }
@@ -88,7 +91,7 @@ class NewTemplate extends Component {
       dispatch(routerRedux.push({
         pathname: '/menubar/menu-template/details',
         // 传递后端返回的id
-        state: { 
+        state: {
           id: newTemplateResult,
           templateFrom: 'P'
         }
@@ -97,7 +100,7 @@ class NewTemplate extends Component {
   }
 
   render() {
-    const { location, loading, tagString } = this.props;
+    const { location, loading, tagString, templateName } = this.props;
     const isLoading = loading.effects['menuCenter/newTemplate'];
     return (
       <div>
@@ -111,6 +114,7 @@ class NewTemplate extends Component {
                 <Col>
                   <Input
                     allowClear
+                    value={templateName}
                     onChange={this.handleTemplateNameInput} />
                 </Col>
               </Row>
