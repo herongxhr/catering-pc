@@ -12,6 +12,16 @@ export function mallPreOrder(params) {//修改菜单数据
         }
     })
 }
+export function camenuPreOrder(id) {
+    return request({
+        method: 'post',
+        url: `/catering/camenu/preOrder/${id}`,
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+            showLoading: true,
+        }
+    });
+}
 // 查询分类
 export function queryCatalogF(params) {
     return request({
@@ -357,6 +367,19 @@ export function queryOrderForm(params) {
     })
 }
 
+export function putOrderForm(params) {
+    const data = JSON.stringify(params)
+    return request({
+        method: 'put',
+        headers: { 'Content-Type': 'application/json' },
+        url: '/catering/order',
+        data: {
+            axiosData: data
+        }
+    })
+}
+
+
 export function queryOrderSelectf(params) {
     return request({
         method: 'get',
@@ -403,15 +426,11 @@ export function queryGoodsByOrderId(id) {
         }
     })
 }
-export function queryOrderPlace(params) {
-    const data = JSON.stringify(params)
+export function queryOrderPlace(id) {
     return request({
         method: 'put',
-        headers: { 'Content-Type': 'application/json' },
-        url: `catering/order/place/${params.id}`,
-        data: {
-            axiosData: data
-        }
+        headers: {'Content-Type': 'application/json'},
+        url: `catering/order/place/${id}`,
     })
 }
 export function queryDeleteByIds(params) {
