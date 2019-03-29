@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:43:54 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-28 09:10:10
+ * @Last Modified time: 2019-03-29 12:46:09
  */
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
@@ -12,10 +12,7 @@ import Bread from '../../components/Bread'
 import PageHeadWrapper from '../../components/PageHeaderWrapper';
 import styles from './index.module.less';
 import { routerRedux, Redirect } from 'dva/router';
-import isLength from 'lodash/isEqual';
-
-
-import Item from 'antd/lib/list/Item';
+import moment from 'moment'
 
 
 const { Description } = DescriptionList;
@@ -24,13 +21,18 @@ const { Description } = DescriptionList;
 const tabColumns = [
 	{
 		title: '商品',
-		key: "skuSummary",
-		dataIndex: "skuSummary"
+		key: "viewSku",
+		dataIndex: "viewSku",
+		render:(text)=>text.wholeName
 	},
 	{
 		title: '单位',
 		key: "unit",
-		dataIndex: "unit"
+		dataIndex: "viewSku",
+		render:(text)=> {
+			console.log(text)
+			return text.unit
+		}
 	},
 	{
 		title: '单价',
@@ -44,13 +46,15 @@ const tabColumns = [
 	},
 	{
 		title: '供应商',
-		key: "supplierName",
-		dataIndex: "supplierName"
+		key: "supplier",
+		dataIndex: "supplier",
+		render:(text)=>text.supplierName
 	},
 	{
 		title: '配送日期',
 		key: "requiredDate",
-		dataIndex: "requiredDate"
+		dataIndex: "requiredDate",
+		render:(text)=>moment(text).format('YYYY-MM-DD')
 	},
 ]
 
@@ -70,9 +74,20 @@ class PurOrderDetails extends React.Component {
 			data: [],
 			list: [],
 			current: 1,
-			visible: false
+			visible: false,
+			id: '',// 订单id
+			status: ''// 订单状态
 		}
 		// this.onLoadMore = this.onLoadMore.bind(this)
+	}
+
+	static getDerivedStateFromProps(props) {
+		const { location } = props
+		if (location.state) {
+			const { id = '', status = '' } = location.state;
+			return { id, status }
+		}
+		return null;
 	}
 
 	showModal = () => {
@@ -89,72 +104,34 @@ class PurOrderDetails extends React.Component {
 	}
 
 	handleCancel = (e) => {
-		console.log(e);
 		this.setState({
 			visible: false,
 		});
 	}
 
-	purOrderAdjust = (pathname, rest) => {
+	purOrderAdjust = (pathname, id) => {
 		const { props } = this
 		props.dispatch(routerRedux.push({
 			pathname,
-			...rest
+			state:{
+				adjustId:id
+			}
 		}))
 	}
 
-	queryOrderDetails() {
-		const { dispatch, location } = this.props
-		console.log(location.id)
-		dispatch({
-			type: 'purOrder/queryOrderDetails',
-			payload: {
-				id: location.id
-			}
+	getOrderDetails() {
+		const { id } = this.state;
+		this.props.dispatch({
+			type: 'purOrder/getOrderDetails',
+			payload: id
 		})
 	}
 
 	//点击loadMore的时候拼接数据
 
-	// queryChangeOrderItemGoods = () => {
-	// 	console.log(1);
-	// 	const { dispatch, location } = this.props
-	// 	dispatch({
-	// 		type: 'purOrder/queryChangeOrderItemGoods',
-	// 		payload: {
-	// 			id: location.id,
-	// 			current: this.state.current,
-	// 			pageSize: 10
-	// 		}
-	// 	})
-	// 	this.setState({
-	// 		loading: false
-	// 	})
-	// }
-
-	// //当页面加载的时候请求数据
-	// queryOrderItemGoods() {
-	// 	const { dispatch, location } = this.props
-	// 	dispatch({
-	// 		type: 'purOrder/queryOrderItemGoods',
-	// 		payload: {
-	// 			id: location.id,
-	// 			current: this.state.current,
-	// 			pageSize: 10
-	// 		}
-	// 	})
-
-	// }
-
-	//  onLoadMore() {
-	// 	this.setState({
-	// 		loading: true,
-	// 	});
-	// 	this.queryChangeOrderItemGoods()
-	// }
 
 	componentDidMount() {
-		this.queryOrderDetails()
+		this.getOrderDetails()
 	}
 
 	render() {
@@ -170,22 +147,11 @@ class PurOrderDetails extends React.Component {
 		const {
 			...rest
 		} = orderDetails //取值
-		let records = [];
-		let orderDetailVos = rest.orderDetailVos || [];
-		if(orderDetailVos) {
-			const length = orderDetailVos.length
-			records = Array(length).fill(undefined).map(() => Object.create(null));
-			for(let i = 0; i < length; i++) {
-				records[i].id = orderDetailVos[i].id
-				records[i].goodsName = orderDetailVos[i].viewSku.goodsName
-				records[i].price = orderDetailVos[i].price
-				records[i].quantity = orderDetailVos[i].quantity
-				records[i].requireDate = orderDetailVos[i].requireDate
-				records[i].supplierName = orderDetailVos[i].supplier.supplierName
-			}
-		}
-
-		// console.log(records)
+	
+		const startDate = rest.startDate || ''
+		const endDate = rest.endDate || ''
+		let orderDetailVos = rest.orderDetailVos || []
+		
 		let orderChannel;
 		if (rest.channel === 'M') {
 			orderChannel = '菜单生成';
@@ -199,8 +165,7 @@ class PurOrderDetails extends React.Component {
 			<Row>
 				<Col xs={24} sm={12}>
 					<div className={styles.textSecondary}>状态</div>
-					{rest.status == '0' ? <span>未下单</span> : <span>已下单</span>}
-					<div className={styles.heading}>未下单</div>
+					<div className={styles.heading}>{this.state.status === '0' ? '未下单' : '已下单'}</div>
 				</Col>
 				<Col xs={24} sm={12}>
 					<div className={styles.textSecondary}>总金额</div>
@@ -212,21 +177,23 @@ class PurOrderDetails extends React.Component {
 		const description = (
 			<DescriptionList className={styles.headerList} size="small" col="2">
 				<Description term="订单来源">{orderChannel}</Description>
-				<Description term="采购区间">{rest.interval}</Description>
-				<Description term="创建时间">{rest.createTime}</Description>
+				<Description term="采购区间">
+				{ startDate&&endDate ? `${moment(startDate).format('YYYY-MM-DD')}~${moment(endDate).format('YYYY-MM-DD')}` : ''}
+				</Description>
+				<Description term="创建时间">{moment(rest.createTime).format('YYYY-MM-DD')}</Description>
 				<Description term="备注内容">{rest.remark}</Description>
 			</DescriptionList>
 		);
 
 
 		const cardTitle = (
-			<span className={styles.cardTitle}>商品明细：<Tag color="cyan">共8条</Tag></span>
+			<span className={styles.cardTitle}>商品明细：<Tag color="cyan">共{orderDetailVos ? orderDetailVos.length : '0'}条</Tag></span>
 		);
 
 		const { id, status } = location
 
 		const chooseButtonGroup = () => {
-			if (status == 0) return otherAction
+			if (this.state.status == '1') return otherAction
 			else return action
 		}
 
@@ -234,20 +201,19 @@ class PurOrderDetails extends React.Component {
 			<Fragment>
 				<Button>打印</Button>
 				<Button style={{ marign: '0px 20px' }}>删除</Button>
-				<Button onClick={() => this.purOrderAdjust('/purOrder/detail/adjust')}>调整</Button>
+				<Button onClick={() => this.purOrderAdjust('/purOrder/detail/adjust',this.state.id)}>调整</Button>
 				<Button type="primary" onClick={this.showModal}>下单</Button>
 			</Fragment>
 		);
 
 		const otherAction = (
 			<Fragment>
-				{/* <Cartoon bell={false} value={'点击这里可以查看配送验收情况哦'} /> */}
 				<Button>打印</Button>
 				<Button style={{ marign: '0px 20px' }}>再来一单</Button>
 				<Button type="primary">查看配送验收情况</Button>
-				{/* <Button type="primary">查看配送验收情况</Button> */}
 			</Fragment>
 		)
+
 		const loadMore = () => {
 			return (
 				<div style={{
@@ -263,7 +229,6 @@ class PurOrderDetails extends React.Component {
 		return (
 			<div className={styles.PurOrderDetails}>
 				{  orderDetailVos   ? null : <Redirect to='/purOrder'></Redirect>}
-				{/* {location.id ? null : <Redirect to="/purOrder" />} */}
 				<Bread bread={bread} value='/purOrder'></Bread>
 				{/* 页头容器 */}
 				<PageHeadWrapper
@@ -275,7 +240,7 @@ class PurOrderDetails extends React.Component {
 					action={chooseButtonGroup()}
 					content={description}
 					
-					Content={extra}
+					extraContent={extra}
 					{...this.props}
 				>
 					<Card
@@ -290,7 +255,7 @@ class PurOrderDetails extends React.Component {
 							loading={loading}
 							rowKey='id'
 							columns={tabColumns}
-							dataSource={records}
+							dataSource={orderDetailVos}
 							footer={() => loadMore()}
 						/>
 					</Card>
