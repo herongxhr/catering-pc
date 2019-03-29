@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:41:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-28 20:04:07
+ * @Last Modified time: 2019-03-29 12:48:29
  */
 import React, { Fragment } from 'react'
 import Bread from '../../../components/Bread'
@@ -32,9 +32,10 @@ class PurOrderAdjust extends React.Component {
     let id = '' //建立一个变量保存后端返回的ID
     const { location } = this.props;
     const { type, data } = location.state;
-    debugger;
     // 类型
     const { orderTableForm, orderItemGoods, orderDetails } = this.props
+    console.log(orderTableForm)
+    debugger;
     //表单验证 message提示
     for (let i = 0; i < orderTableForm.length; i++) {
       if (orderTableForm[i].price.toString() == '0') {
@@ -52,16 +53,10 @@ class PurOrderAdjust extends React.Component {
       object.orderDetails = orderTableForm
     }
     console.log(object)
-    debugger;
+    object.callback = (id) => {
+      this.TableLinkChange('/purOrder/details',id)
+    }
     this.queryOrderForm(object)
-    this.purOrderSave('/purOrder/details')
-    // if(orderItemGoods) {
-    //   message.success('请求成功')
-    //   this.purOrderSave(orderItemGoods)
-    // }
-    // this.purOrderSave('',{
-    //   id:'303c452ba8d4b4a068f84413d286aedf'
-    // })
   }
 
   queryOrderForm = (data) => {
@@ -71,9 +66,16 @@ class PurOrderAdjust extends React.Component {
       payload: data
     })
   }
+
   componentDidMount() {
-    const { type = '', data = {} } = this.props.location.state;
-    debugger;
+    console.log(this.props.location.state)
+    const { type = '', data = {} , adjustId } = this.props.location.state;
+    if(adjustId) {
+      this.props.dispatch({
+        type:'purOrder/judgeDetailsOrderForm',
+        payload:adjustId
+      })
+    }
     if(Object.keys(data).length) {
       this.props.dispatch({
         type:'purOrder/mallPreOrder',
@@ -81,6 +83,8 @@ class PurOrderAdjust extends React.Component {
       })
     }
   }
+  
+
   //点击出现表单验证card
   showAlert = () => {
     this.setState({
@@ -88,13 +92,12 @@ class PurOrderAdjust extends React.Component {
     })
   }
 
-  purOrderSave = (pathname, rest) => {
-    const { props } = this
-    props.dispatch(routerRedux.push({
-      pathname,
-      ...rest
-    }))
-  }
+	TableLinkChange = (pathname, id) => {
+		this.props.dispatch(routerRedux.push({
+			pathname,
+			state: { id: id }
+		}))
+	}
 
   render() {
     const { alertPrice } = this.props

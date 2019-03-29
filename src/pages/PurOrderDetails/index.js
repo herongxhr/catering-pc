@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:43:54 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-29 10:07:25
+ * @Last Modified time: 2019-03-29 12:46:09
  */
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
@@ -23,12 +23,16 @@ const tabColumns = [
 		title: '商品',
 		key: "viewSku",
 		dataIndex: "viewSku",
-		render:(text)=>text.goodsName
+		render:(text)=>text.wholeName
 	},
 	{
 		title: '单位',
 		key: "unit",
-		dataIndex: "unit"
+		dataIndex: "viewSku",
+		render:(text)=> {
+			console.log(text)
+			return text.unit
+		}
 	},
 	{
 		title: '单价',
@@ -100,17 +104,18 @@ class PurOrderDetails extends React.Component {
 	}
 
 	handleCancel = (e) => {
-		//console.log(e);
 		this.setState({
 			visible: false,
 		});
 	}
 
-	purOrderAdjust = (pathname, rest) => {
+	purOrderAdjust = (pathname, id) => {
 		const { props } = this
 		props.dispatch(routerRedux.push({
 			pathname,
-			...rest
+			state:{
+				adjustId:id
+			}
 		}))
 	}
 
@@ -124,39 +129,9 @@ class PurOrderDetails extends React.Component {
 
 	//点击loadMore的时候拼接数据
 
-	async queryChangeOrderItemGoods() {
-		//console.log(1);
-		const { dispatch, location } = this.props
-		await dispatch({
-			type: 'purOrder/queryChangeOrderItemGoods',
-			payload: {
-				id: location.id,
-				current: this.state.current,
-				pageSize: 10
-			}
-		})
-		this.setState({
-			loading: false
-		})
-	}
-
-	//当页面加载的时候请求数据
-	queryOrderItemGoods() {
-		const { dispatch, location } = this.props
-		dispatch({
-			type: 'purOrder/queryOrderItemGoods',
-			payload: {
-				id: location.id,
-				current: this.state.current,
-				pageSize: 10
-			}
-		})
-	}
-
 
 	componentDidMount() {
 		this.getOrderDetails()
-		this.queryOrderItemGoods()
 	}
 
 	render() {
@@ -168,14 +143,15 @@ class PurOrderDetails extends React.Component {
 		const {
 			location,
 			orderDetails,
-			//orderItemGoods
 		} = this.props;
 		const {
 			...rest
 		} = orderDetails //取值
+	
 		const startDate = rest.startDate || ''
 		const endDate = rest.endDate || ''
-		const orderDetailVos = rest.orderDetailVos || []
+		let orderDetailVos = rest.orderDetailVos || []
+		
 		let orderChannel;
 		if (rest.channel === 'M') {
 			orderChannel = '菜单生成';
@@ -189,7 +165,7 @@ class PurOrderDetails extends React.Component {
 			<Row>
 				<Col xs={24} sm={12}>
 					<div className={styles.textSecondary}>状态</div>
-					<div className={styles.heading}>{rest.status === '0' ? '未下单' : '已下单'}</div>
+					<div className={styles.heading}>{this.state.status === '0' ? '未下单' : '已下单'}</div>
 				</Col>
 				<Col xs={24} sm={12}>
 					<div className={styles.textSecondary}>总金额</div>
@@ -202,7 +178,7 @@ class PurOrderDetails extends React.Component {
 			<DescriptionList className={styles.headerList} size="small" col="2">
 				<Description term="订单来源">{orderChannel}</Description>
 				<Description term="采购区间">
-				{`${moment(startDate).format('YYYY-MM-DD')}~${moment(endDate).format('YYYY-MM-DD')}`}
+				{ startDate&&endDate ? `${moment(startDate).format('YYYY-MM-DD')}~${moment(endDate).format('YYYY-MM-DD')}` : ''}
 				</Description>
 				<Description term="创建时间">{moment(rest.createTime).format('YYYY-MM-DD')}</Description>
 				<Description term="备注内容">{rest.remark}</Description>
@@ -217,7 +193,7 @@ class PurOrderDetails extends React.Component {
 		const { id, status } = location
 
 		const chooseButtonGroup = () => {
-			if (status == 0) return otherAction
+			if (this.state.status == '1') return otherAction
 			else return action
 		}
 
@@ -225,7 +201,7 @@ class PurOrderDetails extends React.Component {
 			<Fragment>
 				<Button>打印</Button>
 				<Button style={{ marign: '0px 20px' }}>删除</Button>
-				<Button onClick={() => this.purOrderAdjust('/purOrder/detail/adjust')}>调整</Button>
+				<Button onClick={() => this.purOrderAdjust('/purOrder/detail/adjust',this.state.id)}>调整</Button>
 				<Button type="primary" onClick={this.showModal}>下单</Button>
 			</Fragment>
 		);
@@ -237,6 +213,7 @@ class PurOrderDetails extends React.Component {
 				<Button type="primary">查看配送验收情况</Button>
 			</Fragment>
 		)
+
 		const loadMore = () => {
 			return (
 				<div style={{
@@ -263,7 +240,7 @@ class PurOrderDetails extends React.Component {
 					action={chooseButtonGroup()}
 					content={description}
 					
-					Content={extra}
+					extraContent={extra}
 					{...this.props}
 				>
 					<Card
