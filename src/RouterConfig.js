@@ -74,8 +74,8 @@ export default function RouterConfig({ history }) {
               <Route path="/menubar/menu-template/new" component={NewTemplate} />
               <Route path="/accSupermarket" component={AccSupermarket}></Route>
               <Route path="/purOrder" exact component={PurOrder}></Route>
+              <Route path="/purOrder/details" exact component={PurOrderDetails}></Route>
               <Route path="/purOrder/detail/adjust" exact component={PurOrderDetailAdjust}></Route>
-              <Route path="/purOrder/details" component={PurOrderDetails}></Route>
               <Route path="/delivery" component={DeliveryAcce}></Route>
               <Route path="/delivery/acceptedDetail" component={DeliveryAcce}></Route>
               <Route path="/outStock" component={OutStock}></Route>

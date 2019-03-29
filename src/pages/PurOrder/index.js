@@ -2,11 +2,11 @@
  * @Author: suwei 
  * @Date: 2019-03-21 17:55:51 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-27 16:12:31
+ * @Last Modified time: 2019-03-28 17:50:42
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon, Modal ,Popconfirm} from 'antd';
+import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon, Modal, Popconfirm } from 'antd';
 import WrappedOrderFilter from '../../components/OrderFilter';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
 import DisAcceptTable from '../../components/DisAcceptTable'
@@ -26,7 +26,7 @@ class PurOrder extends React.Component {
 		status: '',
 		startDate: '',
 		endDate: '',
-		orderByField:'',
+		orderByField: '',
 		isAsc: '',
 		visible: false
 	}
@@ -44,15 +44,15 @@ class PurOrder extends React.Component {
 			},
 		})
 	}
-	queryDelivery = (params={}) =>{
+	queryDelivery = (params = {}) => {
 		const { dispatch, } = this.props;
 		dispatch({
 			type: 'deliveryAcce/queryDelivery',
-			payload:{
-			 ...params
+			payload: {
+				...params
 			}
 		})
-}
+	}
 	// handleFilter = (args) => {
 	// 	let newArgs = {};
 	// 	if (args.dateRange) {
@@ -74,27 +74,27 @@ class PurOrder extends React.Component {
 		const { props } = this
 		props.dispatch(routerRedux.push({
 			pathname,
-			type
+			state: { type }
 		}))
 	}
-//下单
-	previewOrder = (id) =>{
+	//下单
+	previewOrder = (id) => {
 		const { dispatch } = this.props;
-			dispatch({
-				type: 'purOrder/queryOrderPlace',
-				payload: {
-					id:id
-				},
-			})
+		dispatch({
+			type: 'purOrder/queryOrderPlace',
+			payload: {
+				id: id
+			},
+		})
 	}
-	orderDelete = (id) =>{   
+	orderDelete = (id) => {
 		const { dispatch } = this.props;
-			dispatch({
-				type: 'purOrder/queryDeleteByIds',
-				payload: {
-					ids: [id]
-				},
-			})
+		dispatch({
+			type: 'purOrder/queryDeleteByIds',
+			payload: {
+				ids: [id]
+			},
+		})
 	}
 	//表格点击行跳转
 	TableLinkChange = (pathname, record, rest) => {
@@ -119,15 +119,15 @@ class PurOrder extends React.Component {
 		})
 	}
 
-	showDistributionModal = (orderNo,e) => {
+	showDistributionModal = (orderNo, e) => {
 		e.stopPropagation()
-    this.setState({
-      visible: true,
+		this.setState({
+			visible: true,
 		});
 		this.queryDelivery({
-			orderNo:orderNo
+			orderNo: orderNo
 		})
-  }
+	}
 
 	//modal展示
 	handleOk = (e) => {
@@ -135,7 +135,7 @@ class PurOrder extends React.Component {
 			visible: false,
 		});
 	}
-	
+
 	componentDidMount() {
 		this.changeToGetData();
 		this.queryDelivery()
@@ -200,15 +200,15 @@ class PurOrder extends React.Component {
 				render: (text, record) => {
 					return record.status === "0" ?
 						(<div className='opertion'>
-							<Popconfirm title="确定继续此操作?" onConfirm={this.previewOrder.bind(this,record.id)}>
-									<a className='orders'>下单</a>
-  						</Popconfirm>
+							<Popconfirm title="确定继续此操作?" onConfirm={this.previewOrder.bind(this, record.id)}>
+								<a className='orders'>下单</a>
+							</Popconfirm>
 							<Divider type="vertical" />
-							<Popconfirm title="确定继续此操作?" onConfirm={this.orderDelete.bind(this,record.id)}>
-									<a className='delete'>删除</a>
-  						</Popconfirm>
+							<Popconfirm title="确定继续此操作?" onConfirm={this.orderDelete.bind(this, record.id)}>
+								<a className='delete'>删除</a>
+							</Popconfirm>
 						</div>) :
-						(<a className={styles.acceptance} onClick={this.showDistributionModal.bind(this,record.orderNo)}>配送验收情况</a>)
+						(<a className={styles.acceptance} onClick={this.showDistributionModal.bind(this, record.orderNo)}>配送验收情况</a>)
 				},
 			}
 		];
@@ -235,7 +235,7 @@ class PurOrder extends React.Component {
 		const current = orderTable.current || 1;
 		const total = orderTable.total || 0;
 		const records = orderTable.records || [];
-		const { delivery={} }= this.props
+		const { delivery = {} } = this.props
 		const deliveryRecords = delivery.records || []
 		return (
 			<div className={className}>
@@ -272,7 +272,7 @@ class PurOrder extends React.Component {
 								const rest = {
 									status: record.status
 								}
-								if(record.status === '1'){
+								if (record.status === '1') {
 									return {
 										onClick: (e) => {
 											this.TableLinkChange('/purOrder/details', record, rest)
@@ -283,30 +283,30 @@ class PurOrder extends React.Component {
 						/>
 					</div>
 				</div>
-					<Scrollbars style={{width:1060, height:628}}>
-							<Modal title="配送验收情况"
-								className={styles.orderModal}
-								visible={this.state.visible}
-								onOk={this.handleOk}
-								//onCancel={this.handleCancel}
-								closable={false}
-								width={1060}
-								maskStyle={{background:'rgba(0,0,0,0.25)'}}
-								footer={[
-									<Button key="submit" type="primary" onClick={this.handleOk}>
-										关闭
+				<Scrollbars style={{ width: 1060, height: 628 }}>
+					<Modal title="配送验收情况"
+						className={styles.orderModal}
+						visible={this.state.visible}
+						onOk={this.handleOk}
+						//onCancel={this.handleCancel}
+						closable={false}
+						width={1060}
+						maskStyle={{ background: 'rgba(0,0,0,0.25)' }}
+						footer={[
+							<Button key="submit" type="primary" onClick={this.handleOk}>
+								关闭
 									</Button>,
-								]}
-							>
-									<DisAcceptTable records={deliveryRecords}/>
-							</Modal>
-					</Scrollbars>
+						]}
+					>
+						<DisAcceptTable records={deliveryRecords} />
+					</Modal>
+				</Scrollbars>
 			</div>
 		)
 	}
 }
 
-export default connect(({ purOrder,deliveryAcce }) => ({
+export default connect(({ purOrder, deliveryAcce }) => ({
 	orderTable: purOrder.orderTable,
-	delivery:deliveryAcce.delivery,
+	delivery: deliveryAcce.delivery,
 }))(withRouter(PurOrder))

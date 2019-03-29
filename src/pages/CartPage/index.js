@@ -41,10 +41,12 @@ class CartPage extends React.Component {
     }
     yieldPurOrder = () => {
         const { shoppingCart, dispatch } = this.props;
-
         dispatch(routerRedux.push({
             pathname: '/purOrder/detail/adjust',
-            state: { accSupermarket: shoppingCart }
+            state: {
+                type: 'supermarket',
+                data: shoppingCart
+            }
         }))
     }
 
@@ -80,10 +82,9 @@ class CartPage extends React.Component {
                     </span>
                     </Col>
                     <Col span={8}>
-                        <Link to="/purOrder/details"
-                            className={styles.createOrder}
+                        <a className={styles.createOrder}
                             onClick={this.yieldPurOrder}
-                        >生成采购单</Link>
+                        >生成采购单</a>
                     </Col>
                 </Row>
             </div>

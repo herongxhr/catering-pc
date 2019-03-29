@@ -2,6 +2,16 @@ import request from '../utils/request';
 import requestpub from '../utils/common';
 import { stringify } from 'qs';
 // 辅料商城
+export function mallPreOrder(params) {//修改菜单数据
+    return request({
+        method: 'post',
+        url: `/catering/mall/preOrder`,
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+            axiosData: JSON.stringify(params)
+        }
+    })
+}
 // 查询分类
 export function queryCatalogF(params) {
     return request({
@@ -35,6 +45,7 @@ export function queryFGoods(params) {
         }
     });
 }
+
 
 /**
  * 使用post方法
@@ -205,6 +216,7 @@ export function toUpdateMenu(params) {//修改菜单数据
         }
     })
 }
+
 export function toNewMenu(params) {//修改菜单数据
     const id = params.id || '';
     return request({

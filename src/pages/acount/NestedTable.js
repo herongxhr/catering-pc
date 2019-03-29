@@ -1,12 +1,12 @@
 /*
  * @Author: suwei 
  * @Date: 2019-03-28 16:45:44 
- * @Last Modified by:   suwei 
- * @Last Modified time: 2019-03-28 16:45:44 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-28 18:38:28
  */
 import React from 'react'
 import {
-  Table, Select,Modal
+  Table, Select, Modal
 } from 'antd';
 import { connect } from 'dva';
 import { destruct } from '@aximario/json-tree';
@@ -17,19 +17,19 @@ const Option = Select.Option;
 
 
 class NestedTable extends React.Component {
-  state = { 
+  state = {
     visible: false,
-    supplierId:'',
-    skuIds:[]
+    supplierId: '',
+    skuIds: []
   }
 
   querySettingCateringCatalog = () => {
     const { props } = this
     props.dispatch({
-      type:'setting/querySettingCateringCatalog'
+      type: 'setting/querySettingCateringCatalog'
     })
   }
-  
+
   componentDidMount() {
     this.querySettingCateringCatalog()
   }
@@ -37,24 +37,23 @@ class NestedTable extends React.Component {
   showModal = (record) => {
     this.querySupplier()
     let destructedData = destruct([record], {
-      pid: 'parentId', 
+      pid: 'parentId',
     })
-    destructedData = destructedData.map(item =>  {
-     return item.id
+    destructedData = destructedData.map(item => {
+      return item.id
     })  //取出数组id中的值
     this.setState({
       visible: true,
-      skuIds:destructedData
+      skuIds: destructedData
     });
   }
 
   handleOk = (e) => {
-    const { props , state } = this
-    const { supplierId , skuIds } = state 
-    debugger;
+    const { props, state } = this
+    const { supplierId, skuIds } = state
     props.dispatch({
-      type:'setting/queryCateringSupplier',
-      payload:{
+      type: 'setting/queryCateringSupplier',
+      payload: {
         supplierId,
         skuIds
       }
@@ -69,10 +68,10 @@ class NestedTable extends React.Component {
       visible: false,
     });
   }
-  
+
   handleChange = (value) => {
     this.setState({
-      supplierId:value
+      supplierId: value
     })
   }
 
@@ -91,11 +90,21 @@ class NestedTable extends React.Component {
   render() {
     const columns = [
       { title: '食材类别', dataIndex: 'name', key: 'name' },
-      { title: '供应商', dataIndex: 'supplierNames', key: 'supplierNames' },
-      { 
+      {
+        title: '供应商',
+        dataIndex: 'supplierNames',
+        key: 'supplierNames',
+        render: name => {
+          if(`${name}`.length >= 30) {
+            return `${name}`.substring(0,30)+'...'
+          }
+            return name
+          }         
+      },
+      {
         title: '操作',
         key: 'setting',
-        render: (text,record) => (
+        render: (text, record) => (
           <a onClick={() => this.showModal(record)}>
             设置
           </a>
@@ -104,10 +113,10 @@ class NestedTable extends React.Component {
     ];
 
     const modalObject = {
-      height:'273px'
+      height: '273px'
     }
 
-    const { cateringCatalog , supplier} = this.props
+    const { cateringCatalog, supplier } = this.props
 
     return (
       <div>
@@ -125,7 +134,7 @@ class NestedTable extends React.Component {
           width='370px'
           bodyStyle={modalObject}
         >
-          <Select  style={{width:'330px'}} placeholder='请选择' onChange={this.handleChange}>
+          <Select style={{ width: '330px' }} placeholder='请选择' onChange={this.handleChange}>
             {supplier.map(item => (
               <Option key={item.id} value={item.id}>{item.supplierName}</Option>
             ))}
@@ -138,8 +147,8 @@ class NestedTable extends React.Component {
 
 }
 
-export default connect(({setting})=>({
-  cateringCatalog:setting.cateringCatalog,
-  supplier:setting.supplier,
+export default connect(({ setting }) => ({
+  cateringCatalog: setting.cateringCatalog,
+  supplier: setting.supplier,
 }))
-(NestedTable)
+  (NestedTable)

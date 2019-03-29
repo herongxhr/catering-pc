@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-23 09:59:50 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-25 18:12:52
+ * @Last Modified time: 2019-03-29 09:12:49
  */
 import React from 'react'
 import { Table } from 'antd'
@@ -69,7 +69,9 @@ class ParameterTable extends React.Component {
     const { props } = this
     props.dispatch(routerRedux.push({ 
       pathname: '/parameter/detail',
-      record:record,
+      state:{
+        record,
+      }
     }))
   }
 
