@@ -59,11 +59,12 @@ export default {
                 payload: data || {},
             })
         },
-        *queryOrderDetails({ payload }, { call, put }) {
+        *getOrderDetails({ payload }, { call, put }) {
             const data = yield call(queryOrderDetails, payload);
+            console.log(data)
             yield put({
                 type: 'savePurOrderDetails',
-                payload: data,
+                payload: data || {},
             })
         },
         *queryOrderItemGoods({ payload }, { call, put }) {

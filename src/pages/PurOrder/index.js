@@ -97,12 +97,10 @@ class PurOrder extends React.Component {
 		})
 	}
 	//表格点击行跳转
-	TableLinkChange = (pathname, record, rest) => {
-		const { props } = this
-		props.dispatch(routerRedux.push({
+	TableLinkChange = (pathname, record, status) => {
+		this.props.dispatch(routerRedux.push({
 			pathname,
-			id: record.id,
-			...rest
+			state: { id: record.id, status }
 		}))
 	}
 
@@ -269,13 +267,18 @@ class PurOrder extends React.Component {
 							onChange={this.handleTableChange}
 							rowKey="id"
 							onRow={(record) => {
+<<<<<<< HEAD
+								const status = record.status;
+=======
 								const rest = {
 									status: record.status
 								}
+>>>>>>> 650cadf257dd970010b5a20c27d5d32417432fb8
 								if (record.status === '1') {
 									return {
-										onClick: (e) => {
-											this.TableLinkChange('/purOrder/details', record, rest)
+										onClick: () => {
+											const status = record.status;
+											this.TableLinkChange('/purOrder/details', record, status)
 										}
 									}
 								}
