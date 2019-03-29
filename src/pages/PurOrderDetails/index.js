@@ -124,7 +124,6 @@ class PurOrderDetails extends React.Component {
 
 	//点击loadMore的时候拼接数据
 
-<<<<<<< HEAD
 	async queryChangeOrderItemGoods() {
 		//console.log(1);
 		const { dispatch, location } = this.props
@@ -152,7 +151,7 @@ class PurOrderDetails extends React.Component {
 				pageSize: 10
 			}
 		})
-=======
+	}
 	// queryChangeOrderItemGoods = () => {
 	// 	console.log(1);
 	// 	const { dispatch, location } = this.props
@@ -168,7 +167,6 @@ class PurOrderDetails extends React.Component {
 	// 		loading: false
 	// 	})
 	// }
->>>>>>> 650cadf257dd970010b5a20c27d5d32417432fb8
 
 	// //当页面加载的时候请求数据
 	// queryOrderItemGoods() {
@@ -181,31 +179,9 @@ class PurOrderDetails extends React.Component {
 	// 			pageSize: 10
 	// 		}
 	// 	})
-
-<<<<<<< HEAD
-	async onLoadMore() {
-		this.setState({
-			loading: true,
-		});
-		this.queryChangeOrderItemGoods()
-	}
-
 	componentDidMount() {
 		this.getOrderDetails()
 		this.queryOrderItemGoods()
-=======
-	// }
-
-	//  onLoadMore() {
-	// 	this.setState({
-	// 		loading: true,
-	// 	});
-	// 	this.queryChangeOrderItemGoods()
-	// }
-
-	componentDidMount() {
-		this.queryOrderDetails()
->>>>>>> 650cadf257dd970010b5a20c27d5d32417432fb8
 	}
 
 	render() {
@@ -217,21 +193,15 @@ class PurOrderDetails extends React.Component {
 		const {
 			location,
 			orderDetails,
-<<<<<<< HEAD
 			//orderItemGoods
-=======
->>>>>>> 650cadf257dd970010b5a20c27d5d32417432fb8
 		} = this.props;
 		const {
 			...rest
 		} = orderDetails //取值
-<<<<<<< HEAD
 		const startDate = rest.startDate || ''
 		const endDate = rest.endDate || ''
-		const orderDetailVos = rest.orderDetailVos || []
-=======
+		let orderDetailVos = rest.orderDetailVos || []
 		let records = [];
-		let orderDetailVos = rest.orderDetailVos || [];
 		if(orderDetailVos) {
 			const length = orderDetailVos.length
 			records = Array(length).fill(undefined).map(() => Object.create(null));
@@ -246,7 +216,6 @@ class PurOrderDetails extends React.Component {
 		}
 
 		// console.log(records)
->>>>>>> 650cadf257dd970010b5a20c27d5d32417432fb8
 		let orderChannel;
 		if (rest.channel === 'M') {
 			orderChannel = '菜单生成';
@@ -260,12 +229,7 @@ class PurOrderDetails extends React.Component {
 			<Row>
 				<Col xs={24} sm={12}>
 					<div className={styles.textSecondary}>状态</div>
-<<<<<<< HEAD
 					<div className={styles.heading}>{rest.status === '0' ? '未下单' : '已下单'}</div>
-=======
-					{rest.status == '0' ? <span>未下单</span> : <span>已下单</span>}
-					<div className={styles.heading}>未下单</div>
->>>>>>> 650cadf257dd970010b5a20c27d5d32417432fb8
 				</Col>
 				<Col xs={24} sm={12}>
 					<div className={styles.textSecondary}>总金额</div>
@@ -278,7 +242,7 @@ class PurOrderDetails extends React.Component {
 			<DescriptionList className={styles.headerList} size="small" col="2">
 				<Description term="订单来源">{orderChannel}</Description>
 				<Description term="采购区间">
-				{`${moment(startDate).format('YYYY-MM-DD')}~${moment(endDate).format('YYYY-MM-DD')}`}
+				{ startDate&&endDate ? `${moment(startDate).format('YYYY-MM-DD')}~${moment(endDate).format('YYYY-MM-DD')}` : ''}
 				</Description>
 				<Description term="创建时间">{moment(rest.createTime).format('YYYY-MM-DD')}</Description>
 				<Description term="备注内容">{rest.remark}</Description>
@@ -287,11 +251,7 @@ class PurOrderDetails extends React.Component {
 
 
 		const cardTitle = (
-<<<<<<< HEAD
 			<span className={styles.cardTitle}>商品明细：<Tag color="cyan">共{orderDetailVos ? orderDetailVos.length : '0'}条</Tag></span>
-=======
-			<span className={styles.cardTitle}>商品明细：<Tag color="cyan">共8条</Tag></span>
->>>>>>> 650cadf257dd970010b5a20c27d5d32417432fb8
 		);
 
 		const { id, status } = location
@@ -329,10 +289,7 @@ class PurOrderDetails extends React.Component {
 		}
 
 		const { loading, data, visible } = this.state
-<<<<<<< HEAD
 		//console.log(loading);
-=======
->>>>>>> 650cadf257dd970010b5a20c27d5d32417432fb8
 		return (
 			<div className={styles.PurOrderDetails}>
 				{  orderDetailVos   ? null : <Redirect to='/purOrder'></Redirect>}
@@ -363,11 +320,7 @@ class PurOrderDetails extends React.Component {
 							loading={loading}
 							rowKey='id'
 							columns={tabColumns}
-<<<<<<< HEAD
 							dataSource={orderDetailVos}
-=======
-							dataSource={records}
->>>>>>> 650cadf257dd970010b5a20c27d5d32417432fb8
 							footer={() => loadMore()}
 						/>
 					</Card>

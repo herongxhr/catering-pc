@@ -395,14 +395,9 @@ export function queryOrderTable(params) {
 export function queryOrderDetails(id) {
     return request({
         method: 'get',
-<<<<<<< HEAD
         url: `/catering/order/${id}`,
-=======
-        url: `/catering/order/${params}`,
->>>>>>> 650cadf257dd970010b5a20c27d5d32417432fb8
         data: {
             showLoading: true,
-            params: {id}
         }
     })
 }

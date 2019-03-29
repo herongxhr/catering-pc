@@ -14,7 +14,7 @@ export default {
     effects: {
         *queryDelivery({payload}, { call, put }) {
             const data = yield call(queryDelivery,payload);
-           //console.log(data)
+           console.log(data)
             yield put({
                 type:'saveDelivery',
                 payload: data,

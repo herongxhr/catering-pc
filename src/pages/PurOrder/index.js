@@ -266,18 +266,11 @@ class PurOrder extends React.Component {
 							pagination={{ total, current }}
 							onChange={this.handleTableChange}
 							rowKey="id"
-							onRow={(record) => {
-<<<<<<< HEAD
+							onRow={ record => {
 								const status = record.status;
-=======
-								const rest = {
-									status: record.status
-								}
->>>>>>> 650cadf257dd970010b5a20c27d5d32417432fb8
-								if (record.status === '1') {
+								if (status === '1') {
 									return {
 										onClick: () => {
-											const status = record.status;
 											this.TableLinkChange('/purOrder/details', record, status)
 										}
 									}
@@ -298,7 +291,7 @@ class PurOrder extends React.Component {
 						footer={[
 							<Button key="submit" type="primary" onClick={this.handleOk}>
 								关闭
-									</Button>,
+							</Button>,
 						]}
 					>
 						<DisAcceptTable records={deliveryRecords} />
