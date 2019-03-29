@@ -1,6 +1,6 @@
-import { queryModalSelect, queryOrderForm, queryOrderSelectf, 
+import { queryModalSelect, queryOrderForm, putOrderForm, queryOrderSelectf, 
     queryOrderTable, queryOrderDetails, 
-    queryOrderPlace, queryDeleteByIds, mallPreOrder } from '../services/api';
+    queryOrderPlace, queryDeleteByIds, mallPreOrder, camenuPreOrder } from '../services/api';
 
 export default {
     namespace: 'purOrder',
@@ -17,12 +17,28 @@ export default {
         orderDelete:''
     },
     effects: {
+        *camenuPreOrder({ payload }, { call, put }) {
+            const data = yield call(camenuPreOrder, payload);
+            debugger;
+            for(let i = 0; i < data.length; i++) {
+                data[i].goodsName = data[i].viewSku ? data[i].viewSku.wholeName : null
+                data[i].skuId = data[i].viewSku ? data[i].viewSku.id : null
+                data[i].id = data[i].viewSku ? data[i].viewSku.id : null
+                data[i].supplierId = data[i].supplier ? data[i].supplier.supplierName : null
+            }
+            yield put({
+                type: 'saveMallPreOrder',
+                payload: data
+            });
+        },
         *mallPreOrder({ payload }, { call, put }) {
             const data = yield call(mallPreOrder, payload);
+            debugger;
             for(let i = 0; i < data.length; i++) {
-                data[i].goodsName = data[i].viewSku.wholeName
-                data[i].skuId = data[i].viewSku.id
-                data[i].id = data[i].viewSku.id
+                data[i].goodsName = data[i].viewSku ? data[i].viewSku.wholeName : null
+                data[i].skuId = data[i].viewSku ? data[i].viewSku.id : null
+                data[i].id =  data[i].viewSku ? data[i].viewSku.id : null
+                data[i].supplierId = data[i].supplier ? data[i].supplier.supplierName : null
             }
             yield put({
                 type: 'saveMallPreOrder',
@@ -68,6 +84,7 @@ export default {
                 orderDetailVos[i].skuId = orderDetailVos[i].viewSku.id
                 orderDetailVos[i].supplierId = orderDetailVos[i].supplier.supplierName
                 orderDetailVos[i].id = orderDetailVos[i].viewSku.id
+                orderDetailVos[i].editable = true
             }
             yield put({
                 type: 'saveMallPreOrder',
@@ -83,13 +100,24 @@ export default {
             })
         },
         *queryOrderForm({ payload }, { call, put }) {
-            const { callback } = payload
-            const data = yield call(queryOrderForm, payload);
-            callback(data)     
+            const { id , callback } = payload
+            debugger;
+            if(id) {
+                debugger;
+                const data = yield call(putOrderForm, payload);
+                callback(data)     
+            } else {
+                debugger;
+                const data = yield call(queryOrderForm, payload);
+                callback(data) 
+            }
         },
         *queryOrderPlace({ payload }, { call, put }) {
-            const data = yield call(queryOrderPlace, payload);
-            console.log(data)
+            const { callback , id } = payload
+            debugger;
+            const data = yield call(queryOrderPlace, id);
+            debugger;
+            callback(data)
             yield put({
                 type: 'saveOrderPlace',
                 payload: data,
@@ -115,7 +143,14 @@ export default {
         },
     },
     reducers: {
+        clearOrderTableForm(state, { payload }) {
+            return {
+                ...state,
+                orderTableForm: []
+            }
+        },            
         saveMallPreOrder(state, { payload }) {
+            debugger;
             return {
                 ...state,
                 orderTableForm: payload

@@ -10,6 +10,9 @@ const Columns = [{
     dataIndex: 'distributionNo',
     key: 'distributionNo',
     render:(text,record) =>{
+      if(record.status == '0'){
+        return(<Link to={{ pathname:"/pendingDeliveryDetail",state:{id:record.id} }}>{text}</Link>) 
+      }
       if(record.status == '1'){
         return(<Link to={{ pathname:"/pendingDeliveryDetail",state:{id:record.id} }}>{text}</Link>) 
       }
@@ -36,8 +39,11 @@ const Columns = [{
       dataIndex: 'status',
       key: 'status',
       render(status){
+        if(status == '0'){
+          return (<span> <Badge status="warning" />待启动</span>)
+        }
         if(status == '1'){
-          return (<span> <Badge status="warning" />待配送</span>)
+          return (<span> <Badge status="processing" />换货中</span>)
         }
         if(status == '2'){
           return (<span> <Badge status="success" />待验收</span>)
@@ -56,7 +62,7 @@ const Columns = [{
   
 class DisAcceptTable extends Component {
     render() {
-      const records = this.props.deliveryRecords || []
+      const records = this.props.records || []
         return ( 
         <div className="accepting">
            <Table 

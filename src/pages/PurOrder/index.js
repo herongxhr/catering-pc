@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-21 17:55:51 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-29 14:52:49
+ * @Last Modified time: 2019-03-29 19:12:17
  */
 import React from 'react';
 import { connect } from 'dva';
@@ -46,7 +46,7 @@ class PurOrder extends React.Component {
 	}
 	
 	queryDelivery = (params = {}) => {
-		const { dispatch, } = this.props;
+		const { dispatch } = this.props;
 		dispatch({
 			type: 'deliveryAcce/queryDelivery',
 			payload: {
@@ -66,12 +66,11 @@ class PurOrder extends React.Component {
 	//下单
 	previewOrder = (e,record) => {
 		const { dispatch } = this.props;
-		const status = record.status;
-		const payload = {}
 		debugger;
+		const payload = {}
 		payload.callback = (params) => {
 			if(params) {
-				this.TableLinkChange('/purOrder/details',record,status)
+				this.TableLinkChange('/purOrder/details',record)
 			} else {
 				message.error('下单失败')		
 			}
@@ -93,10 +92,10 @@ class PurOrder extends React.Component {
 		})
 	}
 	//表格点击行跳转
-	TableLinkChange = (pathname, record, status) => {
+	TableLinkChange = (pathname, record) => {
 		this.props.dispatch(routerRedux.push({
 			pathname,
-			state: { id: record.id, status }
+			state: { id: record.id }
 		}))
 	}
 
@@ -132,7 +131,6 @@ class PurOrder extends React.Component {
 
 	componentDidMount() {
 		this.changeToGetData();
-		this.queryDelivery()
 	}
 
 	render() {
@@ -263,10 +261,9 @@ class PurOrder extends React.Component {
 							onChange={this.handleTableChange}
 							rowKey="id"
 							onRow={ record => {
-								const status = record.status;
 								return {
 									onClick: () => {
-										this.TableLinkChange('/purOrder/details', record, status)
+										this.TableLinkChange('/purOrder/details', record)
 									}
 								}
 							}}

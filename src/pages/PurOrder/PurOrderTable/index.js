@@ -2,13 +2,14 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:07:45 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-29 13:30:14
+ * @Last Modified time: 2019-03-29 19:40:53
  */
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag, message } from 'antd';
 import { connect } from 'dva';
 import Selectf from '../../../components/SelectIngredients';
 import moment from 'moment'
+import isNull from 'lodash/isNull'
 
 import './index.less'
 
@@ -52,6 +53,8 @@ class PurOrderTable extends PureComponent {
 
 
   deleteMeal = (params) => {
+    console.log(params)
+    debugger;
     const { props } = this
     props.dispatch({
       type:'purOrder/delelteOrderTableForm',
@@ -152,7 +155,6 @@ class PurOrderTable extends PureComponent {
      })
    }
 
-
   //请求食材选择器列表
    queryNewOrderSelectf = () => {
      const { props } = this
@@ -202,7 +204,6 @@ class PurOrderTable extends PureComponent {
         render: (text, record) => {
           if(record.price.toString() == '0') {
             return <Input
-              // defaultValue={0}
               style={{ width: '70px',border:'1px solid red' }}
               autoFocus
               onChange={e => this.handleFieldChange(e, 'price', record.id)}
@@ -228,6 +229,7 @@ class PurOrderTable extends PureComponent {
               onChange={e => this.handleFieldChange(e, 'quantity', record.id)}
               placeholder="0"
               style={{ width: '70px' }}
+              defaultValue={text}
             />)
           } else {
             return text
@@ -239,7 +241,17 @@ class PurOrderTable extends PureComponent {
         key: 'supplierId',
         dataIndex: 'supplierId',
         render: (text, record) => {
-          if (record.editable) {
+          console.log(record)
+          if(isNull(text)) {  //判断isNull
+            return (
+              <Select defaultValue={record.supplier.id} onChange={this.handleSelectChange.bind(this, 'supplierId', record.id)} style={{ width: '218px' }} placeholder='请选择'>
+              {supplier.map(item => (
+                <Option key={item.id} value={item.id}>{item.supplierName}</Option>
+              ))}
+              </Select>
+            )
+          }
+          if (record.editable) {  //可编辑
             return (
               <Select onChange={this.handleSelectChange.bind(this, 'supplierId', record.id)} style={{ width: '218px' }} placeholder='请选择'>
               {supplier.map(item => (
@@ -247,12 +259,12 @@ class PurOrderTable extends PureComponent {
               ))}
               </Select>
             )
-          } else {
-            return text
-          }
+          } 
+          return text // 返回数据
         },
       },
       {
+        
         title: '配送日期',
         key: 'requiredDate',
         dataIndex: 'requiredDate',
