@@ -37,7 +37,7 @@ export default {
         // 对模板操作的结果
         templateActionResult: '',
         // 对菜单操作结果
-        createMenuDataResult: '',
+        customMenuResult: '',
         customTemplateResult: '',
         // 模板标签
         tagString: '',
@@ -62,30 +62,28 @@ export default {
                 payload: data || {}
             });
         },
-        // 更新菜单数据
-        *updateMenu({ payload }, { call, put, select }) {
+        // 新建或编辑模板
+        *customMenu({ payload }, { call, put, select }) {
+            const { id, callback, ...rest } = payload;
+            // 请求的接口不一样
+            const queryFunction = id ? toUpdateMenu : toNewMenu;
+            // 从全局state中获取数据
             const params = yield select(({ menuCenter }) => {
-                const camenuDetailVos = menuCenter.allMealsData;
+                const { allMealsData: camenuDetails } = menuCenter
                 return {
-                    ...payload,
-                    camenuDetailVos
+                    camenuDetails,
+                    ...rest,
                 }
             });
-            const res = yield call(toUpdateMenu, params);
-        },
-        *newMenu({ payload }, { call, put, select }) {
-            const params = yield select(({ menuCenter }) => {
-                const camenuDetails = menuCenter.allMealsData;
-                return {
-                    ...payload,
-                    camenuDetails
-                }
-            });
-            const res = yield call(toNewMenu, params);
+            // 上传的数据区别在于新建无需id，编辑要
+            const newData = id ? { ...params, id } : params;
+            const data = yield call(queryFunction, newData)
             yield put({
-                type: 'saveNewMenuDataResult',
-                payload: res
+                type: 'saveCustomMenu',
+                payload: data || ''
             })
+            // 执行callback
+            data && callback(data);
         },
         // 餐饮单位模板列表
         *fetchPMenuTemplate({ payload }, { call, put }) {
@@ -256,11 +254,11 @@ export default {
                 templateActionResult: payload
             }
         },
-        // 新建菜单执行结果
-        saveNewMenuDataResult(state, { payload }) {
+        // 新建模板执行结果
+        saveCustomMenuResult(state, { payload }) {
             return {
                 ...state,
-                createMenuDataResult: payload
+                customMenuResult: payload
             }
         },
         // 新建模板执行结果

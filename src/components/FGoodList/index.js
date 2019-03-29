@@ -4,46 +4,8 @@ import goodsWine from './wine.png';
 import './index.less';
 
 export default class FGoodList extends React.Component {
-    state = {
-        cart: []
-    }
-
-    // 只要修改数量，将改过数量的商品
-    // 商品的id和改后的值保存到state中
-    handleValueChange = (qty, id) => {
-        if (this.state.cart.some(item => item.id === id)) {
-            // console.log('old goods');
-            this.setState({
-                cart: this.state.cart.map(item => {
-                    if (item.id === id) {
-                        return { id, qty }
-                    }
-                    return item;
-                }),
-            });
-        } else {
-            // console.log('new goods');
-            this.setState({
-                cart: this.state.cart.concat({
-                    id,
-                    qty,
-                }),
-            });
-        }
-        // console.log("valueChange", this.state.cart);
-    }
-
-    // 加购物车前统计数量
-    readyToAddCart = id => {
-        const { cart } = this.state;
-        const quantity = (cart.length && cart.find(item => item.id === id).qty) || 1;
-        const { handleAddToCart } = this.props;
-        handleAddToCart(id, quantity);
-    }
-
     render() {
-        const { records } = this.props;
-
+        const { records, changeGoodsNum, addToCart } = this.props;
         return (
             <div >
                 <List
@@ -70,11 +32,11 @@ export default class FGoodList extends React.Component {
                                             defaultValue={1}
                                             min={1}
                                             size="small"
-                                            onChange={(value) => this.handleValueChange(value, item.id)}
+                                            onChange={value => changeGoodsNum(value, item.id)}
                                         />,
                                         <Button style={{ width: 100 }}
                                             type="primary"
-                                            onClick={() => this.readyToAddCart(item.id)} >
+                                            onClick={() => addToCart(item.id)} >
                                             加入购物车 </Button>
                                     ]}
                                     hoverable

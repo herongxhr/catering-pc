@@ -217,18 +217,7 @@ export function toUpdateMenu(params) {//修改菜单数据
     })
 }
 
-export function toNewMenu(params) {//修改菜单数据
-    const id = params.id || '';
-    return request({
-        method: 'put',
-        url: `/catering/camenu/${id}`,
-        headers: { 'Content-Type': 'application/json' },
-        data: {
-            axiosData: JSON.stringify(params)
-        }
-    })
-}
-export function addMenuData(params) {//新建菜单数据
+export function toNewMenu(params) {//新建菜单数据
     return request({
         method: 'post',
         url: `/catering/camenu/`,

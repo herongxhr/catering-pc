@@ -4,7 +4,6 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router'
 import DescriptionList from '../../components/DescriptionList';
 import BreadcrumbComponents from '../../components/BreadcrumbComponent';
-import Moment from 'moment';
 import PageHeadWrapper from '../../components/PageHeaderWrapper';
 import styles from './index.module.less';
 import ShowArrangedDishes from '../../components/ShowArrangedDishes';
