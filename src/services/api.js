@@ -2,6 +2,16 @@ import request from '../utils/request';
 import requestpub from '../utils/common';
 import { stringify } from 'qs';
 // 辅料商城
+export function mallPreOrder(params) {//修改菜单数据
+    return request({
+        method: 'post',
+        url: `/catering/mall/preOrder`,
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+            axiosData: JSON.stringify(params)
+        }
+    })
+}
 // 查询分类
 export function queryCatalogF(params) {
     return request({
@@ -35,6 +45,7 @@ export function queryFGoods(params) {
         }
     });
 }
+
 
 /**
  * 使用post方法
@@ -205,6 +216,7 @@ export function toUpdateMenu(params) {//修改菜单数据
         }
     })
 }
+
 export function toNewMenu(params) {//修改菜单数据
     const id = params.id || '';
     return request({
@@ -328,6 +340,8 @@ export function myCopy(params) {
 
 // 采购订单专区
 
+//请求详情页的接口
+
 //请求选菜模板的select框
 export function queryModalSelect(params) {
     return request({
@@ -381,7 +395,11 @@ export function queryOrderTable(params) {
 export function queryOrderDetails(id) {
     return request({
         method: 'get',
+<<<<<<< HEAD
         url: `/catering/order/${id}`,
+=======
+        url: `/catering/order/${params}`,
+>>>>>>> 650cadf257dd970010b5a20c27d5d32417432fb8
         data: {
             showLoading: true,
             params: {id}
@@ -564,6 +582,29 @@ export function queryParameterUnfoldItem(params) {
 }
 
 //设置专区
+export function queryCateringSupplier(params) {
+    const data = JSON.stringify(params)
+    return request({
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        url: '/catering/setting/cateringSupplier',
+        data: {
+            axiosData:data
+        }
+    })
+}
+
+export function queryCateringCatalog(params) {
+    return request({
+        method: 'get',
+        url: '/catering/setting/catalog',
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
+
 export function querySaveSettingData(params) {
     const data = JSON.stringify(params)
     return request({

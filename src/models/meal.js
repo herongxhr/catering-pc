@@ -1,4 +1,9 @@
-// import {   } from '../services/api';
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-28 16:46:05 
+ * @Last Modified by:   suwei 
+ * @Last Modified time: 2019-03-28 16:46:05 
+ */
 
 export default {
   namespace: 'meal',

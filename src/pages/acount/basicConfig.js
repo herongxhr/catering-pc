@@ -1,11 +1,16 @@
+/*
+ * @Author: suwei 
+ * @Date: 2019-03-28 09:50:13 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-28 10:33:58
+ */
 import React from 'react'
-import { Form, Input, Switch, Select, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import './basicConfig.less'
-var classNames = require('classnames');
+import { connect } from 'dva';
 
 
 const FormItem = Form.Item;
-const { Option } = Select;
 
 class BasicCon extends React.Component {
   state = {
@@ -13,21 +18,38 @@ class BasicCon extends React.Component {
   }
 
   handleSubmit = ()=>{
+    const { props } = this
     let userInfo = this.props.form.getFieldsValue();
-    console.log(JSON.stringify(userInfo))
+    const { numberStudent , numberTeacher } = userInfo
+    if(!numberStudent || !numberTeacher) {
+      message.error('请完善所有信息')
+      return
+    }
+    props.dispatch({
+      type:'setting/querySendBaseView',
+      payload:userInfo
+    })
   }
 
-  switchChange = ()=> {
-    this.setState({
-      show:!this.state.show
-    })
+  queryBaseView = (params = {}) => {
+		this.props.dispatch({
+			type: 'setting/queryBaseView',
+			payload: {
+
+			},
+		})
+  }
+  
+  componentDidMount() {
+    this.queryBaseView()
   }
 
   render() {
     const {
       form: { getFieldDecorator },
+      baseView
     } = this.props;
-    var btn = classNames({foo:this.state.show},{bar:!this.state.show})
+    const { numberStudent , numberTeacher } = baseView
     return(
       <div className='basicConfig'>
         <div className='setting-title'>
@@ -40,72 +62,23 @@ class BasicCon extends React.Component {
         </div>
         <Form layout='vertical'>
           <FormItem label={<span>就餐人数<span style={{color:'#D9D9D9',marginLeft:10}}>(学生)</span></span>}>
-            {getFieldDecorator('student', {
-                  rules: [
-                    {
-                      required: true,
-                      message: 2000,
-                    },
-                  ],
+            {getFieldDecorator('numberStudent', {
+              
                 })(
                 <div style={{width:200}}>
-                  <Input placeholder='2000' style={{width:100,height:32,marginRight:10}} />
+                  <Input placeholder={numberStudent} style={{width:100,height:32,marginRight:10}} />
                   <span>人</span>
                 </div>)}
           </FormItem>
           <FormItem label={<span>就餐人数<span style={{color:'#D9D9D9',marginLeft:10}}>(教职工)</span></span>}>
-            {getFieldDecorator('worker', {
-                  rules: [
-                    {
-                      required: true,
-                      message: 300,
-                    },
-                  ],
+            {getFieldDecorator('numberTeacher', {
+                
                 })(
                 <div style={{width:200}}>
-                  <Input placeholder='300' style={{width:100,height:32,marginRight:10}} />
+                  <Input placeholder={numberTeacher} style={{width:100,height:32,marginRight:10}} />
                   <span>人</span>
                 </div>)}
           </FormItem>
-          <FormItem>
-            {getFieldDecorator('checked', {
-              initialValue:true
-                })(<div>
-                    <span style={{marginRight:8}}>自动下单</span><Switch onChange={this.switchChange} />
-                  </div>)}
-          </FormItem>
-          <div className={btn}>
-                <FormItem label={<span>菜单<span style={{color:'#D9D9D9',marginLeft:10}}>(选择时间后,系统将自动为你执行菜单)</span></span>}>
-              {
-                  getFieldDecorator('state', {
-                      initialValue: '1'
-                  })(
-                      <Select>
-                          <Option value="1">菜单下发后1小时</Option>
-                          <Option value="2">菜单下发后2小时</Option>
-                          <Option value="3">菜单下发后3小时</Option>
-                          <Option value="4">菜单下发后4小时</Option>
-                          <Option value="5">菜单下发后5小时</Option>
-                      </Select>
-                  )
-              }
-            </FormItem>
-            <FormItem label={<span>采购订单<span style={{color:'#D9D9D9',marginLeft:10}}>(选择时间后,系统将自动为你下达采购订单)</span></span>}>
-              {
-                    getFieldDecorator('value', {
-                        initialValue: '请选择'
-                    })(
-                        <Select>
-                            <Option value="1">菜单下发后1小时</Option>
-                            <Option value="2">菜单下发后2小时</Option>
-                            <Option value="3">菜单下发后3小时</Option>
-                            <Option value="4">菜单下发后4小时</Option>
-                            <Option value="5">菜单下发后5小时</Option>
-                        </Select>
-                    )
-                }
-            </FormItem>
-          </div>
           <Button type="primary" onClick={this.handleSubmit}>
               更新基本配置
           </Button>
@@ -117,5 +90,5 @@ class BasicCon extends React.Component {
 
 const BasicConfig = Form.create()(BasicCon)
 
-
-export default BasicConfig
+export default connect(({setting})=>({baseView:setting.baseView}))
+(BasicConfig);

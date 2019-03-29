@@ -4,11 +4,13 @@
   "private": true,
   "homepage": "http://catering.jgzh.com",
   "dependencies": {
+    "@aximario/json-tree": "^2.0.2",
     "ant-design-pro": "^2.2.1",
     "antd": "^3.15.0",
     "axios": "^0.18.0",
     "bizcharts": "^3.4.3",
     "classnames": "^2.2.6",
+    "cnpm": "^6.0.0",
     "dva": "^2.4.1",
     "dva-loading": "^2.0.6",
     "echarts": "^4.1.0",

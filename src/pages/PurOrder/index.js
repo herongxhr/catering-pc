@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-21 17:55:51 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-27 16:12:31
+ * @Last Modified time: 2019-03-28 17:50:42
  */
 import React from 'react';
 import { connect } from 'dva';
@@ -74,7 +74,7 @@ class PurOrder extends React.Component {
 		const { props } = this
 		props.dispatch(routerRedux.push({
 			pathname,
-			type
+			state: { type }
 		}))
 	}
 	//下单
@@ -267,7 +267,13 @@ class PurOrder extends React.Component {
 							onChange={this.handleTableChange}
 							rowKey="id"
 							onRow={(record) => {
+<<<<<<< HEAD
 								const status = record.status;
+=======
+								const rest = {
+									status: record.status
+								}
+>>>>>>> 650cadf257dd970010b5a20c27d5d32417432fb8
 								if (record.status === '1') {
 									return {
 										onClick: () => {

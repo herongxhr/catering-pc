@@ -74,13 +74,15 @@ export default function RouterConfig({ history }) {
               <Route path="/menubar/menu-template/new" component={NewTemplate} />
               <Route path="/accSupermarket" component={AccSupermarket}></Route>
               <Route path="/purOrder" exact component={PurOrder}></Route>
+              <Route path="/purOrder/details" exact component={PurOrderDetails}></Route>
               <Route path="/purOrder/detail/adjust" exact component={PurOrderDetailAdjust}></Route>
-              <Route path="/purOrder/details" component={PurOrderDetails}></Route>
               <Route path="/delivery" component={DeliveryAcce}></Route>
               <Route path="/delivery/acceptedDetail" component={DeliveryAcce}></Route>
               <Route path="/outStock" component={OutStock}></Route>
               <Route path="/parameter" exact component={Parameter}></Route>
               <Route path="/parameter/detail" component={ParameterDetail} exact></Route>
+              <Route path='/Setting/outStock' exact component={OutStock}></Route>
+              <Route path="/Setting/outStock/reportdetail" exact component={ReportDetail} />
               <Route path="/Setting" render={() =>
                 <Setting>
                   <Switch>
@@ -93,8 +95,6 @@ export default function RouterConfig({ history }) {
                   </Switch>
                 </Setting>
               }></Route>
-              <Route path='/Setting/outStock' exact component={OutStock}></Route>
-              <Route path="/Setting/outStock/reportdetail" component={ReportDetail} />
               <Route path="/purCatalog" component={PurCatalog}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/reportdetail" component={ReportDetail}></Route>
