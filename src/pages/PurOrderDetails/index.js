@@ -13,7 +13,6 @@ import PageHeadWrapper from '../../components/PageHeaderWrapper';
 import styles from './index.module.less';
 import { routerRedux, Redirect } from 'dva/router';
 import moment from 'moment'
-=
 
 
 const { Description } = DescriptionList;
