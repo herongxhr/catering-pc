@@ -131,7 +131,7 @@ export default {
             }
         },
         // 删除购物车中商品
-        deleteCartGoods(state, { payload }) {
+        deleteGoods(state, { payload }) {
             let { id } = payload;
             return {
                 ...state,

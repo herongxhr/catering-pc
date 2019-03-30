@@ -50,8 +50,17 @@ class MenuDetails extends React.Component {
       state: { id, type }
     }))
   }
+
+
+  viewPurOrder = () => {
+    const { id } = this.state;
+    this.props.dispatch(routerRedux.push({
+      pathname: '/purOrder/details',
+      state: { id }
+    }))
+  }
   yieldPurOrder = () => {
-    const { id, type } = this.state;
+    const { id } = this.state;
     this.props.dispatch(routerRedux.push({
       pathname: '/purOrder/detail/adjust',
       state: {
@@ -100,7 +109,7 @@ class MenuDetails extends React.Component {
           {!isExecuted && <Button onClick={this.handleArrangeDishes}>调整菜单</Button>}
         </ButtonGroup>
         {isExecuted
-          ? <Button type="primary">查看采购单</Button>
+          ? <Button onClick={this.viewPurOrder} type="primary">查看采购单</Button>
           : <Button onClick={this.yieldPurOrder} type="primary">采购食材</Button>}
       </Fragment>
     );

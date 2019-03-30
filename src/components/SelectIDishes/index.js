@@ -162,11 +162,6 @@ class SelectDishes extends React.Component {
                             showTotal: total => `共 ${total} 道菜`,
                             showQuickJumper: true
                         }}
-                        onRow={record => {
-                            return {
-                                onClick: () => { this.handlePreviewItem(record.id) },
-                            };
-                        }}
                     />
                 </div>
                 <div className={styles.rightResult}>

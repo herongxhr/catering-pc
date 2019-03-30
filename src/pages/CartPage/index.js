@@ -9,16 +9,10 @@ export default class CartPage extends React.Component {
     // 返回id相匹配的商品
     getDetailByGoodsId = skuId => {
         const { FGoodData } = this.props;
-        return FGoodData.records && FGoodData.records.find(item => item.skuId === skuId);
+        const records = FGoodData.records || [];
+        return records.find(item => item.skuId === skuId);
     }
 
-    // 删除购物车中商品
-    handleDeleteGoods = (id) => {
-        this.props.dispatch({
-            type: "accSupermarket/deleteCartGoods",
-            payload: { id }
-        })
-    }
     yieldPurOrder = () => {
         const { shoppingCart, dispatch } = this.props;
         dispatch(routerRedux.push({
@@ -37,6 +31,7 @@ export default class CartPage extends React.Component {
             cartDrawerVisible,
             shoppingCart,
             changeGoodsNum,
+            deleteGoods,
             handleShowCartDrawer,
             handleHideCartDrawer
         } = this.props;
@@ -96,6 +91,7 @@ export default class CartPage extends React.Component {
                                     >
                                         <GoodsItem
                                             changeGoodsNum={changeGoodsNum}
+                                            deleteGoods={deleteGoods}
                                             count={item.quantity}
                                             {...this.getDetailByGoodsId(item.skuId)}
                                         />

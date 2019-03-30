@@ -10,59 +10,75 @@ const { Search } = Input;
 
 class AccSupermarket extends PureComponent {
 	state = {
-		type: 'F',
-		keywords: '',
-		catalogId: '',
-		notInclude: '',
-		brand: '',
-		current: 1,
-		pageSize: 12,
+		channel: '',
+		type: '',
+		data: {},
+		queryParams: {
+			type: 'F',
+			keywords: '',
+			catalogId: '',
+			notInclude: '',
+			brand: '',
+			current: 1,
+			pageSize: 12,
+		}
+	}
+	static getDerivedStateFromProps(props) {
+		const { location: { state } } = props;
+		if (state) {
+			const { channel = '', type = '', data = {} } = state;
+			return { channel, type, data }
+		} else {
+			return null;
+		}
 	}
 	// 获取辅料分类
 	getCatalogF = (params = {}) => {
-		const defaultParams = {
-			type: 'F',
-			orderByField: '',
-			isAsc: true
-		}
 		this.props.dispatch({
 			type: 'accSupermarket/fetchCatalogF',
 			payload: {
-				...defaultParams,
+				type: 'F',
+				orderByField: '',
+				isAsc: true,
 				...params
 			},
 		})
 	}
 	// 获取品牌列表
 	getBrands = (params = {}) => {
-		const defaultParams = {
-			catalogId: '',
-			current: 1,
-			pageSize: 10
-		}
 		this.props.dispatch({
 			type: 'accSupermarket/fetchBrands',
 			payload: {
-				...defaultParams,
+				catalogId: '',
+				current: 1,
+				pageSize: 10,
 				...params
 			},
 		})
 	}
 	// 获取辅料商品列表
 	getFGoods = (params = {}) => {
-		this.getCatalogF();
-		this.setState(params);
+		// 先更新state
+		this.setState({
+			queryParams: {
+				...this.state.queryParams,
+				...params,
+			}
+		});
 		// 如果params中有catalogId属性，也就是点击了分类
-		const brandParams = params.catalogId ? { catalogId: params } : undefined;
-		this.getBrands(brandParams);
+		if (params.catalogId) {
+			const brandParams = params.catalogId ? { catalogId: params } : undefined;
+			this.getBrands(brandParams);
+		}
 		this.props.dispatch({
 			type: 'accSupermarket/fetchFGoods',
 			payload: {
-				...this.state,
+				...this.state.queryParams,
 				...params
 			}
 		})
 	}
+
 	// 显示购物车页面
 	handleShowCartDrawer = () => {
 		this.props.dispatch({
@@ -90,8 +106,16 @@ class AccSupermarket extends PureComponent {
 			payload: { qty, id }
 		})
 	}
+	deleteGoods = id => {
+		this.props.dispatch({
+			type: 'accSupermarket/deleteGoods',
+			payload: { id }
+		})
+	}
 
 	componentDidMount() {
+		this.getCatalogF();
+		this.getBrands();
 		this.getFGoods();
 	}
 
@@ -106,7 +130,7 @@ class AccSupermarket extends PureComponent {
 		const records = FGoodData.records || [];
 		const total = FGoodData.total || 0;
 		const current = FGoodData.current || 1;
-		const { catalogId, brand, notInclude } = this.state;
+		const { catalogId, brand, notInclude } = this.state.queryParams;
 		// 悬浮购物车图标
 		const cartSquare = (
 			<div className="shoppingCart">
@@ -166,6 +190,7 @@ class AccSupermarket extends PureComponent {
 				{/* 购物车详情页 */}
 				<CartPage
 					FGoodData={FGoodData}
+					deleteGoods={this.deleteGoods}
 					changeGoodsNum={this.changeGoodsNum}
 					shoppingCart={shoppingCart}
 					cartDrawerVisible={cartDrawerVisible}
