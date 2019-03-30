@@ -1,8 +1,8 @@
 /*
  * @Author: suwei 
  * @Date: 2019-03-28 16:46:05 
- * @Last Modified by:   suwei 
- * @Last Modified time: 2019-03-28 16:46:05 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-30 15:32:12
  */
 
 export default {
@@ -35,16 +35,12 @@ export default {
     // },
     //设置加菜单
     addMeal(state, { payload }) {
-      // console.log(payload)
-      // debugger;
       return {
         ...state,
         mealArray: state.mealArray.concat(payload),
       };
     },
     removeMeal(state, { payload }) {
-      // console.log(payload)
-      // debugger;
       return {
         ...state,
         mealArray: state.mealArray.filter(item => item.skuId !== payload)

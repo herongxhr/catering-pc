@@ -9,6 +9,7 @@ const Columns = [{
     title: '配送单号',
     dataIndex: 'distributionNo',
     key: 'distributionNo',
+    width:'20%',
     render:(text,record) =>{
       if(record.status == '0'){
         return(<Link to={{ pathname:"/pendingDeliveryDetail",state:{id:record.id} }}>{text}</Link>) 
@@ -27,17 +28,19 @@ const Columns = [{
     title: '供应商',
     dataIndex: 'supplier',
     key: 'supplier',
+    width:'30%',
     width:270,
     render:(text)=>text.supplierName
   }, {
       title: '摘要',
       dataIndex: 'summary',
       key: 'summary',
-      width:300
+      width:'20%'
   }, {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
+      width:'10%',
       render(status){
         if(status == '0'){
           return (<span> <Badge status="warning" />待启动</span>)
@@ -52,11 +55,11 @@ const Columns = [{
           return (<span> <Badge status="default" />已验收</span>)
         }
       },
-      width:160
   },{
     title: '配送日期',
     dataIndex: 'distributionDate',
     key: 'distributionDate',
+    width:'20%',
     render:(text)=>{return <span>{moment(text).format("YYYY-MM-DD dddd")}</span>}
   }];
   
@@ -65,11 +68,12 @@ class DisAcceptTable extends Component {
       const records = this.props.records || []
         return ( 
         <div className="accepting">
-           <Table 
-           columns={Columns} 
-           dataSource={records} 
-           pagination={false}
-           rowKey="id"
+           <Table
+            // size='small'
+            columns={Columns} 
+            dataSource={records} 
+            pagination={false}
+            rowKey="id"
            /> 
         </div>
         );

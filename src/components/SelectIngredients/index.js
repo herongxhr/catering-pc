@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-27 12:02:30 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-29 18:32:19
+ * @Last Modified time: 2019-03-30 10:39:05
  */
 import React from 'react';
 import { Modal, Select, Input, Table, Tag } from 'antd';
@@ -99,7 +99,7 @@ class Selectf extends React.Component {
 					id:record.id,
 					forStaff:0,
 					skuId:record.id,
-					goodsName:record.goodsName + '+' + record.property,
+					goodsName:record.wholeName,
 					unit:record.unit,
 					price:record.price
 				}

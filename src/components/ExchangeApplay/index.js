@@ -64,70 +64,84 @@ class ExchangeApplay extends React.Component {
     this.queryDistributionDetail()
   }
   render() {
-    const handleRender = (text,record)=>{
-      if(record.status === '0'){
-        return (
-          <span></span>
-        )
-      }else{
-        var Arr =text.length>0 && text.split('||') || [];
-        return(
-          <div className='renderText'>
-            {
-              Arr.map((item,index)=>{
-                  return(<div key={index}>{item}</div>)
-              })
-            }
-          </div>
-        )
-      } 
-      }
     const tab1Columns = [{
       title: '标签',
       dataIndex: 'tags',
       key: 'tags',
       render:(text,record)=>{
-        const data = record.combineGoodsSummary
-        var Arr =data.length>0 && data.split('||') || [];
-        if(record.status === '0'){
-          return(
-            <span></span>
-          )
-        }else{
+       const replaceViewSku= record.replaceViewSku||{}
+       const replaceGoods = replaceViewSku.goodsName
+       const targetViewSku= record.targetViewSku||{}
+       const targetGoods = targetViewSku.goodsName
           return (
             <div className='tags'>
-              <div>{Arr[0] ? <Tag color='cyan'>订单商品</Tag> : ''}</div>
-              <div>{Arr[1] ? <Tag color='orange'>置换商品</Tag> : ''}</div>
+              <div>{ targetGoods ? <Tag color='cyan'>订单商品</Tag> : ''}</div>
+              <div>{replaceGoods ? <Tag color='orange'>置换商品</Tag> : ''}</div>
             </div>
           )
-        }
       }
     }, {
       title: '商品',
-      dataIndex: 'combineGoodsSummary',
-      key: 'combineGoodsSummary',
-      render:handleRender
+      dataIndex: 'targetViewSku',
+      key: 'targetViewSku',
+      render:(text,record)=>{
+        const replaceViewSku = record.replaceViewSku
+        return (
+          <div>
+            <div>{text.wholeName}</div>
+            <div  className='applyItem'>{replaceViewSku.wholeName}</div>
+          </div>
+        )
+      }
     }, {
       title: '单位',
-      dataIndex: 'combineUnit',
-      key: 'combineUnit',
-      render:handleRender
+      dataIndex: 'targetUnit',
+      key: 'targetUnit',
+      render:(text,record)=>{
+        return (
+          <div>
+            <div>{text}</div>
+            <div className='applyItem'>{record.replaceUnit}</div>
+          </div>
+        )
+      }
     }, {
       title: '单价(元)',
-      dataIndex: 'combinePrice',
-      key: 'combinePrice',
-      render:handleRender
+      dataIndex: 'targetPrice',
+      key: 'targetPrice',
+      render:(text,record)=>{
+        return (
+          <div>
+            <div>{text}</div>
+            <div className='applyItem'>{record.replacePrice}</div>
+          </div>
+        )
+      }
     }, {
       title: '数量',
-      dataIndex: 'combineQuantity',
-      key: 'combineQuantity',
-      render:handleRender
+      dataIndex: 'targetQuantity',
+      key: 'targetQuantity',
+      render:(text,record)=>{
+        return (
+          <div>
+            <div>{text}</div>
+            <div className='applyItem'>{record.replaceQuantity}</div>
+          </div>
+        )
+      }
     },
     {
       title: '总价(元)',
       dataIndex: 'combineTotal',
       key: 'combineTotal',
-      render:handleRender
+      render:(text,record)=>{
+        return (
+          <div>
+            <div>{record.targetQuantity*record.targetPrice}</div>
+            <div className='applyItem'>{record.replaceQuantity*record.replacePrice}</div>
+          </div>
+        )
+      }
     },
     {
       title: '操作',
@@ -157,7 +171,7 @@ class ExchangeApplay extends React.Component {
     }
     ];
     const { detailData = {} } = this.props
-    const replacementVoList = detailData.replacementDetailVoList || []
+    const replacementVoList = detailData.replacementVoList || []
     const total = replacementVoList.length ? replacementVoList.length : 0
     return (
       // 换货申请的逻辑待修改

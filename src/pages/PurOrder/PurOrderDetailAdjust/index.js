@@ -2,13 +2,13 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:41:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-29 17:50:28
+ * @Last Modified time: 2019-03-30 15:11:15
  */
 import React, { Fragment } from 'react'
 import Bread from '../../../components/Bread'
 import PurOrderTable from '../PurOrderTable'
 import { connect } from 'dva';
-import { Card, Button, Form, message, Alert, Icon } from 'antd'
+import { Card, Button, Form, message, Alert, Icon, Modal } from 'antd'
 import { routerRedux } from 'dva/router';
 
 import './index.less'
@@ -25,7 +25,8 @@ class PurOrderAdjust extends React.Component {
     showAlert: false,
     alertPrice: false,
     index: 1,
-    id:''
+    id:'',
+    visible:false
   }
 
   validatorForm = (orderTableForm) => {
@@ -41,25 +42,48 @@ class PurOrderAdjust extends React.Component {
     }
   }
 
+  cancelModalShow = () => {
+    this.setState({
+      visible:true
+    })
+  }
+
+  handleCancel = () => {
+    this.setState({
+      visible:false
+    })
+  }
+
+  handleOK = () => {
+    const { type, data , channel } = this.props.location.state;
+    if(channel == 'M') {
+      data.channel = 'M'
+      this.TableLinkChange('/menubar/unified-menu/details',data)
+    }
+    if(channel == 'S') {
+      data.channel = 'S'
+      this.TableLinkChange('/accSupermarket',data)
+    }
+
+  }
+
   handleSubmit = () => {
     let object = {} 
     const { location } = this.props;
-    const { type, data } = location.state;
+    const { type, data , channel } = location.state;
     // 类型
     const { orderTableForm } = this.props
-    console.log(orderTableForm)
-    debugger;
     //表单验证 message提示
     this.validatorForm(orderTableForm)
-
+    //处理传递给后端表格数据
     object.type = type || ''
-    object.channel = 'N' 
+    object.channel = channel || '' 
     object.orderDetails = orderTableForm || {}
-
+    if(data) {
+      object.camenuId = data.id || ''
+    }
     console.log(object)
-    debugger;
     if(this.state.id) {
-      debugger;
       object.id = this.state.id
       object.callback = (value) => {
         if(value) {
@@ -71,7 +95,6 @@ class PurOrderAdjust extends React.Component {
       this.queryOrderForm(object)   
     }
     if(!this.state.id) {
-      debugger;
       object.callback = (id) => {
         this.TableLinkChange('/purOrder/details',id)
       }
@@ -89,8 +112,7 @@ class PurOrderAdjust extends React.Component {
 
   componentDidMount() {
     console.log(this.props.location.state)
-    const { type = '', data = {} , adjustId } = this.props.location.state;
-    debugger;
+    const { type = '', data = {}, channel = '' , adjustId } = this.props.location.state;
     if(adjustId) {
       this.setState({
         id:adjustId
@@ -100,32 +122,26 @@ class PurOrderAdjust extends React.Component {
         payload:adjustId
       })
     }
-    if(type == 'supermarket') {
+    if(channel == 'S') {
       this.props.dispatch({
         type:'purOrder/mallPreOrder',
         payload:data
       })
     }
-    if(type == 'menu') {
+    if(channel == 'M') {
       const { id } = data
       this.props.dispatch({
         type:'purOrder/camenuPreOrder',
         payload:id
       })
     }
-    if(type == 'S' || type == 'F') {
+    if(channel == 'N') {
       this.props.dispatch({
         type:'purOrder/clearOrderTableForm'
       })
     }
   }
   
-  // componentWillMount() {
-  //   debugger;
-  //   this.props.dispatch({
-  //     type:'purOrder/clearOrderTableForm'
-  //   })
-  // }
 
   //点击出现表单验证card
   showAlert = () => {
@@ -145,7 +161,11 @@ class PurOrderAdjust extends React.Component {
     const { alertPrice } = this.props
     const { location } = this.props;
     // 类型
-
+		const modalObject = {
+			width: '340px',
+			height: '140px',
+			display: 'flex',
+		}
     return (
       <Fragment>
         <Bread bread={bread} value='/purOrder'></Bread>
@@ -166,10 +186,20 @@ class PurOrderAdjust extends React.Component {
               <Icon type="info-circle" theme="twoTone" twoToneColor="red" />
               {alertPrice ? <span style={{ marginLeft: '5px' }}>{this.state.index}</span> : null}
             </a>
-            <Button>取消</Button>
+            <Button onClick={this.cancelModalShow}>取消</Button>
             <Button onClick={this.handleSubmit} type='primary' style={{ margin: '0px 20px' }}>保存</Button>
           </div>
         </div>
+        <Modal
+          visible={this.state.visible}
+          onOk={this.handleOK}
+          onCancel={this.handleCancel}
+          bodyStyle={modalObject}
+          width='340px'
+          closable={false}
+        >
+          <Alert message='确认取消保存' type="warning" showIcon style={{ background: 'white', border: '0px', marginTop: '40px' }} />
+        </Modal> 
       </Fragment>
     )
   }

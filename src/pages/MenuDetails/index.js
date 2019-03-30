@@ -64,7 +64,8 @@ class MenuDetails extends React.Component {
     this.props.dispatch(routerRedux.push({
       pathname: '/purOrder/detail/adjust',
       state: {
-        type: 'menu',
+        channel: 'M',
+        type: "S",
         data: { id }
       }
     }))

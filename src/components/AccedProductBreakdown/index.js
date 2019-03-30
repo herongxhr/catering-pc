@@ -40,10 +40,10 @@ class AccedProductBreakdown extends React.Component {
         const params = disviewSku.property
         return (
           record.skuId === record.distributionSkuId ?
-            <span>{disviewSku.goodsName}</span> :
+            <span>{disviewSku.wholeName}</span> :
             <div>
-              <div style={{ textDecoration: 'line-through ' }}>{record.viewSku.goodsName}</div>
-              <div><Badge status="warning" />{disviewSku.goodsName}</div>
+              <div style={{ textDecoration: 'line-through ' }}>{record.viewSku.wholeName}</div>
+              <div><Badge status="warning" />{disviewSku.wholeName}</div>
             </div>
         )
       }

@@ -77,7 +77,6 @@ export default function RouterConfig({ history }) {
               <Route path="/purOrder/details" exact component={PurOrderDetails}></Route>
               <Route path="/purOrder/detail/adjust" exact component={PurOrderDetailAdjust}></Route>
               <Route path="/delivery" component={DeliveryAcce}></Route>
-              <Route path="/delivery/acceptedDetail" component={DeliveryAcce}></Route>
               <Route path="/outStock" component={OutStock}></Route>
               <Route path="/parameter" exact component={Parameter}></Route>
               <Route path="/parameter/detail" component={ParameterDetail} exact></Route>
@@ -96,6 +95,7 @@ export default function RouterConfig({ history }) {
                 </Setting>
               }></Route>
               <Route path="/purCatalog" component={PurCatalog}></Route>
+              <Route path="/delivery/acceptedDetail" component={DeliveryAcce}></Route>
               <Route path="/ingredetail" component={IngreDetail}></Route>
               <Route path="/reportdetail" component={ReportDetail}></Route>
               <Route path="/excipientdetail" component={ExcipientDetail}></Route>

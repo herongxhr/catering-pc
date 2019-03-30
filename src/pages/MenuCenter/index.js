@@ -34,6 +34,7 @@ const filterData = {
 };
 class MenuCenter extends React.Component {
 	state = {
+		type:'unified-menu',
 		activeTabKey: 'unified-menu',
 		queryParams: {
 			current: 1,
@@ -48,6 +49,7 @@ class MenuCenter extends React.Component {
 	// 点击tabs标签跳转到指定页面
 	// 页面state中的activeTabKey会传给面包屑
 	handleTabChange = key => {
+		
 		this.props.dispatch(routerRedux.push({
 			pathname: `/menubar/${key}`,
 		}));
