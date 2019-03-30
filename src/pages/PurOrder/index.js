@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-21 17:55:51 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-29 19:12:17
+ * @Last Modified time: 2019-03-30 13:16:29
  */
 import React from 'react';
 import { connect } from 'dva';
@@ -57,10 +57,11 @@ class PurOrder extends React.Component {
 
 	//新建按钮跳转
 	handleLinkChange = (pathname, type) => {
+		let channel = 'N'
 		const { props } = this
 		props.dispatch(routerRedux.push({
 			pathname,
-			state: { type }
+			state: { type , channel }
 		}))
 	}
 	//下单

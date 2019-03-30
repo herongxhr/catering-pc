@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:41:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-30 11:28:16
+ * @Last Modified time: 2019-03-30 13:21:54
  */
 import React, { Fragment } from 'react'
 import Bread from '../../../components/Bread'
@@ -44,18 +44,20 @@ class PurOrderAdjust extends React.Component {
   handleSubmit = () => {
     let object = {} 
     const { location } = this.props;
-    const { type, data } = location.state;
+    const { type, data , channel } = location.state;
     // 类型
     const { orderTableForm } = this.props
-    console.log(orderTableForm)
+    const { id } = data
     debugger;
     //表单验证 message提示
     this.validatorForm(orderTableForm)
-
+    //处理传递给后端表格数据
     object.type = type || ''
-    object.channel = 'N' 
+    object.channel = channel || '' 
     object.orderDetails = orderTableForm || {}
-
+    if(id) {
+      object.camenuId = id
+    }
     console.log(object)
     debugger;
     if(this.state.id) {
@@ -89,7 +91,7 @@ class PurOrderAdjust extends React.Component {
 
   componentDidMount() {
     console.log(this.props.location.state)
-    const { type = '', data = {} , adjustId } = this.props.location.state;
+    const { type = '', data = {}, channel = '' , adjustId } = this.props.location.state;
     debugger;
     if(adjustId) {
       this.setState({
@@ -100,20 +102,20 @@ class PurOrderAdjust extends React.Component {
         payload:adjustId
       })
     }
-    if(type == 'supermarket') {
+    if(channel == 'M') {
       this.props.dispatch({
         type:'purOrder/mallPreOrder',
         payload:data
       })
     }
-    if(type == 'menu') {
+    if(channel == 'S') {
       const { id } = data
       this.props.dispatch({
         type:'purOrder/camenuPreOrder',
         payload:id
       })
     }
-    if(type == 'S' || type == 'F') {
+    if(channel == 'N') {
       this.props.dispatch({
         type:'purOrder/clearOrderTableForm'
       })
