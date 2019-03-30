@@ -5,6 +5,7 @@ import ArrangeDishes from '../../components/ArrangeDishes';
 import styles from './index.module.less';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
 import createHistory from 'history/createBrowserHistory';
+import { routerRedux } from 'dva/router';
 
 const history = createHistory();
 const { WeekPicker, } = DatePicker;
@@ -14,7 +15,7 @@ const { WeekPicker, } = DatePicker;
 class CustomMenu extends Component {
   state = {
     menuTemplateId: '',
-    templateFrom: '',
+    templateFrom: 'P',
     nd: '',
     week: '',
   }
@@ -48,9 +49,21 @@ class CustomMenu extends Component {
       return;
     }
     this.props.dispatch({
-      type: 'menuCenter/newMenu',
-      payload: { ...this.state }
+      type: 'menuCenter/customMenu',
+      payload: { ...this.state, callback: this.goMenuDetails }
     });
+  }
+
+  // 跳转到详情页
+  // 同时传递后端返回的id和局部state中保存的templateType
+  goMenuDetails = data => {
+    const { templateFrom, menuTemplateId } = this.state;
+    const url = templateFrom === 'C' ? 'unified-menu' : 'my-menu';
+    this.success();
+    this.props.dispatch(routerRedux.push({
+      pathname: `/menubar/${url}/details`,
+      state: { id: menuTemplateId || data, type: templateFrom }
+    }))
   }
 
   success = () => {

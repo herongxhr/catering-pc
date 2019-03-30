@@ -7,85 +7,97 @@
 import React, { Component } from 'react';
 import { Link } from 'dva/router';
 import { Menu, Icon, Badge } from 'antd';
+import { connect } from 'dva';
 import logo from './logo.png';
 import MenuDropDown from '../MenuDropDown'
-import './index.less'
-import { withRouter } from "react-router";
+import styles from './index.module.less';
 
+const menus = [
+	{
+		path: '/home',
+		name: '工作台',
+		icon: 'home'
+	},
+	{
+		path: '/menubar',
+		name: '菜单中心',
+		icon: 'bars'
+	},
+	{
+		path: '/accSupermarket',
+		name: '辅料超市',
+		icon: 'shopping'
+	},
+	{
+		path: '/purOrder',
+		name: '采购订单',
+		icon: 'profile'
+	},
+	{
+		path: '/delivery',
+		name: '配送验收',
+		icon: 'bar-chart'
+	},
+	{
+		path: '/parameter',
+		name: '台帐',
+		icon: 'read'
+	}
+]
 class BaseMenu extends Component {
+	getMenuItems = menus => {
+		const matchUrl = this.props
+		// .location.pathname.match(/(\/.+)\/?/)[0];
+		const selectedMenuItem = menus.find(item => item.path === matchUrl);
+		const menuItems = menus.map(menu => (
+			<Menu.Item key={menu.name}>
+				<Link to={menu.path}>
+					<Icon type={menu.icon} />
+					<span>{menu.name}</span>
+				</Link>
+			</Menu.Item>
+		))
+		return (
+			<Menu
+				key="Menu"
+				theme="dark"
+				mode="horizontal"
+				className={styles.baseMenu}
+				defaultSelectedKeys={[selectedMenuItem]}
+			>
+				<Menu.Item disabled style={{ width: 125 }} key="logo">
+					<img src={logo} alt="安品" />
+				</Menu.Item>
+				{menuItems}
+				<Menu.Item
+					style={{ width: 60, textAlign: 'right', float: 'right' }}
+					key="setting">
+					<MenuDropDown />
+				</Menu.Item>
+				<Menu.Item
+					style={{ width: 60, float: 'right' }}
+					key="message" >
+					<Link to='/message'>
+						<Badge count={5}>
+							<Icon
+								style={{ fontSize: 16 }}
+								type="bell"></Icon>
+						</Badge>
+					</Link>
+				</Menu.Item>
+			</Menu>
+		)
+	}
+
 	render() {
 		return (
-			<div className='jWrapper'>
-				<Menu
-					key="Menu"
-					theme="dark"
-					mode="horizontal"
-					className="baseMenu"
-				>
-					<Menu.Item disabled style={{ width: 125 }} key="logo">
-						<img src={logo} alt="安品" />
-					</Menu.Item>
-					<Menu.Item key="home">
-						<Link to='/home'>
-							<Icon type="home" />
-							<span>工作台</span>
-						</Link>
-					</Menu.Item>
-					<Menu.Item key="menubar">
-						<Link to='/menubar'>
-							<span>
-								<Icon type="bars"></Icon>
-								菜单中心
-								</span>
-						</Link>
-					</Menu.Item>
-					<Menu.Item key="accSupermarket">
-						<Link to='/accSupermarket'>
-							<Icon type="shopping"></Icon>
-							<span>辅料超市</span>
-						</Link>
-					</Menu.Item>
-					<Menu.Item key="purOrder">
-						<Link to='/purOrder'>
-							<Icon type="profile"></Icon>
-							<span>采购订单</span>
-						</Link>
-					</Menu.Item>
-					<Menu.Item key="delivery">
-						<Link to='/delivery'>
-							<Icon type="bar-chart"></Icon>
-							<span>配送验收</span>
-						</Link>
-					</Menu.Item>
-					<Menu.Item key="parameter">
-						<Link to='/parameter'>
-							<Icon type="read"></Icon>
-							<span>台账</span>
-						</Link>
-					</Menu.Item>
-
-					<Menu.Item
-						style={{ width: 60, textAlign: 'right', float: 'right' }}
-						key="setting">
-
-						<MenuDropDown />
-
-					</Menu.Item>
-					<Menu.Item
-						style={{ width: 60, float: 'right' }}
-						key="message" >
-						<Link to='/message'>
-							<Badge count={5}>
-								<Icon
-									style={{ fontSize: 16 }}
-									type="bell"></Icon>
-							</Badge>
-						</Link>
-					</Menu.Item>
-				</Menu>
+			<div className={styles.menuWrap}>
+				{this.getMenuItems(menus)}
 			</div>
 		);
 	}
 }
 
-export default withRouter(BaseMenu);
+export default connect(({ menu }) => ({
+	menuData: menu.memuData	
+}))(BaseMenu)

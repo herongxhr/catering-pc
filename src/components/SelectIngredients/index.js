@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-27 12:02:30 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-27 14:52:25
+ * @Last Modified time: 2019-03-29 18:32:19
  */
 import React from 'react';
 import { Modal, Select, Input, Table, Tag } from 'antd';
@@ -26,12 +26,12 @@ class Selectf extends React.Component {
 		return (newData || data).filter(item => item.id === key)[0];
 	}
 
-	deleteMeal = (params) => {
-		this.props.dispatch({
-			type: 'meal/saveMeal',
-			payload: params,
-		})
-	}
+	// deleteMeal = (params) => {
+	// 	this.props.dispatch({
+	// 		type: 'meal/saveMeal',
+	// 		payload: params,
+	// 	})
+	// }
 
 	render() {
 		const { deleteMeal } = this.props;
@@ -47,7 +47,7 @@ class Selectf extends React.Component {
 				key={item.id}
 				// 判断是不是自己加的菜
 				closable={true}
-				afterClose={() => deleteMeal(item)}
+				afterClose={() => deleteMeal(item.id)}
 			>
 				{item.goodsName}{item.property}
 			</Tag>));

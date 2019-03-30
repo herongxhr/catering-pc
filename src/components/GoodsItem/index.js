@@ -23,11 +23,9 @@ export default class GoodsItem extends React.Component {
 
     render() {
         const {
-            className,
-            changeNum,
             deleteGoods,
             id,
-            count,
+            count,// 商品数量
             name,
             brand,
             price,
@@ -35,7 +33,8 @@ export default class GoodsItem extends React.Component {
             provider,
             // isCollected,
             img,
-            attribute
+            attribute,
+            changeGoodsNum
         } = this.props;
 
         const goodsItemWrapperStyle =
@@ -62,10 +61,10 @@ export default class GoodsItem extends React.Component {
                             <a onClick={() => deleteGoods(id)}>删除</a>
                             {/* 修改购物车商品数量 */}
                             <InputNumber
-                                defaultValue={count}
+                                value={count}
                                 min={1}
                                 size="small"
-                                onChange={(value, id) => changeNum(id, value)}
+                                onChange={value => changeGoodsNum(value, id)}
                             />
                         </div>
                     </span>

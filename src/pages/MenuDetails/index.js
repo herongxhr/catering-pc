@@ -4,7 +4,6 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router'
 import DescriptionList from '../../components/DescriptionList';
 import BreadcrumbComponents from '../../components/BreadcrumbComponent';
-import Moment from 'moment';
 import PageHeadWrapper from '../../components/PageHeaderWrapper';
 import styles from './index.module.less';
 import ShowArrangedDishes from '../../components/ShowArrangedDishes';
@@ -28,7 +27,7 @@ class MenuDetails extends React.Component {
   static getDerivedStateFromProps(nextProps) {
     const { location } = nextProps;
     if (location.state) {
-      console.log('state:',location.state);
+      console.log('state:', location.state);
       const { id = '', type = '' } = location.state;
       return { id, type };
     }
@@ -49,6 +48,16 @@ class MenuDetails extends React.Component {
     this.props.dispatch(routerRedux.push({
       pathname: `/menubar/${type}/adjust`,
       state: { id, type }
+    }))
+  }
+  yieldPurOrder = () => {
+    const { id, type } = this.state;
+    this.props.dispatch(routerRedux.push({
+      pathname: '/purOrder/detail/adjust',
+      state: {
+        type: 'menu',
+        data: { id }
+      }
     }))
   }
 
@@ -91,7 +100,7 @@ class MenuDetails extends React.Component {
         </ButtonGroup>
         {isExecuted
           ? <Button type="primary">查看采购单</Button>
-          : <Button type="primary">采购食材</Button>}
+          : <Button onClick={this.yieldPurOrder} type="primary">采购食材</Button>}
       </Fragment>
     );
     // 详细描述

@@ -2,11 +2,11 @@
  * @Author: suwei 
  * @Date: 2019-03-21 17:55:51 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-28 17:50:42
+ * @Last Modified time: 2019-03-29 19:12:17
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon, Modal, Popconfirm } from 'antd';
+import { Table, Tag, Menu, Button, Radio, Badge, Divider, Dropdown, Icon, Modal, Popconfirm, message } from 'antd';
 import WrappedOrderFilter from '../../components/OrderFilter';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
 import DisAcceptTable from '../../components/DisAcceptTable'
@@ -44,8 +44,9 @@ class PurOrder extends React.Component {
 			},
 		})
 	}
+	
 	queryDelivery = (params = {}) => {
-		const { dispatch, } = this.props;
+		const { dispatch } = this.props;
 		dispatch({
 			type: 'deliveryAcce/queryDelivery',
 			payload: {
@@ -53,21 +54,6 @@ class PurOrder extends React.Component {
 			}
 		})
 	}
-	// handleFilter = (args) => {
-	// 	let newArgs = {};
-	// 	if (args.dateRange) {
-	// 		newArgs = { dateRange: args.dateRange }
-	// 	} else if (args.channel) {
-	// 		newArgs = { channel: args.channel }
-	// 	} else {
-	// 		newArgs = { status: args.status }
-	// 	}
-	// 	this.setState(
-	// 		Object.assign(this.state, newArgs),
-	// 		this.getOrderData(this.state)
-	// 	);
-	// }
-
 
 	//新建按钮跳转
 	handleLinkChange = (pathname, type) => {
@@ -78,16 +64,25 @@ class PurOrder extends React.Component {
 		}))
 	}
 	//下单
-	previewOrder = (id) => {
+	previewOrder = (e,record) => {
 		const { dispatch } = this.props;
+		debugger;
+		const payload = {}
+		payload.callback = (params) => {
+			if(params) {
+				this.TableLinkChange('/purOrder/details',record)
+			} else {
+				message.error('下单失败')		
+			}
+		}
+		payload.id = record.id
 		dispatch({
 			type: 'purOrder/queryOrderPlace',
-			payload: {
-				id: id
-			},
+			payload: payload
 		})
 	}
-	orderDelete = (id) => {
+	
+	orderDelete = (e,id) => {
 		const { dispatch } = this.props;
 		dispatch({
 			type: 'purOrder/queryDeleteByIds',
@@ -97,10 +92,10 @@ class PurOrder extends React.Component {
 		})
 	}
 	//表格点击行跳转
-	TableLinkChange = (pathname, record, status) => {
+	TableLinkChange = (pathname, record) => {
 		this.props.dispatch(routerRedux.push({
 			pathname,
-			state: { id: record.id, status }
+			state: { id: record.id }
 		}))
 	}
 
@@ -136,7 +131,6 @@ class PurOrder extends React.Component {
 
 	componentDidMount() {
 		this.changeToGetData();
-		this.queryDelivery()
 	}
 
 	render() {
@@ -197,12 +191,12 @@ class PurOrder extends React.Component {
 				title: '操作',
 				render: (text, record) => {
 					return record.status === "0" ?
-						(<div className='opertion'>
-							<Popconfirm title="确定继续此操作?" onConfirm={this.previewOrder.bind(this, record.id)}>
+						(<div className='opertion' onClick={(e) => {e.stopPropagation()}}>
+							<Popconfirm title="确定继续此操作?" onConfirm={(e) => this.previewOrder(e, record)}>
 								<a className='orders'>下单</a>
 							</Popconfirm>
-							<Divider type="vertical" />
-							<Popconfirm title="确定继续此操作?" onConfirm={this.orderDelete.bind(this, record.id)}>
+							<Divider type="vertical" onClick={(e) => {e.stopPropagation()}}/>
+							<Popconfirm title="确定继续此操作?" onConfirm={(e) =>this.orderDelete(e, record)}>
 								<a className='delete'>删除</a>
 							</Popconfirm>
 						</div>) :
@@ -215,8 +209,8 @@ class PurOrder extends React.Component {
 			const pathname = '/purOrder/detail/adjust'
 			const menu = (
 				<Menu>
-					<Menu.Item key="FOrder" onClick={() => this.handleLinkChange(pathname, 's')}>食材订单</Menu.Item>
-					<Menu.Item key="SOrder" onClick={() => this.handleLinkChange(pathname, 'f')}>辅料订单</Menu.Item>
+					<Menu.Item key="FOrder" onClick={() => this.handleLinkChange(pathname, 'S')}>食材订单</Menu.Item>
+					<Menu.Item key="SOrder" onClick={() => this.handleLinkChange(pathname, 'F')}>辅料订单</Menu.Item>
 				</Menu>
 			)
 			return (
@@ -267,12 +261,9 @@ class PurOrder extends React.Component {
 							onChange={this.handleTableChange}
 							rowKey="id"
 							onRow={ record => {
-								const status = record.status;
-								if (status === '1') {
-									return {
-										onClick: () => {
-											this.TableLinkChange('/purOrder/details', record, status)
-										}
+								return {
+									onClick: () => {
+										this.TableLinkChange('/purOrder/details', record)
 									}
 								}
 							}}

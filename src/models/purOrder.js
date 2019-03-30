@@ -1,6 +1,6 @@
-import { queryModalSelect, queryOrderForm, queryOrderSelectf, 
-    queryOrderTable, queryOrderDetails, queryOrderItemGoods,
-    queryOrderPlace, queryDeleteByIds, mallPreOrder } from '../services/api';
+import { queryModalSelect, queryOrderForm, putOrderForm, queryOrderSelectf, 
+    queryOrderTable, queryOrderDetails, 
+    queryOrderPlace, queryDeleteByIds, mallPreOrder, camenuPreOrder } from '../services/api';
 
 export default {
     namespace: 'purOrder',
@@ -17,12 +17,28 @@ export default {
         orderDelete:''
     },
     effects: {
+        *camenuPreOrder({ payload }, { call, put }) {
+            const data = yield call(camenuPreOrder, payload);
+            debugger;
+            for(let i = 0; i < data.length; i++) {
+                data[i].goodsName = data[i].viewSku ? data[i].viewSku.wholeName : null
+                data[i].skuId = data[i].viewSku ? data[i].viewSku.id : null
+                data[i].id = data[i].viewSku ? data[i].viewSku.id : null
+                data[i].supplierId = data[i].supplier ? data[i].supplier.supplierName : null
+            }
+            yield put({
+                type: 'saveMallPreOrder',
+                payload: data
+            });
+        },
         *mallPreOrder({ payload }, { call, put }) {
             const data = yield call(mallPreOrder, payload);
+            debugger;
             for(let i = 0; i < data.length; i++) {
-                data[i].goodsName = data[i].viewSku.wholeName
-                data[i].skuId = data[i].viewSku.id
-                data[i].id = data[i].viewSku.id
+                data[i].goodsName = data[i].viewSku ? data[i].viewSku.wholeName : null
+                data[i].skuId = data[i].viewSku ? data[i].viewSku.id : null
+                data[i].id =  data[i].viewSku ? data[i].viewSku.id : null
+                data[i].supplierId = data[i].supplier ? data[i].supplier.supplierName : null
             }
             yield put({
                 type: 'saveMallPreOrder',
@@ -59,44 +75,49 @@ export default {
                 payload: data || {},
             })
         },
+        *judgeDetailsOrderForm({ payload }, { call, put }) {
+            const data = yield call(queryOrderDetails, payload);
+            const { orderDetailVos } = data
+            debugger;
+            for(let i = 0; i < orderDetailVos.length; i++) {
+                orderDetailVos[i].goodsName = orderDetailVos[i].viewSku.wholeName
+                orderDetailVos[i].skuId = orderDetailVos[i].viewSku.id
+                orderDetailVos[i].supplierId = orderDetailVos[i].supplier.supplierName
+                orderDetailVos[i].id = orderDetailVos[i].viewSku.id
+                orderDetailVos[i].editable = true
+            }
+            yield put({
+                type: 'saveMallPreOrder',
+                payload: orderDetailVos || {},
+            })
+        },        
         *getOrderDetails({ payload }, { call, put }) {
             const data = yield call(queryOrderDetails, payload);
-            //console.log(data)
+            debugger;
             yield put({
                 type: 'savePurOrderDetails',
                 payload: data || {},
             })
         },
-        *queryOrderItemGoods({ payload }, { call, put }) {
-            const data = yield call(queryOrderItemGoods, payload);
-            yield put({
-                type: 'saveItemGoods',
-                payload: data,
-            })
-        },
-        *queryChangeOrderItemGoods({ payload }, { call, put }) {
-            const data = yield call(queryOrderItemGoods, payload);
-            yield put({
-                type: 'changeItemGoods',
-                payload: data,
-            })
-        },
         *queryOrderForm({ payload }, { call, put }) {
-            const data = yield call(queryOrderForm, payload);
-            if(data) {
-                yield put({
-                    type:'queryOrderDetails',
-                    payload: data,
-                })
+            const { id , callback } = payload
+            debugger;
+            if(id) {
+                debugger;
+                const data = yield call(putOrderForm, payload);
+                callback(data)     
+            } else {
+                debugger;
+                const data = yield call(queryOrderForm, payload);
+                callback(data) 
             }
-            yield put({
-                type: 'changeOrderForm',
-                payload: data,
-            })
         },
         *queryOrderPlace({ payload }, { call, put }) {
-            const data = yield call(queryOrderPlace, payload);
-            console.log(data)
+            const { callback , id } = payload
+            debugger;
+            const data = yield call(queryOrderPlace, id);
+            debugger;
+            callback(data)
             yield put({
                 type: 'saveOrderPlace',
                 payload: data,
@@ -122,7 +143,14 @@ export default {
         },
     },
     reducers: {
+        clearOrderTableForm(state, { payload }) {
+            return {
+                ...state,
+                orderTableForm: []
+            }
+        },            
         saveMallPreOrder(state, { payload }) {
+            debugger;
             return {
                 ...state,
                 orderTableForm: payload
@@ -183,24 +211,6 @@ export default {
             return {
                 ...state,
                 orderDetails: payload,
-            }
-        },
-        saveItemGoods(state, { payload }) {
-            return {
-                ...state,
-                orderItemGoods: payload.records,
-            }
-        },
-        changeItemGoods(state, { payload }) {
-            return {
-                ...state,
-                orderItemGoods: payload.records.concat(state.orderItemGoods),
-            }
-        },
-        changeOrderForm(state, { payload }) {
-            return {
-                ...state,
-                orderItemGoods: payload,
             }
         },
         saveOrderPlace(state, { payload }) {

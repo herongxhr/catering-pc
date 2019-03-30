@@ -41,7 +41,7 @@ class SelectDishes extends React.Component {
         })
     }
     componentDidMount() {
-        this.props.getDishes()
+        this.filterToGetData()
     }
     render() {
         // 弹出框modal表头数据
@@ -156,7 +156,6 @@ class SelectDishes extends React.Component {
                         rowKey="id"
                         pagination={{
                             current: dishesData.current || 1,
-                            pages: dishesData.pages || 0,
                             pageSize: dishesData.size || 10,
                             total: dishesData.total || 0,
                             showTotal: total => `共 ${total} 道菜`,

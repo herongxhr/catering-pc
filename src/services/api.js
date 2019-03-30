@@ -12,6 +12,16 @@ export function mallPreOrder(params) {//修改菜单数据
         }
     })
 }
+export function camenuPreOrder(id) {
+    return request({
+        method: 'post',
+        url: `/catering/camenu/preOrder/${id}`,
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+            showLoading: true,
+        }
+    });
+}
 // 查询分类
 export function queryCatalogF(params) {
     return request({
@@ -198,7 +208,7 @@ export function queryPTemplateDetails(templateId) {
 export function queryCTemplateDetails(templateId) {//查看模板
     return request({
         method: 'get',
-        url: `/catering/menuTemplate/${templateId}`,
+        url: `/catering/menuTemplate/recommend/vo/${templateId}`,
         data: {
             showLoading: true,
         }
@@ -216,19 +226,17 @@ export function toUpdateMenu(params) {//修改菜单数据
         }
     })
 }
-
-export function toNewMenu(params) {//修改菜单数据
-    const id = params.id || '';
+export function toDeleteMyMenu(id) {//删除我的菜单条目
     return request({
-        method: 'put',
+        method: 'delete',
         url: `/catering/camenu/${id}`,
-        headers: { 'Content-Type': 'application/json' },
         data: {
-            axiosData: JSON.stringify(params)
+            showLoading: true,
         }
     })
 }
-export function addMenuData(params) {//新建菜单数据
+
+export function toNewMenu(params) {//新建菜单数据
     return request({
         method: 'post',
         url: `/catering/camenu/`,
@@ -272,10 +280,9 @@ export function toDeleteTemplate(templateId) {//删除模板
 export function toSaveAsMyTemplate(templateId) {//保存为我的模板
     return request({
         method: 'post',
-        url: `/catering/menutemplate/recommend/copy/${templateId}`,
+        url: `/catering/menuTemplate/recommend/copy/${templateId}`,
         data: {
             showLoading: true,
-            params: { id: templateId }
         }
     })
 }
@@ -290,9 +297,10 @@ export function toNewTemplate(params) {//新建模板
     })
 }
 export function toUpdateTemplate(params) {//编辑模板
+    const { id } = params;
     return request({
         method: 'put',
-        url: '/catering/camenuTemplate',
+        url: `/catering/camenuTemplate/${id}`,
         headers: { 'Content-Type': 'application/json' },
         data: {
             axiosData: JSON.stringify(params)
@@ -302,7 +310,7 @@ export function toUpdateTemplate(params) {//编辑模板
 export function queryHasAnyTemplate() {
     return request({
         method: 'get',
-        url: '/catering/menuTemplate/recommend/hasAny',
+        url: '/catering/menuTemplate/recommend/count',
         data: {
             showLoading: true
         }
@@ -378,6 +386,19 @@ export function queryOrderForm(params) {
     })
 }
 
+export function putOrderForm(params) {
+    const data = JSON.stringify(params)
+    return request({
+        method: 'put',
+        headers: { 'Content-Type': 'application/json' },
+        url: '/catering/order',
+        data: {
+            axiosData: data
+        }
+    })
+}
+
+
 export function queryOrderSelectf(params) {
     return request({
         method: 'get',
@@ -411,16 +432,6 @@ export function queryOrderDetails(id) {
         }
     })
 }
-//待修改
-export function queryOrderItemGoods(params) {
-    return request({
-        method: 'get',
-        url: '/catering/order/item/goods',
-        data: {
-            ...params
-        }
-    })
-}
 
 export function queryGoodsByOrderId(id) {
     return request({
@@ -434,24 +445,20 @@ export function queryGoodsByOrderId(id) {
         }
     })
 }
-export function queryOrderPlace(params) {
-    const data = JSON.stringify(params)
+export function queryOrderPlace(id) {
     return request({
         method: 'put',
-        headers: {'Content-Type': 'application/json'},
-        url: `catering/order/place/${params.id}`,
-        data: {
-            axiosData:data
-        }
+        headers: { 'Content-Type': 'application/json' },
+        url: `catering/order/place/${id}`,
     })
 }
 export function queryDeleteByIds(params) {
     return request({
         method: 'DELETE',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
         url: `/catering/order/deleteByIds`,
         data: {
-            axiosData: stringify({'ids[]':params.ids.toString()})
+            axiosData: stringify({ 'ids[]': params.ids.toString() })
         }
     })
 }
@@ -591,10 +598,10 @@ export function queryCateringSupplier(params) {
     const data = JSON.stringify(params)
     return request({
         method: 'post',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         url: '/catering/setting/cateringSupplier',
         data: {
-            axiosData:data
+            axiosData: data
         }
     })
 }

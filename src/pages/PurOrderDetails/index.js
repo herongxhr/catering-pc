@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:43:54 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-28 09:10:10
+ * @Last Modified time: 2019-03-29 19:56:52
  */
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
@@ -13,6 +13,9 @@ import PageHeadWrapper from '../../components/PageHeaderWrapper';
 import styles from './index.module.less';
 import { routerRedux, Redirect } from 'dva/router';
 import moment from 'moment'
+import { Scrollbars } from 'react-custom-scrollbars';
+import DisAcceptTable from '../../components/DisAcceptTable'
+
 
 
 const { Description } = DescriptionList;
@@ -23,12 +26,16 @@ const tabColumns = [
 		title: '商品',
 		key: "viewSku",
 		dataIndex: "viewSku",
-		render:(text)=>text.goodsName
+		render:(text)=>text.wholeName
 	},
 	{
 		title: '单位',
 		key: "unit",
-		dataIndex: "unit"
+		dataIndex: "viewSku",
+		render:(text)=> {
+			console.log(text)
+			return text.unit
+		}
 	},
 	{
 		title: '单价',
@@ -72,16 +79,15 @@ class PurOrderDetails extends React.Component {
 			current: 1,
 			visible: false,
 			id: '',// 订单id
-			status: ''// 订单状态
 		}
-		// this.onLoadMore = this.onLoadMore.bind(this)
 	}
 
 	static getDerivedStateFromProps(props) {
 		const { location } = props
 		if (location.state) {
-			const { id = '', status = '' } = location.state;
-			return { id, status }
+			const { id = '' } = location.state;
+			debugger;
+			return { id }
 		}
 		return null;
 	}
@@ -99,89 +105,73 @@ class PurOrderDetails extends React.Component {
 		message.success('操作成功');
 	}
 
-	handleCancel = (e) => {
-		//console.log(e);
+	handleOrder = (e) => {
+		const { dispatch } = this.props;
+		const payload = {}
+		payload.callback = (params) => {
+			if(params) {
+				this.getOrderDetails()
+			}
+		}
+		payload.id = this.state.id
+		dispatch({
+			type: 'purOrder/queryOrderPlace',
+			payload: payload
+		})
 		this.setState({
 			visible: false,
 		});
 	}
 
-	purOrderAdjust = (pathname, rest) => {
+	handleCancel = (e) => {
+		this.setState({
+			visible: false,
+		});
+	}
+
+	purOrderAdjust = (pathname, id) => {
 		const { props } = this
 		props.dispatch(routerRedux.push({
 			pathname,
-			...rest
+			state:{
+				adjustId:id
+			}
 		}))
 	}
 
-	getOrderDetails() {
+	getOrderDetails = () => {
 		const { id } = this.state;
 		this.props.dispatch({
 			type: 'purOrder/getOrderDetails',
 			payload: id
 		})
 	}
+	
+	queryDelivery = (params = {}) => {
+		const { dispatch } = this.props;
+		dispatch({
+			type: 'deliveryAcce/queryDelivery',
+			payload: {
+				...params
+			}
+		})
+	}
+
+	showDistributionModal = (orderNo, e) => {
+		e.stopPropagation()
+		this.setState({
+			visible: true,
+		});
+		this.queryDelivery({
+			orderNo: orderNo
+		})
+	}
 
 	//点击loadMore的时候拼接数据
 
-	async queryChangeOrderItemGoods() {
-		//console.log(1);
-		const { dispatch, location } = this.props
-		await dispatch({
-			type: 'purOrder/queryChangeOrderItemGoods',
-			payload: {
-				id: location.id,
-				current: this.state.current,
-				pageSize: 10
-			}
-		})
-		this.setState({
-			loading: false
-		})
-	}
 
-	//当页面加载的时候请求数据
-	queryOrderItemGoods() {
-		const { dispatch, location } = this.props
-		dispatch({
-			type: 'purOrder/queryOrderItemGoods',
-			payload: {
-				id: location.id,
-				current: this.state.current,
-				pageSize: 10
-			}
-		})
-	}
-	// queryChangeOrderItemGoods = () => {
-	// 	console.log(1);
-	// 	const { dispatch, location } = this.props
-	// 	dispatch({
-	// 		type: 'purOrder/queryChangeOrderItemGoods',
-	// 		payload: {
-	// 			id: location.id,
-	// 			current: this.state.current,
-	// 			pageSize: 10
-	// 		}
-	// 	})
-	// 	this.setState({
-	// 		loading: false
-	// 	})
-	// }
-
-	// //当页面加载的时候请求数据
-	// queryOrderItemGoods() {
-	// 	const { dispatch, location } = this.props
-	// 	dispatch({
-	// 		type: 'purOrder/queryOrderItemGoods',
-	// 		payload: {
-	// 			id: location.id,
-	// 			current: this.state.current,
-	// 			pageSize: 10
-	// 		}
-	// 	})
 	componentDidMount() {
 		this.getOrderDetails()
-		this.queryOrderItemGoods()
 	}
 
 	render() {
@@ -193,29 +183,15 @@ class PurOrderDetails extends React.Component {
 		const {
 			location,
 			orderDetails,
-			//orderItemGoods
 		} = this.props;
 		const {
 			...rest
 		} = orderDetails //取值
+	
 		const startDate = rest.startDate || ''
 		const endDate = rest.endDate || ''
 		let orderDetailVos = rest.orderDetailVos || []
-		let records = [];
-		if(orderDetailVos) {
-			const length = orderDetailVos.length
-			records = Array(length).fill(undefined).map(() => Object.create(null));
-			for(let i = 0; i < length; i++) {
-				records[i].id = orderDetailVos[i].id
-				records[i].goodsName = orderDetailVos[i].viewSku.goodsName
-				records[i].price = orderDetailVos[i].price
-				records[i].quantity = orderDetailVos[i].quantity
-				records[i].requireDate = orderDetailVos[i].requireDate
-				records[i].supplierName = orderDetailVos[i].supplier.supplierName
-			}
-		}
-
-		// console.log(records)
+		
 		let orderChannel;
 		if (rest.channel === 'M') {
 			orderChannel = '菜单生成';
@@ -229,7 +205,7 @@ class PurOrderDetails extends React.Component {
 			<Row>
 				<Col xs={24} sm={12}>
 					<div className={styles.textSecondary}>状态</div>
-					<div className={styles.heading}>{rest.status === '0' ? '未下单' : '已下单'}</div>
+					<div className={styles.heading}>{rest.status === '1' ? '已下单' : '未下单'}</div>
 				</Col>
 				<Col xs={24} sm={12}>
 					<div className={styles.textSecondary}>总金额</div>
@@ -254,10 +230,9 @@ class PurOrderDetails extends React.Component {
 			<span className={styles.cardTitle}>商品明细：<Tag color="cyan">共{orderDetailVos ? orderDetailVos.length : '0'}条</Tag></span>
 		);
 
-		const { id, status } = location
 
 		const chooseButtonGroup = () => {
-			if (status == 0) return otherAction
+			if (rest.status == '1') return otherAction
 			else return action
 		}
 
@@ -265,7 +240,7 @@ class PurOrderDetails extends React.Component {
 			<Fragment>
 				<Button>打印</Button>
 				<Button style={{ marign: '0px 20px' }}>删除</Button>
-				<Button onClick={() => this.purOrderAdjust('/purOrder/detail/adjust')}>调整</Button>
+				<Button onClick={() => this.purOrderAdjust('/purOrder/detail/adjust',this.state.id)}>调整</Button>
 				<Button type="primary" onClick={this.showModal}>下单</Button>
 			</Fragment>
 		);
@@ -274,9 +249,10 @@ class PurOrderDetails extends React.Component {
 			<Fragment>
 				<Button>打印</Button>
 				<Button style={{ marign: '0px 20px' }}>再来一单</Button>
-				<Button type="primary">查看配送验收情况</Button>
+				<Button type="primary" onClick={this.showDistributionModal.bind(this, rest.orderNo)}>查看配送验收情况</Button>
 			</Fragment>
 		)
+
 		const loadMore = () => {
 			return (
 				<div style={{
@@ -289,11 +265,12 @@ class PurOrderDetails extends React.Component {
 		}
 
 		const { loading, data, visible } = this.state
-		//console.log(loading);
+
+		const { delivery = {} } = this.props
+		const deliveryRecords = delivery.records || []
 		return (
 			<div className={styles.PurOrderDetails}>
 				{  orderDetailVos   ? null : <Redirect to='/purOrder'></Redirect>}
-				{/* {location.id ? null : <Redirect to="/purOrder" />} */}
 				<Bread bread={bread} value='/purOrder'></Bread>
 				{/* 页头容器 */}
 				<PageHeadWrapper
@@ -305,7 +282,7 @@ class PurOrderDetails extends React.Component {
 					action={chooseButtonGroup()}
 					content={description}
 					
-					Content={extra}
+					extraContent={extra}
 					{...this.props}
 				>
 					<Card
@@ -324,23 +301,47 @@ class PurOrderDetails extends React.Component {
 							footer={() => loadMore()}
 						/>
 					</Card>
-					<Modal
-						visible={visible}
-						onOk={this.handleOk}
-						onCancel={this.handleCancel}
-						bodyStyle={modalObject}
-						width='340px'
-						closable={false}
-					>
-						<Alert message="采购单将下发给各供货商，确认下单？" type="warning" showIcon style={{ background: 'white', border: '0px', marginTop: '40px' }} />
-					</Modal>
+					{
+						rest.status == '1' ? ( 
+							<Scrollbars style={{ width: 1060, height: 628 }}>
+								<Modal title="配送验收情况"
+									className={styles.orderModal}
+									visible={this.state.visible}
+									onOk={this.handleOk}
+									//onCancel={this.handleCancel}
+									closable={false}
+									width={1060}
+									maskStyle={{ background: 'rgba(0,0,0,0.25)' }}
+									footer={[
+										<Button key="submit" type="primary" onClick={this.handleOk}>
+											关闭
+										</Button>,
+									]}
+								>
+									<DisAcceptTable records={deliveryRecords} />
+								</Modal>
+							</Scrollbars> 
+					) :  ( 
+						<Modal
+							visible={visible}
+							onOk={this.handleOrder}
+							onCancel={this.handleCancel}
+							bodyStyle={modalObject}
+							width='340px'
+							closable={false}
+						>
+							<Alert message="采购单将下发给各供货商，确认下单？" type="warning" showIcon style={{ background: 'white', border: '0px', marginTop: '40px' }} />
+						</Modal> 
+					)
+					}
 				</PageHeadWrapper>
 			</div>
 		)
 	}
 }
 
-export default connect(({ purOrder }) => ({
+export default connect(({ purOrder , deliveryAcce }) => ({
+	delivery: deliveryAcce.delivery,
 	orderDetails: purOrder.orderDetails,
 	orderItemGoods: purOrder.orderItemGoods
 }))(PurOrderDetails)

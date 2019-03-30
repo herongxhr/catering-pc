@@ -3,6 +3,7 @@ import {
     queryMenuData,
     queryMenuDetails,
     toUpdateMenu,
+    toDeleteMyMenu,
     toNewMenu,
     queryPMenuTemplate,
     queryCMenuTemplate,
@@ -15,6 +16,7 @@ import {
     toSaveAsMyTemplate,
     queryHasAnyTemplate,
     queryFoodDetail
+
 } from '../services/api';
 
 export default {
@@ -35,14 +37,16 @@ export default {
         // 所有可选菜品数据
         dishesData: {},
         // 对模板操作的结果
-        templateActionResult: true,
+        templateActionResult: '',
         // 对菜单操作结果
-        createMenuDataResult: '',
-        newTemplateResult: '',
+        customMenuResult: '',
+        customTemplateResult: '',
         // 模板标签
         tagString: '',
         queryHasAnyTemplate: 0,
-        dishDetailData:{}
+        dishDetailData:{},
+        // 模板名
+        templateName: '',
     },
     effects: {
         // 获取菜单列表,统一接口
@@ -61,36 +65,45 @@ export default {
                 payload: data || {}
             });
         },
-        // 更新菜单数据
-        *updateMenu({ payload }, { call, put, select }) {
-            const params = yield select(({ menuCenter }) => {
-                const camenuDetailVos = menuCenter.allMealsData;
-                return {
-                    ...payload,
-                    camenuDetailVos
-                }
-            });
-            const res = yield call(toUpdateMenu, params);
+        *deleteMyMenu({ payload }, { call }) {
+            yield call(toDeleteMyMenu, payload);
         },
-        *newMenu({ payload }, { call, put, select }) {
+        // 新建或编辑模板
+        *customMenu({ payload }, { call, put, select }) {
+            const { id, callback, ...rest } = payload;
+            // 请求的接口不一样
+            const queryFunction = id ? toUpdateMenu : toNewMenu;
+            // 从全局state中获取数据
             const params = yield select(({ menuCenter }) => {
-                const camenuDetails = menuCenter.allMealsData;
+                const { allMealsData: camenuDetails } = menuCenter
                 return {
-                    ...payload,
-                    camenuDetails
+                    camenuDetails,
+                    ...rest,
                 }
             });
-            const res = yield call(toNewMenu, params);
+            // 上传的数据区别在于新建无需id，编辑要
+            const newData = id ? { ...params, id } : params;
+            const data = yield call(queryFunction, newData)
             yield put({
-                type: 'saveNewMenuDataResult',
-                payload: res
+                type: 'saveCustomMenu',
+                payload: data || ''
             })
+            // 执行callback
+            data && callback(data);
         },
         // 餐饮单位模板列表
         *fetchPMenuTemplate({ payload }, { call, put }) {
             const data = yield call(queryPMenuTemplate, payload);
             yield put({
                 type: 'savePMenuTemplate',
+                payload: data || {},
+            })
+        },
+        // 餐饮管理单位模板列表
+        *fetchCMenuTemplate({ payload }, { call, put }) {
+            const data = yield call(queryCMenuTemplate, payload);
+            yield put({
+                type: 'saveCMenuTemplate',
                 payload: data || {},
             })
         },
@@ -101,14 +114,6 @@ export default {
                 type: 'saveTemplateDetails',
                 payload: data || {},
             });
-        },
-        // 餐饮管理单位模板列表
-        *fetchCMenuTemplate({ payload }, { call, put }) {
-            const data = yield call(queryCMenuTemplate, payload);
-            yield put({
-                type: 'saveCMenuTemplate',
-                payload: data || {},
-            })
         },
         // 获取我的模板详情数据
         *fetchCTemplateDetails({ payload }, { call, put }) {
@@ -138,39 +143,31 @@ export default {
                 type: 'saveTemplateActionResult',
                 payload: data,
             });
-            callback();
+            callback && callback();
         },
-        // 新建模板
-        *newTemplate({ payload }, { call, put, select }) {
+        // 新建或编辑模板
+        *customTemplate({ payload }, { call, put, select }) {
+            const { id, callback } = payload;
+            // 请求的接口不一样
+            const queryFunction = id ? toUpdateTemplate : toNewTemplate;
+            // 从全局state中获取数据
             const params = yield select(({ menuCenter }) => {
-                const camenuTemplateDetails = menuCenter.allMealsData;
-                const tags = menuCenter.tagString;
+                const { templateName, tags, allMealsData: camenuTemplateDetails } = menuCenter
                 return {
-                    payload,
+                    templateName,
                     tags,
                     camenuTemplateDetails
                 }
             });
-            const data = yield call(toNewTemplate, params);
+            // 上传的数据区别在于新建无需id，编辑要
+            const newData = id ? { ...params, id } : params;
+            const data = yield call(queryFunction, newData)
             yield put({
-                type: 'saveNewTemplateResult',
+                type: 'saveCustomTemplateResult',
                 payload: data || ''
             })
-        },
-        // 新建模板或编辑模板
-        *updateTemplate({ payload }, { call, put, select }) {
-            const params = yield select(({ menuCenter }) => {
-                const camenuTemplateDetails = menuCenter.allMealsData;
-                return {
-                    ...payload,
-                    camenuTemplateDetails
-                }
-            });
-            const res = yield call(toUpdateTemplate, params);
-            yield put({
-                type: 'saveNewTemplateDataResult',
-                payload: res
-            })
+            // 执行callback
+            data && callback();
         },
         *hasAnyTemplate(_, { call, put }) {
             const data = yield call(queryHasAnyTemplate)
@@ -228,10 +225,10 @@ export default {
         saveTemplateDetails(state, { payload }) {
             return {
                 ...state,
-                // 直接扁平化每天排餐数据
                 templateDetails: payload,
-                tagString: state.templateDetails.tagString || '',
-                allMealsData: payload.foodArrangeVOMap || [],
+                templateName: payload.templateName,
+                tagString: payload.tags || '',
+                allMealsData: payload.camenuTemplateDetailVos || payload.menuTemplateDetailVos || [],
             }
         },
         // 保存菜品库中的菜品数据
@@ -258,6 +255,8 @@ export default {
                 ...state,
                 allMealsData: [],
                 templateDetails: {},
+                templateName: '',
+                tagString: '',
                 newTemplateResult: ''
             }
 
@@ -269,18 +268,18 @@ export default {
                 templateActionResult: payload
             }
         },
-        // 新建菜单执行结果
-        saveNewMenuDataResult(state, { payload }) {
+        // 新建模板执行结果
+        saveCustomMenuResult(state, { payload }) {
             return {
                 ...state,
-                createMenuDataResult: payload
+                customMenuResult: payload
             }
         },
         // 新建模板执行结果
-        saveNewTemplateResult(state, { payload }) {
+        saveCustomTemplateResult(state, { payload }) {
             return {
                 ...state,
-                newTemplateResult: payload
+                customTemplateResult: payload
             }
         },
         editTag(state, { payload }) {
@@ -301,6 +300,12 @@ export default {
                     tagString: state.tagString.replace(tagReg, '')
                 }
             };
+        },
+        handleTemplateNameInput(state, { payload }) {
+            return {
+                ...state,
+                templateName: payload || ''
+            }
         },
         saveQueryHasAnyTemplate(state, { payload }) {
             return {

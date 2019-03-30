@@ -1,21 +1,14 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
-import BaseMenu from './components/BaseMenu';
+import Header from './pages/Header';
 import { Layout } from 'antd';
 
-const { Content, Header } = Layout;
+const { Content } = Layout;
 
-class App extends Component {
+export default class App extends Component {
   render() {
     return (
       <Layout >
-        <Header style={{
-          width: '100%',
-          height: 70,
-          background: '#1F253E',
-        }}>
-          <BaseMenu />
-        </Header>
+        <Header />
         <Content >
           {this.props.children}
         </Content>
@@ -23,5 +16,3 @@ class App extends Component {
     );
   }
 }
-
-export default connect(({ }) => ({}))(App);

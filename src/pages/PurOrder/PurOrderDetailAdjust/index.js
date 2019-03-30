@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:41:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-28 20:04:07
+ * @Last Modified time: 2019-03-29 17:50:28
  */
 import React, { Fragment } from 'react'
 import Bread from '../../../components/Bread'
@@ -25,43 +25,58 @@ class PurOrderAdjust extends React.Component {
     showAlert: false,
     alertPrice: false,
     index: 1,
+    id:''
   }
 
-  handleSubmit = () => {
-    let object = {}
-    let id = '' //建立一个变量保存后端返回的ID
-    const { location } = this.props;
-    const { type, data } = location.state;
-    debugger;
-    // 类型
-    const { orderTableForm, orderItemGoods, orderDetails } = this.props
-    //表单验证 message提示
+  validatorForm = (orderTableForm) => {
     for (let i = 0; i < orderTableForm.length; i++) {
       if (orderTableForm[i].price.toString() == '0') {
         message.error('商品单价不能为0')
         return
       }
-      if (!orderTableForm[i].price || !orderTableForm[i].quantity || !orderTableForm[i].supplierId || !orderTableForm[i].requiredDate) {
+      if (!orderTableForm[i].price  || !orderTableForm[i].supplierId || !orderTableForm[i].requiredDate) {
         message.error('请完善所有信息')
         return
       }
     }
-    if (type) {
-      object.type = type
-      object.channel = 'N'
-      object.orderDetails = orderTableForm
-    }
+  }
+
+  handleSubmit = () => {
+    let object = {} 
+    const { location } = this.props;
+    const { type, data } = location.state;
+    // 类型
+    const { orderTableForm } = this.props
+    console.log(orderTableForm)
+    debugger;
+    //表单验证 message提示
+    this.validatorForm(orderTableForm)
+
+    object.type = type || ''
+    object.channel = 'N' 
+    object.orderDetails = orderTableForm || {}
+
     console.log(object)
     debugger;
-    this.queryOrderForm(object)
-    this.purOrderSave('/purOrder/details')
-    // if(orderItemGoods) {
-    //   message.success('请求成功')
-    //   this.purOrderSave(orderItemGoods)
-    // }
-    // this.purOrderSave('',{
-    //   id:'303c452ba8d4b4a068f84413d286aedf'
-    // })
+    if(this.state.id) {
+      debugger;
+      object.id = this.state.id
+      object.callback = (value) => {
+        if(value) {
+          this.TableLinkChange('/purOrder/details',this.state.id)
+        } else {
+          message.error('更新出错')
+        }
+      }  
+      this.queryOrderForm(object)   
+    }
+    if(!this.state.id) {
+      debugger;
+      object.callback = (id) => {
+        this.TableLinkChange('/purOrder/details',id)
+      }
+      this.queryOrderForm(object)
+    }
   }
 
   queryOrderForm = (data) => {
@@ -71,16 +86,47 @@ class PurOrderAdjust extends React.Component {
       payload: data
     })
   }
+
   componentDidMount() {
-    const { type = '', data = {} } = this.props.location.state;
+    console.log(this.props.location.state)
+    const { type = '', data = {} , adjustId } = this.props.location.state;
     debugger;
-    if(Object.keys(data).length) {
+    if(adjustId) {
+      this.setState({
+        id:adjustId
+      })
+      this.props.dispatch({
+        type:'purOrder/judgeDetailsOrderForm',
+        payload:adjustId
+      })
+    }
+    if(type == 'supermarket') {
       this.props.dispatch({
         type:'purOrder/mallPreOrder',
         payload:data
       })
     }
+    if(type == 'menu') {
+      const { id } = data
+      this.props.dispatch({
+        type:'purOrder/camenuPreOrder',
+        payload:id
+      })
+    }
+    if(type == 'S' || type == 'F') {
+      this.props.dispatch({
+        type:'purOrder/clearOrderTableForm'
+      })
+    }
   }
+  
+  // componentWillMount() {
+  //   debugger;
+  //   this.props.dispatch({
+  //     type:'purOrder/clearOrderTableForm'
+  //   })
+  // }
+
   //点击出现表单验证card
   showAlert = () => {
     this.setState({
@@ -88,13 +134,12 @@ class PurOrderAdjust extends React.Component {
     })
   }
 
-  purOrderSave = (pathname, rest) => {
-    const { props } = this
-    props.dispatch(routerRedux.push({
-      pathname,
-      ...rest
-    }))
-  }
+	TableLinkChange = (pathname, id) => {
+		this.props.dispatch(routerRedux.push({
+			pathname,
+			state: { id: id }
+		}))
+	}
 
   render() {
     const { alertPrice } = this.props

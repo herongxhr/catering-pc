@@ -2,12 +2,14 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:07:45 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-29 09:20:56
+ * @Last Modified time: 2019-03-29 19:40:53
  */
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag, message } from 'antd';
 import { connect } from 'dva';
 import Selectf from '../../../components/SelectIngredients';
+import moment from 'moment'
+import isNull from 'lodash/isNull'
 
 import './index.less'
 
@@ -35,13 +37,6 @@ class PurOrderTable extends PureComponent {
     return (newData || data).filter(item => item.id === key)[0];
   }
 
-  showModal = () => {
-    this.setState({
-      visible:true
-    })
-  }
-
-
   //请求供货商列表
   querySupplier = (params = {}) => {
     this.props.dispatch({
@@ -58,6 +53,8 @@ class PurOrderTable extends PureComponent {
 
 
   deleteMeal = (params) => {
+    console.log(params)
+    debugger;
     const { props } = this
     props.dispatch({
       type:'purOrder/delelteOrderTableForm',
@@ -70,6 +67,7 @@ class PurOrderTable extends PureComponent {
   }
 
   addMeal = (params) => {
+    params.editable = true
     this.props.dispatch({
       type: 'meal/addMeal',
       payload: params,
@@ -157,7 +155,6 @@ class PurOrderTable extends PureComponent {
      })
    }
 
-
   //请求食材选择器列表
    queryNewOrderSelectf = () => {
      const { props } = this
@@ -189,21 +186,6 @@ class PurOrderTable extends PureComponent {
         dataIndex: 'goodsName',
         width: '25%',
         render: (text, record) => {
-          if (record.editable) {
-            return (
-              <Select  															
-              open={false}
-              onDropdownVisibleChange={this.showModal} 
-              style={{ width: '218px' }} 
-              placeholder='请选择'>
-                <Option value="1">Jack</Option>
-                <Option value="2">Lucy</Option>
-                <Option value="3">Disabled</Option>
-                <Option value="4">yiminghe</Option>
-              </Select>
-
-            );
-          }
           return text;
         },
       },
@@ -222,7 +204,6 @@ class PurOrderTable extends PureComponent {
         render: (text, record) => {
           if(record.price.toString() == '0') {
             return <Input
-              // defaultValue={0}
               style={{ width: '70px',border:'1px solid red' }}
               autoFocus
               onChange={e => this.handleFieldChange(e, 'price', record.id)}
@@ -234,6 +215,7 @@ class PurOrderTable extends PureComponent {
             autoFocus
             onChange={e => this.handleFieldChange(e, 'price', record.id)}
             placeholder="单价"
+            defaultValue={text}
           />
         },
       },
@@ -242,13 +224,16 @@ class PurOrderTable extends PureComponent {
         key: 'quantity',
         dataIndex: 'quantity',
         render: (text, record) => {  //render里面三个参数的意思 text , record ,index  当前行的值，当前行数据，行索引
-          return (
-            <Input
+          if (record.editable) {
+            return (<Input
               onChange={e => this.handleFieldChange(e, 'quantity', record.id)}
               placeholder="0"
               style={{ width: '70px' }}
-            />
-          );
+              defaultValue={text}
+            />)
+          } else {
+            return text
+          }  
         },
       },
       {
@@ -256,23 +241,41 @@ class PurOrderTable extends PureComponent {
         key: 'supplierId',
         dataIndex: 'supplierId',
         render: (text, record) => {
-          return (
-            <Select onChange={this.handleSelectChange.bind(this, 'supplierId', record.id)} style={{ width: '218px' }} placeholder='请选择'>
-                {supplier.map(item => (
-                  <Option key={item.id} value={item.id}>{item.supplierName}</Option>
-                ))}
-            </Select>
-          );
+          console.log(record)
+          if(isNull(text)) {  //判断isNull
+            return (
+              <Select defaultValue={record.supplier.id} onChange={this.handleSelectChange.bind(this, 'supplierId', record.id)} style={{ width: '218px' }} placeholder='请选择'>
+              {supplier.map(item => (
+                <Option key={item.id} value={item.id}>{item.supplierName}</Option>
+              ))}
+              </Select>
+            )
+          }
+          if (record.editable) {  //可编辑
+            return (
+              <Select onChange={this.handleSelectChange.bind(this, 'supplierId', record.id)} style={{ width: '218px' }} placeholder='请选择'>
+              {supplier.map(item => (
+                <Option key={item.id} value={item.id}>{item.supplierName}</Option>
+              ))}
+              </Select>
+            )
+          } 
+          return text // 返回数据
         },
       },
       {
+        
         title: '配送日期',
         key: 'requiredDate',
         dataIndex: 'requiredDate',
         render: (text, record) => {
-          return (
-            <DatePicker onChange={this.handleDateChange.bind(this, 'requiredDate', record.id)} style={{ width: '130px' }} />
-          );
+          if (record.editable) {
+            return (
+              <DatePicker onChange={this.handleDateChange.bind(this, 'requiredDate', record.id)} style={{ width: '130px' }} />
+            )
+          } else {
+            return moment(text).format('YYYY-MM-DD')
+          }
         },
       },
       {
