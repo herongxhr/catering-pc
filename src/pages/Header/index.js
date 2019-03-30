@@ -52,10 +52,10 @@ const menuData = [
 class HeaderView extends Component {
     getMenuItems = menuData => {
         const { pathname } = this.props.location;
-        let matches;
+        let matches, matchItem;
         // 默认选择中首页菜单
         const matchUrl = (matches = pathname.match(/(\/[a-zA-Z0-9-]*)\/?/)[1]) === '/' ? '/home' : matches;
-        const selectedMenuItem = menuData.find(item => item.path === matchUrl).name;
+        const selectedMenuItem = (matchItem = menuData.find(item => item.path === matchUrl)) ? matchItem.name : '/home';
         const menuItems = menuData.slice(0, menuData.length - 1).map(menu => (
             <Menu.Item key={menu.name}>
                 <Link to={menu.path}>
