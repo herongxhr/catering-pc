@@ -19,7 +19,6 @@ export default {
     effects: {
         *camenuPreOrder({ payload }, { call, put }) {
             const data = yield call(camenuPreOrder, payload);
-            debugger;
             for(let i = 0; i < data.length; i++) {
                 data[i].goodsName = data[i].viewSku ? data[i].viewSku.wholeName : null
                 data[i].skuId = data[i].viewSku ? data[i].viewSku.id : null

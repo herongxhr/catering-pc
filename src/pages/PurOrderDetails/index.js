@@ -86,7 +86,6 @@ class PurOrderDetails extends React.Component {
 		const { location } = props
 		if (location.state) {
 			const { id = '' } = location.state;
-			debugger;
 			return { id }
 		}
 		return null;

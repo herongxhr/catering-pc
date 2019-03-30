@@ -87,6 +87,7 @@ class SelectDishes extends React.Component {
                     return currTDMeals.some(item => item.foodId === record.id)
                         ? <span>已选</span>
                         : <a onClick={e => {
+                            e.stopPropagation();
                             changeArrangedMeals(record, flag);
                         }}>选择</a>
                 }
@@ -160,11 +161,6 @@ class SelectDishes extends React.Component {
                             total: dishesData.total || 0,
                             showTotal: total => `共 ${total} 道菜`,
                             showQuickJumper: true
-                        }}
-                        onRow={record => {
-                            return {
-                                onClick: () => { this.handlePreviewItem(record.id) },
-                            };
                         }}
                     />
                 </div>

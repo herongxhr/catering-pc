@@ -23,7 +23,6 @@ export default class GoodsItem extends React.Component {
 
     render() {
         const {
-            deleteGoods,
             id,
             count,// 商品数量
             name,
@@ -34,6 +33,7 @@ export default class GoodsItem extends React.Component {
             // isCollected,
             img,
             attribute,
+            deleteGoods,
             changeGoodsNum
         } = this.props;
 
