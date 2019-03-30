@@ -46,7 +46,10 @@ const menuData = [
 ]
 class HeaderView extends Component {
     getMenuItems = menuData => {
-        const matchUrl = this.props.location.pathname.match(/(\/.+)\/?/)[0];
+        const { pathname } = this.props.location;
+        let matches;
+        // 默认选择中首页菜单
+        const matchUrl = (matches = pathname.match(/(\/.+)\/?/)) ? matches[0] : '/home';
         const selectedMenuItem = menuData.find(item => item.path === matchUrl).name;
         const menuItems = menuData.map(menu => (
             <Menu.Item key={menu.name}>
