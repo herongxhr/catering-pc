@@ -87,6 +87,7 @@ class SelectDishes extends React.Component {
                     return currTDMeals.some(item => item.foodId === record.id)
                         ? <span>已选</span>
                         : <a onClick={e => {
+                            e.stopPropagation();
                             changeArrangedMeals(record, flag);
                         }}>选择</a>
                 }

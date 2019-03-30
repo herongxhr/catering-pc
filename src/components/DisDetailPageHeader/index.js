@@ -44,14 +44,10 @@ class DisDetailPageHeader extends React.Component {
         }, {
             href: '/delivery',
             breadContent: statusConst[detailData.status]
-            // detailData.status === '0' || '1'
-            // ? '待配送'
-            // : detailData.status === '2' ? '待验收' : '已验收'
         }, {
             href: '/delivery',
             breadContent: '详情'
         }]
-        console.log( detailData.status,'1111')
         const content = (
             <Row >
                 <Col span={13} offset={1}>
