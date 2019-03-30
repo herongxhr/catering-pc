@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Select, Input, Table, Tag } from 'antd';
+import { withRouter } from "react-router";
 import styles from './index.module.less';
 
 const { Search } = Input;
@@ -33,6 +34,12 @@ class SelectDishes extends React.Component {
         });
     }
 
+    handlePreviewItem = id => {
+        this.props.history.push({
+            pathname:'/dishDetails',
+            state:{id:id} 
+        })
+    }
     componentDidMount() {
         this.filterToGetData()
     }
@@ -64,7 +71,7 @@ class SelectDishes extends React.Component {
                 dataIndex: 'img',
                 render: (_, record) => (
                     <a onClick={() => {
-                        this.handlePreviewItem(record);
+                        this.handlePreviewItem(record.id);
                     }}>查看</a>
                 )
             },
@@ -156,7 +163,7 @@ class SelectDishes extends React.Component {
                         }}
                         onRow={record => {
                             return {
-                                onClick: () => { },
+                                onClick: () => { this.handlePreviewItem(record.id) },
                             };
                         }}
                     />
@@ -171,5 +178,5 @@ class SelectDishes extends React.Component {
     }
 }
 
-export default SelectDishes;
+export default withRouter(SelectDishes);
 

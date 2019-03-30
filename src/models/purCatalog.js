@@ -35,7 +35,7 @@ export default {
         },
         *queryIngreDetail({payload}, { call, put }) {
             const data = yield call(queryIngreDetail,payload);
-            console.log(data)
+            //console.log(data)
             yield put({
                 type:'saveIngreDetail',
                 payload: data,

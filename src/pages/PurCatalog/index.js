@@ -80,12 +80,13 @@ class PurCatalog extends React.Component {
       y: e.pageY,
     }, () => {
       const { dispatch } = this.props;
-      const { skuId,id } = record
+      const skuId = record.skuId
+      const id= record.id
       dispatch({
         type: 'purCatalog/queryPriceHistory',
         payload: {
-          skuId,
-          id
+           skuId:skuId,
+           id:id
         }
       })
       if (this.state.show) {
@@ -124,10 +125,10 @@ class PurCatalog extends React.Component {
     }, {
       title: '分类',
       dataIndex: 'viewSku',
-      key: 'catalogName',
+      key: 'type',
       render: (text) => {
         return (
-          <span>{text.catalogName}</span>
+          <span>{text.type==='F' ? '辅料' : '食材'}</span>
         )
       }
     }, {

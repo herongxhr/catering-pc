@@ -6,10 +6,12 @@
  */
 import React from 'react'
 import DeliveryForm from '../DeliveryForm'
-import { Tag , Table} from 'antd'
+import { Tag , Table,Tooltip } from 'antd'
 import { withRouter } from "react-router";
 import './index.less'
 import moment from 'moment'
+import 'ant-design-pro/dist/ant-design-pro.css'; 
+import { CountDown } from 'ant-design-pro';
 
 class DeliveryTable extends React.Component {
   state = {
@@ -74,8 +76,14 @@ class DeliveryTable extends React.Component {
         dataIndex: 'Operation',
         key: 'Operation',
         render:(text,record)=>{
-         return ( record.replacementNum ? 
-              <span style={{color:'#FF9500'}}>有{record.replacementNum}个换货申请</span>
+          const replaceCommitTime = record.replaceCommitTime || ''
+          const targetTime = replaceCommitTime + 86400000;
+         return ( record.replaceStatus === '1' ? 
+              <Tooltip title={<span>倒计时逾期,系统将自动拒绝</span>}>
+                <span style={{color:'#FF9500'}}>有换货申请待审批
+                  <CountDown style={{ fontSize: 14 ,color:'red',marginLeft:5}} target={targetTime} />
+                </span>
+              </Tooltip>
               : ''
               )
         }
