@@ -120,7 +120,6 @@ export default {
             }
         },
         *queryDeleteByIds({ payload }, { call, put }) {
-            console.log(payload)
             const data = yield call(queryDeleteByIds, payload);
             yield put({
                 type: 'saveDeleteByIds',

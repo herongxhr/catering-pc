@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:07:45 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-30 11:21:02
+ * @Last Modified time: 2019-03-30 15:48:19
  */
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag, message } from 'antd';
@@ -138,14 +138,6 @@ class PurOrderTable extends PureComponent {
     // Can not select days before today and today
     return current && current < moment().endOf('day');
   }
-  
-  disabledDateTime = () => {
-    return {
-      disabledHours: () => this.range(0, 24).splice(4, 20),
-      disabledMinutes: () => this.range(30, 60),
-      disabledSeconds: () => [55, 56],
-    };
-  }
 
   //select选择的时候改变值
   handleSelectChange(fieldName, key, value) {
@@ -258,7 +250,7 @@ class PurOrderTable extends PureComponent {
         render: (text, record) => {
           if (isNull(text)) {  //判断isNull
             return (
-              <Select onChange={this.handleSelectChange.bind(this, 'supplierId', record.id)} style={{ width: '218px' }} placeholder='请选择'>
+              <Select defaultValue={record.id} onChange={this.handleSelectChange.bind(this, 'supplierId', record.id)} style={{ width: '218px' }} placeholder='请选择'>
                 {supplier.map(item => (
                   <Option key={item.id} value={item.id}>{item.supplierName}</Option>
                 ))}
@@ -284,13 +276,11 @@ class PurOrderTable extends PureComponent {
           const date = getYMD(requiredDate)
           return (
             <DatePicker 
-            defaultValue={moment(date, dateFormat)} 
+            defaultValue={requiredDate ? moment(date, dateFormat) : null} 
             onChange={this.handleDateChange.bind(this, 'requiredDate', record.id)} 
             style={{ width: '130px' }} 
             format="YYYY-MM-DD"
             disabledDate={this.disabledDate}
-            disabledTime={this.disabledDateTime}
-            showTime={{ defaultValue: moment('00:00:00') }}
             />
           )
         },

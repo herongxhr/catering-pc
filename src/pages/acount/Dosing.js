@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-24 10:39:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-30 10:04:36
+ * @Last Modified time: 2019-03-30 15:34:52
  */
 import React, { Fragment } from 'react'
 import {
@@ -84,7 +84,7 @@ class Dose extends React.Component {
   //请求食材选择器列表
   queryNewOrderSelectf = (e,type) => {
     //级联框数据
-    this.queryIngreType()
+    // this.queryIngreType()
     const { props } = this
     props.dispatch({
       type:'purOrder/queryOrderSelectf',
@@ -123,7 +123,6 @@ class Dose extends React.Component {
     const { dosingTable } = props
     const newData = dosingTable.map(item => ({ ...item }));
     const target = this.getRowByKey(key,newData)
-    // debugger;
     if(target) {
       target[fieldName] = e.target.value;
       props.dispatch({
@@ -167,7 +166,7 @@ class Dose extends React.Component {
   render() {
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const { dosingTable , modalSelect, purCatalog } = this.props
-    const ingreTypeList = purCatalog.ingreTypeList || []
+    // const ingreTypeList = purCatalog.ingreTypeList || []
     getFieldDecorator('keys', { initialValue: dosingTable });  // 给keys一个初始值
     const keys = getFieldValue('keys'); //获取输入控件的值
     const formItems = keys.map((k, index) => (
@@ -253,7 +252,7 @@ class Dose extends React.Component {
           mealArray={this.props.mealArray}
           visible={this.state.visible}
           modelSelect={modalSelect}
-          ingreTypeList={ingreTypeList}
+          // ingreTypeList={ingreTypeList}
         /> : null
         }
       </Fragment>

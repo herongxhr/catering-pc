@@ -1,8 +1,8 @@
 /*
  * @Author: suwei 
  * @Date: 2019-03-28 16:42:13 
- * @Last Modified by:   suwei 
- * @Last Modified time: 2019-03-28 16:42:13 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-30 14:02:16
  */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'dva/router';
@@ -54,9 +54,9 @@ class HeaderView extends Component {
         const { pathname } = this.props.location;
         let matches;
         // 默认选择中首页菜单
-        const matchUrl = (matches = pathname.match(/(\/[a-zA-Z0-9-]*)\/?/)) ? matches[1] : '/home';
-        const selectedMenuItem = menuData.find(item => item.path === matchUrl).name;
-        const menuItems = menuData.slice(0,menuData.length-1).map(menu => (
+        const matchUrl = pathname.match(/(\/[a-zA-Z0-9-]*)\/?/);
+        const selectedMenuItem = (matches = menuData.find(item => item.path === matchUrl)) ? matches.name : '/home';
+        const menuItems = menuData.slice(0, menuData.length - 1).map(menu => (
             <Menu.Item key={menu.name}>
                 <Link to={menu.path}>
                     <Icon type={menu.icon} />

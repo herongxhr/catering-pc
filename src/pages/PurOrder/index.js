@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-21 17:55:51 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-30 13:16:29
+ * @Last Modified time: 2019-03-30 15:34:52
  */
 import React from 'react';
 import { connect } from 'dva';
@@ -67,7 +67,6 @@ class PurOrder extends React.Component {
 	//下单
 	previewOrder = (e,record) => {
 		const { dispatch } = this.props;
-		debugger;
 		const payload = {}
 		payload.callback = (params) => {
 			if(params) {
