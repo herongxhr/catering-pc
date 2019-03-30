@@ -25,7 +25,6 @@ export default async function request(options) {
     //金鹏强
     let baseApi = 'http://192.168.5.149/';
 
-//     let baseApi = 'http://anpin.jgzh.test:9001/';
     try {
         const response = await axios({
             method: options.method,
