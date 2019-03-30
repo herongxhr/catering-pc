@@ -42,6 +42,11 @@ const menuData = [
         path: '/parameter',
         name: '台帐',
         icon: 'read'
+    },
+    {
+        path: '/Setting',
+        name: '设置',
+        icon: 'setting'
     }
 ]
 class HeaderView extends Component {
@@ -49,9 +54,9 @@ class HeaderView extends Component {
         const { pathname } = this.props.location;
         let matches;
         // 默认选择中首页菜单
-        const matchUrl = (matches = pathname.match(/(\/.+)\/?/)) ? matches[0] : '/home';
+        const matchUrl = (matches = pathname.match(/(\/[a-zA-Z0-9-]*)\/?/)) ? matches[1] : '/home';
         const selectedMenuItem = menuData.find(item => item.path === matchUrl).name;
-        const menuItems = menuData.map(menu => (
+        const menuItems = menuData.slice(0,menuData.length-1).map(menu => (
             <Menu.Item key={menu.name}>
                 <Link to={menu.path}>
                     <Icon type={menu.icon} />
@@ -73,7 +78,7 @@ class HeaderView extends Component {
                 {menuItems}
                 <Menu.Item
                     style={{ width: 60, textAlign: 'right', float: 'right' }}
-                    key="setting">
+                    key="设置">
                     <MenuDropDown />
                 </Menu.Item>
                 <Menu.Item

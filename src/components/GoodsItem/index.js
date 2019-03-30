@@ -64,7 +64,7 @@ export default class GoodsItem extends React.Component {
                                 value={count}
                                 min={1}
                                 size="small"
-                                onChange={value => changeGoodsNum(id, value)}
+                                onChange={value => changeGoodsNum(value, id)}
                             />
                         </div>
                     </span>

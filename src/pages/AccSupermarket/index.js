@@ -171,6 +171,7 @@ class AccSupermarket extends PureComponent {
 					cartDrawerVisible={cartDrawerVisible}
 					handleShowCartDrawer={this.handleShowCartDrawer}
 					handleHideCartDrawer={this.handleHideCartDrawer}
+					{...this.props}
 				/>
 			</div>
 		)
