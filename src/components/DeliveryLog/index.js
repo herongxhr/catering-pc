@@ -40,7 +40,7 @@ class DeliveryLog extends React.Component {
       key: 'operationTime',
       render:(text)=>{
         return(
-            <span>{moment(text).format("YYYY-MM-DD HH:mm:ss")}</span>
+           text ? <span>{moment(text).format("YYYY-MM-DD HH:mm:ss")}</span> : ''
         )
       }
     },{

@@ -41,8 +41,8 @@ class AccedProductBreakdown extends React.Component {
         return (
           record.skuId === record.distributionSkuId ?
             <span>{disviewSku.goodsName}</span> :
-            <div className='tabItem'>
-              <div style={{ textDecoration: 'line-through ' }}>{record.viewSku}</div>
+            <div>
+              <div style={{ textDecoration: 'line-through ' }}>{record.viewSku.goodsName}</div>
               <div><Badge status="warning" />{disviewSku.goodsName}</div>
             </div>
         )
@@ -55,7 +55,7 @@ class AccedProductBreakdown extends React.Component {
         return (
           record.skuId === record.distributionSkuId ?
             <span>{text}</span> :
-            <div className='tabItem'>
+            <div>
               <div style={{ textDecoration: 'line-through ' }}>{record.unit}</div>
               <div>{text}</div>
             </div>
@@ -69,7 +69,7 @@ class AccedProductBreakdown extends React.Component {
         return (
           record.skuId === record.distributionSkuId ?
             <span>{text}</span> :
-            <div className='tabItem'>
+            <div>
               <div style={{ textDecoration: 'line-through ' }}>{record.price}</div>
               <div>{text}</div>
             </div>
@@ -77,8 +77,8 @@ class AccedProductBreakdown extends React.Component {
       }
     }, {
       title: '数量',
-      dataIndex: 'distributionQuantity',
-      key: 'distributionQuantity',
+      dataIndex: 'validQuantity',
+      key: 'validQuantity',
       render:(text,record)=>{
         return (
           record.skuId === record.distributionSkuId ?
@@ -99,7 +99,7 @@ class AccedProductBreakdown extends React.Component {
           record.skuId === record.distributionSkuId ?
           <span>{record.distributionPrice * record.distributionQuantity}</span>
           :
-          <div className='tabItem'>
+          <div>
               <div style={{ textDecoration: 'line-through ' }}>{record.price*record.quantity}</div>
               <div>{record.distributionPrice * record.distributionQuantity}</div>
           </div>
@@ -114,7 +114,7 @@ class AccedProductBreakdown extends React.Component {
         return (
           record.skuId === record.distributionSkuId ?
             <span>{text}</span> :
-            <div className='tabItem'>
+            <div>
               <div style={{ textDecoration: 'line-through ' }}>无</div>
               <div>{text}</div>
             </div>
@@ -164,7 +164,7 @@ class AccedProductBreakdown extends React.Component {
           record.skuId === record.distributionSkuId ? 
           ( text ? <span>{moment(text).format('YYYY-MM-DD')}</span>
             : <span style={{ color: '#F5222D' }}>未上传</span>)
-         :  <div className='tabItem'>
+         :  <div>
               <div style={{ textDecoration: 'line-through ' }}>无</div>
               <div>
                 {text ? <span>{moment(text).format('YYYY-MM-DD')}</span>
@@ -182,7 +182,7 @@ class AccedProductBreakdown extends React.Component {
         return (record.skuId === record.distributionSkuId ? 
           ( text ? <span>{text}</span>
             : <span style={{ color: '#F5222D' }}>未上传</span>)
-         :  <div className='tabItem'>
+         :  <div>
               <div style={{ textDecoration: 'line-through ' }}>无</div>
               <div>
                 { text ? <span>{text}</span>
@@ -207,6 +207,7 @@ class AccedProductBreakdown extends React.Component {
               rowKey='id'
               dataSource={disOrderDetailVos}
               pagination={false}
+              rowClassName={(record) => record.skuId === record.distributionSkuId ? '' : 'tabItem'}
             />
           </div> : ''}
       </div>

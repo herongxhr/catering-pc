@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:07:45 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-30 15:48:19
+ * @Last Modified time: 2019-03-30 16:03:51
  */
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag, message } from 'antd';
@@ -250,7 +250,7 @@ class PurOrderTable extends PureComponent {
         render: (text, record) => {
           if (isNull(text)) {  //判断isNull
             return (
-              <Select defaultValue={record.id} onChange={this.handleSelectChange.bind(this, 'supplierId', record.id)} style={{ width: '218px' }} placeholder='请选择'>
+              <Select  onChange={this.handleSelectChange.bind(this, 'supplierId', record.id)} style={{ width: '218px' }} placeholder='请选择'>
                 {supplier.map(item => (
                   <Option key={item.id} value={item.id}>{item.supplierName}</Option>
                 ))}

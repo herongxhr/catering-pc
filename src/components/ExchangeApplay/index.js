@@ -41,28 +41,22 @@ class ExchangeApplay extends React.Component {
       payload: {
         ...params,
       }
-    })
+    }).then(
+      this.queryDistributionDetail
+    )
   }
   handleAgree = (params) => {
-    //console.log(params,'1111')
-    const { location } = this.props;
-    const id = location.state && location.state.id;
     const applyId= params.id
    this.queryExecute({
      id:applyId,
      approveStatus:'1',
-     distributionId:id
    })
   }
   handleRefuse = (params) => {
-    //console.log(params,'2222')
-    const { location } = this.props;
-    const id = location.state && location.state.id;
     const applyId= params.id
     this.queryExecute({
       id:applyId,
       approveStatus:'0',
-      distributionId:id
     })
   }
 
@@ -141,12 +135,7 @@ class ExchangeApplay extends React.Component {
       key: 'status',
       width: '20%',
       render: (text,record)=>{
-        if(record.status === '0'){
-          return (
-            <span></span>
-          )
-        }
-        if(record.status === '1'){
+        if(record.approveStatus === null){
           return(
             <div>
                <Fragment>
@@ -159,8 +148,7 @@ class ExchangeApplay extends React.Component {
                </Fragment>
             </div>
           )
-        }
-       if(record.status === '2'){
+        }else{
          return(
           <span>{record.approveStatus === '0' ? <span style={{color:'red'}}>已拒绝</span> : '已同意'}</span>
          ) 
@@ -169,9 +157,8 @@ class ExchangeApplay extends React.Component {
     }
     ];
     const { detailData = {} } = this.props
-    const replacementVoList = detailData.replacementVoList || []
-     const remark = replacementVoList[0] || {}
-     const total = replacementVoList.length ? replacementVoList.length : 0
+    const replacementVoList = detailData.replacementDetailVoList || []
+    const total = replacementVoList.length ? replacementVoList.length : 0
     return (
       // 换货申请的逻辑待修改
       <div className='exchangeApplay'>
@@ -189,7 +176,7 @@ class ExchangeApplay extends React.Component {
               rowKey='id'
               pagination={false}
               footer={() => <div className="changeMark">
-                换货备注：{remark.remark}
+                换货备注：{detailData.replaceRemark}
             </div>}
             />
           </div> : ''

@@ -11,13 +11,6 @@ export default class CartPage extends React.Component {
         const { FGoodData } = this.props;
         return FGoodData.records && FGoodData.records.find(item => item.skuId === skuId);
     }
-    // 改变商品数量
-    handleChangeNum = (id, value) => {
-        this.props.dispatch({
-            type: "accSupermarket/changeCartNum",
-            payload: { id, value }
-        })
-    }
 
     // 删除购物车中商品
     handleDeleteGoods = (id) => {

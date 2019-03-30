@@ -363,6 +363,16 @@ export function queryModalSelect(params) {
         }
     })
 }
+export function queryFoodDetail(params) {
+    return request({
+        method: 'get',
+        url: `/pub/food/${params.id}`,
+        data: {
+            showLoading: true,
+            params,
+        }
+    })
+}
 
 export function queryOrderForm(params) {
     const data = JSON.stringify(params)
@@ -743,8 +753,7 @@ export function queryExecute(params) {
     return request({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: '/catering/setting/favoriteSupplier',
-        url: `/catering/distribution/execute/${params.id}`,
+        url: `/catering/distribution/execute`,
         data: {
             axiosData: data
         }
