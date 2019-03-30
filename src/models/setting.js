@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-23 16:56:31 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-28 16:46:19
+ * @Last Modified time: 2019-03-30 15:32:12
  */
 import { queryCateringSupplier , queryCateringCatalog , querySaveSettingData , queryDosingTable , queryDeleteFavoriteSupplier, queryfavoriteSupplier, queryBaseView , querySendBaseView , queryModifyPassword , queryListQuery , querySupplier} from '../services/api';
 import { message } from 'antd';
@@ -142,7 +142,6 @@ export default {
 			//Input输入改变值
 			inputChangeDosingTable(state,{ payload }) {
 				// console.log(payload)
-				// debugger;
 				return {
 					...state,
 					dosingTable:payload

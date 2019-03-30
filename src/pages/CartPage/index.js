@@ -24,7 +24,8 @@ export default class CartPage extends React.Component {
         dispatch(routerRedux.push({
             pathname: '/purOrder/detail/adjust',
             state: {
-                type: 'supermarket',
+                channel: 'S',
+                type: 'F',
                 data: shoppingCart
             }
         }))
