@@ -19,7 +19,6 @@ export default {
     effects: {
         *camenuPreOrder({ payload }, { call, put }) {
             const data = yield call(camenuPreOrder, payload);
-            debugger;
             for(let i = 0; i < data.length; i++) {
                 data[i].goodsName = data[i].viewSku ? data[i].viewSku.wholeName : null
                 data[i].skuId = data[i].viewSku ? data[i].viewSku.id : null
@@ -33,7 +32,6 @@ export default {
         },
         *mallPreOrder({ payload }, { call, put }) {
             const data = yield call(mallPreOrder, payload);
-            debugger;
             for(let i = 0; i < data.length; i++) {
                 data[i].goodsName = data[i].viewSku ? data[i].viewSku.wholeName : null
                 data[i].skuId = data[i].viewSku ? data[i].viewSku.id : null
@@ -78,7 +76,6 @@ export default {
         *judgeDetailsOrderForm({ payload }, { call, put }) {
             const data = yield call(queryOrderDetails, payload);
             const { orderDetailVos } = data
-            debugger;
             for(let i = 0; i < orderDetailVos.length; i++) {
                 orderDetailVos[i].goodsName = orderDetailVos[i].viewSku.wholeName
                 orderDetailVos[i].skuId = orderDetailVos[i].viewSku.id
@@ -93,7 +90,6 @@ export default {
         },        
         *getOrderDetails({ payload }, { call, put }) {
             const data = yield call(queryOrderDetails, payload);
-            debugger;
             yield put({
                 type: 'savePurOrderDetails',
                 payload: data || {},
@@ -101,22 +97,17 @@ export default {
         },
         *queryOrderForm({ payload }, { call, put }) {
             const { id , callback } = payload
-            debugger;
             if(id) {
-                debugger;
                 const data = yield call(putOrderForm, payload);
                 callback(data)     
             } else {
-                debugger;
                 const data = yield call(queryOrderForm, payload);
                 callback(data) 
             }
         },
         *queryOrderPlace({ payload }, { call, put }) {
             const { callback , id } = payload
-            debugger;
             const data = yield call(queryOrderPlace, id);
-            debugger;
             callback(data)
             yield put({
                 type: 'saveOrderPlace',
@@ -150,7 +141,6 @@ export default {
             }
         },            
         saveMallPreOrder(state, { payload }) {
-            debugger;
             return {
                 ...state,
                 orderTableForm: payload

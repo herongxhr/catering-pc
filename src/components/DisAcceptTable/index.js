@@ -65,11 +65,12 @@ class DisAcceptTable extends Component {
       const records = this.props.records || []
         return ( 
         <div className="accepting">
-           <Table 
-           columns={Columns} 
-           dataSource={records} 
-           pagination={false}
-           rowKey="id"
+           <Table
+            size='small'
+            columns={Columns} 
+            dataSource={records} 
+            pagination={false}
+            rowKey="id"
            /> 
         </div>
         );

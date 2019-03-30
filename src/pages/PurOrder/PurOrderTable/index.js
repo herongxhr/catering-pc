@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 15:07:45 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-29 19:40:53
+ * @Last Modified time: 2019-03-30 11:21:02
  */
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, Popconfirm, DatePicker, Select, Tag, message } from 'antd';
@@ -10,13 +10,13 @@ import { connect } from 'dva';
 import Selectf from '../../../components/SelectIngredients';
 import moment from 'moment'
 import isNull from 'lodash/isNull'
+import { getYMD } from '../../../utils/utils'
 
 import './index.less'
 
 
 const Option = Select.Option;
-
-
+const dateFormat = 'YYYY/MM/DD';
 
 class PurOrderTable extends PureComponent {
   index = 0;
@@ -53,16 +53,14 @@ class PurOrderTable extends PureComponent {
 
 
   deleteMeal = (params) => {
-    console.log(params)
-    debugger;
     const { props } = this
     props.dispatch({
-      type:'purOrder/delelteOrderTableForm',
-      payload:params
+      type: 'purOrder/delelteOrderTableForm',
+      payload: params
     })
     props.dispatch({
       type: 'meal/removeMeal',
-      payload:params ,
+      payload: params,
     })
   }
 
@@ -73,8 +71,8 @@ class PurOrderTable extends PureComponent {
       payload: params,
     })
     this.props.dispatch({
-      type:'purOrder/addOrderTableForm',
-      payload:params
+      type: 'purOrder/addOrderTableForm',
+      payload: params
     })
   }
 
@@ -84,31 +82,31 @@ class PurOrderTable extends PureComponent {
     const { props } = this
     const { orderTableForm } = props
     const newData = orderTableForm.map(item => ({ ...item }));
-    const target = this.getRowByKey(key,newData)
-    if(target) {
-      if(changeValue == 0) {
+    const target = this.getRowByKey(key, newData)
+    if (target) {
+      if (changeValue == 0) {
         props.dispatch({
-          type:'purOrder/priceVerify',
-          payload:true
-        })    
-      }
-      if(changeValue < 0) {
-        props.dispatch({
-          type:'purOrder/priceVerify',
-          payload:true
+          type: 'purOrder/priceVerify',
+          payload: true
         })
       }
-      if(changeValue > 0) {
+      if (changeValue < 0) {
         props.dispatch({
-          type:'purOrder/priceVerify',
-          payload:false
+          type: 'purOrder/priceVerify',
+          payload: true
+        })
+      }
+      if (changeValue > 0) {
+        props.dispatch({
+          type: 'purOrder/priceVerify',
+          payload: false
         })
       }
 
       target[fieldName] = changeValue;
       props.dispatch({
-        type:'purOrder/InputorderForm',
-        payload:newData
+        type: 'purOrder/InputorderForm',
+        payload: newData
       })
     }
   }
@@ -122,10 +120,31 @@ class PurOrderTable extends PureComponent {
     if (target) {
       target[fieldName] = dateString;
       props.dispatch({
-        type:'purOrder/InputorderForm',
-        payload:newData
+        type: 'purOrder/InputorderForm',
+        payload: newData
       })
     }
+  }
+
+  range = (start, end) => {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  }
+  
+  disabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current < moment().endOf('day');
+  }
+  
+  disabledDateTime = () => {
+    return {
+      disabledHours: () => this.range(0, 24).splice(4, 20),
+      disabledMinutes: () => this.range(30, 60),
+      disabledSeconds: () => [55, 56],
+    };
   }
 
   //select选择的时候改变值
@@ -137,46 +156,46 @@ class PurOrderTable extends PureComponent {
     if (target) {
       target[fieldName] = value;
       props.dispatch({
-        type:'purOrder/InputorderForm',
-        payload:newData
+        type: 'purOrder/InputorderForm',
+        payload: newData
       })
     }
   }
 
   handleModalVisble = (params) => {
     this.setState({
-     visible:false,
-    }) 
-   }
- 
-   handleModalHidden = () => {
-     this.setState({
-       visible:false
-     })
-   }
+      visible: false,
+    })
+  }
+
+  handleModalHidden = () => {
+    this.setState({
+      visible: false
+    })
+  }
 
   //请求食材选择器列表
-   queryNewOrderSelectf = () => {
-     const { props } = this
-     props.dispatch({
-       type:'purOrder/queryOrderSelectf',
-       payload:{
-         cateringId:'f970fb8a4e99402da175dba8ca87ef1c'
-       },       
+  queryNewOrderSelectf = () => {
+    const { props } = this
+    props.dispatch({
+      type: 'purOrder/queryOrderSelectf',
+      payload: {
+        cateringId: 'f970fb8a4e99402da175dba8ca87ef1c'
+      },
       callback: (value) => {
         this.setState({
           visible: true,
-          value:value
+          value: value
         });
       },
-     }) 
-   }
+    })
+  }
 
-   componentWillMount() {
+  componentWillMount() {
     this.props.dispatch({
       type: 'meal/clearMeal',
     })
-   }
+  }
 
   render() {
     const tabColumns = [
@@ -202,9 +221,9 @@ class PurOrderTable extends PureComponent {
         key: 'price',
         dataIndex: 'price',
         render: (text, record) => {
-          if(record.price.toString() == '0') {
+          if (record.price.toString() == '0') {
             return <Input
-              style={{ width: '70px',border:'1px solid red' }}
+              style={{ width: '70px', border: '1px solid red' }}
               autoFocus
               onChange={e => this.handleFieldChange(e, 'price', record.id)}
               placeholder="单价"
@@ -224,16 +243,12 @@ class PurOrderTable extends PureComponent {
         key: 'quantity',
         dataIndex: 'quantity',
         render: (text, record) => {  //render里面三个参数的意思 text , record ,index  当前行的值，当前行数据，行索引
-          if (record.editable) {
-            return (<Input
-              onChange={e => this.handleFieldChange(e, 'quantity', record.id)}
-              placeholder="0"
-              style={{ width: '70px' }}
-              defaultValue={text}
-            />)
-          } else {
-            return text
-          }  
+          return (<Input
+            onChange={e => this.handleFieldChange(e, 'quantity', record.id)}
+            placeholder="0"
+            style={{ width: '70px' }}
+            defaultValue={text}
+          />)
         },
       },
       {
@@ -241,41 +256,43 @@ class PurOrderTable extends PureComponent {
         key: 'supplierId',
         dataIndex: 'supplierId',
         render: (text, record) => {
-          console.log(record)
-          if(isNull(text)) {  //判断isNull
-            return (
-              <Select defaultValue={record.supplier.id} onChange={this.handleSelectChange.bind(this, 'supplierId', record.id)} style={{ width: '218px' }} placeholder='请选择'>
-              {supplier.map(item => (
-                <Option key={item.id} value={item.id}>{item.supplierName}</Option>
-              ))}
-              </Select>
-            )
-          }
-          if (record.editable) {  //可编辑
+          if (isNull(text)) {  //判断isNull
             return (
               <Select onChange={this.handleSelectChange.bind(this, 'supplierId', record.id)} style={{ width: '218px' }} placeholder='请选择'>
+                {supplier.map(item => (
+                  <Option key={item.id} value={item.id}>{item.supplierName}</Option>
+                ))}
+              </Select>
+            )
+          } //可编辑
+          return (
+            <Select onChange={this.handleSelectChange.bind(this, 'supplierId', record.id)} style={{ width: '218px' }} placeholder='请选择'>
               {supplier.map(item => (
                 <Option key={item.id} value={item.id}>{item.supplierName}</Option>
               ))}
-              </Select>
-            )
-          } 
-          return text // 返回数据
+            </Select>
+          )
         },
       },
       {
-        
+
         title: '配送日期',
         key: 'requiredDate',
         dataIndex: 'requiredDate',
         render: (text, record) => {
-          if (record.editable) {
-            return (
-              <DatePicker onChange={this.handleDateChange.bind(this, 'requiredDate', record.id)} style={{ width: '130px' }} />
-            )
-          } else {
-            return moment(text).format('YYYY-MM-DD')
-          }
+          const { requiredDate } = record
+          const date = getYMD(requiredDate)
+          return (
+            <DatePicker 
+            defaultValue={moment(date, dateFormat)} 
+            onChange={this.handleDateChange.bind(this, 'requiredDate', record.id)} 
+            style={{ width: '130px' }} 
+            format="YYYY-MM-DD"
+            disabledDate={this.disabledDate}
+            disabledTime={this.disabledDateTime}
+            showTime={{ defaultValue: moment('00:00:00') }}
+            />
+          )
         },
       },
       {
@@ -292,7 +309,7 @@ class PurOrderTable extends PureComponent {
         }
       }
     ];
-    const { loading,  visible } = this.state;
+    const { loading, visible } = this.state;
     const { supplier } = this.props
     //解数据
     const { value } = this.state
@@ -327,26 +344,26 @@ class PurOrderTable extends PureComponent {
           添加
         </Button>
 
-       {
-         visible ? <Selectf 
-          dataSource={records} 
-          handleModalVisble={this.handleModalVisble} 
-          handleModalHidden={this.handleModalHidden}
-          addMeal={this.addMeal}
-          deleteMeal={this.deleteMeal}
-          mealArray={this.props.mealArray}
-          visible={this.state.visible}
-          
-        /> : null
-       }
+        {
+          visible ? <Selectf
+            dataSource={records}
+            handleModalVisble={this.handleModalVisble}
+            handleModalHidden={this.handleModalHidden}
+            addMeal={this.addMeal}
+            deleteMeal={this.deleteMeal}
+            mealArray={this.props.mealArray}
+            visible={this.state.visible}
+
+          /> : null
+        }
       </Fragment>
     );
   }
 }
 
-export default connect(({purOrder,meal,setting})=>({
-  orderTableForm:purOrder.orderTableForm,
+export default connect(({ purOrder, meal, setting }) => ({
+  orderTableForm: purOrder.orderTableForm,
   mealArray: meal.mealArray,
-  supplier:setting.supplier
+  supplier: setting.supplier
 }))
-(PurOrderTable);
+  (PurOrderTable);

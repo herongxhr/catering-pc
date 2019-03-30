@@ -1,8 +1,8 @@
 /*
  * @Author: suwei 
  * @Date: 2019-03-30 09:05:16 
- * @Last Modified by:   suwei 
- * @Last Modified time: 2019-03-30 09:05:16 
+ * @Last Modified by: suwei
+ * @Last Modified time: 2019-03-30 09:16:44
  */
 import React from 'react'
 import { Select, DatePicker, Input, Form } from "antd";
@@ -24,11 +24,11 @@ export default class OrderFilter extends React.Component {
             label="日期选择:"
           >
             <RangePicker
-            style={{ width: 240 }}
-            onChange={(_, dateStrings) => {
-              let [startDate, endDate] = dateStrings;
-              handleFilter({ startDate, endDate, })
-            }} />
+              style={{ width: 240 }}
+              onChange={(_, dateStrings) => {
+                let [startDate, endDate] = dateStrings;
+                handleFilter({ startDate, endDate, })
+              }} />
           </Form.Item>
           <Form.Item
             label="订单来源:"
@@ -42,7 +42,7 @@ export default class OrderFilter extends React.Component {
               <Option value="M">菜单生成</Option>
               <Option value="S">辅料超市</Option>
               <Option value="N">自建订单</Option>
-          </Select>
+            </Select>
           </Form.Item>
           <Form.Item>
             <Search

@@ -2,7 +2,7 @@
  * @Author: suwei 
  * @Date: 2019-03-20 14:41:40 
  * @Last Modified by: suwei
- * @Last Modified time: 2019-03-29 17:50:28
+ * @Last Modified time: 2019-03-30 11:28:16
  */
 import React, { Fragment } from 'react'
 import Bread from '../../../components/Bread'
@@ -120,12 +120,6 @@ class PurOrderAdjust extends React.Component {
     }
   }
   
-  // componentWillMount() {
-  //   debugger;
-  //   this.props.dispatch({
-  //     type:'purOrder/clearOrderTableForm'
-  //   })
-  // }
 
   //点击出现表单验证card
   showAlert = () => {
