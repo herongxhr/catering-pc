@@ -1,28 +1,15 @@
 import React from 'react';
-import { Link } from 'dva/router';
-import { connect } from 'dva';
 import { routerRedux } from 'dva/router'
 import { Drawer, Badge, Icon, List, Row, Col } from 'antd';
 import GoodsItem from '../../components/GoodsItem';
 import styles from './index.module.less';
 
-class CartPage extends React.Component {
-    // 显示购物车页面
-    showCartDrawer = () => {
-        this.props.dispatch({
-            type: 'accSupermarket/showCartDrawer',
-        })
-    }
-    // 隐藏购物车页面
-    hideCartDrawer = () => {
-        this.props.dispatch({
-            type: 'accSupermarket/hideCartDrawer',
-        })
-    }
+export default class CartPage extends React.Component {
+
     // 返回id相匹配的商品
-    getDetailByGoodsId = (id) => {
+    getDetailByGoodsId = skuId => {
         const { FGoodData } = this.props;
-        return FGoodData.records && FGoodData.records.find(item => item.id === id);
+        return FGoodData.records && FGoodData.records.find(item => item.skuId === skuId);
     }
     // 改变商品数量
     handleChangeNum = (id, value) => {
@@ -53,15 +40,18 @@ class CartPage extends React.Component {
     render() {
         const {
             className,
-            showCartDrawer,
+            cartDrawerVisible,
             shoppingCart,
+            changeGoodsNum,
+            handleShowCartDrawer,
+            handleHideCartDrawer
         } = this.props;
         // 购物车中商品数量
         let countCart = shoppingCart.length;
         // 购物车详情标题
         const cartPageTitle = (
             <Badge
-                onClick={this.showCartDrawer}
+                onClick={handleShowCartDrawer}
                 className={styles.titleWithBadge}
                 count={countCart} >
                 <Icon type="shopping-cart" className={styles.shoppingCartIcon} />
@@ -97,8 +87,8 @@ class CartPage extends React.Component {
                     title={cartPageTitle}
                     closable={true}
                     width={470}
-                    onClose={this.hideCartDrawer}
-                    visible={showCartDrawer}
+                    onClose={handleHideCartDrawer}
+                    visible={cartDrawerVisible}
                     zIndex={99999}
                 >
                     <div className={'itemWrap'}>
@@ -108,13 +98,12 @@ class CartPage extends React.Component {
                                 return (
                                     <List.Item
                                         style={{ padding: 0 }}
-                                        key={item.id}
+                                        key={item.skuId}
                                     >
                                         <GoodsItem
-                                            changeNum={this.handleChangeNum}
-                                            deleteGoods={this.handleDeleteGoods}
+                                            changeGoodsNum={changeGoodsNum}
                                             count={item.quantity}
-                                            {...this.getDetailByGoodsId(item.id)}
+                                            {...this.getDetailByGoodsId(item.skuId)}
                                         />
                                     </List.Item>
                                 )
@@ -127,7 +116,3 @@ class CartPage extends React.Component {
         )
     }
 }
-
-export default connect(({ accSupermarket }) => ({
-    ...accSupermarket
-}))(CartPage)

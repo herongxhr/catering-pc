@@ -12,31 +12,30 @@ const history = createHistory();
 /**
  * 新建模板与编辑模板共用一个页面
  */
-class NewTemplate extends Component {
+class CustomTemplate extends Component {
   state = {
-    menuTemplateId: '',
-    templateFrom: '',
-    templateName: '',
-    tag: '' // 模板标签
+    id: '',
+    templateType: '',
   }
 
   static getDerivedStateFromProps(props) {
     const { location } = props;
     // 编辑模式才有state
     if (location.state) {
-      const { menuTemplateId = '', templateFrom = '' } = location.state;
-      return {
-        menuTemplateId,
-        templateFrom,
-      }
+      const { id = '', templateType = '' } = location.state;
+      return { id, templateType, }
     }
     return null;
   }
 
   // 输入模板名称
   handleTemplateNameInput = e => {
-    this.setState({ templateName: e.target.value });
+    this.props.dispatch({
+      type: 'menuCenter/handleTemplateNameInput',
+      payload: e.target.value
+    })
   }
+
   // 编辑标签的回调
   editTag = (tag, flag) => {
     this.props.dispatch({
@@ -50,55 +49,53 @@ class NewTemplate extends Component {
   }
 
   handleClickOk = () => {
-    // 从局部state中取数据，再向后端传数据
-    const { templateName } = this.state;
+    // 新建id为undefined, 请求方法会根据有无id请求不同接口
+    const { id } = this.state;
+    const { templateName } = this.props;
     if (!templateName) {
       this.warning();
       return;
     }
+    // 向后端传送数据
     this.props.dispatch({
-      type: 'menuCenter/newTemplate',
-      payload: templateName 
-    });
+      type: 'menuCenter/customTemplate',
+      payload: { id, callback: this.goTemplateDetails }
+    })
+  }
+
+  // 跳转到详情页
+  // 同时传递后端返回的id和局部state中保存的templateType
+  goTemplateDetails = () => {
+    this.success();
+    this.props.dispatch(routerRedux.push({
+      pathname: '/menubar/menu-template/details',
+      state: { ...this.state }
+    }));
   }
 
   success = () => {
-    message.success('模板新建成功')
+    message.success('模板保存成功')
   }
+
   warning = () => {
     message.warning('请输入模板名称');
   };
 
   componentDidMount() {
-    const { menuTemplateId, templateFrom } = this.state;
+    console.log('4didMout', this.props)
+    const { id, templateType } = this.state;
     // 如果是从编辑模板，要获取相应模板的详情
-    if (menuTemplateId) {
-     this.props.dispatch({
-        type: `menuCenter/fetch${templateFrom}TemplateDetails`,
-        payload: menuTemplateId
+    if (id) {
+      this.props.dispatch({
+        type: `menuCenter/fetch${templateType}TemplateDetails`,
+        payload: id
       })
     }
   }
 
-  componentDidUpdate() {
-    const { dispatch, newTemplateResult } = this.props;
-    // 如果createMenuDataResult有id，即为true,定向到详情页
-    if (newTemplateResult) {
-      this.success();
-      dispatch(routerRedux.push({
-        pathname: '/menubar/menu-template/details',
-        // 传递后端返回的id
-        state: { 
-          id: newTemplateResult,
-          templateFrom: 'P'
-        }
-      }))
-    }
-  }
-
   render() {
-    const { location, loading, tagString } = this.props;
-    const isLoading = loading.effects['menuCenter/newTemplate'];
+    const { location, loading, tagString, templateName } = this.props;
+    const isLoading = loading.effects['menuCenter/customTemplate'];
     return (
       <div>
         <BreadcrumbComponent {...location} />
@@ -111,6 +108,7 @@ class NewTemplate extends Component {
                 <Col>
                   <Input
                     allowClear
+                    value={templateName}
                     onChange={this.handleTemplateNameInput} />
                 </Col>
               </Row>
@@ -149,4 +147,4 @@ class NewTemplate extends Component {
 export default connect(({ menuCenter, loading }) => ({
   loading,
   ...menuCenter
-}))(NewTemplate);
+}))(CustomTemplate);

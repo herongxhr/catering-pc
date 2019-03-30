@@ -53,7 +53,8 @@ class AccSupermarket extends PureComponent {
 		this.getCatalogF();
 		this.setState(params);
 		// 如果params中有catalogId属性，也就是点击了分类
-		this.getBrands({ catalogId: params.catalogId || '' });
+		const brandParams = params.catalogId ? { catalogId: params } : undefined;
+		this.getBrands(brandParams);
 		this.props.dispatch({
 			type: 'accSupermarket/fetchFGoods',
 			payload: {
@@ -63,16 +64,30 @@ class AccSupermarket extends PureComponent {
 		})
 	}
 	// 显示购物车页面
-	showCartDrawer = () => {
+	handleShowCartDrawer = () => {
 		this.props.dispatch({
 			type: 'accSupermarket/showCartDrawer',
 		})
 	}
+	// 隐藏购物车页面
+	handleHideCartDrawer = () => {
+		this.props.dispatch({
+			type: 'accSupermarket/hideCartDrawer',
+		})
+	}
 	// 加购物车功能
-	handleAddToCart = (id, quantity) => {
+	addToCart = skuId => {
 		this.props.dispatch({
 			type: 'accSupermarket/addToCart',
-			payload: { id, quantity }
+			payload: { skuId }
+		})
+	}
+	// 只要修改数量，将改过数量的商品
+	// 商品的id和改后的值保存到state中
+	changeGoodsNum = (qty, id) => {
+		this.props.dispatch({
+			type: 'accSupermarket/changeGoodsNum',
+			payload: { qty, id }
 		})
 	}
 
@@ -86,6 +101,7 @@ class AccSupermarket extends PureComponent {
 			catalogList,
 			brandList,
 			FGoodData,
+			cartDrawerVisible,
 		} = this.props;
 		const records = FGoodData.records || [];
 		const total = FGoodData.total || 0;
@@ -94,7 +110,7 @@ class AccSupermarket extends PureComponent {
 		// 悬浮购物车图标
 		const cartSquare = (
 			<div className="shoppingCart">
-				<Badge onClick={this.showCartDrawer} className="cartInner" count={shoppingCart.length} >
+				<Badge onClick={this.handleShowCartDrawer} className="cartInner" count={shoppingCart.length} >
 					<Icon type="shopping-cart" style={{ fontSize: 20 }} />
 					<div className="cartText">购物车</div>
 				</Badge>
@@ -120,6 +136,7 @@ class AccSupermarket extends PureComponent {
 						brandList={brandList}
 						getBrands={this.getBrands}
 						getFGoods={this.getFGoods}
+						changeGoodsNum={this.changeGoodsNum}
 						catalogId={catalogId}
 						brand={brand}
 						notInclude={notInclude}
@@ -129,7 +146,8 @@ class AccSupermarket extends PureComponent {
 				{/* 筛选商品结果列表 */}
 				<div className="goodsCardList">
 					<FGoodList
-						handleAddToCart={this.handleAddToCart}
+						addToCart={this.addToCart}
+						changeGoodsNum={this.changeGoodsNum}
 						records={records} />
 					<Pagination
 						style={{ float: 'right', marginBottom: 20 }}
@@ -146,7 +164,14 @@ class AccSupermarket extends PureComponent {
 				{cartSquare}
 
 				{/* 购物车详情页 */}
-				<CartPage {...this.props} />
+				<CartPage
+					FGoodData={FGoodData}
+					changeGoodsNum={this.changeGoodsNum}
+					shoppingCart={shoppingCart}
+					cartDrawerVisible={cartDrawerVisible}
+					handleShowCartDrawer={this.handleShowCartDrawer}
+					handleHideCartDrawer={this.handleHideCartDrawer}
+				/>
 			</div>
 		)
 	}

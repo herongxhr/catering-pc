@@ -38,7 +38,7 @@ export default class MenuTemplateCard extends React.Component {
       (<span>创建于：{getYMDHms(itemData.createDate)}</span>);
     const cTemplateCardFooter = !this.state.cardHover
       ? [templateCreateTime]
-      : [<span id='saveAsMy'> 保存为我的模板</span>, <span id='useIt'>使用</span>]
+      : [<span id='saveAsMy'> 保存为我的模板</span>, <span id='preview'>查看</span>]
 
     const pTemplateCardFooter = !this.state.cardHover
       ? [templateCreateTime]
@@ -48,6 +48,7 @@ export default class MenuTemplateCard extends React.Component {
         onConfirm={this.handleDelete}>
         <span id='delete'>删除</span>
       </Popconfirm>,
+      <span id='update'>编辑</span>,
       <span id='view'>查看</span>]
     return (
       <Spin spinning={spinning}>
