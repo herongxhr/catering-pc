@@ -13,7 +13,8 @@ import {
     toCopyTemplate,
     toDeleteTemplate,
     toSaveAsMyTemplate,
-    queryHasAnyTemplate
+    queryHasAnyTemplate,
+    queryFoodDetail
 } from '../services/api';
 
 export default {
@@ -40,7 +41,8 @@ export default {
         newTemplateResult: '',
         // 模板标签
         tagString: '',
-        queryHasAnyTemplate: 0
+        queryHasAnyTemplate: 0,
+        dishDetailData:{}
     },
     effects: {
         // 获取菜单列表,统一接口
@@ -185,6 +187,14 @@ export default {
                 payload: data || {}
             })
         },
+        *queryFoodDetail({ payload }, { call, put }) {
+            const data = yield call(queryFoodDetail, payload);
+            console.log(data)
+            yield put({
+                type: 'saveDishesDetail',
+                payload: data || {}
+            })
+        },
     },
     reducers: {
         // 保存菜单列表数据
@@ -296,6 +306,12 @@ export default {
             return {
                 ...state,
                 queryHasAnyTemplate: payload
+            }
+        },
+        saveDishesDetail(state, { payload }) {
+            return {
+                ...state,
+                dishDetailData: payload
             }
         },
         // 根据flag确定是增加还是删除

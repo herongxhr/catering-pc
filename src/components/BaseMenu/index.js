@@ -6,16 +6,13 @@
  */
 import React, { Component } from 'react';
 import { Link } from 'dva/router';
-import { Menu, Icon, Badge  } from 'antd';
+import { Menu, Icon, Badge } from 'antd';
 import logo from './logo.png';
 import MenuDropDown from '../MenuDropDown'
 import './index.less'
 import { withRouter } from "react-router";
 
 class BaseMenu extends Component {
-	state={
-		currentUrl : '/home'
-	}
 	render() {
 		return (
 			<div className='jWrapper'>
@@ -26,7 +23,7 @@ class BaseMenu extends Component {
 					className="baseMenu"
 				>
 					<Menu.Item disabled style={{ width: 125 }} key="logo">
-							<img src={logo} alt="安品" />
+						<img src={logo} alt="安品" />
 					</Menu.Item>
 					<Menu.Item key="home">
 						<Link to='/home'>
@@ -91,4 +88,4 @@ class BaseMenu extends Component {
 	}
 }
 
-export default withRouter(BaseMenu) ;
+export default withRouter(BaseMenu);

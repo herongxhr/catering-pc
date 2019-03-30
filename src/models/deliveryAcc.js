@@ -14,7 +14,7 @@ export default {
     effects: {
         *queryDelivery({payload}, { call, put }) {
             const data = yield call(queryDelivery,payload);
-           console.log(data)
+           // console.log(data)
             yield put({
                 type:'saveDelivery',
                 payload: data,
@@ -22,7 +22,6 @@ export default {
         },
         *queryCount({payload}, { call, put }) {
             const data = yield call(queryCount,payload);
-            //console.log(data)
             yield put({
                 type:'savecount',
                 payload: data,
@@ -38,16 +37,10 @@ export default {
         },
         *queryExecute({payload}, { call, put }) {
             const data = yield call(queryExecute,payload);
-             //console.log(data,'11111')
             yield put({
                 type:'saveExecute',   
                 payload: data,
             })
-            if(data){
-                yield put({
-                    type: 'queryDistributionDetail',
-                })
-            }
         },
         *queryTicket({payload}, { call, put }) {
             const data = yield call(queryTicket,payload);

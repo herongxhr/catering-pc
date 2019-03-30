@@ -31,25 +31,34 @@ class DisDetailPageHeader extends React.Component {
     render() {
         const { detailData = {} } = this.props
         const supplier=detailData.supplier || {}
+        const order = detailData.order || {}
+        const statusConst = {
+            '0':'待配送',
+            '1':'待配送',
+            '2':'待验收',
+            '3':'已验收'
+        }
         const bread = [{
             href: '/delivery',
             breadContent: '配送验收'
         }, {
             href: '/delivery',
-            breadContent: detailData.status === '1'
-            ? '待配送'
-            : (detailData.status === '2' ? '待验收' : '已验收')
+            breadContent: statusConst[detailData.status]
+            // detailData.status === '0' || '1'
+            // ? '待配送'
+            // : detailData.status === '2' ? '待验收' : '已验收'
         }, {
             href: '/delivery',
             breadContent: '详情'
         }]
+        console.log( detailData.status,'1111')
         const content = (
             <Row >
                 <Col span={13} offset={1}>
                     <Description term="来源订单：">
                         <a onClick={() => {
                             this.props.history.push(
-                                { pathname: "/purOrder/details", state: {} }
+                                { pathname: "/purOrder/details", state: {id:order.id} }
                             )
                         }}>{detailData.orderNo}</a>
                     </Description>
@@ -72,9 +81,9 @@ class DisDetailPageHeader extends React.Component {
         const extraContent = (
             <Row>
                 <Col span={14}><Statistic title="状态"
-                    value={detailData.status === '1'
-                        ? '待配送'
-                        : (detailData.status === '2' ? '待验收' : '已验收')} /></Col>
+                    value={detailData.status === '0'
+                        ? '待启动'
+                        : (detailData.status === '1' ? '换货中' : detailData.status === '2' ? '待验收' : '已验收')} /></Col>
                 <Col span={10}>
                     <Statistic title="总金额" prefix="￥"
                         value={detailData.total ? detailData.total : '0' } />
