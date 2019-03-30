@@ -3,6 +3,7 @@ import {
     queryMenuData,
     queryMenuDetails,
     toUpdateMenu,
+    toDeleteMyMenu,
     toNewMenu,
     queryPMenuTemplate,
     queryCMenuTemplate,
@@ -61,6 +62,9 @@ export default {
                 type: 'saveMenuDetails',
                 payload: data || {}
             });
+        },
+        *deleteMyMenu({ payload }, { call }) {
+            yield call(toDeleteMyMenu, payload);
         },
         // 新建或编辑模板
         *customMenu({ payload }, { call, put, select }) {

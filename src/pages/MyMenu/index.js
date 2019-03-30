@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Card, Badge } from 'antd';
+import { Table, Card, Badge, message } from 'antd';
 //import WrappedInlineForm from '../InlineForm';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
@@ -62,7 +62,7 @@ class MyMenu extends React.Component {
 	}
 
 	// 查看订单详情
-	handleShowDetail = record => {
+	handleView = record => {
 		this.props.dispatch(routerRedux.push({
 			pathname: `/menubar/my-menu/details`,
 			state: {
@@ -71,18 +71,36 @@ class MyMenu extends React.Component {
 			}
 		}));
 	}
+
+	// 查看订单详情
+	handleDelete = (e, record) => {
+		e.stopPropagation();
+		this.props.dispatch({
+			type: 'menuCenter/deleteMyMenu',
+			payload: record.id
+		}).then(this.success)
+			.then(this.getMenuData);
+	}
+	
 	// 获取我的菜单数据
-	getMenuData = (params = {}) => {
-		this.setState({
-			queryParams: params
-		});
+	handleFilter = (params = {}) => {
+		this.setState(
+			{ queryParams: params },
+			() => this.getMenuData()
+		)
+	}
+
+	getMenuData = () => {
 		this.props.dispatch({
 			type: 'menuCenter/fetchMenuData',
 			payload: {
 				...this.state.queryParams,
-				...params
 			}
 		});
+	}
+
+	success() {
+		message.success('菜单删除成功')
 	}
 
 	componentDidMount() {
@@ -138,8 +156,11 @@ class MyMenu extends React.Component {
 				title: '操作',
 				dataIndex: 'status',
 				key: 'status',
-				render(text) {
-					return text === '未执行' ? <a>删除</a> : <span style={{ cursor: 'pointer' }}>查看</span>;
+				render: (text, record) => {
+					return text === '0'
+						? <a onClick={e => { this.handleDelete(e, record) }}>删除</a>
+						: <span onClick={() => this.handleView(record)}
+							style={{ cursor: 'pointer' }}>查看</span>;
 				}
 			}];
 		const { location, menuList } = this.props;
@@ -169,9 +190,9 @@ class MyMenu extends React.Component {
 							columns={tableColumns}
 							dataSource={menuList.records || []}
 							rowKey="id"
-							onRow={(record) => {
+							onRow={record => {
 								return {
-									onClick: () => this.handleShowDetail(record)
+									onClick: () => this.handleView(record)
 								}
 							}}
 							pagination={{

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Button, Divider, message } from 'antd';
+import { Row, Col, Card, Button, Divider, message, List } from 'antd';
 import { routerRedux } from 'dva/router';
 import TemplateCard from '../../components/TemplateCard';
 import BreadcrumbComponent from '../../components/BreadcrumbComponent';
@@ -84,25 +84,30 @@ class ChoiceTemplate extends React.Component {
           className='templateCardWrap'
           bodyStyle={{ padding: '30px 30px 0' }}
         >
-          <div className='cardsWrapper'>
-            {CMenuTemplateRecords.slice(0, 3).map(item =>
-              <div className='cardInner' key={item.id}>
+          <List
+            grid={{ gutter: 16, column: 3 }}
+            dataSource={CMenuTemplateRecords.slice(0, 3)}
+            renderItem={item => (
+              <List.Item style={{ marginBottom: 30 }}>
                 <TemplateCard
                   // 当前卡片与点击的卡片是同一个，并且是推荐模板
                   isSelect={item.id === menuTemplateId && templateFrom === 'C'}
                   templateFrom='C'
                   itemData={item}
                   handleTemplateActions={this.handleTemplateActions}>
-                </TemplateCard></div>
+                </TemplateCard>
+              </List.Item>
             )}
-          </div>
+          />
           {/* 分隔线 */}
           <Row>
             <Col><Divider orientation='left'>我的模板：</Divider></Col>
           </Row>
-          <div className='cardsWrapper'>
-            {PMenuTemplateRecords.slice(0, 6).map(item =>
-              (<div className='cardInner' key={item.id}>
+          <List
+            grid={{ gutter: 16, column: 3 }}
+            dataSource={PMenuTemplateRecords.slice(0, 6)}
+            renderItem={item => (
+              <List.Item style={{ marginBottom: 30 }}>
                 <TemplateCard
                   // 当前卡片与点击的卡片是同一个，并且不是推荐模板
                   isSelect={item.id === menuTemplateId && templateFrom === 'P'}
@@ -110,8 +115,9 @@ class ChoiceTemplate extends React.Component {
                   itemData={item}
                   handleTemplateActions={this.handleTemplateActions}>
                 </TemplateCard>
-              </div>))}
-          </div>
+              </List.Item>
+            )}
+          />
         </Card>
         <div className={'footerWrap'}>
           <div className={'footerBtn'}>

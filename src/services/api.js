@@ -226,6 +226,15 @@ export function toUpdateMenu(params) {//修改菜单数据
         }
     })
 }
+export function toDeleteMyMenu(id) {//删除我的菜单条目
+    return request({
+        method: 'delete',
+        url: `/catering/camenu/${id}`,
+        data: {
+            showLoading: true,
+        }
+    })
+}
 
 export function toNewMenu(params) {//新建菜单数据
     return request({
@@ -429,7 +438,7 @@ export function queryGoodsByOrderId(id) {
 export function queryOrderPlace(id) {
     return request({
         method: 'put',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         url: `catering/order/place/${id}`,
     })
 }
