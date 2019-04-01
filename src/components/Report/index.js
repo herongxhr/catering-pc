@@ -171,6 +171,7 @@ class Report extends React.Component {
             dataSource={records}
             rowKey="id"
             pagination={{ current, total }}
+            onChange={this.handleTableChange}
             onRow={(record) => {
               if (record.status != 1) {
                 return {
