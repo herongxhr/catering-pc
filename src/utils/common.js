@@ -21,7 +21,7 @@ export default async function request(options) {
     }
      // let baseApi = 'http://yapi.jgzh.com/mock/21/';
      //贾宇晓
-    let baseApi = 'http://anpin.jgzh.test:9001/';
+    let baseApi = 'http://anpin.jgzh.test:9002/';
      //金鹏强
     //  let baseApi = 'http://192.168.5.149/';
      //let baseApi = 'http://anpin.jpq.test/';

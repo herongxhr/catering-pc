@@ -33,7 +33,6 @@ const tabColumns = [
 		key: "unit",
 		dataIndex: "viewSku",
 		render:(text)=> {
-			console.log(text)
 			return text.unit
 		}
 	},
@@ -166,9 +165,6 @@ class PurOrderDetails extends React.Component {
 		})
 	}
 
-	//点击loadMore的时候拼接数据
-
-
 	componentDidMount() {
 		this.getOrderDetails()
 	}
@@ -181,7 +177,7 @@ class PurOrderDetails extends React.Component {
 		}
 		const {
 			location,
-			orderDetails,
+			orderDetails={},
 		} = this.props;
 		const {
 			...rest
@@ -263,7 +259,7 @@ class PurOrderDetails extends React.Component {
 			)
 		}
 
-		const { loading, data, visible } = this.state
+		const { loading, data, visible } = this.state 
 
 		const { delivery = {} } = this.props
 		const deliveryRecords = delivery.records || []
@@ -274,7 +270,7 @@ class PurOrderDetails extends React.Component {
 				{/* 页头容器 */}
 				<PageHeadWrapper
 					className={styles.pageHeadWrap}
-					title={`采购单号：${rest.orderNo}`}
+					title={`采购单号：${rest.orderNo ? rest.orderNo : ''}`}
 					logo={
 						<img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png" />
 					}

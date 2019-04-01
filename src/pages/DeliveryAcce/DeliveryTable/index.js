@@ -79,11 +79,10 @@ class DeliveryTable extends React.Component {
           const replaceCommitTime = record.replaceCommitTime || ''
           const targetTime = replaceCommitTime + 86400000;
          return ( record.replaceStatus === '1' ? 
-              <Tooltip title={<span>倒计时逾期,系统将自动拒绝</span>}>
-                <span style={{color:'#FF9500'}}>有换货申请待审批
-                  <CountDown style={{ fontSize: 14 ,color:'red',marginLeft:5}} target={targetTime} />
+                <span style={{color:'#FF9500',fontSize:12}}>有换货申请<br/>
+                  <span style={{color:'#E51C23',fontSize:12}}>剩余处理时间</span>
+                  <CountDown style={{ fontSize: 12 ,color:'#E51C23',marginLeft:5}} target={targetTime} />
                 </span>
-              </Tooltip>
               : ''
               )
         }

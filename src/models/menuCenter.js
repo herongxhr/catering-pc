@@ -186,7 +186,7 @@ export default {
         },
         *queryFoodDetail({ payload }, { call, put }) {
             const data = yield call(queryFoodDetail, payload);
-            console.log(data)
+            //console.log(data)
             yield put({
                 type: 'saveDishesDetail',
                 payload: data || {}

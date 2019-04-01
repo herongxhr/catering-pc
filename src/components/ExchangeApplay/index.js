@@ -9,7 +9,8 @@ import { connect } from 'dva';
 import './index.less'
 import { Alert, Tag, Table, Button, Popconfirm } from 'antd';
 import { withRouter } from "react-router";
-
+import 'ant-design-pro/dist/ant-design-pro.css'; 
+import { CountDown } from 'ant-design-pro';
 
 class ExchangeApplay extends React.Component {
   state = {
@@ -173,12 +174,21 @@ class ExchangeApplay extends React.Component {
     const { detailData = {} } = this.props
     const replacementVoList = detailData.replacementVoList || []
     const total = replacementVoList.length ? replacementVoList.length : 0
+    const replaceCommitTime = detailData.replaceCommitTime || ''
+    const targetTime = replaceCommitTime + 86400000;
     return (
       // 换货申请的逻辑待修改
       <div className='exchangeApplay'>
         <div className='exchangeHead'>
           <div className='exchangeTitle'>换货申请</div>
-          <Alert message={`共${total}条`} type="warning" showIcon className='alert' />
+            <Alert message={`共${total}条`} type="warning" showIcon className='alert' />
+            <Alert message={<span>
+                                <span style={{color:'#E51C23',fontSize:14}}>剩余处理时间</span>
+                                {replaceCommitTime ? 
+                                <CountDown style={{ fontSize: 14 ,color:'#E51C23',marginLeft:5}} target={targetTime} /> : ''}
+                            </span>}
+                  type="warning" showIcon className='changeTime' 
+                  style={{ backgroundColor: 'rgba(229, 28, 35, 0.05)',border: '1px solid rgba(229, 28, 35, 1)'}}/>
           <div className='operation' onClick={this.handleExpender}>{this.state.expander ? '收起' : '展开'}</div>
         </div>
         {this.state.expander ?
