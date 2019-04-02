@@ -25,11 +25,6 @@ export default {
                 type: 'saveEager',
                 payload: data || {},
             });
-            if(data){
-                yield put({
-                    type: 'queryReportmissing',
-                })
-            }
         },
         *queryWithdrawal({ payload }, { call, put }) {
             const  data  = yield call(queryWithdrawal,payload);

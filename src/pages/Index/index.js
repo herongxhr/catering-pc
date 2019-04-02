@@ -14,7 +14,7 @@ const TabPane = Tabs.TabPane;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
-class A extends Component {
+class Index extends Component {
   state={
     timeType:'today',
     pager:{
@@ -172,7 +172,7 @@ class A extends Component {
   }
 }
 
-const ShowARouter = withRouter(A);
+const ShowARouter = withRouter(Index);
 export default connect(({ home ,deliveryAcce}) => ({
   home,deliveryAcce
 }))(ShowARouter);
