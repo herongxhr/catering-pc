@@ -44,7 +44,7 @@ export default {
         // 模板标签
         tagString: '',
         queryHasAnyTemplate: 0,
-        dishDetailData:{},
+        dishDetailData: {},
         // 模板名
         templateName: '',
     },
@@ -69,8 +69,8 @@ export default {
             yield call(toDeleteMyMenu, payload);
         },
         // 新建或编辑模板
-        *customMenu({ payload }, { call, put, select }) {
-            const { id, callback, ...rest } = payload;
+        *customMenu({ payload, callback }, { call, put, select }) {
+            const { id, ...rest } = payload;
             // 请求的接口不一样
             const queryFunction = id ? toUpdateMenu : toNewMenu;
             // 从全局state中获取数据
@@ -89,7 +89,7 @@ export default {
                 payload: data || ''
             })
             // 执行callback
-            data && callback(data);
+            if (callback) callback(data);
         },
         // 餐饮单位模板列表
         *fetchPMenuTemplate({ payload }, { call, put }) {
@@ -186,7 +186,7 @@ export default {
         },
         *queryFoodDetail({ payload }, { call, put }) {
             const data = yield call(queryFoodDetail, payload);
-            console.log(data)
+            //console.log(data)
             yield put({
                 type: 'saveDishesDetail',
                 payload: data || {}

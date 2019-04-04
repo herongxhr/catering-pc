@@ -50,12 +50,11 @@ class MenuDetails extends React.Component {
     }))
   }
 
-
   viewPurOrder = () => {
     const { id } = this.state;
     this.props.dispatch(routerRedux.push({
       pathname: '/purOrder/details',
-      state: { id }
+      state:  {id} 
     }))
   }
   yieldPurOrder = () => {

@@ -109,14 +109,14 @@ class AccedProductBreakdown extends React.Component {
     {
       title: '验收数量',
       dataIndex: 'validQuantity',
-      key: 'validQuantity',
+      key: 'acceptQuantity',
       render: (text, record) => {
         return (
           record.skuId === record.distributionSkuId ?
             <span>{text}</span> :
             <div>
               <div style={{ textDecoration: 'line-through ' }}>无</div>
-              <div>{text}</div>
+              <div>{text}</div>      
             </div>
         )
       }

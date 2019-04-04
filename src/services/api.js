@@ -366,7 +366,7 @@ export function queryModalSelect(params) {
 export function queryFoodDetail(params) {
     return request({
         method: 'get',
-        url: `/pub/food/${params.id}`,
+        url: `/pub/food/vo/${params.id}`,
         data: {
             showLoading: true,
             params,

@@ -14,8 +14,8 @@ const { WeekPicker, } = DatePicker;
  */
 class CustomMenu extends Component {
   state = {
-    menuTemplateId: '',
-    templateFrom: 'P',
+    id: '',
+    type: 'P',
     nd: '',
     week: '',
   }
@@ -25,8 +25,8 @@ class CustomMenu extends Component {
     // 只有从模板新建，选择了模板后
     // location.state才存在，直接自定义菜单是location.state为undefined
     if (location.state) {
-      const { menuTemplateId = '', templateFrom = '' } = location.state;
-      return { menuTemplateId, templateFrom }
+      const { id = '', type = '' } = location.state;
+      return { id, type }
     }
     return null;
   }
@@ -48,21 +48,23 @@ class CustomMenu extends Component {
       this.warning();
       return;
     }
+    const { type: templateFrom, ...rest } = this.state;
     this.props.dispatch({
       type: 'menuCenter/customMenu',
-      payload: { ...this.state, callback: this.goMenuDetails }
+      payload: { templateFrom, ...rest },
+      callback: this.goMenuDetails
     });
   }
 
   // 跳转到详情页
   // 同时传递后端返回的id和局部state中保存的templateType
   goMenuDetails = data => {
-    const { templateFrom, menuTemplateId } = this.state;
-    const url = templateFrom === 'C' ? 'unified-menu' : 'my-menu';
+    const { type, id } = this.state;
+    const url = type === 'C' ? 'unified-menu' : 'my-menu';
     this.success();
     this.props.dispatch(routerRedux.push({
       pathname: `/menubar/${url}/details`,
-      state: { id: menuTemplateId || data, type: templateFrom }
+      state: { id: id || data, type: type }
     }))
   }
 
@@ -73,14 +75,13 @@ class CustomMenu extends Component {
     message.warning('请选择菜单的适用周次');
   };
 
-
   componentDidMount() {
-    const { menuTemplateId, templateFrom } = this.state;
+    const { id, type } = this.state;
     // 如果是从模板新建，要获取相应模板的详情
-    if (menuTemplateId) {
+    if (id) {
       this.props.dispatch({
-        type: `menuCenter/fetch${templateFrom}TemplateDetails`,
-        payload: menuTemplateId
+        type: `menuCenter/fetch${type}TemplateDetails`,
+        payload: id
       })
     }
   }
