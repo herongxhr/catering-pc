@@ -23,8 +23,6 @@ export default class ShowArrangedDishes extends Component {
         })
     }
 
-
-
     /**
      * 根据是否图片模式，是否显示配料详情来返回每个单元格中的内容
      * @param{array} dishes 每一餐的菜品数据

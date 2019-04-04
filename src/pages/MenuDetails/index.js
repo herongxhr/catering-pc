@@ -25,10 +25,9 @@ class MenuDetails extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps) {
-    const { location } = nextProps;
-    if (location.state) {
-      console.log('state:', location.state);
-      const { id = '', type = '' } = location.state;
+    const { location: { state } } = nextProps;
+    if (state) {
+      const { id = '', type = '' } = state;
       return { id, type };
     }
     return null;
@@ -99,19 +98,18 @@ class MenuDetails extends React.Component {
     // 订单的采购时间
     const orderTime = order.orderTime || '';
     // 记录订单是否已经执行，在下面内容中根据条件显示
-    const isExecuted = status === '1';
+    const canOperator = status === '0';
     // 操作区
     const action = (
       <Fragment>
         <ButtonGroup>
-          <Button>打印</Button>
-          {!isExecuted && <Button onClick={this.getMenuDetail}>恢复</Button>}
-          {!isExecuted && <Button onClick={this.handleArrangeDishes}>调整菜单</Button>}
+          {/* <Button>打印</Button> */}
+          {canOperator && <Button onClick={this.getMenuDetail}>恢复</Button>}
+          {canOperator && <Button onClick={this.handleArrangeDishes}>调整菜单</Button>}
         </ButtonGroup>
-        {isExecuted
-          ? <Button onClick={this.viewPurOrder} type="primary">查看采购单</Button>
-          : <Button onClick={this.yieldPurOrder} type="primary">采购食材</Button>}
-      </Fragment>
+        {!canOperator && <Button onClick={this.viewPurOrder} type="primary">查看采购单</Button>}
+        {canOperator && <Button onClick={this.yieldPurOrder} type="primary">采购食材</Button>}
+      </Fragment >
     );
     // 详细描述
     const description = (
@@ -131,7 +129,7 @@ class MenuDetails extends React.Component {
         <Col>
           <div className={styles.textSecondary}>状态</div>
           <div style={{ fontSize: 18 }}>
-            {isExecuted ? '已执行' : (status === '0' ? '未执行' : '已失效')}
+            {!canOperator ? '已执行' : (status === '0' ? '未执行' : '已失效')}
           </div>
         </Col>
       </Row>
@@ -151,7 +149,7 @@ class MenuDetails extends React.Component {
         >
           {/* 进度条 */}
           <Card style={{ width: 1160, marginTop: 20 }}>
-            <Steps current={isExecuted ? 2 : 1} progressDot>
+            <Steps current={canOperator ? 1 : 2} progressDot>
               <Step title="菜单下达" description={getYMDHms(createTime)} />
               <Step title="采购食材" description={getYMDHms(orderCreateTime)} />
               <Step title="下达订单" description={getYMDHms(orderTime)} />

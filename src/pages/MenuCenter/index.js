@@ -6,6 +6,7 @@ import { Card, Table, Badge } from 'antd';
 import styles from './index.module.less';
 import BreadcrumbWithTabs from '../../components/BreadcrumbWithTabs';
 import CommonFilter from '../../components/CommonFilter';
+import { getYMD } from '../../utils/utils';
 
 // breadcrumbWithTabs中tabs数据
 const tabList = [
@@ -34,22 +35,17 @@ const filterData = {
 };
 class MenuCenter extends React.Component {
 	state = {
-		type:'unified-menu',
-		activeTabKey: 'unified-menu',
-		queryParams: {
-			current: 1,
-			pageSize: 10,
-			startDate: '',
-			endDate: '',
-			status: '',
-			onlyIssued: true
-		}
+		current: 1,
+		pageSize: 10,
+		startDate: '',
+		endDate: '',
+		status: '',
+		onlyIssued: true
 	}
 
 	// 点击tabs标签跳转到指定页面
 	// 页面state中的activeTabKey会传给面包屑
 	handleTabChange = key => {
-		
 		this.props.dispatch(routerRedux.push({
 			pathname: `/menubar/${key}`,
 		}));
@@ -67,13 +63,11 @@ class MenuCenter extends React.Component {
 	}
 	// 获取统一菜单列表
 	getMenuData = (params = {}) => {
-		this.setState({
-			queryParams: params
-		});
+		this.setState(params);
 		this.props.dispatch({
 			type: 'menuCenter/fetchMenuData',
 			payload: {
-				...this.state.queryParams,
+				...this.state,
 				...params
 			}
 		});
@@ -101,25 +95,27 @@ class MenuCenter extends React.Component {
 				dataIndex: 'date',
 				key: 'date',
 				render: (_, record) =>
-					Moment(record.beginDate).format('YYYY-MM-DD')
-					+ '~' + Moment(record.endDate).format('YYYY-MM-DD')
+					getYMD(record.beginDate) + '~' + getYMD(record.endDate)
 			},
 			{
 				title: '下达单位',
-				dataIndex: 'superiorName',
 				key: 'superiorName',
+				render: (_, record) => {
+					const superior = record.superior || {}
+					return superior.superiorName
+				}
 			},
 			{
 				title: '下达时间',
-				dataIndex: 'issuedTime',
-				key: 'issuedTime',
-				render: text => Moment(text).format('YYYY-MM-DD')
+				dataIndex: 'createTime',
+				key: 'createTime',
+				render: text => getYMD(text)
 			},
 			{
 				title: '执行状态',
 				dataIndex: 'status',
 				key: 'status',
-				render: (text) => {
+				render: text => {
 					if (text === '1') {
 						return (
 							<span>
@@ -144,16 +140,16 @@ class MenuCenter extends React.Component {
 			}
 		];
 		const { location, menuList } = this.props;
+		const records = menuList.records || [];
 		// 状态筛选条状态值
-		const { status } = this.state.queryParams;
-		const { activeTabKey } = this.state;
+		const { status } = this.state;
 		return (
 			<div>
 				<BreadcrumbWithTabs
 					{...location}
 					tabList={tabList}
 					onChange={this.handleTabChange}
-					activeTabKey={activeTabKey}
+					activeTabKey={'unified-menu'}
 				/>
 				<Card className={styles.tableList} bordered={false}>
 					<div >
@@ -166,7 +162,7 @@ class MenuCenter extends React.Component {
 						/>
 						<Table
 							columns={tableColumns}
-							dataSource={menuList.records || []}
+							dataSource={records}
 							rowKey="id"
 							onRow={(record) => {
 								return {

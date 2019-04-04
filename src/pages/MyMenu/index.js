@@ -42,15 +42,12 @@ const filterData = {
 
 class MyMenu extends React.Component {
 	state = {
-		activeTabKey: 'my-menu',
-		queryParams: {
-			current: 1,
-			pageSize: 10,
-			startDate: '',
-			endDate: '',
-			status: '',
-			onlyIssued: false
-		}
+		current: 1,
+		pageSize: 10,
+		startDate: '',
+		endDate: '',
+		status: '',
+		onlyIssued: false
 	}
 
 	// 点击tabs标签跳转到指定页面
@@ -81,20 +78,15 @@ class MyMenu extends React.Component {
 		}).then(this.success)
 			.then(this.getMenuData);
 	}
-	
-	// 获取我的菜单数据
-	handleFilter = (params = {}) => {
-		this.setState(
-			{ queryParams: params },
-			() => this.getMenuData()
-		)
-	}
 
-	getMenuData = () => {
+	// 获取我的菜单列表
+	getMenuData = (params = {}) => {
+		this.setState(params);
 		this.props.dispatch({
 			type: 'menuCenter/fetchMenuData',
 			payload: {
-				...this.state.queryParams,
+				...this.state,
+				...params
 			}
 		});
 	}
@@ -138,42 +130,57 @@ class MyMenu extends React.Component {
 				key: 'date',
 			}, {
 				title: '执行状态',
-				key: 'execute',
-				render: (_, { status }) => {
-					return (
-						status === '已执行'
-							? (<span>
+				dataIndex: 'status',
+				key: 'status',
+				render: text => {
+					if (text === '1') {
+						return (
+							<span>
 								<Badge status="success" />
 								<span>已执行</span>
-							</span>)
-							: (<span>
+							</span>
+						)
+					} else if (text === '0') {
+						return (
+							<span>
 								<Badge status="warning" />
 								<span>未执行</span>
 							</span>)
-					)
+					} else {
+						return (
+							<span>
+								<Badge status="default" />
+								<span>已过期</span>
+							</span>)
+					}
 				}
 			}, {
 				title: '操作',
-				dataIndex: 'status',
-				key: 'status',
-				render: (text, record) => {
-					return text === '0'
-						? <a onClick={e => { this.handleDelete(e, record) }}>删除</a>
-						: <span onClick={() => this.handleView(record)}
+				key: 'actions',
+				render: (_, record) => {
+					const status = record.status || '1'
+					if (status === '0') {
+						return <a onClick={e => { this.handleDelete(e, record) }}>删除</a>
+					} else if (status === '1') {
+						return <span onClick={() => this.handleView(record)}
 							style={{ cursor: 'pointer' }}>查看</span>;
+					} else {
+						return <span>已过期</span>
+					}
 				}
 			}];
 		const { location, menuList } = this.props;
 		// 状态筛选条状态值
-		const { status } = this.state.queryParams;
-		const { activeTabKey } = this.state;
+		const records = menuList.records || [];
+		// 状态筛选条状态值
+		const { status } = this.state;
 		return (
 			<div>
 				<BreadcrumbWithTabs
 					{...location}
 					tabList={tabList}
 					onChange={this.handleTabChange}
-					activeTabKey={activeTabKey}
+					activeTabKey={'my-menu'}
 				/>
 				<Card className={styles.tableList} bordered={false}>
 					<div >
@@ -188,7 +195,7 @@ class MyMenu extends React.Component {
 						/>
 						<Table
 							columns={tableColumns}
-							dataSource={menuList.records || []}
+							dataSource={records}
 							rowKey="id"
 							onRow={record => {
 								return {
